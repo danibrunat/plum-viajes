@@ -1,7 +1,7 @@
 "use client";
 
+import { urlForImage } from "@/sanity/lib/image";
 import Image from "next/image";
-import { urlFor } from "../lib/sanity";
 import { useState } from "react";
 
 interface iAppProps {
@@ -20,7 +20,7 @@ export default function ImageGallery({ images }: iAppProps) {
         {images.map((image: any, idx: any) => (
           <div key={idx} className="overflow-hidden rounded-lg bg-gray-100">
             <Image
-              src={urlFor(image).url()}
+              src={urlForImage(image)}
               width={200}
               height={200}
               alt="photo"
@@ -33,7 +33,7 @@ export default function ImageGallery({ images }: iAppProps) {
 
       <div className="relative overflow-hidden rounded-lg bg-gray-100 lg:col-span-4">
         <Image
-          src={urlFor(bigImage).url()}
+          src={urlForImage(bigImage)}
           alt="Photo"
           width={500}
           height={500}
