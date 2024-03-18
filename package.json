@@ -41,8 +41,7 @@
     "stripe": "^14.2.0",
     "styled-components": "6.0",
     "tailwind-merge": "^1.14.0",
-    "tailwindcss-animate": "^1.0.7",
-    "use-shopping-cart": "^3.1.8"
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@types/node": "^20",
