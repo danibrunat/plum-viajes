@@ -1,7 +1,4 @@
-import AddToBag from "@/app/components/AddToBag";
-import CheckoutNow from "@/app/components/CheckoutNow";
-import ImageGallery from "@/app/components/ImageGallery";
-import { fullProduct } from "@/app/interface";
+/* import { fullProduct } from "@/app/interface";
 import { client } from "@/sanity/lib/client";
 import { Star, Truck } from "lucide-react";
 
@@ -108,3 +105,4 @@ export default async function ProductPge({
     </div>
   );
 }
+ */
