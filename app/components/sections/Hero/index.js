@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import imageUrlBuilder from "@sanity/image-url";
 import styles from "./Hero.module.css";
-import client from "@/sanity/lib/client";
+import { client } from "../../../../sanity/lib/client";
 import SimpleBlockContent from "../../SimpleBlockContent";
 import Cta from "../../Cta";
 

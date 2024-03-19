@@ -1,4 +1,4 @@
-import groq from "groq";
+/* import groq from "groq";
 import { slugToAbsUrl } from "../../utils/urls";
 import { client } from "../../sanity/lib/client";
 
@@ -31,3 +31,4 @@ export default async function handler(req, res) {
 
   res.status(200).send(sitemap);
 }
+ */
