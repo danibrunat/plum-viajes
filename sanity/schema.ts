@@ -19,6 +19,7 @@ import portableText from "./schemas/objects/portableText";
 import simplePortableText from "./schemas/objects/simplePortableText";
 import products from "./schemas/objects/products";
 import reviews from "./schemas/objects/reviews";
+import newsletter from "./schemas/objects/newsletter";
 
 // Landing page sections
 import hero from "./schemas/objects/hero";
@@ -51,5 +52,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     simplePortableText,
     siteConfig,
     textSection,
+    newsletter,
   ],
 };

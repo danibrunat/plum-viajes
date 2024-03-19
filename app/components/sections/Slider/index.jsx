@@ -6,7 +6,7 @@ import {
   BsFillArrowRightCircleFill,
   BsFillArrowLeftCircleFill,
 } from "react-icons/bs";
-import { SLIDER_DEFAULT_HEIGHT } from "../../../constants/site";
+
 export default function Carousel({ items }) {
   let [current, setCurrent] = useState(0);
 
@@ -23,7 +23,7 @@ export default function Carousel({ items }) {
   return (
     <div className="overflow-hidden relative">
       <div
-        className={`flex w-full h-40  transition ease-out duration-40 md:h-[${SLIDER_DEFAULT_HEIGHT}]`}
+        className={`flex w-full h-40 transition ease-out duration-40 md:h-96`}
         style={{
           transform: `translateX(-${current * 100}%)`,
         }}
