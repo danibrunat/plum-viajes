@@ -27,6 +27,7 @@ export default defineField({
         { type: "slider" },
         { type: "homeLinksBanners" },
         { type: "searchEngines" },
+        { type: "reviews" },
         { type: "heroWithImages" },
         { type: "imageSection" },
         { type: "mailchimp" },

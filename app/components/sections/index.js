@@ -5,3 +5,4 @@ export { default as TextSection } from "./TextSection";
 export { default as ImageSection } from "./ImageSection";
 export { default as Slider } from "./Slider/index.jsx";
 export { default as SearchEngines } from "./SearchEngines";
+export { default as Reviews } from "./Reviews";

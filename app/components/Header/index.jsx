@@ -7,13 +7,13 @@ import Image from "next/image";
 export default function Header(props) {
   const { title = "Missing title", navItems, logo, contact } = props;
   return (
-    <nav className="flex items-center justify-between flex-wrap border-b-8 border-plumPrimaryPink">
-      <div className="flex items-center flex-shrink-0 text-white mr-6">
+    <nav className="flex justify-center border-b-8 border-plumPrimaryPink md:items-center md:justify-between md:flex-wrap ">
+      <div className="p-4  mr-0 flex text-white md:mr-6 md:p-6">
         <Link href={"/"}>
           <Image src={logo.asset.url} alt="logo" width={150} height={120} />
         </Link>
       </div>
-      <div className="flex w-full pb-1 flex-grow justify-center self-end items-bottom lg:flex lg:items-end lg:w-auto">
+      <div className="hidden md:pb-1 md:flex-grow md:justify-center md:self-end md:items-bottom md:flex md:items-end md:w-auto">
         <div className="text-sm">
           {navItems &&
             navItems.map((item) => {
@@ -38,7 +38,7 @@ export default function Header(props) {
         </div>
       </div>
       {contact && (
-        <div className="justify-end p-6 ">
+        <div className="hidden md:justify-end md:p-6 ">
           <Link href={`/contactanos`}>
             <Image
               src={urlForImage(contact)}

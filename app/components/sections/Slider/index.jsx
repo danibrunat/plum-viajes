@@ -6,6 +6,7 @@ import {
   BsFillArrowRightCircleFill,
   BsFillArrowLeftCircleFill,
 } from "react-icons/bs";
+import { SLIDER_DEFAULT_HEIGHT } from "../../../constants/site";
 export default function Carousel({ items }) {
   let [current, setCurrent] = useState(0);
 
@@ -22,10 +23,9 @@ export default function Carousel({ items }) {
   return (
     <div className="overflow-hidden relative">
       <div
-        className={`flex w-full transition ease-out duration-40`}
+        className={`flex w-full h-40  transition ease-out duration-40 md:h-[${SLIDER_DEFAULT_HEIGHT}]`}
         style={{
           transform: `translateX(-${current * 100}%)`,
-          height: "600px",
         }}
       >
         {items.map((slide) => {
@@ -40,7 +40,7 @@ export default function Carousel({ items }) {
         })}
       </div>
 
-      <div className="absolute top-0 h-full w-full justify-between items-center flex text-white px-10 text-3xl">
+      <div className="absolute top-0 h-full w-full justify-between flex text-white px-0 md:px-10 text-sm md:text-3xl">
         <button onClick={previousSlide}>
           <BsFillArrowLeftCircleFill size={"3em"} />
         </button>
@@ -57,7 +57,7 @@ export default function Carousel({ items }) {
                 setCurrent(i);
               }}
               key={"circle" + i}
-              className={`rounded-full w-5 h-5 cursor-pointer  ${
+              className={`rounded-full w-3 h-3 cursor-pointer md:w-5 md:h-5   ${
                 i == current ? "bg-white" : "bg-gray-500"
               }`}
             ></div>

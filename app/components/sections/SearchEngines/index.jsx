@@ -8,13 +8,6 @@ export default function SearchEngines({
   flights,
   packages,
 }) {
-  console.log(
-    "assurances,hotels,flights,packages,",
-    assurances,
-    hotels,
-    flights,
-    packages
-  );
   return (
     <Tabs className="py-5">
       {packages ? (

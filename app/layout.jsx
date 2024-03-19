@@ -52,7 +52,7 @@ export default async function Layout({ children }) {
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} text-sm md:text-1xl`}>
         <Head>
           <meta
             name="viewport"
@@ -65,7 +65,7 @@ export default async function Layout({ children }) {
           logo={logo}
           contact={contact}
         />
-        <div className="content">{children}</div>
+        <div className="content ">{children}</div>
         <Footer navItems={footerNavigation} text={footerText} />
         {logoUrl && url && <LogoJsonLd url={url} logo={logoUrl} />}
       </body>

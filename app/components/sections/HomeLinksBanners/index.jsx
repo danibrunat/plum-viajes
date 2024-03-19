@@ -15,15 +15,16 @@ export default function HomeLinksBanners(imageLinks) {
   }
  */
   return (
-    <div className="flex gap-3 justify-center py-5 mx-16">
+    <div className="flex gap-1 py-0 mx-0 md:py-5 md:mx-16 md:gap-3 overflow-scroll scroll-smooth md:overflow-visible">
       {links.map((il) => (
-        <div key={il._key} className="w-auto sm:w-full">
+        <div key={il._key} className="shrink-0 md:shrink ">
           <Link href={il.link}>
             <Image
               src={urlForImage(il.image)}
               alt={il.title}
-              width={150}
-              height={80}
+              width={250}
+              loading="lazy"
+              height={100}
             />
           </Link>
         </div>

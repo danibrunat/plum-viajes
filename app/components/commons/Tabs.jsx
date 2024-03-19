@@ -7,7 +7,7 @@ const Tabs = ({ children }) => {
     setActiveTab(newActiveTab);
   };
   return (
-    <div className="mx-16 py-5">
+    <div className="mx-2 py-5 md:mx-16 ">
       <div className="flex">
         {children?.map((child) => (
           <button
@@ -16,7 +16,7 @@ const Tabs = ({ children }) => {
               activeTab === child.props.label
                 ? " bg-plumPrimaryPink text-white"
                 : ""
-            } flex-1 text-gray-700 font-medium py-2`}
+            } flex-1 text-gray-700 font-normal md:font-medium py-2 `}
             onClick={(e) => handleClick(e, child.props.label)}
           >
             {child.props.label}
