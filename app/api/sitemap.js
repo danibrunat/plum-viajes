@@ -1,10 +1,9 @@
-/* import groq from "groq";
+import groq from "groq";
 import { slugToAbsUrl } from "../../utils/urls";
 import { client } from "../../sanity/lib/client";
 
 export default async function handler(req, res) {
   const { allRoutesSlugs, baseUrl } = await client.fetch(groq`{
-    // Get the slug of all routes that should be in the sitemap
     "allRoutesSlugs": *[
       _type == "route" &&
       !(_id in path("drafts.**")) &&
@@ -13,7 +12,7 @@ export default async function handler(req, res) {
     ].slug.current,
 
     // And the base site URL
-    "baseUrl": *[_id == "global-config"][0].url,
+    "baseUrl": *[_id == "siteConfig"][0].url,
   }`);
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -29,6 +28,5 @@ export default async function handler(req, res) {
       .join("\n")}
   </urlset>`;
 
-  res.status(200).send(sitemap);
+  res?.status(200).send(sitemap);
 }
- */
