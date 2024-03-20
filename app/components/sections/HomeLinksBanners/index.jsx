@@ -15,7 +15,7 @@ export default function HomeLinksBanners(imageLinks) {
   }
  */
   return (
-    <div className="flex gap-1 py-0 mx-0 md:py-5 md:mx-16 md:gap-3 overflow-scroll scroll-smooth md:overflow-visible">
+    <div className="flex gap-1 py-0 mx-2 md:py-5 md:mx-16 md:gap-3 overflow-scroll scroll-smooth md:overflow-visible md:justify-center lg:justify-center">
       {links.map((il) => (
         <div key={il._key} className="shrink-0 md:shrink ">
           <Link href={il.link}>

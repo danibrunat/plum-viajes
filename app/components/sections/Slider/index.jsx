@@ -23,7 +23,7 @@ export default function Carousel({ items }) {
   return (
     <div className="overflow-hidden relative">
       <div
-        className={`flex w-full h-40 transition ease-out duration-40 md:h-96`}
+        className={`flex w-full h-40 transition ease-out duration-40 md:h-96 lg:h-[60vh]`}
         style={{
           transform: `translateX(-${current * 100}%)`,
         }}
