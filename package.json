@@ -11,6 +11,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
+    "@madzadev/image-slider": "^2.0.1",
     "@portabletext/react": "^3.0.11",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
@@ -26,6 +27,7 @@
     "bcp47": "^1.1.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "dayjs": "^1.11.10",
     "dotenv": "^16.4.1",
     "lucide-react": "^0.289.0",
     "mongoose": "^8.2.0",

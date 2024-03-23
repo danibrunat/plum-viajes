@@ -1,5 +1,5 @@
-export const apiVersion =
-  process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2024-01-02";
+import dayjs from "dayjs";
+export const apiVersion = dayjs().format("YYYY-MM-DD");
 
 export const dataset = "production";
 

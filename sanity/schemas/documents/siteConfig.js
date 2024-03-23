@@ -4,15 +4,14 @@ import { defineField } from "sanity";
 export default defineField({
   name: "siteConfig",
   type: "document",
-  title: "Site configuration",
+  title: "Configuración del Sitio",
   // https://www.sanity.io/docs/experimental/ui-affordances-for-actions
-  __experimental_actions: [/* "create", "delete", */ "update", "publish"],
   fieldsets: [{ name: "footer", title: "Footer" }],
   fields: [
     {
       name: "title",
       type: "string",
-      title: "Site title",
+      title: "Título del sitio",
     },
     {
       title: "URL",
@@ -23,12 +22,12 @@ export default defineField({
     {
       name: "frontpage",
       type: "reference",
-      description: "Choose page to be the frontpage",
+      description: "Elegí una página de inicio",
       to: { type: "page" },
     },
 
     {
-      title: "Brand logo",
+      title: "Logo",
       description:
         "Best choice is to use an SVG where the color are set with currentColor",
       name: "logo",
@@ -39,14 +38,11 @@ export default defineField({
           type: "string",
           title: "Alternative text",
           description: "Important for SEO and accessiblity.",
-          options: {
-            isHighlighted: true,
-          },
         },
       ],
     },
     {
-      title: "Main navigation",
+      title: "Navegación principal",
       name: "mainNavigation",
       description: "Select pages for the top menu",
       validation: (Rule) => [
@@ -73,14 +69,11 @@ export default defineField({
           type: "string",
           title: "Alternative text",
           description: "Important for SEO and accessiblity.",
-          options: {
-            isHighlighted: true,
-          },
         },
       ],
     },
     {
-      title: "Footer navigation items",
+      title: "Navegación del Footer",
       name: "footerNavigation",
       type: "array",
       validation: (Rule) => [

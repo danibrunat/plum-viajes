@@ -29,30 +29,13 @@ content[] {
   }
 }`;
 
-  const siteConfigQuery = `
-  *[_id == "siteConfig"] {
-    ...,
-    logo {asset->{extension, url}},
-    mainNavigation[] -> {
-      ...,
-      "title": page->title
-    },
-    footerNavigation[] -> {
-      ...,
-      "title": page->title
-    }
-  }[0]
-  `;
-
   const slug = slugParamToPath(params?.slug);
-  console.log("slug", slug);
+  //console.log("slug", slug);
   const pageQuery = groq`*[_type == "route" && slug.current in $possibleSlugs]{
           page-> {
             ${pageFragment}
           }
         }`;
-
-  const config = await sanityFetch({ query: siteConfigQuery });
 
   // Frontpage - fetch the linked `frontpage` from the global configuration document.
   if (slug === "/") {
@@ -79,8 +62,6 @@ content[] {
   if (!data?._type === "page") {
     throw new Error("page not found");
   }
-  if (data && config) data.config = config;
-  console.log("getData | data", JSON.stringify(data));
   return data;
 }
 
@@ -123,7 +104,7 @@ export async function generateMetadata({ params }, parent) {
       ]
     : [];
 
-  console.log("title", title);
+  // console.log("title", title);
 
   return {
     title,

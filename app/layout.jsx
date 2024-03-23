@@ -6,6 +6,7 @@ import { LogoJsonLd } from "next-seo";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Whatsapp from "./components/Whatsapp";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,7 +27,7 @@ export default async function Layout({ children }) {
   `;
 
   const config = await sanityFetch({ query: siteConfigQuery });
-
+  console.log("config", config);
   if (!config) {
     console.error(
       "Missing site config. Please refer to Sanity and setup your own site configuration"
@@ -68,6 +69,7 @@ export default async function Layout({ children }) {
         <div className="content ">{children}</div>
         <Footer navItems={footerNavigation} text={footerText} />
         {logoUrl && url && <LogoJsonLd url={url} logo={logoUrl} />}
+        <Whatsapp />
       </body>
     </html>
   );

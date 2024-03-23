@@ -22,10 +22,12 @@ export default defineField({
       },
     },
   ],
+  components: {
+    preview: HTMLpreview,
+  },
   preview: {
     select: {
       html: "html",
     },
-    component: HTMLpreview,
   },
 });

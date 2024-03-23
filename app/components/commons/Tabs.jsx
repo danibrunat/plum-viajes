@@ -7,7 +7,7 @@ const Tabs = ({ children }) => {
     setActiveTab(newActiveTab);
   };
   return (
-    <div className="mx-2 py-5 md:mx-16 ">
+    <>
       <div className="flex">
         {children?.map((child) => (
           <button
@@ -31,7 +31,7 @@ const Tabs = ({ children }) => {
           return null;
         })}
       </div>
-    </div>
+    </>
   );
 };
 const Tab = ({ label = "", children }) => {

@@ -9,9 +9,9 @@ const Newsletter = ({ title, subtitle }) => {
         className="flex flex-col self-center w-full md:w-1/3 text-left gap-2"
         method="post"
       >
-        <label for="name">Nombre</label>
+        <label htmlFor="name">Nombre</label>
         <input type="text" id="name" />
-        <label for="mail">E-Mail</label>
+        <label htmlFor="mail">E-Mail</label>
         <input type="text" id="mail" />
 
         <input type="submit" value="Enviar" />

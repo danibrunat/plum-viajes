@@ -6,9 +6,10 @@ import Image from "next/image";
 
 export default function Header(props) {
   const { title = "Missing title", navItems, logo, contact } = props;
+  console.log("navItems", navItems);
   return (
-    <nav className="flex justify-center border-b-8 border-plumPrimaryPink md:items-center md:justify-between md:flex-wrap ">
-      <div className="p-4  mr-0 flex text-white md:mr-6 md:p-6">
+    <nav className="flex justify-center border-b-4 border-plumPrimaryPink md:items-center md:justify-between md:flex-wrap ">
+      <div className="p-4 mr-0 flex text-white md:mr-6 md:p-6">
         <Link href={"/"}>
           <Image src={logo.asset.url} alt="logo" width={150} height={120} />
         </Link>
