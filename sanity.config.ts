@@ -19,6 +19,8 @@ import {
 import { structureTool } from "sanity/structure";
 
 import { codeInput } from "@sanity/code-input";
+import { iconPicker } from "sanity-plugin-icon-picker";
+
 const hiddenDocTypes = (listItem: { getId: () => string }) =>
   !["page", "route", "siteConfig"].includes(listItem.getId());
 
@@ -33,6 +35,7 @@ export default defineConfig({
       structure: deskStructure,
     }),
     deskTool(),
+    iconPicker(),
     codeInput(),
     dashboardTool({
       widgets: [projectInfoWidget(), projectUsersWidget()],

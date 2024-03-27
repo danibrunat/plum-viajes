@@ -16,7 +16,7 @@ export default function Carousel({ items }) {
   const imageGalleryItems = items?.map((item) => ({
     url: urlForImage(item),
   }));
-  const { width, height } = useWindowSize();
+  const { width } = useWindowSize();
 
   const sliderHeight = memo(
     width > MOBILE_DEFAULT_BREAKPOINT

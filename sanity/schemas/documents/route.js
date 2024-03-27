@@ -23,6 +23,16 @@ export default defineField({
       ],
     },
     {
+      title: "Ícono de la ruta",
+      description: "Elegí el ícono que tendrá en el menú",
+      name: "icon",
+      type: "iconPicker",
+      options: {
+        providers: ["fa"],
+        outputFormat: "react",
+      },
+    },
+    {
       name: "includeInSitemap",
       type: "boolean",
       title: "Include page in sitemap",

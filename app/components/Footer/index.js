@@ -12,6 +12,7 @@ import {
   FaPhone,
   FaWhatsapp,
 } from "react-icons/fa";
+import Newsletter from "./Newsletter";
 
 const contactInfo = [
   {
@@ -50,6 +51,7 @@ export default function Footer(props) {
   const { navItems, text } = props;
   return (
     <footer className=" bg-plumPrimaryBlue border-b-2 text-white">
+      <Newsletter />
       <div className="flex flex-col md:flex-row p-4">
         <div className="flex gap-2 justify-center p-4 text-xl w-full md:w-1/3">
           <SocialLinks />
@@ -57,7 +59,6 @@ export default function Footer(props) {
         <ul className="flex flex-col w-full items-center gap-2 md:gap-10 md:w-2/3 md:flex-row ">
           {navItems &&
             navItems.map((item) => {
-              const isActive = true;
               return (
                 <li
                   key={item._id}
@@ -89,7 +90,7 @@ export default function Footer(props) {
           style={{ border: "none", overflow: "hidden" }}
           scrolling="no"
           frameBorder="0"
-          allowFullScreen="true"
+          allowFullScreen={true}
           allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
         ></iframe>
       </div>
