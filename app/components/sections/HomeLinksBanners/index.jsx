@@ -14,7 +14,6 @@ export default function HomeLinksBanners(imageLinks) {
             <Image
               src={urlForImage(il.image)}
               alt={il.title}
-              priority
               width={250}
               height={100}
             />
