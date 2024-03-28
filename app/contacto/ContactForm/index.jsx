@@ -264,6 +264,7 @@ const ContactForm = () => {
         />
         <button
           className="bg-plumPrimaryPink text-white rounded-md p-2"
+          aria-label="Enviar"
           name="submit"
           id="submit"
         >

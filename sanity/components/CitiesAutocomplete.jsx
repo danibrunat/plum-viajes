@@ -46,7 +46,7 @@ export const CitiesAutocomplete = (props) => {
         placeholder="Type to find user …"
         // custom option render function
         renderOption={(option) => (
-          <Card as="button">
+          <Card as="button" aria-label="Botón">
             <Flex align="center">
               <Box padding={1}>
                 <Avatar

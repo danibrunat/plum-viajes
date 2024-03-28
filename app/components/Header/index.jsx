@@ -39,8 +39,8 @@ export default function Header(props) {
             <Image
               src={urlForImage(contact)}
               alt={contact?.alt}
-              width={200}
-              height={150}
+              width={238}
+              height={98}
               priority
             />
           </Link>

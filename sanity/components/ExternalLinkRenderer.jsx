@@ -1,14 +1,15 @@
 // ExternalLinkRenderer.js
-import React from 'react'
-import { LaunchIcon } from '@sanity/icons'
+import React from "react";
+import { LaunchIcon } from "@sanity/icons";
+import Link from "next/link";
 
-const ExternalLinkRenderer = props => (
+const ExternalLinkRenderer = (props) => (
   <span>
     {props.renderDefault(props)}
-    <a contentEditable={false} href={props.value.href}>
+    <Link contentEditable={false} href={props.value.href}>
       <LaunchIcon />
-    </a>
+    </Link>
   </span>
-)
+);
 
-export default ExternalLinkRenderer
+export default ExternalLinkRenderer;

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { FaFacebook, FaInstagram, FaWhatsapp } from "react-icons/fa";
 
@@ -8,9 +9,13 @@ const ContactInfo = () => {
         Llámenos por teléfono para consultar sobre destinos y nuestros
         productos:
       </p>
-      <a className="text-2xl text-plumPrimaryBlue" href="tel:+541170797586">
+      <Link
+        className="text-2xl text-plumPrimaryBlue"
+        aria-label="+54 9 11 7079 7586"
+        href="tel:+541170797586"
+      >
         +54 9 11 7079 7586
-      </a>
+      </Link>
       <p className="text-plumPrimaryPink">
         Lunes a viernes de: 09:00 a 18:00 hs - Sábados de 10:00 a 13:00 hs
       </p>

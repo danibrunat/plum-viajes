@@ -31,14 +31,14 @@ export const packageEngineItems = [
     id: "where",
     title: "¿Dónde querés ir?",
     icon: <FaGlobeAmericas className="text-gray-200" />,
-    children: <Autocomplete />,
+    children: <Autocomplete id="where" />,
   },
   {
     id: "when",
     title: "¿Cuándo pensás viajar?",
     icon: <FaCalendar className="text-gray-200" />,
     children: (
-      <select className="w-full p-1">
+      <select name="when" id="when" className="w-full p-1">
         <option value="">Elegí el mes de tu viaje...</option>
         <option value="">Marzo</option>
         <option value="">Abril</option>
@@ -53,7 +53,7 @@ export const packageEngineItems = [
     title: "¿Desde qué ciudad partís?",
     icon: <FaMapMarked className="text-gray-200" />,
     children: (
-      <select className="w-full p-1">
+      <select className="w-full p-1" name="from" id="from">
         <option value="">Indistinto</option>
         <option value="">Asunción</option>
         <option value="">Bahía Blanca</option>

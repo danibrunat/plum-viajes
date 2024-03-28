@@ -38,6 +38,7 @@ export default function LandingGrid({ product, destination }) {
             <>
               <article
                 key={destination.comment}
+                aria-label="Grilla de destinos"
                 className="p-6 mb-6  transition duration-300 group transform hover:-translate-y-2 hover:shadow-2xl rounded-2xl cursor-pointer"
               >
                 <Link

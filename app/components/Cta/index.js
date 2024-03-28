@@ -23,13 +23,13 @@ function cta(props) {
 
   if (link) {
     return (
-      <a className={styles.button} href={link}>
+      <Link className={styles.button} href={link}>
         {title}
-      </a>
+      </Link>
     );
   }
 
-  return <a className={styles.button}>{title}</a>;
+  return <Link className={styles.button}>{title}</Link>;
 }
 
 cta.propTypes = {

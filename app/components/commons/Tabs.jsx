@@ -12,6 +12,7 @@ const Tabs = ({ children }) => {
         {children?.map((child) => (
           <button
             key={child.props.label}
+            aria-label={child.props.label}
             className={`${
               activeTab === child.props.label
                 ? " bg-plumPrimaryPink text-white"
