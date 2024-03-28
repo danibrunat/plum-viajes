@@ -1,10 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { submitContactForm } from "../../actions/submitContactForm";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { CITIES } from "../../constants/destinations";
-
+import { openModalBase } from "../../helpers/modals";
 //TODO: Usar este objeto como guía para renderizar.
 const formFields = [
   {
@@ -47,9 +48,31 @@ const formFields = [
 
 const ContactForm = () => {
   const [startDate, setStartDate] = useState(new Date());
+  const recaptchaRef = useRef(null);
+
+  const submitForm = async (formData) => {
+    if (formData) {
+      try {
+        const response = await submitContactForm(formData);
+        if (response.statusCode === 200) {
+          openModalBase({
+            title: "Éxito",
+            children:
+              "Recibimos tu consulta. Te vamos a estar contactando a la brevedad!",
+          });
+        }
+      } catch (error) {
+        openModalBase({
+          title: "Error",
+          children: "No pudimos enviar tu formulario",
+        });
+      }
+    }
+    document.getElementById("contactForm").reset();
+  };
 
   return (
-    <div className="flex flex-col p-3 gap-2 text-plumPrimaryPink">
+    <div className="flex flex-col p-2 gap-2 text-plumPrimaryPink">
       <p className="text-xl">Formulario de contacto</p>
       <p>
         Puede comunicarse con nosotros completando el siguiente formulario. Uno
@@ -59,7 +82,7 @@ const ContactForm = () => {
       <form
         id="contactForm"
         className="flex flex-col gap-3"
-        action={submitContactForm}
+        action={submitForm}
       >
         <div className="flex flex-col gap-2 p-1">
           <label htmlFor="name">Nombre</label>
@@ -83,23 +106,23 @@ const ContactForm = () => {
         </div>
         <div className="flex flex-col gap-2 p-1">
           <label htmlFor="phone">Teléfono</label>
-          <div className="flex gap-1">
+          <div className="flex gap-1 w-full">
             <select className="py-2" name="phoneType" id="phoneType">
               <option value="home">Fijo</option>
               <option value="cellphone">Celular</option>
             </select>
             <input
               required
-              className=" rounded-md p-2 border-2 border-gray-300"
+              className="w-1/3 rounded-md p-2 border-2 border-gray-300"
               type="text"
-              size={1}
+              size={2}
               maxLength={5}
               name="phoneAreaCode"
               id="phoneAreaCode"
             />
             <input
               required
-              className=" rounded-md p-2 border-2 border-gray-300"
+              className="w-full rounded-md p-2 border-2 border-gray-300"
               type="text"
               maxLength={12}
               name="phoneNumber"
@@ -142,13 +165,14 @@ const ContactForm = () => {
             ))}
           </select>
         </div>
-        <div className="flex flex-col gap-2 p-1">
+        <div className="flex flex-col gap-2 p-1 w-auto md:w-1/3">
           <label htmlFor="surname">Fecha de salida</label>
           <DatePicker
             selected={startDate}
             id="departureDate"
             onChange={(date) => setStartDate(date)}
             dateFormat={"dd-MM-YYYY"}
+            className="w-auto"
           />
         </div>
         <div className="flex flex-col gap-2 p-1">
@@ -214,7 +238,6 @@ const ContactForm = () => {
         </div>
         <div className="flex gap-2 p-1">
           <input
-            required
             type="checkbox"
             className=" rounded-md p-2 border-2 border-gray-300"
             name="ringMe"
@@ -226,7 +249,6 @@ const ContactForm = () => {
         </div>
         <div className="flex gap-2 p-1">
           <input
-            required
             type="checkbox"
             className=" rounded-md p-2 border-2 border-gray-300"
             name="notifyPromotions"
@@ -236,9 +258,10 @@ const ContactForm = () => {
             Quiero suscribirme para recibir las mejores promociones
           </label>
         </div>
-        {
-          //TODO: Falta el checkbox de No soy un robot
-        }
+        <ReCAPTCHA
+          ref={recaptchaRef}
+          sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}
+        />
         <button
           className="bg-plumPrimaryPink text-white rounded-md p-2"
           name="submit"

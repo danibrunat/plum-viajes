@@ -7,6 +7,7 @@ import { LogoJsonLd } from "next-seo";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Whatsapp from "./components/Whatsapp";
+import ModalRoot from "./components/commons/Modal/ModalRoot";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -54,6 +55,7 @@ export default async function Layout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className} text-sm md:text-1xl`}>
+        <ModalRoot />
         <Head>
           <meta
             name="viewport"

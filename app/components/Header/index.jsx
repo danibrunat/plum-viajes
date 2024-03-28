@@ -24,7 +24,7 @@ export default function Header(props) {
         </Link>
       </div>
       <div className="hidden md:flex md:flex-grow md:justify-center md:self-end md:w-auto">
-        <menu className="flex md:text-sm">
+        <menu className="flex md:text-sm items-center">
           {navItems &&
             navItems.map((item) => {
               const Icon = getIconByName(item?.icon?.name);
@@ -34,7 +34,7 @@ export default function Header(props) {
       </div>
 
       {contact && (
-        <div className="hidden md:flex md:justify-end md:p-6 ">
+        <div className="hidden md:flex md:justify-end md:p-4 ">
           <Link href={`/contactanos`}>
             <Image
               src={urlForImage(contact)}

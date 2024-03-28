@@ -13,7 +13,7 @@ const MenuItem = ({ item, icon }) => {
       href={getPathFromSlug(slug.current)}
       className="flex text-black  py-3 px-4 hover:bg-plumPrimaryPink "
     >
-      <i className="text-black mx-2">{icon}</i> {title}
+      <i className="text-black mx-2 self-center">{icon}</i> {title}
     </Link>
   );
 };

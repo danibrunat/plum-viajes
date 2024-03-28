@@ -7,7 +7,8 @@ export async function submitContactForm(formData) {
   console.log("server action", formData);
 
   return {
-    status: "success",
+    statusCode: 200,
+
     message: `Form submitted`,
   };
 }
