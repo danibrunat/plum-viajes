@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { submitContactForm } from "../../actions/submitContactForm";
+import { submitContactForm } from "../../actions/forms";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { CITIES } from "../../constants/destinations";
@@ -145,7 +145,7 @@ const ContactForm = () => {
           <input
             required
             className=" rounded-md p-2 border-2 border-gray-300"
-            type="text"
+            type="email"
             name="email"
             id="email"
           />
@@ -258,10 +258,13 @@ const ContactForm = () => {
             Quiero suscribirme para recibir las mejores promociones
           </label>
         </div>
-        <ReCAPTCHA
-          ref={recaptchaRef}
-          sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}
-        />
+        <div className="min-w-96 min-h-24">
+          <ReCAPTCHA
+            ref={recaptchaRef}
+            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}
+          />
+        </div>
+
         <button
           className="bg-plumPrimaryPink text-white rounded-md p-2"
           aria-label="Enviar"

@@ -9,7 +9,7 @@ import LandingGrid from "./LandingGrid";
 async function fetchLandingDynamicData(product, destination) {}
 
 async function getData(params) {
-  console.log("params", params);
+  //console.log("params", params);
 
   const slug = params?.slug[1];
   const product = params?.slug[0];
@@ -18,7 +18,7 @@ async function getData(params) {
   const landingData = await sanityFetch({
     query: pageQuery,
   }).then((res) => {
-    console.log("res[0]?", res[0]);
+    //console.log("res[0]?", res[0]);
     return res[0] ? { ...res[0], slug } : undefined;
   });
 

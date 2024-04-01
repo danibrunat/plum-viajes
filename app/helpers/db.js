@@ -8,7 +8,7 @@ async function run() {
     // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
     await connect(uri, clientOptions);
     await connection.db.admin().command({ ping: 1 });
-    console.log(
+    //console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
   } finally {

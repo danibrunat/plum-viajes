@@ -4,6 +4,11 @@ import ContactInfo from "./ContactInfo";
 import VisitUs from "./VisitUs";
 import ContactForm from "./ContactForm";
 
+export const metadata = {
+  title: "Contáctenos",
+  description: `Dejá tu consulta`,
+};
+
 const Contact = (props) => {
   return (
     <div className="flex flex-col gap-3 ">

@@ -20,6 +20,7 @@ module.exports = {
         plumPrimaryPink: "#d86c64",
         plumPrimaryBlue: "#789cd1",
         plumSecondaryBlue: "#709cea",
+        plumAboutUsBlue: "#0b2654",
       },
     },
   },

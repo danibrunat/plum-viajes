@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 // Hook
 export const useWindowSize = () => {
   const isClient = typeof window === "object"; //Object represents browser window
-  console.log("isClient", isClient);
+  //console.log("isClient", isClient);
   const lastWidth = useRef();
 
   function getSize() {

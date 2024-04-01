@@ -28,7 +28,7 @@ export default async function Layout({ children }) {
   `;
 
   const config = await sanityFetch({ query: siteConfigQuery });
-  console.log("config", config);
+  ////console.log("config", config);
   if (!config) {
     console.error(
       "Missing site config. Please refer to Sanity and setup your own site configuration"

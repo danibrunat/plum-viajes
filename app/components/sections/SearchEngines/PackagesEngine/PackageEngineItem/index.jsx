@@ -1,7 +1,7 @@
 import React from "react";
 
 const PackageEngineItem = ({ title, icon, children }) => {
-  console.log("children props id", children.props.id);
+  //console.log("children props id", children.props.id);
   return (
     <div className="flex flex-col gap-0 w-full md:w-1/4 md:gap-2">
       <label

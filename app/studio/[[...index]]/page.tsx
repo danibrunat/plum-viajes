@@ -13,6 +13,6 @@ import { NextStudio } from "next-sanity/studio";
 import config from "../../../sanity.config";
 
 export default function StudioPage() {
-  console.log("entra a la page");
+  //console.log("entra a la page");
   return <NextStudio config={config} />;
 }

@@ -10,7 +10,7 @@ import Cta from "../../Cta";
 
 function ImageSection(props) {
   const { heading, label, text, image, cta } = props;
-  console.log("image", JSON.stringify(props));
+  ////console.log("image", JSON.stringify(props));
   if (!image) {
     return null;
   }

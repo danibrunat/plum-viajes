@@ -1,69 +1,8 @@
 import imageUrlBuilder from "@sanity/image-url";
-import groq from "groq";
 import React from "react";
 import { client } from "../../sanity/lib/client";
-import { sanityFetch } from "../../sanity/lib/sanityFetch";
 import RenderSections from "../components/RenderSections";
-import { getSlugVariations, slugParamToPath } from "../../utils/urls";
-
-/**
- * Fetches data for our pages.
- *
- * The [[...slug]] name for this file is intentional - it means Next will run this getServerSideProps
- * for every page requested - /, /about, /contact, etc..
- * From the received params.slug, we're able to query Sanity for the route coresponding to the currently requested path.
- */
-async function getData(params) {
-  let data;
-  const pageFragment = groq`
-...,
-content[] {
-  ...,
-  cta {
-    ...,
-    route->
-  },
-  ctas[] {
-    ...,
-    route->
-  }
-}`;
-
-  const slug = slugParamToPath(params?.slug);
-  //console.log("slug", slug);
-  const pageQuery = groq`*[_type == "route" && slug.current in $possibleSlugs]{
-          page-> {
-            ${pageFragment}
-          }
-        }`;
-
-  // Frontpage - fetch the linked `frontpage` from the global configuration document.
-  if (slug === "/") {
-    const frontQuery = groq`
-        *[_id == "siteConfig"][0]{
-          frontpage -> {
-            ${pageFragment}
-          }
-        }
-      `;
-    data = await sanityFetch({ query: frontQuery }).then((res) =>
-      res?.frontpage ? { ...res.frontpage, slug } : undefined
-    );
-  } else {
-    // Regular route
-    data = await sanityFetch({
-      query: pageQuery,
-      params: { possibleSlugs: getSlugVariations(slug) },
-    }).then((res) => {
-      return res[0]?.page ? { ...res[0].page, slug } : undefined;
-    });
-  }
-
-  if (!data?._type === "page") {
-    throw new Error("page not found");
-  }
-  return data;
-}
+import { getData } from "../actions/sanity";
 
 export async function generateMetadata({ params }, parent) {
   const builder = imageUrlBuilder(client);
@@ -104,7 +43,7 @@ export async function generateMetadata({ params }, parent) {
       ]
     : [];
 
-  // console.log("title", title);
+  // //console.log("title", title);
 
   return {
     title,
