@@ -7,6 +7,7 @@ const withPWA = require("@ducanh2912/next-pwa").default({
   disable: false,
   workboxOptions: {
     disableDevLogs: true,
+    maximumFileSizeToCacheInBytes: 5000000, // <---- increasing the file size to cached 5mb
   },
 });
 const nextConfig = {
