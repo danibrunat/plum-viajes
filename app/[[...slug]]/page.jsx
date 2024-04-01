@@ -50,6 +50,8 @@ export async function generateMetadata({ params }, parent) {
     titleTemplate: `%s | ${config.title}`,
     description,
     canonical: config.url && `${config.url}/${slug}`,
+    manifest: "/manifest.json",
+
     openGraph: {
       images: openGraphImages,
     },
