@@ -1,4 +1,3 @@
-import { DashboardConfig } from "@sanity/dashboard";
 /**
  * This configuration is used to for the Sanity Studio that’s mounted on the `\src\app\studio\[[...index]]\page.tsx` route
  */
@@ -29,7 +28,6 @@ export default defineConfig({
   basePath: "/studio",
   projectId,
   dataset,
-  // Add and edit the content schema in the './sanity/schema' folder
   schema,
   plugins: [
     tags({}),
