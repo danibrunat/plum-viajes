@@ -51,7 +51,7 @@ export default defineField({
       title: "Subtítulo",
       fieldset: "generalData",
     },
-    {
+    /* {
       name: "origin",
       type: "tags",
       title: "Origen",
@@ -76,7 +76,7 @@ export default defineField({
           value: o.name,
         })),
       },
-    },
+    }, */
     {
       name: "nights",
       type: "number",

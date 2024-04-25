@@ -19,7 +19,7 @@ import { structureTool } from "sanity/structure";
 
 import { codeInput } from "@sanity/code-input";
 import { iconPicker } from "sanity-plugin-icon-picker";
-import { tags } from "sanity-plugin-tags";
+//import { tags } from "sanity-plugin-tags";
 
 const hiddenDocTypes = (listItem: { getId: () => string }) =>
   !["page", "route", "siteConfig"].includes(listItem.getId());
@@ -30,7 +30,7 @@ export default defineConfig({
   dataset,
   schema,
   plugins: [
-    tags({}),
+    //tags({}),
     structureTool({
       structure: deskStructure,
     }),

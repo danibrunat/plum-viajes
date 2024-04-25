@@ -47,7 +47,6 @@
     "react-inlinesvg": "^4.1.1",
     "sanity": "^3.39.0",
     "sanity-plugin-icon-picker": "^3.3.0",
-    "sanity-plugin-tags": "^2.0.1",
     "stripe": "^14.2.0",
     "styled-components": "^6.1.8",
     "tailwind-merge": "^1.14.0",
