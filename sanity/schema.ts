@@ -5,6 +5,7 @@ import page from "./schemas/documents/page";
 import route from "./schemas/documents/route";
 import siteConfig from "./schemas/documents/siteConfig";
 import landing from "./schemas/documents/landing";
+import packages from "./schemas/documents/packages";
 
 // Object types
 import cta from "./schemas/objects/cta";
@@ -20,17 +21,17 @@ import simplePortableText from "./schemas/objects/simplePortableText";
 import products from "./schemas/objects/products";
 import reviews from "./schemas/objects/reviews";
 import newsletter from "./schemas/objects/newsletter";
+import iFrame from "./schemas/objects/iframe";
+import departure from "./schemas/objects/departure";
 
 // Landing page sections
 import hero from "./schemas/objects/hero";
 import imageSection from "./schemas/objects/imageSection";
-import mailchimp from "./schemas/objects/mailchimp";
 import textSection from "./schemas/objects/textSection";
-import heroWithImages from "./schemas/objects/heroWithImages";
 import slider from "./schemas/objects/slider";
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
-    heroWithImages,
+    packages,
     cta,
     embedHTML,
     figure,
@@ -43,7 +44,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     searchEngines,
     link,
     reviews,
-    mailchimp,
     products,
     slider,
     page,
@@ -53,5 +53,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     siteConfig,
     textSection,
     newsletter,
+    iFrame,
+    departure,
   ],
 };

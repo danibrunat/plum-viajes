@@ -8,7 +8,7 @@ export const deskStructure = (S) =>
     .title("Administración")
     .items([
       S.documentListItem().schemaType("siteConfig").title("Site config"),
-      S.documentTypeListItem("page").title("Pages"),
-      S.documentTypeListItem("route").title("Routes"),
+      S.documentTypeListItem("page").title("Páginas"),
+      S.documentTypeListItem("route").title("Rutas"),
       ...S.documentTypeListItems().filter(hiddenDocTypes),
     ]);

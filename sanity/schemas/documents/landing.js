@@ -47,10 +47,10 @@ export default defineField({
         { type: "slider" },
         { type: "homeLinksBanners" },
         { type: "searchEngines" },
-        { type: "heroWithImages" },
+        { type: "reviews" },
         { type: "imageSection" },
-        { type: "mailchimp" },
         { type: "textSection" },
+        { type: "iFrame" },
       ],
     },
     {

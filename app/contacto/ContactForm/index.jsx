@@ -258,7 +258,7 @@ const ContactForm = () => {
             Quiero suscribirme para recibir las mejores promociones
           </label>
         </div>
-        <div className="min-w-96 min-h-24">
+        <div className="min-w-auto min-h-24">
           <ReCAPTCHA
             ref={recaptchaRef}
             sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}

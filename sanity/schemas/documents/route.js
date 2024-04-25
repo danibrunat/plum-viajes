@@ -4,7 +4,7 @@ import { defineField } from "sanity";
 export default defineField({
   name: "route",
   type: "document",
-  title: "Route",
+  title: "Rutas",
   icon: LinkIcon,
   fields: [
     {

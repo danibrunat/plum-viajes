@@ -1,4 +1,3 @@
-import bcp47 from "bcp47";
 import { defineField } from "sanity";
 
 export default defineField({

@@ -4,7 +4,7 @@ import { defineField } from "sanity";
 export default defineField({
   name: "page",
   type: "document",
-  title: "Page",
+  title: "Páginas",
   icon: MasterDetailIcon,
   fieldsets: [
     {
@@ -28,10 +28,9 @@ export default defineField({
         { type: "homeLinksBanners" },
         { type: "searchEngines" },
         { type: "reviews" },
-        { type: "heroWithImages" },
         { type: "imageSection" },
-        { type: "mailchimp" },
         { type: "textSection" },
+        { type: "iFrame" },
       ],
     },
     {
