@@ -49,7 +49,7 @@
     "sanity-plugin-icon-picker": "^3.3.0",
     "sanity-plugin-tags": "^2.0.1",
     "stripe": "^14.2.0",
-    "styled-components": "6.0",
+    "styled-components": "^5.3.6 || ^6.0.0",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4"
