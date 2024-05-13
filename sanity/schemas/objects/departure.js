@@ -55,7 +55,7 @@ export default defineField({
     },
     {
       name: "departureActive",
-      type: "string",
+      type: "number",
       title: "Disponible",
       fieldset: "departures",
       options: {

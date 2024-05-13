@@ -21,7 +21,7 @@ export default defineField({
     {
       title: "Ofertas y formas de pago",
       name: "paymentType",
-      options: { columns: 5 },
+      options: { columns: 2 },
     },
     {
       title: "Posicionamiento en buscadores",
@@ -46,10 +46,56 @@ export default defineField({
       fieldset: "generalData",
     },
     {
+      name: "slug",
+      type: "slug",
+      title: "título en la URL",
+      fieldset: "generalData",
+      options: {
+        //Change to schema title to automatically populate
+        source: "title",
+        slugify: (input) =>
+          input
+            .toLowerCase()
+            //Remove spaces
+            .replace(/\s+/g, "-")
+            //Remove special characters
+            .replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, ""),
+        validation: (Rule) => Rule.required(),
+      },
+    },
+    {
       name: "subtitle",
       type: "string",
       title: "Subtítulo",
       fieldset: "generalData",
+    },
+    // Presented as a tokenizing tag-field
+    {
+      title: "Origen",
+      name: "origin",
+      type: "array",
+      of: [{ type: "string" }],
+      options: {
+        layout: "grid",
+        list: ORIGINS.map((o) => ({
+          title: o.cityName,
+          value: o.id,
+        })).slice(1, 5),
+      },
+    },
+    // Presented as a tokenizing tag-field
+    {
+      title: "Destino",
+      name: "destination",
+      type: "array",
+      of: [{ type: "string" }],
+      options: {
+        layout: "grid",
+        list: CITIES.map((o) => ({
+          title: o.name,
+          value: o.id,
+        })).slice(70, 80),
+      },
     },
     /* {
       name: "origin",

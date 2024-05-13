@@ -7,6 +7,7 @@ export default function SearchEngines({
   hotels,
   flights,
   packages,
+  defaultValues = {},
 }) {
   return (
     <section className="mx-2 py-5 md:mx-16 ">
@@ -14,7 +15,7 @@ export default function SearchEngines({
         {packages ? (
           <Tab label="Buscar Paquetes">
             <div className=" bg-plumPrimaryPink py-4">
-              <PackagesEngine />
+              <PackagesEngine defaultValues={defaultValues?.packages} />
             </div>
           </Tab>
         ) : (

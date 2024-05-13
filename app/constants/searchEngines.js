@@ -1,12 +1,18 @@
-import { FaCalendar, FaGlobeAmericas, FaMapMarked } from "react-icons/fa";
 import FlightsEngine from "../components/sections/SearchEngines/FlightsEngine";
 import PackagesEngine from "../components/sections/SearchEngines/PackagesEngine";
-import Autocomplete from "../components/sections/SearchEngines/Autocomplete";
+
+export const departureDateMonths = [
+  { id: 1, value: "05-2024", label: "Mayo, 2024" },
+  { id: 2, value: "06-2024", label: "Junio, 2024" },
+  { id: 3, value: "07-2024", label: "Julio, 2024" },
+  { id: 4, value: "08-2024", label: "Agosto, 2024" },
+];
 
 export const searchEngines = [
   {
     id: "packages",
     component: <PackagesEngine />,
+    formId: "pkgSearchForm",
     label: "Buscar Paquetes",
   },
   {
@@ -23,44 +29,5 @@ export const searchEngines = [
     id: "assurances",
     component: <h1>Assurances</h1>,
     label: "Asistencia al Viajero",
-  },
-];
-
-export const packageEngineItems = [
-  {
-    id: "where",
-    title: "¿Dónde querés ir?",
-    icon: <FaGlobeAmericas className="text-gray-200" />,
-    children: <Autocomplete id="where" />,
-  },
-  {
-    id: "when",
-    title: "¿Cuándo pensás viajar?",
-    icon: <FaCalendar className="text-gray-200" />,
-    children: (
-      <select name="when" id="when" className="w-full p-1">
-        <option value="">Elegí el mes de tu viaje...</option>
-        <option value="">Marzo</option>
-        <option value="">Abril</option>
-        <option value="">Mayo</option>
-        <option value="">Junio</option>
-        <option value="">Julio</option>
-      </select>
-    ),
-  },
-  {
-    id: "from",
-    title: "¿Desde qué ciudad partís?",
-    icon: <FaMapMarked className="text-gray-200" />,
-    children: (
-      <select className="w-full p-1" name="from" id="from">
-        <option value="">Indistinto</option>
-        <option value="">Asunción</option>
-        <option value="">Bahía Blanca</option>
-        <option value="">Bariloche</option>
-        <option value="">Buenos Aires</option>
-        <option value="">Córdoba</option>
-      </select>
-    ),
   },
 ];
