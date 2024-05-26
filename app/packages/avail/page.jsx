@@ -8,10 +8,13 @@ import PkgGridHeader from "./PkgGridTestServer/PkgGridHeader";
 
 async function getCity(code) {
   try {
-    const citiesSearch = await fetch(`/api/cities/byCode?code=${code}`, {
-      method: "GET",
-      //cache: "no-cache",
-    });
+    const citiesSearch = await fetch(
+      `${process.env.URL}/api/cities/byCode?code=${code}`,
+      {
+        method: "GET",
+        //cache: "no-cache",
+      }
+    );
     const citiesResponse = await citiesSearch.json();
 
     const mapResponse = citiesResponse.map(
@@ -28,8 +31,6 @@ async function getCity(code) {
     return { error: error.message };
   }
 }
-
-const delay = (time) => new Promise((res) => setTimeout(res, time));
 
 const PackagesAvailability = async ({ searchParams }) => {
   const { arrivalCity, departureCity, departureDate } = searchParams;
@@ -51,6 +52,7 @@ const PackagesAvailability = async ({ searchParams }) => {
   };
   const sanityQuery = await sanityFetch({ query: pkgAvailQuery });
   const pkgAvailResponse = await sanityQuery;
+  console.log("searchEngineDefaultValues", searchEngineDefaultValues);
 
   return (
     <>
