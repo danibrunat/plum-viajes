@@ -5,10 +5,10 @@ export async function GET(req) {
   console.log("input", input);
   if (input === "arrivalCity") {
     try {
-      const citiesSearch = await fetch(
-        `http://localhost:3000/api/cities/byName?name=${query}`,
-        { method: "GET", cache: "no-cache" }
-      );
+      const citiesSearch = await fetch(`/api/cities/byName?name=${query}`, {
+        method: "GET",
+        cache: "no-cache",
+      });
       const citiesResponse = await citiesSearch.json();
 
       const autocompleteResponse = citiesResponse.map(
@@ -29,7 +29,7 @@ export async function GET(req) {
   if (input === "departureCity") {
     try {
       const citiesSearch = await fetch(
-        `http://localhost:3000/api/cities/departureCity?name=${query}`,
+        `/api/cities/departureCity?name=${query}`,
         { method: "GET", cache: "no-cache" }
       );
       const citiesResponse = await citiesSearch.json();

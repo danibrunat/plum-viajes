@@ -20,7 +20,7 @@ const getPackageEngineItems = () => {
   const getCitiesAutocompleteApi = async (query, inputName) => {
     try {
       const cities = await fetch(
-        `http://localhost:3000/api/cities/autocomplete?query=${query}&input=${inputName}`,
+        `/api/cities/autocomplete?query=${query}&input=${inputName}`,
         {
           method: "GET",
         }

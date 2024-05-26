@@ -8,10 +8,10 @@ import PkgGridHeader from "./PkgGridTestServer/PkgGridHeader";
 
 async function getCity(code) {
   try {
-    const citiesSearch = await fetch(
-      `http://localhost:3000/api/cities/byCode?code=${code}`,
-      { method: "GET", cache: "no-cache" }
-    );
+    const citiesSearch = await fetch(`/api/cities/byCode?code=${code}`, {
+      method: "GET",
+      //cache: "no-cache",
+    });
     const citiesResponse = await citiesSearch.json();
 
     const mapResponse = citiesResponse.map(
