@@ -6,6 +6,11 @@ import PkgGridServer from "./PkgGridTestServer";
 import { departureDateMonths } from "../../constants/searchEngines";
 import PkgGridHeader from "./PkgGridTestServer/PkgGridHeader";
 
+export const metadata = {
+  title: "Paquetes | Plum Viajes",
+  keywords: "Paquetes Plum Viajes El mejor precio para tu viaje",
+};
+
 async function getCity(code) {
   try {
     const citiesSearch = await fetch(
@@ -32,27 +37,34 @@ async function getCity(code) {
   }
 }
 
+async function getPkgAvailability(searchParams) {
+  const pkgAvailabilityRequest = await fetch(
+    `${process.env.URL}/api/packages/availability`,
+    { method: "POST", body: JSON.stringify({ searchParams }) }
+  );
+
+  if (!pkgAvailabilityRequest.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch data");
+  }
+
+  return pkgAvailabilityRequest.json();
+}
+
 const PackagesAvailability = async ({ searchParams }) => {
   const { arrivalCity, departureCity, departureDate } = searchParams;
-  const pkgAvailQuery = groq`*[_type == "packages" 
-  && "${departureCity}" in origin
-  && "${arrivalCity}" in destination
-  && now() > validDateFrom 
-  && now() < validDateTo 
- // && departures[departureDateRt1 >= now()]
- ]`;
+
   const searchEngineDefaultValues = {
     packages: {
       departureDate: departureDateMonths.filter(
-        (ddm) => ddm.value === searchParams.departureDate
+        (ddm) => ddm.value === departureDate
       ),
-      arrivalCity: await getCity(searchParams.arrivalCity),
-      departureCity: await getCity(searchParams.departureCity),
+      arrivalCity: await getCity(arrivalCity),
+      departureCity: await getCity(departureCity),
     },
   };
-  const sanityQuery = await sanityFetch({ query: pkgAvailQuery });
-  const pkgAvailResponse = await sanityQuery;
-  console.log("searchEngineDefaultValues", searchEngineDefaultValues);
+
+  const pkgAvailabilityResponse = await getPkgAvailability(searchParams);
 
   return (
     <>
@@ -63,7 +75,7 @@ const PackagesAvailability = async ({ searchParams }) => {
       <div className="mx-2 py-2 md:py-5 md:mx-40">
         <Suspense fallback={<p>Cargando pkg grid</p>}>
           <PkgGridHeader searchParams={searchParams} />
-          <PkgGridServer availResponse={pkgAvailResponse} />
+          <PkgGridServer availResponse={pkgAvailabilityResponse} />
         </Suspense>
       </div>
     </>
