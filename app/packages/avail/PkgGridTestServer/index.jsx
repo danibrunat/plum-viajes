@@ -6,7 +6,7 @@ const PkgGridServer = ({ availResponse }) => {
       <aside className="d-none md:flex md:w-1/4">Filtros</aside>
       <div className="flex w-full flex-col md:w-3/4">
         {availResponse.map((pkgItem) => (
-          <PkgGridItem pkgItem={pkgItem} />
+          <PkgGridItem key={pkgItem._id} pkgItem={pkgItem} />
         ))}
       </div>
     </section>
