@@ -6,7 +6,7 @@ export async function GET(req) {
   if (input === "arrivalCity") {
     try {
       const citiesSearch = await fetch(
-        `${process.env.NEXT_PUBLIC_URL}/api/cities/byName?name=${query}`,
+        `${process.env.URL}/api/cities/byName?name=${query}`,
         {
           method: "GET",
           cache: "no-cache",
@@ -32,7 +32,7 @@ export async function GET(req) {
   if (input === "departureCity") {
     try {
       const citiesSearch = await fetch(
-        `${process.env.NEXT_PUBLIC_URL}/api/cities/departureCity?name=${query}`,
+        `${process.env.URL}/api/cities/departureCity?name=${query}`,
         { method: "GET", cache: "no-cache" }
       );
       const citiesResponse = await citiesSearch.json();
