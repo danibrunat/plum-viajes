@@ -6,6 +6,7 @@ import route from "./schemas/documents/route";
 import siteConfig from "./schemas/documents/siteConfig";
 import landing from "./schemas/documents/landing";
 import packages from "./schemas/documents/packages";
+import quotation from "./schemas/documents/quotation";
 
 // Object types
 import cta from "./schemas/objects/cta";
@@ -23,6 +24,7 @@ import reviews from "./schemas/objects/reviews";
 import newsletter from "./schemas/objects/newsletter";
 import iFrame from "./schemas/objects/iframe";
 import departure from "./schemas/objects/departure";
+import prices from "./schemas/objects/prices";
 
 // Landing page sections
 import hero from "./schemas/objects/hero";
@@ -32,6 +34,7 @@ import slider from "./schemas/objects/slider";
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     packages,
+    quotation,
     cta,
     embedHTML,
     figure,
@@ -55,5 +58,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     newsletter,
     iFrame,
     departure,
+    prices,
   ],
 };

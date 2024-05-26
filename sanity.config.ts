@@ -4,7 +4,6 @@
 
 import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
-import { deskTool } from "sanity/desk";
 
 import { apiVersion, dataset, projectId } from "./sanity/env";
 import dbConfig from "./sanity/dashboardConfig";
@@ -21,6 +20,8 @@ import { codeInput } from "@sanity/code-input";
 import { iconPicker } from "sanity-plugin-icon-picker";
 //import { tags } from "sanity-plugin-tags";
 
+import DownloadPDFAction from "./sanity/actions/PDFDownload";
+
 const hiddenDocTypes = (listItem: { getId: () => string }) =>
   !["page", "route", "siteConfig"].includes(listItem.getId());
 
@@ -29,12 +30,18 @@ export default defineConfig({
   projectId,
   dataset,
   schema,
+  document: {
+    actions: (prev, context) => {
+      return context.schemaType === "quotation"
+        ? [DownloadPDFAction, ...prev]
+        : prev;
+    },
+  },
   plugins: [
     //tags({}),
     structureTool({
       structure: deskStructure,
     }),
-    deskTool(),
     iconPicker(),
     codeInput(),
     dashboardTool({

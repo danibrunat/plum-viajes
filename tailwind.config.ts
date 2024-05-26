@@ -1,4 +1,3 @@
-/** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
   content: [
@@ -18,6 +17,7 @@ module.exports = {
     extend: {
       colors: {
         plumPrimaryPink: "#d86c64",
+        plumSecondaryPink: "#dd928c",
         plumPrimaryBlue: "#789cd1",
         plumSecondaryBlue: "#709cea",
         plumAboutUsBlue: "#0b2654",

@@ -10,7 +10,7 @@ export default function SearchEngines({
   defaultValues = {},
 }) {
   return (
-    <section className="mx-2 py-5 md:mx-16 ">
+    <section className="mx-2 py-5 md:mx-12">
       <Tabs className="py-5">
         {packages ? (
           <Tab label="Buscar Paquetes">

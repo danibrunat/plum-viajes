@@ -1,5 +1,6 @@
 import { defineField } from "sanity";
 import { AIRLINES } from "../../../app/constants/airlines";
+import { HOTELS } from "../../../app/constants/hotels";
 
 export default defineField({
   title: "Salida",
@@ -30,8 +31,9 @@ export default defineField({
     {
       title: "Tarifas",
       name: "prices",
-      options: { columns: 6 },
+      options: { columns: 1 },
     },
+  
   ],
 
   fields: [
@@ -227,5 +229,54 @@ export default defineField({
       title: "Escalas",
       fieldset: "roundTripFlight2",
     },
+    {
+      name: "hotels",
+      type: "string",
+      title: "Hotel",
+      fieldset: "hotels",
+      options: {
+        list: HOTELS.slice(0, 50).map((o) => ({
+          title: o.name,
+          id: o.id,
+          value: o.name,
+        })),
+      },
+    },
+    {
+      name: "mealPlan",
+      type: "string",
+      title: "Régimen de comidas",
+      fieldset: "hotels",
+      options: {
+        list: [
+          {
+            title: "Desayuno",
+            id: "breakfast",
+            value: "breakfast",
+          },
+          {
+            title: "Media Pensión",
+            id: "halfBoard",
+            value: "halfBoard",
+          },
+          {
+            title: "Pensión Completa",
+            id: "fullBoard",
+            value: "fullBoard",
+          },
+          {
+            title: "All Inclusive",
+            id: "allInclusive",
+            value: "allInclusive",
+          }
+        ],
+      },
+    },
+    {
+      name: "prices",
+      type: "array",
+      of: [{type: "price"}],
+      fieldset:"prices"
+    }
   ],
 });

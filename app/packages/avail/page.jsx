@@ -4,6 +4,7 @@ import groq from "groq";
 import SearchEngines from "../../components/sections/SearchEngines";
 import PkgGridServer from "./PkgGridTestServer";
 import { departureDateMonths } from "../../constants/searchEngines";
+import PkgGridHeader from "./PkgGridTestServer/PkgGridHeader";
 
 async function getCity(code) {
   try {
@@ -36,11 +37,9 @@ const PackagesAvailability = async ({ searchParams }) => {
   && "${departureCity}" in origin
   && "${arrivalCity}" in destination
   && now() > validDateFrom 
-  && now() < validDateTo
- ] {
-  ...,
-  departures[departureDateRt1 >= now()]
- }`;
+  && now() < validDateTo 
+ // && departures[departureDateRt1 >= now()]
+ ]`;
   const searchEngineDefaultValues = {
     packages: {
       departureDate: departureDateMonths.filter(
@@ -53,17 +52,18 @@ const PackagesAvailability = async ({ searchParams }) => {
   const sanityQuery = await sanityFetch({ query: pkgAvailQuery });
   const pkgAvailResponse = await sanityQuery;
 
-  await delay(3000);
-
   return (
     <>
       <SearchEngines
         packages={true}
         defaultValues={searchEngineDefaultValues}
       />
-      <Suspense fallback={<p>Cargando pkg grid</p>}>
-        <PkgGridServer availResponse={pkgAvailResponse} />
-      </Suspense>
+      <div className="mx-2 py-2 md:py-5 md:mx-40">
+        <Suspense fallback={<p>Cargando pkg grid</p>}>
+          <PkgGridHeader searchParams={searchParams} />
+          <PkgGridServer availResponse={pkgAvailResponse} />
+        </Suspense>
+      </div>
     </>
   );
 };
