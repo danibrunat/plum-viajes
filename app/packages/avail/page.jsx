@@ -1,10 +1,9 @@
 import React, { Suspense } from "react";
-import { sanityFetch } from "../../../sanity/lib/sanityFetch";
-import groq from "groq";
 import SearchEngines from "../../components/sections/SearchEngines";
 import PkgGridServer from "./PkgGridTestServer";
 import { departureDateMonths } from "../../constants/searchEngines";
 import PkgGridHeader from "./PkgGridTestServer/PkgGridHeader";
+import Loading from "../../components/commons/Loading";
 
 export const metadata = {
   title: "Paquetes | Plum Viajes",
@@ -73,10 +72,8 @@ const PackagesAvailability = async ({ searchParams }) => {
         defaultValues={searchEngineDefaultValues}
       />
       <div className="mx-2 py-2 md:py-5 md:mx-40">
-        <Suspense fallback={<p>Cargando pkg grid</p>}>
-          <PkgGridHeader searchParams={searchParams} />
-          <PkgGridServer availResponse={pkgAvailabilityResponse} />
-        </Suspense>
+        <PkgGridHeader searchParams={searchParams} />
+        <PkgGridServer availResponse={pkgAvailabilityResponse} />
       </div>
     </>
   );

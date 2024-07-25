@@ -3,7 +3,10 @@ import React from "react";
 import { urlForImage } from "../../../../../sanity/lib/image";
 
 const getDepartureLowestPrice = (departures) => {
-  return `$ ${departures[0].prices[0].amount}`;
+  if (!departures[0].prices.length > 0) return "Consulte";
+  const departureLowestPrice = departures[0]?.prices[0]?.amount;
+
+  return `$ ${departureLowestPrice}`;
 };
 
 const getHotelRating = (departure) => {
@@ -72,7 +75,7 @@ const PkgGridItem = ({ pkgItem: { images, title, departures } }) => {
         <Image
           className="rounded-xl hover:scale-110 transition-all duration-500"
           fill
-          src={urlForImage(images[0])}
+          src={images ? urlForImage(images[0]) : "/no-image.jpeg"}
           alt="Paquete"
         />
         <span className="absolute top-0 left-0 m-2 rounded-full bg-plumPrimaryPink px-2 text-center text-sm font-medium text-white">

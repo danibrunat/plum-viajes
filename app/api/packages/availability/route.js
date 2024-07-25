@@ -1,21 +1,19 @@
-import { groq } from "next-sanity";
-import { sanityFetch } from "../../../../sanity/lib/sanityFetch";
+import { urls } from "../../../services/urls.service";
 
 export async function POST(req) {
   const body = await req.json();
-  const {
-    searchParams: { arrivalCity, departureCity, departureDate },
-  } = body;
-  const pkgAvailQuery = groq`*[_type == "packages" 
-  && "${departureCity}" in origin
-  && "${arrivalCity}" in destination
-  && now() > validDateFrom 
-  && now() < validDateTo 
- // && departures[departureDateRt1 >= now()]
- ]`;
+  /* PBase */
+  const pkgAvailRequest = await fetch(
+    urls.packages.avail.pbase.url(),
+    urls.packages.avail.pbase.options(body),
+    { next: { revalidate: 3600 } }
+  );
 
-  const sanityQuery = await sanityFetch({ query: pkgAvailQuery });
-  const pkgAvailResponse = await sanityQuery;
+  /* PCom */
+
+  /* Response */
+
+  const pkgAvailResponse = await pkgAvailRequest.json();
 
   return Response.json(pkgAvailResponse);
 }

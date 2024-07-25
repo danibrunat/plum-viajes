@@ -33,7 +33,6 @@ export default defineField({
       name: "prices",
       options: { columns: 1 },
     },
-  
   ],
 
   fields: [
@@ -268,15 +267,15 @@ export default defineField({
             title: "All Inclusive",
             id: "allInclusive",
             value: "allInclusive",
-          }
+          },
         ],
       },
     },
     {
       name: "prices",
       type: "array",
-      of: [{type: "price"}],
-      fieldset:"prices"
-    }
+      of: [{ type: "price" }],
+      fieldset: "prices",
+    },
   ],
 });
