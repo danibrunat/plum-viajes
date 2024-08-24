@@ -1,4 +1,6 @@
-const PROVIDERS = [
+import { isObject } from "../../helpers/validation";
+
+/* const PROVIDERS = [
   {
     id: "julia",
     label: "Julia Tours",
@@ -8,7 +10,7 @@ const PROVIDERS = [
     },
   },
   { id: "plum", label: "Plum Viajes", active: 1 },
-];
+]; */
 
 export const PlumViajesService = {
   aFunction: () => {},
@@ -19,75 +21,93 @@ export const ProviderService = {
     id: {
       plum: "_id",
       julia: "IDPAQUETE",
+      ola: "Package.Code",
     },
     title: {
       plum: "title",
       julia: "NOMBRE",
+      ola: "Package.Name",
     },
     subtitle: {
       plum: "subtitle",
       julia: "subtitle",
+      ola: "Package.Description",
     },
     nights: {
       plum: "nights",
       julia: "CANTNOCHES",
+      ola: "Package.Nights",
     },
     hotels: {
       plum: "hotels",
       julia: "hotels",
+      ola: "Descriptions.Description.Name",
+    },
+    thumbnails: {
+      plum: "images",
+      ola: "Package.Pictures.Picture.[].$value",
     },
     departures: {
       plum: "departures",
       julia: "departures",
     },
   },
+  haveNestedProperty: (string) => {
+    return string.includes(".");
+  },
+  /**
+   *
+   * @param {*} object El objeto a iterar
+   * @param {*} value El string de properties a splittear por "."
+   * @returns Retorna un objeto según un string de nested properties. Ej: Provider.Code. Buscará dentro de un objeto una propiedad Provider y dentro de ese una propiedad Code y traerá su valor
+   */
+  getByDotOperator(object, value) {
+    if (!object || !value) return null;
+
+    const reduced = value.split(".").reduce((acc, curr) => {
+      if (curr === "[]") {
+        // Handle array case
+        return Array.isArray(acc) ? acc : [];
+      } else if (Array.isArray(acc)) {
+        // If acc is an array, map the property access to all elements
+        return acc.map((item) => item[curr]);
+      } else {
+        return acc ? acc[curr] : undefined;
+      }
+    }, object);
+
+    return reduced;
+  },
   mapper: (response, provider) => {
+    //console.log("mapper | response", response);
     if (response.length === 0) return response;
     if (provider === "plum") return response;
-
     const respConfig = ProviderService.availResponseConfig;
-    //console.log("response before foreach", response);
+    //console.log("json.stringify", JSON.stringify(response));
+
     const mappedResponse = response.map((pkg) => {
       let mappedPkg = {};
       Object.keys(respConfig).forEach((prop) => {
-        // console.log("[respConfig[prop]", respConfig[prop]);
-        mappedPkg[prop] = pkg[respConfig[prop][provider]];
+        const providerConfigProp = respConfig[prop][provider];
+        if (
+          providerConfigProp &&
+          ProviderService.haveNestedProperty(providerConfigProp)
+        ) {
+          mappedPkg[prop] = ProviderService.getByDotOperator(
+            pkg,
+            providerConfigProp
+          );
+          return mappedPkg;
+        }
+        mappedPkg[prop] = pkg[providerConfigProp];
       });
       //console.log("mappedPkg", JSON.stringify(mappedPkg));
       return mappedPkg;
     });
-    // console.log("mappedResponse", mappedResponse);
     return mappedResponse;
-  },
-  julia: {
-    parseXmlResults: (xml) => {
-      const parseString = require("xml2js").parseString;
-      let results = [];
-      if (Array.isArray(xml)) return xml;
-      parseString(xml, function (err, result) {
-        const emptyResponse = ProviderService.julia.isEmptyString(
-          result.DocumentElement
-        );
-        // console.log("emptyResponse", emptyResponse);
-        if (emptyResponse) return [];
 
-        const rawResults = result.DocumentElement.Row;
-        if (rawResults && Array.isArray(rawResults)) {
-          rawResults.map((resultItem) => {
-            Object.keys(resultItem).map((resultProperty) => {
-              resultItem[resultProperty] = resultItem[resultProperty][0];
-            });
-          });
-          results.push(rawResults);
-        }
-        if (result.error) return result.error;
-      });
-      if (results.length === 0) return results;
-      const resultArr = results[0];
-      return resultArr;
-    },
-    isEmptyString: (string) => {
-      return string === "" ? true : false;
-    },
+    //console.log("mappedResponse", mappedResponse);
   },
+  julia: {},
+  ola: {},
 };

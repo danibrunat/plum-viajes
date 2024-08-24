@@ -1,4 +1,5 @@
 import React from "react";
+import { sanitizeHtmlString } from "../../../helpers/strings";
 
 const Newsletter = ({ title, subtitle }) => {
   return (
@@ -16,7 +17,7 @@ const Newsletter = ({ title, subtitle }) => {
 
         <input type="submit" value="Enviar" />
       </form>
-      <em className="text-sm">{subtitle}</em>
+      <em className="text-sm">{sanitizeHtmlString(subtitle)}</em>
     </div>
   );
 };

@@ -46,14 +46,18 @@ const filters = [
   },
 ];
 
-const PkgGridServer = ({ availResponse }) => {
+const PkgGridServer = ({ availResponse, searchParams: { departureCity } }) => {
   const hydratedFilters = filters;
   return (
     <section className="flex flex-col md:flex-row md:justify-between w-full gap-2 md:gap-5">
       <PkgFilters filters={hydratedFilters} />
       <div className="flex w-full p-2 md:p-0 flex-col md:w-3/4">
         {availResponse.map((pkgItem) => (
-          <PkgGridItem key={pkgItem._id} pkgItem={pkgItem} />
+          <PkgGridItem
+            key={pkgItem?._id}
+            pkgItem={pkgItem}
+            departureCity={departureCity}
+          />
         ))}
       </div>
     </section>

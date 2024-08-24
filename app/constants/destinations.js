@@ -947,6 +947,18 @@ export const CITIES = [
     regionName: "Sudam\u00e9rica",
   },
   {
+    id: "CUN",
+    name: "Cancún",
+    label: "Cancún",
+    description:
+      "<p>Asunci&oacute;n es la ciudad capital de Paraguay rodeada por el r&iacute;o Paraguay.</p>\r\n\r\n<p>&nbsp;Su encantador casco hist&oacute;rico se puede recorrer a pie. La hospitalaria capital de Paraguay, puerta de entrada a las llanuras de la regi&oacute;n del Gran Chaco, fue durante mucho tiempo un centro aglutinador de m&uacute;sica, poes&iacute;a y artes pl&aacute;sticas. Entre los sitios merecedores de una visita destacan el Pante&oacute;n Nacional de los H&eacute;roes, la Casa de la Independencia y la catedral de Nuestra Se&ntilde;ora de la Asunci&oacute;n.</p>\r\n",
+    longDescription: "",
+    active: "0",
+    origin: "1",
+    countryName: "México",
+    regionName: "Sudam\u00e9rica",
+  },
+  {
     id: "ASW",
     name: "Aswan",
     label: "Aswan",
@@ -2736,7 +2748,7 @@ export const CITIES = [
     regionName: "Ocean\u00eda",
   },
   {
-    id: "36",
+    id: "CUN",
     name: "Canc\u00fan",
     label: "Canc\u00fan",
     description:
@@ -12853,7 +12865,7 @@ export const CITIES = [
     regionName: "Sudam\u00e9rica",
   },
   {
-    id: "32",
+    id: "PUJ",
     name: "Punta Cana",
     label: "Punta Cana",
     description:
@@ -12861,7 +12873,7 @@ export const CITIES = [
     longDescription: "",
     active: "1",
     origin: "0",
-    countryName: "Rep\u00fablica Dominicana",
+    countryName: "República Dominicana",
     regionName: "Caribe",
   },
   {

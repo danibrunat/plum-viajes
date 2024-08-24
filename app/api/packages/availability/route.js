@@ -5,8 +5,7 @@ export async function POST(req) {
   /* PBase */
   const pkgAvailRequest = await fetch(
     urls.packages.avail.pbase.url(),
-    urls.packages.avail.pbase.options(body),
-    { next: { revalidate: 3600 } }
+    urls.packages.avail.pbase.options(body)
   );
 
   /* PCom */

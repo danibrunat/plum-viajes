@@ -2,6 +2,7 @@ import { groq } from "next-sanity";
 import { sanityFetch } from "../../../../../sanity/lib/sanityFetch";
 import { Julia } from "../../../services/julia.service";
 import { ProviderService } from "../../../services/providers.service";
+import { OLA } from "../../../services/ola.service";
 
 async function fetchPlumPackages({
   arrivalCity,
@@ -26,6 +27,42 @@ async function fetchPlumPackages({
   return Response.json(pkgAvailResponse);
 }
 
+async function fetchOlaPackages(searchParams) {
+  const { departureCity, arrivalCity, departureDate } = searchParams;
+  // ARMAR UN GETSEARCHPARAMSBYPROVIDER PARA MAPEAR DIRECTAMENTE LOS SEARCH PARAMS SEGUN NECESITE EL PROVEEDOR
+  const getPackagesFaresRequest = `<GetPackagesFaresRequest>
+            <GeneralParameters>
+              <Username>${process.env.OLA_USERNAME}</Username>
+              <Password>${process.env.OLA_API_KEY}</Password>
+              <CustomerIp>186.57.221.35</CustomerIp>
+            </GeneralParameters>
+             <DepartureDate>
+            <From>2024-12-01</From>
+            <To>2024-12-01</To>
+          </DepartureDate>
+          <Rooms>
+            <Room>
+              <Passenger Type="ADL"/>
+              <Passenger Type="ADL"/>
+            </Room>
+          </Rooms>
+          <DepartureDestination>${departureCity}</DepartureDestination>
+          <ArrivalDestination>${arrivalCity}</ArrivalDestination>
+          <FareCurrency>ARS</FareCurrency>
+          <Outlet>1</Outlet>
+          <PackageType>ALL</PackageType>
+            </GetPackagesFaresRequest>`;
+
+  try {
+    const olaAvail = await OLA.avail(getPackagesFaresRequest);
+    const mapResponse = ProviderService.mapper(olaAvail, "ola");
+
+    return mapResponse;
+  } catch (error) {
+    console.log("error OLA", error);
+  }
+}
+
 async function fetchJuliaPackages(searchParams) {
   const arrivalCity = "ASU";
   const departureCity = "BUE";
@@ -48,15 +85,22 @@ async function fetchJuliaPackages(searchParams) {
 export async function POST(req, res) {
   const body = await req.json();
   const { searchParams } = body;
-  const [plumPkg, juliaPkg] = await Promise.all([
+  const [plumPkg, olaPkg /*  juliaPkg  */] = await Promise.all([
     fetchPlumPackages(searchParams),
-    fetchJuliaPackages(searchParams),
+    fetchOlaPackages(searchParams),
+    //  fetchJuliaPackages(searchParams),
   ]);
 
   const plumPkgResponse = await plumPkg.json();
-  const juliaPkgResponse = await juliaPkg.json();
+  //const juliaPkgResponse = await juliaPkg.json();
+  console.log("// PLUM RESPONSE // ");
+  console.log(plumPkgResponse);
+  console.log("// PLUM RESPONSE END // ");
 
-  const packagesResponse = plumPkgResponse.concat(juliaPkgResponse);
+  console.log("// OLA RESPONSE // ");
+  console.log(olaPkg);
+  console.log("// OLA RESPONSE END // ");
+  const packagesResponse = plumPkgResponse.concat(olaPkg);
 
   return Response.json(packagesResponse);
 }

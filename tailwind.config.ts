@@ -16,7 +16,7 @@ module.exports = {
     },
     extend: {
       colors: {
-        plumPrimaryPink: "#d86c64",
+        plumPrimaryPink: "#2c388b",
         plumSecondaryPink: "#dd928c",
         plumPrimaryBlue: "#789cd1",
         plumSecondaryBlue: "#709cea",

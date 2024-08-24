@@ -1,5 +1,6 @@
 import { ProviderService } from "./providers.service";
 import Dates from "../../services/dates.service";
+import XmlService from "./xml.service";
 
 const getHeaderRequest = (token) => {
   return {
@@ -41,8 +42,7 @@ export const Julia = {
       { method: "GET" }
     );
     const juliaTokenResponse = await juliaLoginRequest.text();
-    const parsedToken =
-      ProviderService.julia.parseXmlResults(juliaTokenResponse);
+    const parsedToken = XmlService.parseXmlResults(juliaTokenResponse);
     const token = parsedToken[0]["IDTOKEN"];
     return token;
   },
@@ -63,7 +63,7 @@ export const Julia = {
       });
 
       const juliaPkgHeaderAvailXml = await juliaPkgHeaderAvail.text();
-      const juliaPkgAvailHeaderResponse = ProviderService.julia.parseXmlResults(
+      const juliaPkgAvailHeaderResponse = XmlService.parseXmlResults(
         juliaPkgHeaderAvailXml
       );
       // console.log("juliaPkgAvailHeaderResponse", juliaPkgAvailHeaderResponse);
@@ -107,8 +107,7 @@ export const Julia = {
       if (departureHotelsGroupRequest.ok) {
         const departureHotelsGroup = await departureHotelsGroupRequest.text();
 
-        hotelsGroupResponse =
-          ProviderService.julia.parseXmlResults(departureHotelsGroup);
+        hotelsGroupResponse = XmlService.parseXmlResults(departureHotelsGroup);
       }
       return hotelsGroupResponse;
     } catch (error) {
@@ -135,8 +134,7 @@ export const Julia = {
       });
       if (departureFlightsRequest.ok) {
         const departureFlights = await departureFlightsRequest.text();
-        flightsResponse =
-          ProviderService.julia.parseXmlResults(departureFlights);
+        flightsResponse = XmlService.parseXmlResults(departureFlights);
       }
       return flightsResponse;
     } catch (error) {
@@ -167,7 +165,7 @@ export const Julia = {
         const departurePrices = await departurePricesRequest.text();
 
         //console.log("departurePrices", departurePrices);
-        pricesResponse = ProviderService.julia.parseXmlResults(departurePrices);
+        pricesResponse = XmlService.parseXmlResults(departurePrices);
       }
       return pricesResponse;
     } catch (error) {
@@ -230,8 +228,7 @@ export const Julia = {
         body: new URLSearchParams({ ...requestData }),
       });
       const pkgDepartures = await pkgDeparturesRequest.text();
-      const pkgDeparturesHeader =
-        ProviderService.julia.parseXmlResults(pkgDepartures);
+      const pkgDeparturesHeader = XmlService.parseXmlResults(pkgDepartures);
 
       if (pkgDeparturesHeader && pkgDeparturesHeader.length > 0) {
         // console.log("pkgDeparturesHeader", pkgDeparturesHeader);

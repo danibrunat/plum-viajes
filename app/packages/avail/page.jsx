@@ -73,7 +73,10 @@ const PackagesAvailability = async ({ searchParams }) => {
       />
       <div className="mx-2 py-2 md:py-5 md:mx-40">
         <PkgGridHeader searchParams={searchParams} />
-        <PkgGridServer availResponse={pkgAvailabilityResponse} />
+        <PkgGridServer
+          availResponse={pkgAvailabilityResponse}
+          searchParams={searchParams}
+        />
       </div>
     </>
   );

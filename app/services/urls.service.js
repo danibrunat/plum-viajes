@@ -5,7 +5,11 @@ export const urls = {
     avail: {
       pbase: {
         url: () => `${baseUrl}/api/packages/availability/pbase`,
-        options: (body) => ({ body: JSON.stringify(body), method: "POST" }),
+        options: (body) => ({
+          body: JSON.stringify(body),
+          method: "POST",
+          next: { revalidate: 1 },
+        }),
       },
     },
   },
