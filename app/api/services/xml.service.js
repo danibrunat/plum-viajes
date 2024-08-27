@@ -1,5 +1,4 @@
-import soap from "soap";
-import { isObject } from "../../helpers/validation";
+import { createClientAsync, Client } from "soap";
 
 const XmlService = {
   buildXmlSet: (object) => {
@@ -79,7 +78,7 @@ const XmlService = {
       };
 
       try {
-        const client = await soap.createClientAsync(url + "?wsdl", {
+        const client = await createClientAsync(url + "?wsdl", {
           endpoint: url,
         });
         const soapRequest = await client.GetPackagesFaresAsync(request);
