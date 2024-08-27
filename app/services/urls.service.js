@@ -8,7 +8,6 @@ export const urls = {
         options: (body) => ({
           body: JSON.stringify(body),
           method: "POST",
-          next: { revalidate: 10 },
         }),
       },
     },

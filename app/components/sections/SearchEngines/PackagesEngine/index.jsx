@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+
 import { useForm, Controller } from "react-hook-form";
 import AsyncSelect from "react-select/async";
 import { useEffect } from "react";
@@ -95,7 +95,7 @@ const generateAvailUrl = (product, searchData) => {
   const departureFromTo = ProviderService.departureDateFromTo(
     searchData["departureMonthYear"].value
   );
-  const availUrl = `/${product}/avail?arrivalCity=${arrivalCity}&departureCity=${departureCity}&dateFrom=${departureFromTo.dateFrom}&dateTo=${departureFromTo.dateTo}`;
+  const availUrl = `/${product}/avail?arrivalCity=${arrivalCity}&departureCity=${departureCity}&startDate=${departureFromTo.startDate}&endDate=${departureFromTo.endDate}`;
 
   return availUrl;
 };
@@ -123,7 +123,6 @@ export default function PackagesEngine({ defaultValues = {} }) {
     handleSubmit,
     formState: { errors },
   } = useForm(defaultValues);
-  const router = useRouter();
 
   useEffect(() => {
     reset({
@@ -135,7 +134,7 @@ export default function PackagesEngine({ defaultValues = {} }) {
 
   function handlePkgSearch(data) {
     const packagesAvailUrl = generateAvailUrl("packages", data);
-    router.push(packagesAvailUrl);
+    window.location = packagesAvailUrl;
   }
 
   const renderFormItems = () => {

@@ -7,8 +7,8 @@ import { OLA } from "../../../services/ola.service";
 async function fetchPlumPackages({
   arrivalCity,
   departureCity,
-  dateFrom,
-  dateTo,
+  startDate,
+  endDate,
 }) {
   const pkgAvailQuery = groq`*[_type == "packages" 
     && "${departureCity}" in origin
@@ -29,9 +29,9 @@ async function fetchPlumPackages({
 }
 
 async function fetchOlaPackages(searchParams) {
-  const { departureCity, arrivalCity, dateFrom, dateTo } = searchParams;
-  const formattedDateFrom = ProviderService.ola.olaDateFormat(dateFrom);
-  const formattedDateTo = ProviderService.ola.olaDateFormat(dateTo);
+  const { departureCity, arrivalCity, startDate, endDate } = searchParams;
+  const formattedDateFrom = ProviderService.ola.olaDateFormat(startDate);
+  const formattedDateTo = ProviderService.ola.olaDateFormat(endDate);
   // ARMAR UN GETSEARCHPARAMSBYPROVIDER PARA MAPEAR DIRECTAMENTE LOS SEARCH PARAMS SEGUN NECESITE EL PROVEEDOR
   const getPackagesFaresRequest = `<GetPackagesFaresRequest>
             <GeneralParameters>

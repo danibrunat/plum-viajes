@@ -38,7 +38,11 @@ async function getCity(code, asObject = false) {
 async function getPkgAvailability(searchParams) {
   const pkgAvailabilityRequest = await fetch(
     `${process.env.URL}/api/packages/availability`,
-    { method: "POST", body: JSON.stringify({ searchParams }) }
+    {
+      method: "POST",
+      body: JSON.stringify({ searchParams }),
+      next: { revalidate: 0 },
+    }
   );
 
   if (!pkgAvailabilityRequest.ok) {
@@ -50,19 +54,19 @@ async function getPkgAvailability(searchParams) {
 }
 
 const PackagesAvailability = async ({ searchParams }) => {
-  const { arrivalCity, departureCity, dateFrom, dateTo } = searchParams;
+  const { arrivalCity, departureCity, startDate, endDate } = searchParams;
 
   const searchEngineDefaultValues = {
     packages: {
-      departureMonthYear: ProviderService.departureDateMonthYear(dateFrom),
+      departureMonthYear: ProviderService.departureDateMonthYear(startDate),
       arrivalCity: await getCity(arrivalCity, true),
       departureCity: await getCity(departureCity, true),
     },
   };
 
   const pkgAvailabilityRequestData = {
-    dateFrom,
-    dateTo,
+    startDate,
+    endDate,
     arrivalCity,
     departureCity,
   };
@@ -70,6 +74,10 @@ const PackagesAvailability = async ({ searchParams }) => {
   const pkgAvailabilityResponse = await getPkgAvailability(
     pkgAvailabilityRequestData
   );
+
+  const cacheKey = `pkg-avail-${arrivalCity}-${departureCity}-${startDate}-${endDate}`;
+
+  console.log("cacheKey", cacheKey);
 
   return (
     <>
@@ -79,10 +87,12 @@ const PackagesAvailability = async ({ searchParams }) => {
       />
       <div className="mx-2 py-2 md:py-5 md:mx-40">
         <PkgGridHeader searchParams={searchParams} />
-        <PkgGridServer
-          availResponse={pkgAvailabilityResponse}
-          searchParams={searchParams}
-        />
+        <Suspense key={cacheKey} fallback={<Loading />}>
+          <PkgGridServer
+            availResponse={pkgAvailabilityResponse}
+            searchParams={searchParams}
+          />
+        </Suspense>
       </div>
     </>
   );

@@ -17,11 +17,11 @@ export const PlumViajesService = {
 };
 
 export const ProviderService = {
-  departureDateMonthYear: (dateFrom) => {
-    const currentDate = dateFrom ? new Date(dateFrom) : new Date();
+  departureDateMonthYear: (startDate) => {
+    const currentDate = startDate ? new Date(startDate) : new Date();
     const currentYear = currentDate.getFullYear();
-    const currentMonth = dateFrom
-      ? parseInt(dateFrom.split("-")[1]) - 1
+    const currentMonth = startDate
+      ? parseInt(startDate.split("-")[1]) - 1
       : currentDate.getMonth();
 
     const months = [
@@ -39,7 +39,7 @@ export const ProviderService = {
       "Diciembre",
     ];
 
-    if (dateFrom) {
+    if (startDate) {
       const monthIndex = currentMonth;
       const monthNumber = monthIndex + 1;
       const monthString = monthNumber.toString().padStart(2, "0");
@@ -71,8 +71,8 @@ export const ProviderService = {
     const [month, year] = monthYear.split("-");
     const currentMonthLastDay = new Date(year, month, 0).getDate();
     return {
-      dateFrom: `01-${month}-${year}`,
-      dateTo: `${currentMonthLastDay}-${month}-${year}`,
+      startDate: `01-${month}-${year}`,
+      endDate: `${currentMonthLastDay}-${month}-${year}`,
     };
   },
   availResponseConfig: {
