@@ -7,14 +7,15 @@ import { OLA } from "../../../services/ola.service";
 async function fetchPlumPackages({
   arrivalCity,
   departureCity,
-  departureDate,
+  dateFrom,
+  dateTo,
 }) {
   const pkgAvailQuery = groq`*[_type == "packages" 
     && "${departureCity}" in origin
     && "${arrivalCity}" in destination
     && now() > validDateFrom 
     && now() < validDateTo 
-   // && departures[departureDateRt1 >= now()]
+   // && departures[dateFromRt1 >= now()]
    ] {
     ...,
     "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1
@@ -28,7 +29,9 @@ async function fetchPlumPackages({
 }
 
 async function fetchOlaPackages(searchParams) {
-  const { departureCity, arrivalCity, departureDate } = searchParams;
+  const { departureCity, arrivalCity, dateFrom, dateTo } = searchParams;
+  const formattedDateFrom = ProviderService.ola.olaDateFormat(dateFrom);
+  const formattedDateTo = ProviderService.ola.olaDateFormat(dateTo);
   // ARMAR UN GETSEARCHPARAMSBYPROVIDER PARA MAPEAR DIRECTAMENTE LOS SEARCH PARAMS SEGUN NECESITE EL PROVEEDOR
   const getPackagesFaresRequest = `<GetPackagesFaresRequest>
             <GeneralParameters>
@@ -37,8 +40,8 @@ async function fetchOlaPackages(searchParams) {
               <CustomerIp>186.57.221.35</CustomerIp>
             </GeneralParameters>
              <DepartureDate>
-            <From>2024-12-01</From>
-            <To>2024-12-01</To>
+            <From>${formattedDateFrom}</From>
+            <To>${formattedDateTo}</To>
           </DepartureDate>
           <Rooms>
             <Room>
@@ -55,6 +58,7 @@ async function fetchOlaPackages(searchParams) {
 
   try {
     const olaAvail = await OLA.avail(getPackagesFaresRequest);
+    console.log("olaAvail", olaAvail);
     const mapResponse = ProviderService.mapper(olaAvail, "ola");
 
     return mapResponse;

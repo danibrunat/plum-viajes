@@ -4,6 +4,7 @@
  * @property {function} toDate return a date
  * @property {function} toUnix return a date with Unix format
  * @property {function} getMonth return date month
+ * @property {function} getYear return date year
  * @property {function} getDay return date day
  * @property {function(Date)} compareIsAfter return if the date is after the date parameter
  * @property {function(Date)} compareIsBefore return if date is before than date parameter

@@ -11,10 +11,7 @@ import {
   FaSearch,
 } from "react-icons/fa";
 import PackageEngineItem from "./PackageEngineItem";
-import {
-  departureDateMonths,
-  searchEngines,
-} from "../../../../constants/searchEngines";
+import { ProviderService } from "../../../../api/services/providers.service";
 
 const getPackageEngineItems = () => {
   const getCitiesAutocompleteApi = async (query, inputName) => {
@@ -58,8 +55,8 @@ const getPackageEngineItems = () => {
       ),
     },
     {
-      id: "departureDate",
-      name: "departureDate",
+      id: "departureMonthYear",
+      name: "departureMonthYear",
       title: "¿Cuándo pensás viajar?",
       icon: <FaCalendar className="text-gray-200" />,
       children: (field) => (
@@ -67,7 +64,7 @@ const getPackageEngineItems = () => {
           {...field}
           className="w-full p-1"
           placeholder="Seleccione"
-          options={departureDateMonths}
+          options={ProviderService.departureDateMonthYear()}
         />
       ),
     },
@@ -95,8 +92,10 @@ const getPackageEngineItems = () => {
 const generateAvailUrl = (product, searchData) => {
   const arrivalCity = searchData["arrivalCity"].value;
   const departureCity = searchData["departureCity"].value;
-  const departureDate = searchData["departureDate"].value;
-  const availUrl = `/${product}/avail?arrivalCity=${arrivalCity}&departureCity=${departureCity}&departureDate=${departureDate}`;
+  const departureFromTo = ProviderService.departureDateFromTo(
+    searchData["departureMonthYear"].value
+  );
+  const availUrl = `/${product}/avail?arrivalCity=${arrivalCity}&departureCity=${departureCity}&dateFrom=${departureFromTo.dateFrom}&dateTo=${departureFromTo.dateTo}`;
 
   return availUrl;
 };
@@ -104,7 +103,7 @@ const generateAvailUrl = (product, searchData) => {
 const FormSubmitButton = () => {
   return (
     <div className="flex w-full items-center justify-center md:w-1/4 ">
-      <div className="flex p-3 w-auto transition ease-in-out delay-50 rounded hover:-translate-y-1 hover:scale-110 hover:bg-red-400 duration-300">
+      <div className="flex p-3 w-auto transition ease-in-out delay-50 rounded hover:-translate-y-1 hover:scale-110 hover:bg-plumPrimaryOrange duration-300">
         <button
           className="flex gap-2 items-center text-white"
           aria-label="Buscar paquetes"
@@ -122,16 +121,15 @@ export default function PackagesEngine({ defaultValues = {} }) {
     control,
     reset,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm();
+  } = useForm(defaultValues);
   const router = useRouter();
 
   useEffect(() => {
     reset({
       arrivalCity: defaultValues.arrivalCity,
       departureCity: defaultValues.departureCity,
-      departureDate: defaultValues.departureDate,
+      departureMonthYear: defaultValues.departureMonthYear,
     });
   }, []);
 

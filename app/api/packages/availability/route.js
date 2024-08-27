@@ -16,3 +16,5 @@ export async function POST(req) {
 
   return Response.json(pkgAvailResponse);
 }
+
+const revalidate = 0;

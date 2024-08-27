@@ -17,6 +17,64 @@ export const PlumViajesService = {
 };
 
 export const ProviderService = {
+  departureDateMonthYear: (dateFrom) => {
+    const currentDate = dateFrom ? new Date(dateFrom) : new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = dateFrom
+      ? parseInt(dateFrom.split("-")[1]) - 1
+      : currentDate.getMonth();
+
+    const months = [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
+    ];
+
+    if (dateFrom) {
+      const monthIndex = currentMonth;
+      const monthNumber = monthIndex + 1;
+      const monthString = monthNumber.toString().padStart(2, "0");
+      const value = `${monthString}-${currentYear}`;
+
+      return {
+        id: monthNumber,
+        value: value,
+        label: `${months[monthIndex]}, ${currentYear}`,
+      };
+    }
+
+    return months
+      .map((month, index) => {
+        const monthNumber = index + 1;
+        const monthString = monthNumber.toString().padStart(2, "0");
+        const value = `${monthString}-${currentYear}`;
+
+        return {
+          id: monthNumber,
+          value,
+          label: `${month}, ${currentYear}`,
+        };
+      })
+      .filter((_, index) => index >= currentMonth);
+  },
+  departureDateFromTo: (monthYear) => {
+    if (!monthYear) return null;
+    const [month, year] = monthYear.split("-");
+    const currentMonthLastDay = new Date(year, month, 0).getDate();
+    return {
+      dateFrom: `01-${month}-${year}`,
+      dateTo: `${currentMonthLastDay}-${month}-${year}`,
+    };
+  },
   availResponseConfig: {
     id: {
       plum: "_id",
@@ -109,5 +167,10 @@ export const ProviderService = {
     //console.log("mappedResponse", mappedResponse);
   },
   julia: {},
-  ola: {},
+  ola: {
+    olaDateFormat: (dayMonthYear) => {
+      const [day, month, year] = dayMonthYear.split("-");
+      return `${year}-${month}-${day}`;
+    },
+  },
 };

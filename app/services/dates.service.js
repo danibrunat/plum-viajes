@@ -48,6 +48,7 @@ const transform = (momentDate) => {
     toFormat: (format) => momentDate.format(format),
     toUnix: () => momentDate.unix(),
     getMonth: () => momentDate.month(),
+    getYear: () => momentDate.year(),
     getDay: () => momentDate.day(),
     compareIsAfter: (date) => momentDate.isAfter(moment(date)),
     compareIsBefore: (date) => momentDate.isBefore(moment(date)),
