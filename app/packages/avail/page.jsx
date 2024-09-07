@@ -1,83 +1,28 @@
-import React, { Suspense } from "react";
 import SearchEngines from "../../components/sections/SearchEngines";
 import PkgGridServer from "./PkgGridTestServer";
 import PkgGridHeader from "./PkgGridTestServer/PkgGridHeader";
-import Loading from "../../components/commons/Loading";
 import { ProviderService } from "../../api/services/providers.service";
+import { CitiesService } from "../../services/cities.service";
 
 export const metadata = {
   title: "Paquetes | Plum Viajes",
   keywords: "Paquetes Plum Viajes El mejor precio para tu viaje",
 };
 
-async function getCity(code, asObject = false) {
-  try {
-    const citiesSearch = await fetch(
-      `${process.env.URL}/api/cities/byCode?code=${code}`,
-      {
-        method: "GET",
-        //cache: "no-cache",
-      }
-    );
-    const citiesResponse = await citiesSearch.json();
-
-    const mapResponse = citiesResponse.map(
-      ({ id, name, label, countryName }) => ({
-        id,
-        name,
-        label: `${label}, ${countryName}`,
-        value: id,
-      })
-    );
-
-    return asObject ? mapResponse[0] : mapResponse;
-  } catch (error) {
-    return { error: error.message };
-  }
-}
-async function getPkgAvailability(searchParams) {
-  const pkgAvailabilityRequest = await fetch(
-    `${process.env.URL}/api/packages/availability`,
-    {
-      method: "POST",
-      body: JSON.stringify({ searchParams }),
-      next: { revalidate: 0 },
-    }
-  );
-
-  if (!pkgAvailabilityRequest.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error("Failed to fetch data");
-  }
-
-  return pkgAvailabilityRequest.json();
-}
-
-const PackagesAvailability = async ({ searchParams }) => {
+// Convert to a Server Component
+export default async function PackagesAvailability({ searchParams }) {
   const { arrivalCity, departureCity, startDate, endDate } = searchParams;
 
-  const searchEngineDefaultValues = {
-    packages: {
-      departureMonthYear: ProviderService.departureDateMonthYear(startDate),
-      arrivalCity: await getCity(arrivalCity, true),
-      departureCity: await getCity(departureCity, true),
-    },
-  };
-
-  const pkgAvailabilityRequestData = {
-    startDate,
-    endDate,
-    arrivalCity,
-    departureCity,
-  };
-
-  const pkgAvailabilityResponse = await getPkgAvailability(
-    pkgAvailabilityRequestData
-  );
-
-  const cacheKey = `pkg-avail-${arrivalCity}-${departureCity}-${startDate}-${endDate}`;
-
-  console.log("cacheKey", cacheKey);
+  const [searchEngineDefaultValues, pkgAvailabilityResponse] =
+    await Promise.all([
+      getSearchEngineDefaultValues(startDate, arrivalCity, departureCity),
+      ProviderService.getPkgAvailability({
+        startDate,
+        endDate,
+        arrivalCity,
+        departureCity,
+      }),
+    ]);
 
   return (
     <>
@@ -87,15 +32,31 @@ const PackagesAvailability = async ({ searchParams }) => {
       />
       <div className="mx-2 py-2 md:py-5 md:mx-40">
         <PkgGridHeader searchParams={searchParams} />
-        <Suspense key={cacheKey} fallback={<Loading />}>
-          <PkgGridServer
-            availResponse={pkgAvailabilityResponse}
-            searchParams={searchParams}
-          />
-        </Suspense>
+        <PkgGridServer
+          availResponse={pkgAvailabilityResponse}
+          searchParams={searchParams}
+        />
       </div>
     </>
   );
-};
+}
 
-export default PackagesAvailability;
+// Helper function to get search engine default values
+async function getSearchEngineDefaultValues(
+  startDate,
+  arrivalCity,
+  departureCity
+) {
+  const [arrivalCityData, departureCityData] = await Promise.all([
+    CitiesService.getCityByCode(arrivalCity, true),
+    CitiesService.getCityByCode(departureCity, true),
+  ]);
+
+  return {
+    packages: {
+      departureMonthYear: ProviderService.departureDateMonthYear(startDate),
+      arrivalCity: arrivalCityData,
+      departureCity: departureCityData,
+    },
+  };
+}

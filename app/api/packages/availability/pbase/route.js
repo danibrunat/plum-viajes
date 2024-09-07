@@ -58,10 +58,10 @@ async function fetchOlaPackages(searchParams) {
 
   try {
     const olaAvail = await OLA.avail(getPackagesFaresRequest);
-    console.log("olaAvail", olaAvail);
+    // console.log("olaAvail", olaAvail);
     const mapResponse = ProviderService.mapper(olaAvail, "ola");
-
-    return mapResponse;
+    const groupResponseSet = ProviderService.ola.grouper(mapResponse);
+    return groupResponseSet;
   } catch (error) {
     console.log("error OLA", error);
   }
@@ -102,7 +102,7 @@ export async function POST(req, res) {
   console.log("// PLUM RESPONSE END // ");
 
   console.log("// OLA RESPONSE // ");
-  console.log(olaPkg);
+  //console.log(JSON.stringify(olaPkg));
   console.log("// OLA RESPONSE END // ");
   const packagesResponse = plumPkgResponse.concat(olaPkg);
 

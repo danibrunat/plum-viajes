@@ -6660,7 +6660,7 @@ export const CITIES = [
     regionName: "Norteamérica",
   },
   {
-    id: "20",
+    id: "IGR",
     name: "Iguazú",
     label: "Iguazú",
     description:

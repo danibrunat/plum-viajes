@@ -12,41 +12,12 @@ const XmlService = {
     let results = [];
     if (Array.isArray(xml)) return xml;
     parseString(xml, function (err, result) {
-      console.log("result", result);
+      // console.log("result", result);
       const emptyResponse = XmlService.isEmptyString(result[rootElement]);
       // console.log("emptyResponse", emptyResponse);
       if (emptyResponse) return [];
 
       const rawResults = result.DocumentElement.Row;
-      if (rawResults && Array.isArray(rawResults)) {
-        rawResults.map((resultItem) => {
-          Object.keys(resultItem).map((resultProperty) => {
-            resultItem[resultProperty] = resultItem[resultProperty][0];
-          });
-        });
-        results.push(rawResults);
-      }
-      if (result.error) return result.error;
-    });
-    if (results.length === 0) return results;
-    const resultArr = results[0];
-    return resultArr;
-  },
-  parseSoapResults: (soap) => {
-    const parseString = require("xml2js").parseString;
-    let results = [];
-    if (Array.isArray(soap)) return soap;
-    parseString(soap, function (err, result) {
-      console.log("result", result);
-      const emptyResponse = XmlService.isEmptyString(result);
-      // console.log("emptyResponse", emptyResponse);
-      if (emptyResponse) return [];
-
-      const rawResults =
-        result["SOAP-ENV:Envelope"]["SOAP-ENV:Body"][0][
-          "ns1:GetPackagesFaresResponse"
-        ][0]["Response"];
-      console.log("rawResults", rawResults);
       if (rawResults && Array.isArray(rawResults)) {
         rawResults.map((resultItem) => {
           Object.keys(resultItem).map((resultProperty) => {
