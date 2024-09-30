@@ -91,10 +91,10 @@ export default defineField({
       of: [{ type: "string" }],
       options: {
         layout: "grid",
-        list: CITIES.map((o) => ({
+        list: CITIES.filter((c) => c.id === "IGR").map((o) => ({
           title: o.name,
           value: o.id,
-        })).slice(70, 80),
+        })),
       },
     },
     /* {

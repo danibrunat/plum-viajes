@@ -10,6 +10,8 @@
   { id: "plum", label: "Plum Viajes", active: 1 },
 ]; */
 
+import { CitiesService } from "../../services/cities.service";
+
 /**
  * @typedef {Object} AvailResponseConfig
  * @property {Object} id
@@ -71,27 +73,27 @@ export const ProviderService = {
     },
     hotels: {
       name: {
-        plum: "hotels",
+        plum: "departures.[0].hotels",
         julia: "hotels",
         ola: "Descriptions.Description.Name",
       },
       rating: {
-        plum: "rating",
+        plum: "departures.[0].hotels.rating",
         julia: "rating",
         ola: "Descriptions.Description.HotelClass",
       },
       mealPlan: {
-        plum: "hotels",
+        plum: "departures.[0].mealPlan",
         julia: "hotels",
         ola: "Descriptions.Description.FareDescriptions.FareDescription.[1].$value",
       },
       roomType: {
-        plum: "hotels",
+        plum: "departures.[0].roomType",
         julia: "hotels",
         ola: "Descriptions.Description.FareDescriptions.FareDescription.[0].$value",
       },
       roomSize: {
-        plum: "hotels",
+        plum: "departures.[0].prices.[0].type",
         julia: "hotels",
         ola: "Descriptions.Description.FareDescriptions.FareDescription.[2].$value",
       },
@@ -103,39 +105,39 @@ export const ProviderService = {
     prices: {
       pricesDetail: {
         basePrice: {
-          plum: "prices",
+          plum: "departures.[0].prices.[0].amount",
           julia: "prices",
           ola: "FareTotal.Net",
         },
         currency: {
-          plum: "prices",
+          plum: "departures.[0].prices.[0].currency",
           julia: "prices",
           ola: "FareTotal.Currency",
         },
         comission: {
-          plum: "prices",
+          plum: "default",
           julia: "prices",
           ola: "FareTotal.Comission",
         },
       },
       taxes: {
         baseTax: {
-          plum: "prices",
+          plum: "departures.[0].prices.[0].taxes",
           julia: "prices",
           ola: "FareTotal.Tax",
         },
         iva: {
-          plum: "prices",
+          plum: "departures.[0].prices.[0].iva",
           julia: "prices",
           ola: "FareTotal.Vat",
         },
         ivaAgency: {
-          plum: "prices",
+          plum: "departures.[0].prices.[0].ivaAgency",
           julia: "prices",
           ola: "FareTotal.VatAgency",
         },
         paisTax: {
-          plum: "prices",
+          plum: "departures.[0].prices.[0].paisTax",
           julia: "prices",
           ola: "FareTotal.R3450.$value",
         },
@@ -146,7 +148,7 @@ export const ProviderService = {
             ola: "Taxes.Tax.Name",
           },
           value: {
-            plum: "prices",
+            plum: "departures.[0].prices.[0].other",
             julia: "prices",
             ola: "Taxes.Tax.Value",
           },
@@ -183,6 +185,10 @@ export const ProviderService = {
     }
 
     return pkgAvailabilityRequest.json();
+  },
+
+  getPkgDetail: async ({ provider, id }) => {
+    return {};
   },
 
   /**
@@ -298,7 +304,7 @@ export const ProviderService = {
    */
   mapper: (response, provider) => {
     if (response.length === 0) return response;
-    if (provider === "plum") return response;
+    //if (provider === "plum") return response;
     const respConfig = ProviderService.availResponseConfig;
 
     const mapNestedObject = (pkg, configObj) => {
@@ -335,6 +341,24 @@ export const ProviderService = {
     });
 
     return mappedResponse;
+  },
+  getSearchEngineDefaultValues: async (
+    startDate,
+    arrivalCity,
+    departureCity
+  ) => {
+    const [arrivalCityData, departureCityData] = await Promise.all([
+      CitiesService.getCityByCode(arrivalCity, true),
+      CitiesService.getCityByCode(departureCity, true),
+    ]);
+
+    return {
+      packages: {
+        departureMonthYear: ProviderService.departureDateMonthYear(startDate),
+        arrivalCity: arrivalCityData,
+        departureCity: departureCityData,
+      },
+    };
   },
 
   julia: {},

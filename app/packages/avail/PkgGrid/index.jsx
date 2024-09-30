@@ -54,7 +54,7 @@ const PkgGridServer = ({ availResponse, searchParams: { departureCity } }) => {
       <div className="flex w-full p-2 md:p-0 flex-col md:w-3/4">
         {availResponse.map((pkgItem) => (
           <PkgGridItem
-            key={pkgItem?._id}
+            key={pkgItem?.id}
             pkgItem={pkgItem}
             departureCity={departureCity}
           />

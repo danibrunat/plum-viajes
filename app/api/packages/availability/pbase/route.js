@@ -18,14 +18,16 @@ async function fetchPlumPackages({
    // && departures[dateFromRt1 >= now()]
    ] {
     ...,
-    "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1
+    "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1,
+    "departures": departures[departureFrom > now()]
    }`;
 
   const sanityQuery = await sanityFetch({ query: pkgAvailQuery });
   const pkgAvailResponse = await sanityQuery;
+  console.log("PLUM | pkgAvailResponse", JSON.stringify(pkgAvailResponse));
   // console.log("PLUM | pkgAvailResponse", pkgAvailResponse);
-  //const mapResponse = ProviderService.mapper(pkgAvailResponse, "plum");
-  return Response.json(pkgAvailResponse);
+  const mapResponse = ProviderService.mapper(pkgAvailResponse, "plum");
+  return Response.json(mapResponse);
 }
 
 async function fetchOlaPackages(searchParams) {
@@ -98,13 +100,13 @@ export async function POST(req, res) {
   const plumPkgResponse = await plumPkg.json();
   //const juliaPkgResponse = await juliaPkg.json();
   console.log("// PLUM RESPONSE // ");
-  console.log(plumPkgResponse);
+  console.log(JSON.stringify(plumPkgResponse));
   console.log("// PLUM RESPONSE END // ");
 
   console.log("// OLA RESPONSE // ");
   //console.log(JSON.stringify(olaPkg));
   console.log("// OLA RESPONSE END // ");
   const packagesResponse = plumPkgResponse.concat(olaPkg);
-
+  console.log("packagesResponse", JSON.stringify(packagesResponse));
   return Response.json(packagesResponse);
 }

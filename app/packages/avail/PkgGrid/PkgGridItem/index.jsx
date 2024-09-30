@@ -5,6 +5,7 @@ import {
   sanitizeHtmlString,
   sanitizeUrlFromDoubleSlash,
 } from "../../../../helpers/strings";
+import { Helpers } from "../../../../services/helpers.service";
 
 const getPkgPrice = (prices) => {
   if (!prices) return "Consulte";
@@ -44,31 +45,38 @@ const getHotelRating = (rating) => {
   return <div className="flex items-center">{stars}</div>;
 };
 
-const PkgGridItem = ({ pkgItem, departureCity }) => {
-  const departures = pkgItem && pkgItem.departures ? pkgItem.departures : [];
-  const pkgPrice = getPkgPrice(pkgItem?.prices);
-  const hotelStars = getHotelRating(pkgItem?.hotels?.rating);
-  const imgSource = pkgItem?.images
-    ? urlForImage(pkgItem?.images[0])
-    : sanitizeUrlFromDoubleSlash(
+const getImgSource = (pkgItem, provider) => {
+  switch (provider) {
+    case "ola":
+      return sanitizeUrlFromDoubleSlash(
         pkgItem?.thumbnails[
           Math.floor(Math.random() * pkgItem?.thumbnails.length)
         ]
       );
+    case "plum":
+      return urlForImage(pkgItem?.thumbnails[0]);
+  }
+};
 
-  // capitalize first letter of hotelName, hotelMealPlan, hotelRoomType
-  const hotelName = pkgItem?.hotels?.name
-    ? pkgItem?.hotels?.name.charAt(0).toUpperCase() +
-      pkgItem?.hotels?.name.slice(1).toLowerCase()
-    : "";
-  const hotelMealPlan = pkgItem?.hotels?.mealPlan
-    ? pkgItem?.hotels?.mealPlan.charAt(0).toUpperCase() +
-      pkgItem?.hotels?.mealPlan.slice(1).toLowerCase()
-    : "";
-  const hotelRoomType = pkgItem?.hotels?.roomType
-    ? pkgItem?.hotels?.roomType.charAt(0).toUpperCase() +
-      pkgItem?.hotels?.roomType.slice(1).toLowerCase()
-    : "";
+const PkgGridItem = ({ pkgItem, departureCity }) => {
+  // const departures = pkgItem && pkgItem.departures ? pkgItem.departures : [];
+  const pkgPrice = getPkgPrice(pkgItem?.prices);
+  const hotelStars = getHotelRating(pkgItem?.hotels?.rating);
+  const imgSource = getImgSource(pkgItem, pkgItem?.provider);
+
+  const hotelName = Helpers.capitalizeFirstLetter(pkgItem?.hotels?.name);
+  const hotelMealPlan = Helpers.capitalizeFirstLetter(
+    pkgItem?.hotels?.mealPlan
+  );
+  const hotelRoomType = Helpers.capitalizeFirstLetter(
+    pkgItem?.hotels?.roomType
+  );
+  const hotelRoomSize = Helpers.capitalizeFirstLetter(
+    pkgItem?.hotels?.roomSize
+  );
+
+  const slug = Helpers.slugify(pkgItem?.title);
+  const detailUrl = `/packages/detail?provider=${pkgItem?.provider}&id=${pkgItem?.id}`;
 
   return (
     <div className="flex flex-col md:flex-row md:justify-between w-full m-2 mx-auto p-1 md:p-2 h-fit overflow-hidden rounded-lg border border-gray-300 bg-white shadow-md">
@@ -98,7 +106,7 @@ const PkgGridItem = ({ pkgItem, departureCity }) => {
           <span className="flex items-center gap-1">
             {`${hotelName} `} {hotelStars}
           </span>
-          <span>{`Habitación: ${hotelRoomType}`}</span>
+          <span>{`Habitación: ${hotelRoomType} - ${hotelRoomSize}`}</span>
           <span>{hotelMealPlan}</span>
         </div>
       </div>
@@ -110,7 +118,7 @@ const PkgGridItem = ({ pkgItem, departureCity }) => {
         {/*         {<span className="text-sm text-slate-900 line-through">$699</span>}
          */}
         <a
-          href="#"
+          href={detailUrl}
           className="flex items-center justify-center rounded-xl bg-plumPrimaryPink hover:bg-plumSecondaryPink transition-all duration-500 px-5 py-2 md:py-2.5 text-center text-xs font-medium text-white hover:bg-plumPrimaryPink-500"
         >
           Ver paquete

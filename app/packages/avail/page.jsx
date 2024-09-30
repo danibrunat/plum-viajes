@@ -1,8 +1,7 @@
 import SearchEngines from "../../components/sections/SearchEngines";
-import PkgGridServer from "./PkgGridTestServer";
-import PkgGridHeader from "./PkgGridTestServer/PkgGridHeader";
+import PkgGrid from "./PkgGrid";
+import PkgGridHeader from "./PkgGrid/PkgGridHeader";
 import { ProviderService } from "../../api/services/providers.service";
-import { CitiesService } from "../../services/cities.service";
 
 export const metadata = {
   title: "Paquetes | Plum Viajes",
@@ -15,7 +14,11 @@ export default async function PackagesAvailability({ searchParams }) {
 
   const [searchEngineDefaultValues, pkgAvailabilityResponse] =
     await Promise.all([
-      getSearchEngineDefaultValues(startDate, arrivalCity, departureCity),
+      ProviderService.getSearchEngineDefaultValues(
+        startDate,
+        arrivalCity,
+        departureCity
+      ),
       ProviderService.getPkgAvailability({
         startDate,
         endDate,
@@ -32,31 +35,11 @@ export default async function PackagesAvailability({ searchParams }) {
       />
       <div className="mx-2 py-2 md:py-5 md:mx-40">
         <PkgGridHeader searchParams={searchParams} />
-        <PkgGridServer
+        <PkgGrid
           availResponse={pkgAvailabilityResponse}
           searchParams={searchParams}
         />
       </div>
     </>
   );
-}
-
-// Helper function to get search engine default values
-async function getSearchEngineDefaultValues(
-  startDate,
-  arrivalCity,
-  departureCity
-) {
-  const [arrivalCityData, departureCityData] = await Promise.all([
-    CitiesService.getCityByCode(arrivalCity, true),
-    CitiesService.getCityByCode(departureCity, true),
-  ]);
-
-  return {
-    packages: {
-      departureMonthYear: ProviderService.departureDateMonthYear(startDate),
-      arrivalCity: arrivalCityData,
-      departureCity: departureCityData,
-    },
-  };
 }

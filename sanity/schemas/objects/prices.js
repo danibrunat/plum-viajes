@@ -23,11 +23,41 @@ export default defineField({
       type: "number",
       title: "Valor",
     },
+    {
+      name: "currency",
+      type: "string",
+      title: "Moneda",
+    },
+    {
+      name: "taxes",
+      type: "number",
+      title: "Impuestos",
+    },
+    {
+      name: "paisTax",
+      type: "number",
+      title: "Impuesto PAIS",
+    },
+    {
+      name: "rg5463",
+      type: "number",
+      title: "RG 5463",
+    },
+    {
+      name: "iva",
+      type: "number",
+      title: "IVA",
+    },
+    {
+      name: "other",
+      type: "number",
+      title: "Otros",
+    },
   ],
   preview: {
     select: {
       type: "type",
-      amount: "amount"
+      amount: "amount",
     },
     prepare({ type, amount }) {
       return {
