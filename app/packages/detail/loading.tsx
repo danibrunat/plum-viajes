@@ -11,7 +11,7 @@ export default function Loading() {
           className="align-middle self-center"
           src={`/avail-loader.gif`}
         />
-        <h1 className="text-xl">Buscando los mejores paquetes para vos...</h1>
+        <h1 className="text-xl">Cargando..</h1>
       </div>
     </div>
   );

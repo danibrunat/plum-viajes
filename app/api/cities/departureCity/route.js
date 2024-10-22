@@ -1,20 +1,25 @@
-export function GET(req) {
+/* export function GET(req) {
   const { searchParams } = new URL(req.url);
   const name = searchParams.get("name");
   //console.log("name", name);
 
   const departureCities = [
-    { id: "ASU", name: "Asunción", countryName: "Paraguay", label: "Asunción" },
+    {
+      id: "ASU",
+      name: "Asunción",
+      country_name: "Paraguay",
+      label: "Asunción",
+    },
     {
       id: "BHI",
       name: "Bahía Blanca",
-      countryName: "Argentina",
+      country_name: "Argentina",
       label: "Bahía Blanca",
     },
     {
       id: "BUE",
       name: "Buenos Aires",
-      countryName: "Argentina",
+      country_name: "Argentina",
       label: "Buenos Aires",
     },
   ];
@@ -28,3 +33,4 @@ export function GET(req) {
 
   return Response.json(filteredCities);
 }
+ */

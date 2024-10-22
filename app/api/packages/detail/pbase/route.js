@@ -4,33 +4,30 @@ import { Julia } from "../../../services/julia.service";
 import { ProviderService } from "../../../services/providers.service";
 import { OLA } from "../../../services/ola.service";
 
-async function fetchPlumPackages({
-  arrivalCity,
-  departureCity,
-  startDate,
-  endDate,
-}) {
-  const pkgAvailQuery = groq`*[_type == "packages" 
-    && "${departureCity}" in origin
-    && "${arrivalCity}" in destination
-    && now() > validDateFrom 
-    && now() < validDateTo 
-   // && departures[dateFromRt1 >= now()]
-   ] {
+async function fetchPlumPackageDetail(id) {
+  const pkgDetailQuery = groq`*[
+    _id == "${id}" && 
+    now() > validDateFrom && 
+    now() < validDateTo]
+    {
     ...,
     "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1,
     "departures": departures[departureFrom > now()]
    }`;
 
-  const sanityQuery = await sanityFetch({ query: pkgAvailQuery });
-  const pkgAvailResponse = await sanityQuery;
-  console.log("PLUM | pkgAvailResponse", JSON.stringify(pkgAvailResponse));
+  const sanityQuery = await sanityFetch({ query: pkgDetailQuery });
+  const pkgDetailResponse = await sanityQuery;
   // console.log("PLUM | pkgAvailResponse", pkgAvailResponse);
-  const mapResponse = ProviderService.mapper(pkgAvailResponse, "plum", "avail");
-  return Response.json(mapResponse);
+  const mapResponse = ProviderService.mapper(
+    pkgDetailResponse,
+    "plum",
+    "detail"
+  );
+  // TODO refactor when detail mapper is ready
+  return Response.json(mapResponse[0]);
 }
 
-async function fetchOlaPackages(searchParams) {
+async function fetchOlaPackageDetail() {
   const { departureCity, arrivalCity, startDate, endDate } = searchParams;
   const formattedDateFrom = ProviderService.ola.olaDateFormat(startDate);
   const formattedDateTo = ProviderService.ola.olaDateFormat(endDate);
@@ -61,7 +58,7 @@ async function fetchOlaPackages(searchParams) {
   try {
     const olaAvail = await OLA.avail(getPackagesFaresRequest);
     // console.log("olaAvail", olaAvail);
-    const mapResponse = ProviderService.mapper(olaAvail, "ola", "avail");
+    const mapResponse = ProviderService.mapper(olaAvail, "ola", "detail");
     const groupResponseSet = ProviderService.ola.grouper(mapResponse);
     return groupResponseSet;
   } catch (error) {
@@ -69,7 +66,7 @@ async function fetchOlaPackages(searchParams) {
   }
 }
 
-async function fetchJuliaPackages(searchParams) {
+/* async function fetchJuliaPackageDetail(searchParams) {
   const arrivalCity = "ASU";
   const departureCity = "BUE";
   const departureFrom = "2024-10-01";
@@ -86,31 +83,30 @@ async function fetchJuliaPackages(searchParams) {
   const mapResponse = ProviderService.mapper(
     juliaPkgResponse,
     "julia",
-    "avail"
+    "detail"
   );
   //console.log("fetchJuliaPackages | pkgAvail ", juliaPkgResponse);
   return Response.json(mapResponse);
-}
+} */
 
 export async function POST(req, res) {
   const body = await req.json();
-  const { searchParams } = body;
-  const [plumPkg, olaPkg /*  juliaPkg  */] = await Promise.all([
-    fetchPlumPackages(searchParams),
-    fetchOlaPackages(searchParams),
-    //  fetchJuliaPackages(searchParams),
-  ]);
+  const { provider, id } = body;
 
-  const plumPkgResponse = await plumPkg.json();
-  //const juliaPkgResponse = await juliaPkg.json();
-  console.log("// PLUM RESPONSE // ");
-  console.log(JSON.stringify(plumPkgResponse));
-  console.log("// PLUM RESPONSE END // ");
+  // check the provider and fetch the corresponding package detail
+  switch (provider) {
+    case "plum":
+      const plumPkgDetail = await fetchPlumPackageDetail(id);
 
-  console.log("// OLA RESPONSE // ");
-  //console.log(JSON.stringify(olaPkg));
-  console.log("// OLA RESPONSE END // ");
-  const packagesResponse = plumPkgResponse.concat(olaPkg);
-  console.log("packagesResponse", JSON.stringify(packagesResponse));
-  return Response.json(packagesResponse);
+      const response = await plumPkgDetail.json();
+      return Response.json(response);
+    case "ola":
+      const olaPkgDetail = await fetchOlaPackageDetail(id);
+      const responseOla = await olaPkgDetail.json();
+      return Response.json(responseOla);
+    case "julia":
+      const juliaPkgDetail = await fetchJuliaPackageDetail(id);
+      const responseJulia = await juliaPkgDetail.json();
+      return Response.json(responseJulia);
+  }
 }

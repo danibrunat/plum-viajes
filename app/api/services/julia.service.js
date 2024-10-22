@@ -1,6 +1,7 @@
 import { ProviderService } from "./providers.service";
 import Dates from "../../services/dates.service";
 import XmlService from "./xml.service";
+import { ApiUtils } from "./apiUtils.service";
 
 const getHeaderRequest = (token) => {
   return {
@@ -39,7 +40,7 @@ export const Julia = {
 
     const juliaLoginRequest = await fetch(
       `${loginService}?LOGIN=PLUM_TEST&PASSWORD=t6yyCNtlTuTu&IDAGENCIA=14710`,
-      { method: "GET" }
+      { method: "GET", headers: ApiUtils.getCommonHeaders() }
     );
     const juliaTokenResponse = await juliaLoginRequest.text();
     const parsedToken = XmlService.parseXmlResults(juliaTokenResponse);
@@ -58,6 +59,7 @@ export const Julia = {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
+          ...ApiUtils.getCommonHeaders(),
         },
         body: new URLSearchParams({ ...requestData }),
       });
@@ -100,6 +102,7 @@ export const Julia = {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
+          ...ApiUtils.getCommonHeaders(),
         },
         body: new URLSearchParams({ ...departureHotelsGroupOptions }),
       });
@@ -129,6 +132,7 @@ export const Julia = {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
+          ...ApiUtils.getCommonHeaders(),
         },
         body: new URLSearchParams({ ...departureFlightsOptions }),
       });
@@ -157,6 +161,7 @@ export const Julia = {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
+          ...ApiUtils.getCommonHeaders(),
         },
         body: new URLSearchParams({ ...departurePricesOptions }),
       });
@@ -224,6 +229,7 @@ export const Julia = {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
+          ...ApiUtils.getCommonHeaders(),
         },
         body: new URLSearchParams({ ...requestData }),
       });

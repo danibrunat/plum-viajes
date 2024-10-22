@@ -12,21 +12,19 @@ import {
 } from "react-icons/fa";
 import PackageEngineItem from "./PackageEngineItem";
 import { ProviderService } from "../../../../api/services/providers.service";
+import { ApiUtils } from "../../../../api/services/apiUtils.service";
 
 const getPackageEngineItems = () => {
   const getCitiesAutocompleteApi = async (query, inputName) => {
-    try {
-      const cities = await fetch(
-        `/api/cities/autocomplete?query=${query}&input=${inputName}`,
-        {
-          method: "GET",
-        }
-      );
-      const citiesResponse = await cities.json();
-      return citiesResponse;
-    } catch (error) {
-      return error;
-    }
+    const cities = await ApiUtils.requestHandler(
+      fetch(`/api/cities/autocomplete?query=${query}&input=${inputName}`, {
+        method: "GET",
+        headers: ApiUtils.getCommonHeaders(),
+      }),
+      "getCitiesAutocompleteApi"
+    );
+    const citiesResponse = await cities.json();
+    return citiesResponse;
   };
 
   const loadOptions = async (query, callback, inputName) => {

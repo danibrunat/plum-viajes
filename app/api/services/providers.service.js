@@ -11,6 +11,7 @@
 ]; */
 
 import { CitiesService } from "../../services/cities.service";
+import { ApiUtils } from "./apiUtils.service";
 
 /**
  * @typedef {Object} AvailResponseConfig
@@ -25,9 +26,11 @@ import { CitiesService } from "../../services/cities.service";
  */
 
 /**
- * @typedef {Object} ProviderService
+ * @typedef {Object}
  * @property {AvailResponseConfig} availResponseConfig
  * @property {Function} getPkgAvailability
+ * @property {Function} getSearchEngineDefaultValues
+ * @property {Function} getPkgDetail
  * @property {Function} departureDateMonthYear
  * @property {Function} departureDateFromTo
  * @property {Function} hasNestedProperty
@@ -161,6 +164,117 @@ export const ProviderService = {
       ola: "departures",
     },
   },
+  detailResponseConfig: {
+    id: {
+      plum: "_id",
+      julia: "IDPAQUETE",
+      ola: "Package.Code",
+    },
+    title: {
+      plum: "title",
+      julia: "NOMBRE",
+      ola: "Package.Name",
+    },
+    subtitle: {
+      plum: "subtitle",
+      julia: "subtitle",
+      ola: "Package.Description",
+    },
+    nights: {
+      plum: "nights",
+      julia: "CANTNOCHES",
+      ola: "Package.Nights",
+    },
+    hotels: {
+      name: {
+        plum: "departures.[0].hotels",
+        julia: "hotels",
+        ola: "Descriptions.Description.Name",
+      },
+      rating: {
+        plum: "departures.[0].hotels.rating",
+        julia: "rating",
+        ola: "Descriptions.Description.HotelClass",
+      },
+      mealPlan: {
+        plum: "departures.[0].mealPlan",
+        julia: "hotels",
+        ola: "Descriptions.Description.FareDescriptions.FareDescription.[1].$value",
+      },
+      roomType: {
+        plum: "departures.[0].roomType",
+        julia: "hotels",
+        ola: "Descriptions.Description.FareDescriptions.FareDescription.[0].$value",
+      },
+      roomSize: {
+        plum: "departures.[0].prices.[0].type",
+        julia: "hotels",
+        ola: "Descriptions.Description.FareDescriptions.FareDescription.[2].$value",
+      },
+    },
+    images: {
+      plum: "images",
+      ola: "Package.Pictures.Picture.[].$value",
+    },
+    prices: {
+      pricesDetail: {
+        basePrice: {
+          plum: "departures.[0].prices.[0].amount",
+          julia: "prices",
+          ola: "FareTotal.Net",
+        },
+        currency: {
+          plum: "departures.[0].prices.[0].currency",
+          julia: "prices",
+          ola: "FareTotal.Currency",
+        },
+        comission: {
+          plum: "default",
+          julia: "prices",
+          ola: "FareTotal.Comission",
+        },
+      },
+      taxes: {
+        baseTax: {
+          plum: "departures.[0].prices.[0].taxes",
+          julia: "prices",
+          ola: "FareTotal.Tax",
+        },
+        iva: {
+          plum: "departures.[0].prices.[0].iva",
+          julia: "prices",
+          ola: "FareTotal.Vat",
+        },
+        ivaAgency: {
+          plum: "departures.[0].prices.[0].ivaAgency",
+          julia: "prices",
+          ola: "FareTotal.VatAgency",
+        },
+        paisTax: {
+          plum: "departures.[0].prices.[0].paisTax",
+          julia: "prices",
+          ola: "FareTotal.R3450.$value",
+        },
+        additionalTax: {
+          description: {
+            plum: "prices",
+            julia: "prices",
+            ola: "Taxes.Tax.Name",
+          },
+          value: {
+            plum: "departures.[0].prices.[0].other",
+            julia: "prices",
+            ola: "Taxes.Tax.Value",
+          },
+        },
+      },
+    },
+    departures: {
+      plum: "departures",
+      julia: "departures",
+      ola: "departures",
+    },
+  },
 
   /**
    * Fetches package availability based on search parameters
@@ -176,19 +290,49 @@ export const ProviderService = {
         method: "POST",
         body: JSON.stringify({ searchParams }),
         next: { revalidate: 0 },
+        headers: ApiUtils.getCommonHeaders(),
       }
     );
 
     if (!pkgAvailabilityRequest.ok) {
+      const response = await pkgAvailabilityRequest.json();
       // This will activate the closest `error.js` Error Boundary
-      throw new Error("Failed to fetch data");
+      throw new Error(
+        `Ocurrió un error en el avail de paquetes. Razón: ${response.reason}`
+      );
     }
 
     return pkgAvailabilityRequest.json();
   },
 
+  /**
+   * Fetches package detail based on provider and id
+   * @async
+   * @param {string} provider - The provider identifier
+   * @param {string} id - The package identifier
+   * @returns {Promise<Object>} The package detail data
+   * @throws {Error} If the fetch request fails
+   */
   getPkgDetail: async ({ provider, id }) => {
-    return {};
+    const pkgDetailRequest = await fetch(
+      `${process.env.URL}/api/packages/detail`,
+      {
+        method: "POST",
+        body: JSON.stringify({ provider, id }),
+        next: { revalidate: 0 },
+        headers: ApiUtils.getCommonHeaders(),
+      }
+    );
+
+    if (!pkgDetailRequest.ok) {
+      const response = await pkgDetailRequest.json();
+      // This will activate the closest `error.js` Error Boundary
+      throw new Error(
+        `Ocurrió un error en el detail de paquetes. Razón: ${response.reason}`
+      );
+    }
+
+    return pkgDetailRequest.json();
   },
 
   /**
@@ -302,10 +446,13 @@ export const ProviderService = {
    * @param {string} provider - The provider identifier
    * @returns {Array} The mapped response data
    */
-  mapper: (response, provider) => {
+  mapper: (response, provider, consumer) => {
     if (response.length === 0) return response;
     //if (provider === "plum") return response;
-    const respConfig = ProviderService.availResponseConfig;
+    const respConfig =
+      consumer === "detail"
+        ? ProviderService.detailResponseConfig
+        : ProviderService.availResponseConfig;
 
     const mapNestedObject = (pkg, configObj) => {
       let result = {};
@@ -360,6 +507,8 @@ export const ProviderService = {
       },
     };
   },
+
+  getHotelDetailInfo: async () => {},
 
   julia: {},
 

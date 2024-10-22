@@ -1,11 +1,11 @@
-import { urls } from "../../../services/urls.service";
+import { Api } from "../../../services/api.service";
 
 export async function POST(req) {
   const body = await req.json();
   /* PBase */
   const pkgAvailRequest = await fetch(
-    urls.packages.avail.pbase.url(),
-    urls.packages.avail.pbase.options(body)
+    Api.packages.avail.pbase.url(),
+    Api.packages.avail.pbase.options(body)
   );
 
   /* PCom */

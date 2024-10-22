@@ -1,11 +1,12 @@
 import Image from "next/image";
 import React from "react";
-import { urlForImage } from "../../../../../sanity/lib/image";
+import { urlForImage } from "../../../../../../sanity/lib/image";
 import {
   sanitizeHtmlString,
   sanitizeUrlFromDoubleSlash,
-} from "../../../../helpers/strings";
-import { Helpers } from "../../../../services/helpers.service";
+} from "../../../../../helpers/strings";
+import { Helpers } from "../../../../../services/helpers.service";
+import Link from "next/link";
 
 const getPkgPrice = (prices) => {
   if (!prices) return "Consulte";
@@ -76,7 +77,7 @@ const PkgGridItem = ({ pkgItem, departureCity }) => {
   );
 
   const slug = Helpers.slugify(pkgItem?.title);
-  const detailUrl = `/packages/detail?provider=${pkgItem?.provider}&id=${pkgItem?.id}`;
+  const detailUrl = `/packages/detail?id=${pkgItem?.id}&provider=${pkgItem?.provider}`;
 
   return (
     <div className="flex flex-col md:flex-row md:justify-between w-full m-2 mx-auto p-1 md:p-2 h-fit overflow-hidden rounded-lg border border-gray-300 bg-white shadow-md">
@@ -117,12 +118,12 @@ const PkgGridItem = ({ pkgItem, departureCity }) => {
         </div>
         {/*         {<span className="text-sm text-slate-900 line-through">$699</span>}
          */}
-        <a
+        <Link
           href={detailUrl}
           className="flex items-center justify-center rounded-xl bg-plumPrimaryPink hover:bg-plumSecondaryPink transition-all duration-500 px-5 py-2 md:py-2.5 text-center text-xs font-medium text-white hover:bg-plumPrimaryPink-500"
         >
           Ver paquete
-        </a>
+        </Link>
         <div className="flex flex-col text-xs">
           <em>Precio por persona</em>
           <em>Base doble</em>

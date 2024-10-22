@@ -1,13 +1,19 @@
-import { CITIES } from "../../../constants/destinations";
+import { cookies } from "next/headers";
+import DatabaseService from "../../services/database.service";
 
-export function GET(req) {
+export async function GET(req) {
+  const cookieStore = cookies();
+  const supabase = DatabaseService.serverClient(cookieStore);
   const { searchParams } = new URL(req.url);
   const code = searchParams.get("code");
   //console.log("name", name);
 
-  const dbCities = CITIES;
+  const { data, error } = await supabase
+    .from("cities")
+    .select()
+    .eq("iata_code", code);
 
-  const filteredCities = dbCities.filter((city) => city.id === code);
+  if (error) Response.json(error);
 
-  return Response.json(filteredCities);
+  return Response.json(data);
 }

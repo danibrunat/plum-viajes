@@ -1,18 +1,18 @@
-import { CITIES } from "../../../constants/destinations";
+import DatabaseService from "../../services/database.service";
 
-export function GET(req) {
+export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const name = searchParams.get("name");
   //console.log("name", name);
 
-  const dbCities = CITIES;
+  const { data, error } = await DatabaseService.getByFieldIlike(
+    "cities",
+    "name",
+    name
+  );
 
-  const filteredCities = dbCities.filter((city) => {
-    const cityName = city.name.toLowerCase();
-    const nameParam = name.toLowerCase();
-    if (cityName.indexOf(nameParam) > -1) return true;
-    return false;
-  });
+  if (error)
+    throw new Error(`No se encontró ciudad con la instrucción ${name}`);
 
-  return Response.json(filteredCities);
+  return Response.json(data);
 }

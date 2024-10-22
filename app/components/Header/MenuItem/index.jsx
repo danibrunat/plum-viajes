@@ -11,7 +11,7 @@ const MenuItem = ({ item, icon }) => {
       data-is-active={isActive ? "true" : "false"}
       aria-current={isActive}
       href={getPathFromSlug(slug.current)}
-      className="flex text-black  py-3 px-4 hover:bg-plumPrimaryPink "
+      className="flex text-black  py-3 px-4 hover:bg-plumPrimaryOrange "
     >
       <i className="text-black mx-2 self-center">{icon}</i> {title}
     </Link>

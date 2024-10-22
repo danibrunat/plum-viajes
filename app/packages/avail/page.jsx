@@ -1,6 +1,6 @@
 import SearchEngines from "../../components/sections/SearchEngines";
-import PkgGrid from "./PkgGrid";
-import PkgGridHeader from "./PkgGrid/PkgGridHeader";
+import PkgGrid from "./_components/PkgGrid";
+import PkgGridHeader from "./_components/PkgGrid/PkgGridHeader";
 import { ProviderService } from "../../api/services/providers.service";
 
 export const metadata = {

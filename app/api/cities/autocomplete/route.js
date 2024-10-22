@@ -1,35 +1,33 @@
+import { ApiUtils } from "../../services/apiUtils.service";
+
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const query = searchParams.get("query");
-  const input = searchParams.get("input");
-  console.log("input", input);
-  if (input === "arrivalCity") {
-    try {
-      const citiesSearch = await fetch(
-        `${process.env.URL}/api/cities/byName?name=${query}`,
-        {
-          method: "GET",
-          cache: "no-cache",
-        }
-      );
-      const citiesResponse = await citiesSearch.json();
+  //const input = searchParams.get("input");
+  /* if (input === "arrivalCity") { */
 
-      const autocompleteResponse = citiesResponse.map(
-        ({ id, name, label, countryName }) => ({
-          id,
-          name,
-          label: `${label}, ${countryName}`,
-          value: id,
-        })
-      );
+  const citiesSearch = await ApiUtils.requestHandler(
+    fetch(`${process.env.URL}/api/cities/byName?name=${query}`, {
+      method: "GET",
+      cache: "no-cache",
+      headers: ApiUtils.getCommonHeaders(),
+    }),
+    "GET | Autocomplete Api"
+  );
+  const citiesResponse = await citiesSearch.json();
+  const autocompleteResponse = citiesResponse.map(
+    ({ id, name, country_name, region_name, iata_code }) => ({
+      id,
+      name,
+      label: `${name}, ${country_name}`,
+      value: iata_code,
+    })
+  );
 
-      return Response.json(autocompleteResponse);
-    } catch (error) {
-      return Response.json({ error: error.message });
-    }
-  }
+  return Response.json(autocompleteResponse);
+  /*  } */
 
-  if (input === "departureCity") {
+  /* if (input === "departureCity") {
     try {
       const citiesSearch = await fetch(
         `${process.env.URL}/api/cities/departureCity?name=${query}`,
@@ -38,11 +36,11 @@ export async function GET(req) {
       const citiesResponse = await citiesSearch.json();
 
       const autocompleteResponse = citiesResponse.map(
-        ({ id, name, label, countryName }) => ({
+        ({ id, name, country_name, region_name, iata_code }) => ({
           id,
           name,
-          label: `${label}, ${countryName}`,
-          value: id,
+          label: `${name}, ${country_name}`,
+          value: iata_code,
         })
       );
 
@@ -50,5 +48,5 @@ export async function GET(req) {
     } catch (error) {
       return Response.json({ error: error.message });
     }
-  }
+  } */
 }

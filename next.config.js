@@ -12,7 +12,27 @@ const withPWA = require("@ducanh2912/next-pwa").default({
 });
 const nextConfig = {
   images: {
-    domains: ["cdn.sanity.io", "source.unsplash.com", "aws-qa1.ola.com.ar"],
+    domains: [
+      "cdn.sanity.io",
+      "source.unsplash.com",
+      "aws-qa1.ola.com.ar",
+      "s3.amazonaws.com",
+      "plumviajes.com.ar",
+      "www.plumviajes.com.ar",
+    ],
+  },
+  experimental: {
+    turbo: {
+      resolveExtensions: [
+        ".mdx",
+        ".tsx",
+        ".ts",
+        ".jsx",
+        ".js",
+        ".mjs",
+        ".json",
+      ],
+    },
   },
 };
 

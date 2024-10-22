@@ -25,7 +25,7 @@ const Whatsapp = () => {
     <>
       <div
         className="bg-green-600 w-min p-2 rounded-full fixed 
-          bottom-10 right-4 cursor-pointer md:right-8"
+          bottom-28 right-4 cursor-pointer md:right-8"
         onClick={handleClick}
       >
         <FaWhatsapp color="white" className=" w-14 h-14 md:w-10 md:h-10" />

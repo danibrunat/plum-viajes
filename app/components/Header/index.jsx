@@ -1,7 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { getPathFromSlug, slugParamToPath } from "../../../utils/urls";
 import { urlForImage } from "../../../sanity/lib/image";
 import Image from "next/image";
 import MenuItem from "./MenuItem";
