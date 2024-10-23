@@ -1,6 +1,6 @@
 import { defineField } from "sanity";
 import { AIRLINES } from "../../../app/constants/airlines";
-import { HOTELS } from "../../../app/constants/hotels";
+import HotelSelect from "../../components/HotelSelect";
 
 export default defineField({
   title: "Salida",
@@ -228,19 +228,34 @@ export default defineField({
       title: "Escalas",
       fieldset: "roundTripFlight2",
     },
-    {
+    defineField({
       name: "hotels",
-      type: "string",
-      title: "Hotel",
-      fieldset: "hotels",
-      options: {
-        list: HOTELS.slice(0, 50).map((o) => ({
-          title: o.name,
-          id: o.id,
-          value: o.name,
-        })),
-      },
-    },
+      title: "Hotels",
+      type: "array",
+      of: [
+        defineField({
+          name: "hotel",
+          type: "object",
+          title: "Hotel",
+          fields: [
+            defineField({
+              name: "id",
+              type: "string",
+              title: "Hotel ID",
+              hidden: true, // Ocultamos el ID ya que no es editable
+            }),
+            defineField({
+              name: "name",
+              type: "string",
+              title: "Hotel Name",
+            }),
+          ],
+          components: {
+            input: HotelSelect, // Componente personalizado para el select
+          },
+        }),
+      ],
+    }),
     {
       name: "mealPlan",
       type: "string",

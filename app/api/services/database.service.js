@@ -38,7 +38,7 @@ const DatabaseService = {
     const cookieStore = cookies();
     const supabase = serverClient(cookieStore);
     // TODO: Handle error with api request handler.
-    const { data, error } = await supabase.from("hotels").select();
+    const { data, error } = await supabase.from(table).select();
     return data;
   },
   getByIdEqual: async (table, id) => {
@@ -54,6 +54,7 @@ const DatabaseService = {
       .from(table)
       .select(selectQuery)
       .eq("id", id);
+
     return data;
   },
   getByFieldIlike: async (table, field, ilikeParam) => {

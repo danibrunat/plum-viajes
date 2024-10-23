@@ -1,6 +1,4 @@
 import { ApiUtils } from "../api/services/apiUtils.service";
-import DatabaseService from "../api/services/database.service";
-import { Hotels } from "../api/services/hotels.service";
 
 const baseUrl = process.env.URL;
 

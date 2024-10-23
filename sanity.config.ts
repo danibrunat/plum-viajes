@@ -6,7 +6,6 @@ import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
 
 import { apiVersion, dataset, projectId } from "./sanity/env";
-import dbConfig from "./sanity/dashboardConfig";
 import { deskStructure } from "./sanity/deskStructure";
 import { schema } from "./sanity/schema";
 import {
@@ -22,8 +21,15 @@ import { iconPicker } from "sanity-plugin-icon-picker";
 
 import DownloadPDFAction from "./sanity/actions/PDFDownload";
 
-const hiddenDocTypes = (listItem: { getId: () => string }) =>
-  !["page", "route", "siteConfig"].includes(listItem.getId());
+// Carga dotenv solo en el servidor (Node.js)
+if (typeof window === "undefined") {
+  (async () => {
+    const dotenv = await import("dotenv");
+    dotenv.config();
+  })();
+}
+/* const hiddenDocTypes = (listItem: { getId: () => string }) =>
+  !["page", "route", "siteConfig"].includes(listItem.getId()); */
 
 export default defineConfig({
   basePath: "/studio",
