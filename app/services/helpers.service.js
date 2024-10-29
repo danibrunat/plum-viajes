@@ -1,7 +1,8 @@
 export const Helpers = {
   capitalizeFirstLetter: (string) => {
     if (!string) return "";
-    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    if (typeof string !== "string") return "";
+    return string?.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   },
   slugify: (text) => {
     if (!text) return "";

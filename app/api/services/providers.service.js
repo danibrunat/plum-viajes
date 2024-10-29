@@ -186,13 +186,20 @@ export const ProviderService = {
       ola: "Package.Nights",
     },
     hotels: {
+      // TODO: A esto le hace falta poder devolver un array de hotels con las sub propiedades. Es decir > 1 hotel con su id, name, rating, mealPlan, etc...
+      id: {
+        // TODO: No debería acceder al [0].id, ahí es donde debemos tener en realidad un array de estos valores ya accedidos.
+        plum: "departures.[0].hotels.[0].id",
+        julia: "hotels",
+        ola: "Descriptions.Description.Name",
+      },
       name: {
-        plum: "departures.[0].hotels",
+        plum: "departures.[0].hotels.[0].name",
         julia: "hotels",
         ola: "Descriptions.Description.Name",
       },
       rating: {
-        plum: "departures.[0].hotels.rating",
+        plum: "departures.[0].hotels",
         julia: "rating",
         ola: "Descriptions.Description.HotelClass",
       },

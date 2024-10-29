@@ -8,4 +8,6 @@ export const Hotels = {
       `*, hotels_images (image_name)`,
       id
     ),
+  getImagePublicUrl: (imagePath) =>
+    DatabaseService.getStorageItemPublicUrl("hotel_images", imagePath),
 };

@@ -26,7 +26,7 @@ export default defineField({
     {
       title: "Hoteles",
       name: "hotels",
-      options: { columns: 3 },
+      options: { columns: 1 },
     },
     {
       title: "Tarifas",
@@ -232,6 +232,7 @@ export default defineField({
       name: "hotels",
       title: "Hotels",
       type: "array",
+      fieldset: "hotels",
       of: [
         defineField({
           name: "hotel",
@@ -240,9 +241,9 @@ export default defineField({
           fields: [
             defineField({
               name: "id",
-              type: "string",
+              type: "number",
               title: "Hotel ID",
-              hidden: true, // Ocultamos el ID ya que no es editable
+              hidden: true,
             }),
             defineField({
               name: "name",
@@ -251,7 +252,7 @@ export default defineField({
             }),
           ],
           components: {
-            input: HotelSelect, // Componente personalizado para el select
+            input: HotelSelect,
           },
         }),
       ],

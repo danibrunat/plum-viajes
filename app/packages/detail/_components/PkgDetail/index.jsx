@@ -12,6 +12,9 @@ import PricesAndAgentContact from "./PricesAndAgentContact";
 export default function PkgDetail({ detailResponse }) {
   const name = detailResponse?.title;
   const subtitle = detailResponse?.subtitle;
+  const hotelsData = detailResponse?.hotelsData;
+  const citiesData = detailResponse?.citiesData;
+  console.log("citiesData", citiesData);
   const sliderImages = detailResponse?.images.map((image) => {
     return {
       src: urlForImage(image),
@@ -37,14 +40,18 @@ export default function PkgDetail({ detailResponse }) {
             <h1 className="text-xl">Itinerario de Vuelos</h1>
             <Flights />
           </div>
-          <div className="flex flex-col w-full rounded">
-            <h2 className="text-xl">Alojamiento</h2>
-            <HotelCard sliderImages={sliderImages} />
-          </div>
-          <div className="flex flex-col w-full rounded">
-            <h2 className="text-xl">Destino</h2>
-            <DestinationCity sliderImages={sliderImages} />
-          </div>
+          {hotelsData.map((hotel) => (
+            <div className="flex flex-col w-full rounded">
+              <h2 className="text-xl">Alojamiento</h2>
+              <HotelCard hotelData={hotel} />
+            </div>
+          ))}
+          {citiesData.map((city) => (
+            <div className="flex flex-col w-full rounded">
+              <h2 className="text-xl">Destino</h2>
+              <DestinationCity sliderImages={sliderImages} city={city} />
+            </div>
+          ))}
           <div className="flex flex-col md:hidden w-full rounded">
             <h2 className="text-xl">Consultá con tu agente de viajes</h2>
             <AgentContact />

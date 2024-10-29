@@ -1,19 +1,32 @@
-import { cookies } from "next/headers";
+import { CitiesService } from "../../../services/cities.service";
 import DatabaseService from "../../services/database.service";
 
 export async function GET(req) {
-  const cookieStore = cookies();
-  const supabase = DatabaseService.serverClient(cookieStore);
   const { searchParams } = new URL(req.url);
   const code = searchParams.get("code");
   //console.log("name", name);
 
-  const { data, error } = await supabase
-    .from("cities")
-    .select()
-    .eq("iata_code", code);
+  const baseCityResponse =
+    await DatabaseService.getAllByFieldEqualAndCustomSelect(
+      "cities",
+      `*, cities_images (image_name)`,
+      "iata_code",
+      code
+    );
+  const cityImages = baseCityResponse[0]?.cities_images;
 
-  if (error) Response.json(error);
+  const citiesImagesWithPublicUrl = await Promise.all(
+    cityImages.map(async (image) => {
+      const publicUrl = await CitiesService.getImagePublicUrl(
+        `${image.image_name}`
+      );
+      return { ...image, publicUrl }; // Incluir la URL pública en el objeto de imagen
+    })
+  );
+  const response = [
+    { ...baseCityResponse[0], images: citiesImagesWithPublicUrl },
+  ];
+  if (response?.error) Response.json(response?.error);
 
-  return Response.json(data);
+  return Response.json(response);
 }

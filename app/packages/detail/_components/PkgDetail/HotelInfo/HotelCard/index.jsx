@@ -3,7 +3,11 @@ import { useState } from "react";
 import { FaMapMarkerAlt, FaStar } from "react-icons/fa";
 import Slider from "../../../../../../components/commons/Slider";
 
-const HotelCard = ({ sliderImages }) => {
+const HotelCard = ({ hotelData }) => {
+  const { name, stars, city_id, description, latitude, longitude } = hotelData;
+  const hotelImages = hotelData?.images.map((imageItem) => ({
+    src: imageItem.publicUrl,
+  }));
   // State to handle text expansion
   const [expanded, setExpanded] = useState(false);
 
@@ -15,18 +19,21 @@ const HotelCard = ({ sliderImages }) => {
   return (
     <div className="w-full h-auto border rounded-lg overflow-hidden shadow-lg p-4">
       {/* Card title */}
-      <h2 className="flex text-xl font-bold mb-2">
-        <span>Posada New Paradise</span>{" "}
-        <span className="flex">
-          <FaStar className="text-yellow-500" />{" "}
-          <FaStar className="text-yellow-500" />
-        </span>
-        <span>Búzios</span>
+      <h2 className="flex flex-col md:flex-row text-md mb-2">
+        <p className="w-full md:w-auto font-bold">{name}</p>{" "}
+        <div className="flex gap-3">
+          <p className="flex text-md gap-1">
+            {[...Array(stars)].map((_, index) => (
+              <FaStar key={index} className="text-yellow-500 text-sm" />
+            ))}
+          </p>
+          <p>{city_id}</p>
+        </div>
       </h2>
 
       {/* Image section */}
       <div className="relative w-full h-48 mb-4">
-        <Slider slides={sliderImages} deviceType="desktop" />
+        <Slider slides={hotelImages} deviceType="desktop" />
       </div>
 
       {/* Map link with marker icon */}
@@ -38,19 +45,12 @@ const HotelCard = ({ sliderImages }) => {
       >
         <FaMapMarkerAlt className="mr-2" />
         <span>Ver mapa</span>
+        {latitude} {longitude}
       </a>
 
       {/* Large text (expandable) with ellipsis */}
       <div className={`transition-all ${expanded ? "" : "line-clamp-5"}`}>
-        <p className="text-gray-700">
-          La Pousada New Paradise está ubicada a 150 metros de la famosa y
-          concurrida Playa de Joao Fernandes y a 10 minutos de caminata, por la
-          Orla Bardot, de Rua das Pedras. Ofrece los siguientes servicios:
-          Pileta, Bar, Desayuno, Salón de juegos, Sala TV/DVD, estacionamiento,
-          Parrilla, y Balcón vista mar Las habitaciones están equipadas con TV,
-          frigobar, aire acondicionado, ventilador de techo y teléfono. Todas
-          tienen balcón con vista al mar.
-        </p>
+        <p className="text-gray-700">{description}</p>
       </div>
 
       {/* "Ver más" button */}

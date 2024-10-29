@@ -5,14 +5,13 @@ export async function GET(req) {
   const name = searchParams.get("name");
   //console.log("name", name);
 
-  const { data, error } = await DatabaseService.getByFieldIlike(
+  const response = await DatabaseService.getByFieldIlike(
     "cities",
     "name",
     name
   );
 
-  if (error)
-    throw new Error(`No se encontró ciudad con la instrucción ${name}`);
+  if (response?.error) Response.json(response?.error);
 
-  return Response.json(data);
+  return Response.json(response);
 }

@@ -25,6 +25,7 @@ import newsletter from "./schemas/objects/newsletter";
 import iFrame from "./schemas/objects/iframe";
 import departure from "./schemas/objects/departure";
 import prices from "./schemas/objects/prices";
+import hotel from "./schemas/objects/hotel";
 
 // Landing page sections
 import hero from "./schemas/objects/hero";
@@ -59,5 +60,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     iFrame,
     departure,
     prices,
+    hotel,
   ],
 };

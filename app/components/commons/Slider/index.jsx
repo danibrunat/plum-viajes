@@ -40,7 +40,6 @@ const Slider = ({ slides, deviceType = "desktop" }) => {
       draggable={true}
       showDots={true}
       responsive={responsive}
-      ssr={true} // means to render carousel on server-side.
       infinite={true}
       autoPlay={true}
       autoPlaySpeed={3500}
@@ -55,10 +54,13 @@ const Slider = ({ slides, deviceType = "desktop" }) => {
           key={index + 1}
           src={slide.src}
           alt={slide.alt || `Slide ${index + 1}`}
-          width={0}
-          height={0}
+          width={deviceType === "desktop" ? 300 : 0}
+          height={deviceType === "desktop" ? 250 : 0}
           sizes="100vw"
-          style={{ width: "100%", height: "auto" }}
+          style={{
+            width: "100%",
+            height: deviceType === "desktop" ? "200px" : "auto",
+          }}
         />
       ))}
     </Carousel>

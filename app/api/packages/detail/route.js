@@ -1,33 +1,38 @@
 import { Api } from "../../../services/api.service";
-import { ApiUtils } from "../../services/apiUtils.service";
+import { CitiesService } from "../../../services/cities.service";
+import HotelsService from "../../../services/hotels.service";
 
 export async function POST(req) {
-  async function getHotelDataById(pkgHotelData) {
-    pkgHotelData.id = 1;
-    const hotelData = await ApiUtils.requestHandler(
-      fetch(
-        Api.hotels.getById.url(pkgHotelData?.id),
-        Api.hotels.getById.options
-      ),
-      Api.hotels.getById.name
-    );
-
-    return hotelData;
-  }
-
   const body = await req.json();
-  /* PBase */
+
+  // Fetch package details
   const pkgDetailRequest = await fetch(
     Api.packages.detail.pbase.url(),
     Api.packages.detail.pbase.options(body)
   );
   const pkgDetailResponse = await pkgDetailRequest.json();
-  console.log("pkgDetailResponse", pkgDetailResponse);
-  const hotelData = await getHotelDataById(pkgDetailResponse);
 
-  /* PCom */
+  // Fetch hotels data
+  const hotelsData = await HotelsService.getHotelsData(
+    pkgDetailResponse.provider,
+    pkgDetailResponse.hotels
+  );
 
-  /* Response */
+  // Determine if multiple hotels exist
+  const hotelsArray = Array.isArray(hotelsData);
 
-  return Response.json(pkgDetailResponse);
+  // Fetch cities data
+  const citiesData = hotelsArray
+    ? await Promise.all(
+        hotelsData.map((hotel) => CitiesService.getCityByCode(hotel.city_id))
+      )
+    : await CitiesService.getCityByCode(hotelsData.city_id);
+  // Construct response
+  const response = {
+    ...pkgDetailResponse,
+    hotelsData,
+    citiesData: hotelsArray ? citiesData[0] : citiesData,
+  };
+
+  return Response.json(response);
 }

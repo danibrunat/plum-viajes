@@ -9,7 +9,7 @@ export async function applyRateLimit(req) {
 
   const currentTime = Date.now();
   const windowTime = 15 * 60 * 1000; // 15 minutes
-  const requestLimit = 100; // Max 100 requests
+  const requestLimit = 300; // Max 100 requests
 
   const rateInfo = rateLimit.get(ip) || {
     count: 0,
