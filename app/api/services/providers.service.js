@@ -75,30 +75,38 @@ export const ProviderService = {
       ola: "Package.Nights",
     },
     hotels: {
-      name: {
-        plum: "departures.[0].hotels",
-        julia: "hotels",
-        ola: "Descriptions.Description.Name",
-      },
-      rating: {
-        plum: "departures.[0].hotels.rating",
-        julia: "rating",
-        ola: "Descriptions.Description.HotelClass",
-      },
-      mealPlan: {
-        plum: "departures.[0].mealPlan",
-        julia: "hotels",
-        ola: "Descriptions.Description.FareDescriptions.FareDescription.[1].$value",
-      },
-      roomType: {
-        plum: "departures.[0].roomType",
-        julia: "hotels",
-        ola: "Descriptions.Description.FareDescriptions.FareDescription.[0].$value",
-      },
-      roomSize: {
-        plum: "departures.[0].prices.[0].type",
-        julia: "hotels",
-        ola: "Descriptions.Description.FareDescriptions.FareDescription.[2].$value",
+      isArray: true,
+      items: {
+        id: {
+          plum: "departures.[].hotels.[0].id",
+          julia: "hotels",
+          ola: "Descriptions.Description.Name",
+        },
+        name: {
+          plum: "departures.[].hotels.[0].name",
+          julia: "hotels",
+          ola: "Descriptions.Description.Name",
+        },
+        rating: {
+          plum: "departures.[].hotels.[0].rating",
+          julia: "rating",
+          ola: "Descriptions.Description.HotelClass",
+        },
+        mealPlan: {
+          plum: "departures.[].mealPlan",
+          julia: "hotels",
+          ola: "Descriptions.Description.FareDescriptions.FareDescription.[1].$value",
+        },
+        roomType: {
+          plum: "departures.[].roomType",
+          julia: "hotels",
+          ola: "Descriptions.Description.FareDescriptions.FareDescription.[0].$value",
+        },
+        roomSize: {
+          plum: "departures.[].roomSize",
+          julia: "hotels",
+          ola: "Descriptions.Description.FareDescriptions.FareDescription.[2].$value",
+        },
       },
     },
     thumbnails: {
@@ -106,6 +114,10 @@ export const ProviderService = {
       ola: "Package.Pictures.Picture.[].$value",
     },
     prices: {
+      id: {
+        plum: "1234",
+        ola: "FareCodes.FareOption",
+      },
       pricesDetail: {
         basePrice: {
           plum: "departures.[0].prices.[0].amount",
@@ -159,9 +171,10 @@ export const ProviderService = {
       },
     },
     departures: {
-      plum: "departures",
-      julia: "departures",
-      ola: "departures",
+      date: {
+        plum: "departures",
+        ola: "Flight.Trips.Trip.[0].DepartureDate",
+      },
     },
   },
   detailResponseConfig: {
@@ -186,37 +199,38 @@ export const ProviderService = {
       ola: "Package.Nights",
     },
     hotels: {
-      // TODO: A esto le hace falta poder devolver un array de hotels con las sub propiedades. Es decir > 1 hotel con su id, name, rating, mealPlan, etc...
-      id: {
-        // TODO: No debería acceder al [0].id, ahí es donde debemos tener en realidad un array de estos valores ya accedidos.
-        plum: "departures.[0].hotels.[0].id",
-        julia: "hotels",
-        ola: "Descriptions.Description.Name",
-      },
-      name: {
-        plum: "departures.[0].hotels.[0].name",
-        julia: "hotels",
-        ola: "Descriptions.Description.Name",
-      },
-      rating: {
-        plum: "departures.[0].hotels",
-        julia: "rating",
-        ola: "Descriptions.Description.HotelClass",
-      },
-      mealPlan: {
-        plum: "departures.[0].mealPlan",
-        julia: "hotels",
-        ola: "Descriptions.Description.FareDescriptions.FareDescription.[1].$value",
-      },
-      roomType: {
-        plum: "departures.[0].roomType",
-        julia: "hotels",
-        ola: "Descriptions.Description.FareDescriptions.FareDescription.[0].$value",
-      },
-      roomSize: {
-        plum: "departures.[0].prices.[0].type",
-        julia: "hotels",
-        ola: "Descriptions.Description.FareDescriptions.FareDescription.[2].$value",
+      isArray: true,
+      items: {
+        id: {
+          plum: "departures.[].hotels.[0].id",
+          julia: "hotels",
+          ola: "Descriptions.Description.Name",
+        },
+        name: {
+          plum: "departures.[].hotels.[0].name",
+          julia: "hotels",
+          ola: "Descriptions.Description.Name",
+        },
+        rating: {
+          plum: "departures.[].hotels.[0].rating",
+          julia: "rating",
+          ola: "Descriptions.Description.HotelClass",
+        },
+        mealPlan: {
+          plum: "departures.[].mealPlan",
+          julia: "hotels",
+          ola: "Descriptions.Description.FareDescriptions.FareDescription.[1].$value",
+        },
+        roomType: {
+          plum: "departures.[].roomType",
+          julia: "hotels",
+          ola: "Descriptions.Description.FareDescriptions.FareDescription.[0].$value",
+        },
+        roomSize: {
+          plum: "departures.[].roomSize",
+          julia: "hotels",
+          ola: "Descriptions.Description.FareDescriptions.FareDescription.[2].$value",
+        },
       },
     },
     images: {
@@ -224,6 +238,10 @@ export const ProviderService = {
       ola: "Package.Pictures.Picture.[].$value",
     },
     prices: {
+      id: {
+        plum: "1234",
+        ola: "FareCodes.FareOption",
+      },
       pricesDetail: {
         basePrice: {
           plum: "departures.[0].prices.[0].amount",
@@ -277,9 +295,10 @@ export const ProviderService = {
       },
     },
     departures: {
-      plum: "departures",
-      julia: "departures",
-      ola: "departures",
+      date: {
+        plum: "departures.[].departureFrom",
+        ola: "Flight.Trips.Trip.[0].DepartureDate",
+      },
     },
   },
 
@@ -296,7 +315,6 @@ export const ProviderService = {
       {
         method: "POST",
         body: JSON.stringify({ searchParams }),
-        next: { revalidate: 0 },
         headers: ApiUtils.getCommonHeaders(),
       }
     );
@@ -320,13 +338,30 @@ export const ProviderService = {
    * @returns {Promise<Object>} The package detail data
    * @throws {Error} If the fetch request fails
    */
-  getPkgDetail: async ({ provider, id }) => {
+  getPkgDetail: async ({
+    provider,
+    id,
+    arrivalCity,
+    departureCity,
+    startDate,
+    endDate,
+    priceId,
+    rooms,
+  }) => {
     const pkgDetailRequest = await fetch(
       `${process.env.URL}/api/packages/detail`,
       {
         method: "POST",
-        body: JSON.stringify({ provider, id }),
-        next: { revalidate: 0 },
+        body: JSON.stringify({
+          provider,
+          id,
+          arrivalCity,
+          departureCity,
+          startDate,
+          endDate,
+          priceId,
+          rooms,
+        }),
         headers: ApiUtils.getCommonHeaders(),
       }
     );
@@ -407,8 +442,8 @@ export const ProviderService = {
     const [month, year] = monthYear.split("-");
     const currentMonthLastDay = new Date(year, month, 0).getDate();
     return {
-      startDate: `01-${month}-${year}`,
-      endDate: `${currentMonthLastDay}-${month}-${year}`,
+      startDate: `${year}-${month}-01`,
+      endDate: `${year}-${month}-${currentMonthLastDay}`,
     };
   },
 
@@ -427,22 +462,37 @@ export const ProviderService = {
    * @param {string} value - The dot-separated path to the desired property
    * @returns {*} The value at the specified path, or undefined if not found
    */
-  getByDotOperator(object, value) {
+  getByDotOperator: (object, value) => {
     if (!object || !value) return null;
+
     const reduced = value.split(".").reduce((acc, curr) => {
-      if (curr === "[]") {
-        // Handle array case
-        return Array.isArray(acc) ? acc : [];
-      } else if (/^\[\d+\]$/.test(curr)) {
-        // Handle array index case
-        return Array.isArray(acc) ? acc[curr.slice(1, -1)] : [];
-      } else if (Array.isArray(acc)) {
-        // If acc is an array, map the property access to all elements
-        return acc.map((item) => item[curr]);
-      } else {
+      // Si encontramos un índice como "[0]", accedemos a la posición correspondiente
+      if (/^\[\d+\]$/.test(curr)) {
+        const index = parseInt(curr.slice(1, -1), 10); // Extraemos el índice
+        return Array.isArray(acc) ? acc[index] : undefined;
+      }
+      // Si encontramos "[]", recorremos el array y devolvemos un array de los valores resultantes
+      else if (curr === "[]") {
+        if (Array.isArray(acc)) {
+          return acc.map((item) => item); // Mantenemos todos los elementos del array
+        } else {
+          return []; // Si no es un array, devolvemos un array vacío
+        }
+      }
+      // Si acc es un array, mapeamos la propiedad a todos los elementos
+      else if (Array.isArray(acc)) {
+        return acc.map((item) => (item ? item[curr] : undefined));
+      }
+      // Si acc no es un array, simplemente accedemos a la propiedad del objeto
+      else {
         return acc ? acc[curr] : undefined;
       }
     }, object);
+
+    // Si el resultado es un array con un solo valor, devolvemos ese valor en lugar de un array
+    if (Array.isArray(reduced) && reduced.length === 1) {
+      return reduced[0];
+    }
 
     return reduced;
   },
@@ -461,30 +511,37 @@ export const ProviderService = {
         ? ProviderService.detailResponseConfig
         : ProviderService.availResponseConfig;
 
+    // Función para verificar si es un objeto
+    const isObject = (value) => value !== null && typeof value === "object";
     const mapNestedObject = (pkg, configObj) => {
       let result = {};
+
       Object.entries(configObj).forEach(([key, value]) => {
-        if (typeof value === "object" && value !== null) {
-          if (value[provider]) {
-            // Handle the current scenario where the provider key exists directly
-            const providerConfigProp = value[provider];
-            if (ProviderService.hasNestedProperty(providerConfigProp)) {
-              result[key] = ProviderService.getByDotOperator(
-                pkg,
-                providerConfigProp
-              );
-            } else {
-              result[key] = pkg[providerConfigProp];
-            }
-          } else {
-            // Recursively map nested objects
-            result[key] = mapNestedObject(pkg, value);
-          }
-        } else {
-          // This case should not occur in the current structure, but kept for safety
-          console.warn(`Unexpected value type for key ${key}:`, value);
+        // Si la configuración es un array, lo manejamos inmediatamente
+        if (value.isArray) {
+          result[key] = [mapNestedObject(pkg, value.items)];
+          return;
         }
+
+        // Verificamos si 'value' es un objeto anidado pero no contiene el proveedor directamente
+        if (isObject(value) && !value[provider]) {
+          // Recursivamente mapeamos este objeto
+          result[key] = mapNestedObject(pkg, value);
+          return;
+        }
+
+        // Si no es un objeto o no tiene el proveedor en la configuración, no hacemos nada
+        if (!isObject(value) || !value[provider]) {
+          console.warn(`Unexpected value type for key ${key}:`, value);
+          return;
+        }
+
+        const providerConfigProp = value[provider];
+        result[key] = ProviderService.hasNestedProperty(providerConfigProp)
+          ? ProviderService.getByDotOperator(pkg, providerConfigProp)
+          : pkg[providerConfigProp];
       });
+
       return result;
     };
 
@@ -514,7 +571,31 @@ export const ProviderService = {
       },
     };
   },
+  getRoomsConfig: (configString) => {
+    // Si el string está vacío o indefinido, retornar un array vacío
+    if (!configString || configString.trim() === "") return [];
 
+    // Dividimos las habitaciones usando la coma ","
+    const rooms = configString.split(",");
+
+    // Recorremos cada habitación para procesar adultos y niños
+    return rooms.map((room) => {
+      // Dividimos adultos de niños usando "|"
+      const [adultsPart, childrenPart] = room.split("|");
+
+      // Convertimos la cantidad de adultos en número
+      const adults = parseInt(adultsPart, 10) || 0;
+
+      // Procesamos las edades de los niños si existen, si no, devolvemos un array vacío
+      const children = childrenPart ? childrenPart.split("-").map(Number) : [];
+
+      // Devolvemos un objeto con adultos y niños para cada habitación
+      return {
+        adults,
+        children,
+      };
+    });
+  },
   getHotelDetailInfo: async () => {},
 
   julia: {},
@@ -542,7 +623,9 @@ export const ProviderService = {
       const seenItems = new Set();
 
       mappedResponse.forEach((item) => {
-        const uniqueKey = `${item.id}-${item.hotels.name}-${item.hotels.roomType}-${item.hotels.roomSize}-${item.hotels.mealPlan}`;
+        console.log("item", item);
+        const uniqueKey = `${item.id}-${item.hotels[0].name}-${item.hotels[0].roomType}-${item.hotels[0].roomSize}-${item.hotels[0].mealPlan}`;
+        console.log("uniqueKey", uniqueKey);
         if (!seenItems.has(uniqueKey)) {
           seenItems.add(uniqueKey);
           uniqueResponse.push(item);
@@ -551,5 +634,30 @@ export const ProviderService = {
 
       return uniqueResponse;
     },
+
+    // Helper para generar el XML
+    generateXMLRoomsByConfigString: (roomsConfig) => {
+      let xmlString = "<Rooms>\n";
+
+      roomsConfig.forEach((room) => {
+        xmlString += "  <Room>\n";
+
+        // Agregar tantos adultos (Passenger Type="ADL") como indique el objeto
+        for (let i = 0; i < room.adults; i++) {
+          xmlString += '    <Passenger Type="ADL"/>\n';
+        }
+
+        // Agregar tantos niños (Passenger Type="CHD") con la propiedad age como niños haya
+        room.children.forEach((age) => {
+          xmlString += `    <Passenger Type="CHD" Age="${age}"/>\n`;
+        });
+
+        xmlString += "  </Room>\n";
+      });
+
+      xmlString += "</Rooms>";
+      return xmlString;
+    },
   },
+  clientFetch: (...args) => fetch(...args).then((res) => res.json()),
 };

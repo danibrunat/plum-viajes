@@ -9,11 +9,26 @@ export const metadata = {
 };
 
 export default async function PackagesDetail({
-  searchParams: { provider, id },
+  searchParams: {
+    provider,
+    id,
+    arrivalCity,
+    departureCity,
+    startDate,
+    endDate,
+    priceId,
+    rooms,
+  },
 }) {
   const pkgDetailResponse = await ProviderService.getPkgDetail({
     provider,
     id,
+    arrivalCity,
+    departureCity,
+    startDate,
+    endDate,
+    priceId,
+    rooms,
   });
 
   return (

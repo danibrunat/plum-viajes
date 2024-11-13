@@ -24,17 +24,20 @@ async function fetchPlumPackages({
 
   const sanityQuery = await sanityFetch({ query: pkgAvailQuery });
   const pkgAvailResponse = await sanityQuery;
-  console.log("PLUM | pkgAvailResponse", JSON.stringify(pkgAvailResponse));
+
+  //console.log("PLUM | pkgAvailResponse", JSON.stringify(pkgAvailResponse));
   // console.log("PLUM | pkgAvailResponse", pkgAvailResponse);
   const mapResponse = ProviderService.mapper(pkgAvailResponse, "plum", "avail");
+  console.log("mapResponse.hotels", JSON.stringify(mapResponse.hotels));
   return Response.json(mapResponse);
 }
 
 async function fetchOlaPackages(searchParams) {
-  const { departureCity, arrivalCity, startDate, endDate } = searchParams;
+  const { departureCity, arrivalCity, startDate, endDate, rooms } =
+    searchParams;
   const formattedDateFrom = ProviderService.ola.olaDateFormat(startDate);
   const formattedDateTo = ProviderService.ola.olaDateFormat(endDate);
-  // ARMAR UN GETSEARCHPARAMSBYPROVIDER PARA MAPEAR DIRECTAMENTE LOS SEARCH PARAMS SEGUN NECESITE EL PROVEEDOR
+  // TODO: ARMAR UN GETSEARCHPARAMSBYPROVIDER PARA MAPEAR DIRECTAMENTE LOS SEARCH PARAMS SEGUN NECESITE EL PROVEEDOR
   const getPackagesFaresRequest = `<GetPackagesFaresRequest>
             <GeneralParameters>
               <Username>${process.env.OLA_USERNAME}</Username>
@@ -59,9 +62,19 @@ async function fetchOlaPackages(searchParams) {
             </GetPackagesFaresRequest>`;
 
   try {
-    const olaAvail = await OLA.avail(getPackagesFaresRequest);
-    // console.log("olaAvail", olaAvail);
-    const mapResponse = ProviderService.mapper(olaAvail, "ola", "avail");
+    const olaAvailRequest = await fetch(
+      OLA.avail.url(),
+      OLA.avail.options(getPackagesFaresRequest)
+    );
+
+    const olaAvailResponse = await olaAvailRequest.json();
+    // console.log("olaAvailResponse", olaAvailResponse);
+
+    const mapResponse = ProviderService.mapper(
+      olaAvailResponse,
+      "ola",
+      "avail"
+    );
     const groupResponseSet = ProviderService.ola.grouper(mapResponse);
     return groupResponseSet;
   } catch (error) {
@@ -103,14 +116,13 @@ export async function POST(req, res) {
 
   const plumPkgResponse = await plumPkg.json();
   //const juliaPkgResponse = await juliaPkg.json();
-  console.log("// PLUM RESPONSE // ");
+  /*  console.log("// PLUM RESPONSE // ");
   console.log(JSON.stringify(plumPkgResponse));
   console.log("// PLUM RESPONSE END // ");
 
   console.log("// OLA RESPONSE // ");
   //console.log(JSON.stringify(olaPkg));
-  console.log("// OLA RESPONSE END // ");
+  console.log("// OLA RESPONSE END // "); */
   const packagesResponse = plumPkgResponse.concat(olaPkg);
-  console.log("packagesResponse", JSON.stringify(packagesResponse));
   return Response.json(packagesResponse);
 }

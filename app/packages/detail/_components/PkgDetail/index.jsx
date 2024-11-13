@@ -4,20 +4,26 @@ import Slider from "../../../../components/commons/Slider";
 import Departures from "./Departures";
 import DepartureDetail from "./DepartureDetail";
 import Flights from "./Flights";
-import HotelCard from "./HotelInfo/HotelCard";
+import HotelCard from "./HotelCard";
 import DestinationCity from "./DestinationCity";
 import AgentContact from "./AgentContact";
 import PricesAndAgentContact from "./PricesAndAgentContact";
 
 export default function PkgDetail({ detailResponse }) {
+  const provider = detailResponse?.provider;
+  const departures = Array.isArray(detailResponse?.departures)
+    ? detailResponse?.departures.sort((a, b) => a.date < b.date)
+    : [detailResponse?.departures];
   const name = detailResponse?.title;
   const subtitle = detailResponse?.subtitle;
   const hotelsData = detailResponse?.hotelsData;
   const citiesData = detailResponse?.citiesData;
-  console.log("citiesData", citiesData);
   const sliderImages = detailResponse?.images.map((image) => {
     return {
-      src: urlForImage(image),
+      src:
+        provider === "ola"
+          ? image.replace("//", "https://")
+          : urlForImage(image),
     };
   });
 
@@ -31,7 +37,7 @@ export default function PkgDetail({ detailResponse }) {
 
           <Slider slides={sliderImages} deviceType="desktop" />
           <div className="flex w-full rounded">
-            <Departures />
+            <Departures departures={departures} />
           </div>
           <div className="flex w-full rounded">
             <DepartureDetail />
@@ -40,13 +46,13 @@ export default function PkgDetail({ detailResponse }) {
             <h1 className="text-xl">Itinerario de Vuelos</h1>
             <Flights />
           </div>
-          {hotelsData.map((hotel) => (
+          {hotelsData?.map((hotel) => (
             <div className="flex flex-col w-full rounded">
               <h2 className="text-xl">Alojamiento</h2>
               <HotelCard hotelData={hotel} />
             </div>
           ))}
-          {citiesData.map((city) => (
+          {citiesData?.map((city) => (
             <div className="flex flex-col w-full rounded">
               <h2 className="text-xl">Destino</h2>
               <DestinationCity sliderImages={sliderImages} city={city} />

@@ -2,7 +2,7 @@ import PkgFilters from "../PkgFilters";
 import PkgGridItem from "./PkgGridItem";
 
 const filters = [
-  {
+  /* {
     id: "productType",
     title: "Producto",
     type: "checkbox",
@@ -15,7 +15,7 @@ const filters = [
     type: "checkbox",
     items: [],
     grouper: "transportation",
-  },
+  }, */
   {
     id: "mealPlan",
     title: "Régimen de Comidas",
@@ -24,18 +24,18 @@ const filters = [
     grouper: "mealPlan",
   },
   {
-    id: "nightsQty",
+    id: "nights",
     title: "Cantidad de noches",
     type: "checkbox",
     items: [],
-    grouper: "nightsQty",
+    grouper: "nights",
   },
   {
-    id: "category",
+    id: "rating",
     title: "Estrellas",
     type: "checkbox",
     items: [],
-    grouper: "category",
+    grouper: "rating",
   },
   {
     id: "hotel",
@@ -46,7 +46,7 @@ const filters = [
   },
 ];
 
-const PkgGridServer = ({ availResponse, searchParams: { departureCity } }) => {
+const PkgGrid = ({ availResponse, searchParams }) => {
   const hydratedFilters = filters;
   return (
     <section className="flex flex-col md:flex-row md:justify-between w-full gap-2 md:gap-5">
@@ -56,7 +56,7 @@ const PkgGridServer = ({ availResponse, searchParams: { departureCity } }) => {
           <PkgGridItem
             key={pkgItem?.id}
             pkgItem={pkgItem}
-            departureCity={departureCity}
+            searchParams={searchParams}
           />
         ))}
       </div>
@@ -64,4 +64,4 @@ const PkgGridServer = ({ availResponse, searchParams: { departureCity } }) => {
   );
 };
 
-export default PkgGridServer;
+export default PkgGrid;

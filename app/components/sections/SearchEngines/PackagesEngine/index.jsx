@@ -93,7 +93,8 @@ const generateAvailUrl = (product, searchData) => {
   const departureFromTo = ProviderService.departureDateFromTo(
     searchData["departureMonthYear"].value
   );
-  const availUrl = `/${product}/avail?arrivalCity=${arrivalCity}&departureCity=${departureCity}&startDate=${departureFromTo.startDate}&endDate=${departureFromTo.endDate}`;
+  // rooms=2 -> 2 adults.
+  const availUrl = `/${product}/avail?arrivalCity=${arrivalCity}&departureCity=${departureCity}&startDate=${departureFromTo.startDate}&endDate=${departureFromTo.endDate}&rooms=2`;
 
   return availUrl;
 };

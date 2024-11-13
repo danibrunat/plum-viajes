@@ -10,7 +10,8 @@ export const metadata = {
 
 // Convert to a Server Component
 export default async function PackagesAvailability({ searchParams }) {
-  const { arrivalCity, departureCity, startDate, endDate } = searchParams;
+  const { arrivalCity, departureCity, startDate, endDate, rooms } =
+    searchParams;
 
   const [searchEngineDefaultValues, pkgAvailabilityResponse] =
     await Promise.all([
@@ -24,6 +25,7 @@ export default async function PackagesAvailability({ searchParams }) {
         endDate,
         arrivalCity,
         departureCity,
+        rooms,
       }),
     ]);
 

@@ -1,13 +1,4 @@
 import { createServerClient } from "@supabase/ssr";
-import { createBrowserClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
-
-// Function to create a Supabase client for browser-side operations
-export const browserClient = () =>
-  createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
 
 // Function to create a Supabase client for server-side operations
 const serverClient = (cookieStore) => {
@@ -41,7 +32,7 @@ const serverClient = (cookieStore) => {
 const DatabaseService = {
   // Method to get all records from a specified table
   get: async (table) => {
-    const cookieStore = cookies();
+    const cookieStore = require("next/headers").cookies();
     const supabase = serverClient(cookieStore);
     // TODO: Handle error with api request handler.
     const { data, error } = await supabase.from(table).select();
@@ -49,14 +40,14 @@ const DatabaseService = {
   },
   // Method to get all records from a table where the id matches a specified value
   getAllByIdEqual: async (table, id) => {
-    const cookieStore = cookies();
+    const cookieStore = require("next/headers").cookies();
     const supabase = serverClient(cookieStore);
     const { data, error } = await supabase.from(table).select().eq("id", id);
     return data;
   },
   // Method to get all records from a table where a specified field matches a specified value
   getAllByFieldEqual: async (table, field, equalParam) => {
-    const cookieStore = cookies();
+    const cookieStore = require("next/headers").cookies();
     const supabase = serverClient(cookieStore);
     const { data, error } = await supabase
       .from(table)
@@ -71,7 +62,7 @@ const DatabaseService = {
     field,
     equalParam
   ) => {
-    const cookieStore = cookies();
+    const cookieStore = require("next/headers").cookies();
     const supabase = serverClient(cookieStore);
     const { data, error } = await supabase
       .from(table)
@@ -81,7 +72,7 @@ const DatabaseService = {
   },
   // Method to get a single record by id with a custom select query
   getByIdEqualAndCustomSelect: async (table, selectQuery, id) => {
-    const cookieStore = cookies();
+    const cookieStore = require("next/headers").cookies();
     const supabase = serverClient(cookieStore);
     const { data, error } = await supabase
       .from(table)
@@ -92,7 +83,7 @@ const DatabaseService = {
   },
   // Method to get records where a specified field matches a pattern using ILIKE
   getByFieldIlike: async (table, field, ilikeParam) => {
-    const cookieStore = cookies();
+    const cookieStore = require("next/headers").cookies();
     const supabase = serverClient(cookieStore);
     const { data, error } = await supabase
       .from(table)
@@ -102,7 +93,7 @@ const DatabaseService = {
   },
   // Method to get the public URL of a storage item
   getStorageItemPublicUrl: async (bucketName, filePath) => {
-    const cookieStore = cookies();
+    const cookieStore = require("next/headers").cookies();
     const supabase = serverClient(cookieStore);
 
     const { data, error } = supabase.storage

@@ -22,6 +22,11 @@ const nextConfig = {
       "guvpgxfgdpcfdtdvrpcd.supabase.co",
     ],
   },
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
   experimental: {
     turbo: {
       resolveExtensions: [

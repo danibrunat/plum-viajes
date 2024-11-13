@@ -1,3 +1,4 @@
+import CACHE from "../../../constants/cachePolicies";
 import { ApiUtils } from "../../services/apiUtils.service";
 
 export async function GET(req) {
@@ -9,7 +10,9 @@ export async function GET(req) {
   const citiesSearch = await ApiUtils.requestHandler(
     fetch(`${process.env.URL}/api/cities/byName?name=${query}`, {
       method: "GET",
-      cache: "no-cache",
+      next: {
+        revalidate: CACHE.revalidation.cities,
+      },
       headers: ApiUtils.getCommonHeaders(),
     }),
     "GET | Autocomplete Api"

@@ -49,7 +49,7 @@ const Slider = ({ slides, deviceType = "desktop" }) => {
       deviceType={deviceType}
       partialVisible={true}
     >
-      {slides.map((slide, index) => (
+      {slides?.map((slide, index) => (
         <Image
           key={index + 1}
           src={slide.src}

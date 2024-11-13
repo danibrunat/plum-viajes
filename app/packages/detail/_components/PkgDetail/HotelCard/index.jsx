@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { FaMapMarkerAlt, FaStar } from "react-icons/fa";
-import Slider from "../../../../../../components/commons/Slider";
+import Slider from "../../../../../components/commons/Slider";
 
 const HotelCard = ({ hotelData }) => {
   const { name, stars, city_id, description, latitude, longitude } = hotelData;

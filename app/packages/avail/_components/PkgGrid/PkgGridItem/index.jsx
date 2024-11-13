@@ -59,25 +59,23 @@ const getImgSource = (pkgItem, provider) => {
   }
 };
 
-const PkgGridItem = ({ pkgItem, departureCity }) => {
-  // const departures = pkgItem && pkgItem.departures ? pkgItem.departures : [];
+const PkgGridItem = ({ pkgItem, searchParams }) => {
+  const { departureCity, arrivalCity, startDate, endDate, rooms } =
+    searchParams;
+  const hotels = pkgItem.hotels[0];
   const pkgPrice = getPkgPrice(pkgItem?.prices);
-  const hotelStars = getHotelRating(pkgItem?.hotels?.rating);
+  const hotelStars = getHotelRating(hotels.rating);
   const imgSource = getImgSource(pkgItem, pkgItem?.provider);
 
-  const hotelName = Helpers.capitalizeFirstLetter(pkgItem?.hotels?.name);
-  const hotelMealPlan = Helpers.capitalizeFirstLetter(
-    pkgItem?.hotels?.mealPlan
-  );
-  const hotelRoomType = Helpers.capitalizeFirstLetter(
-    pkgItem?.hotels?.roomType
-  );
-  const hotelRoomSize = Helpers.capitalizeFirstLetter(
-    pkgItem?.hotels?.roomSize
-  );
+  const hotelName = Helpers.capitalizeFirstLetter(hotels.name);
+  const hotelMealPlan = Helpers.capitalizeFirstLetter(hotels.mealPlan);
+  const hotelRoomType = Helpers.capitalizeFirstLetter(hotels.roomType);
+  const hotelRoomSize = Helpers.capitalizeFirstLetter(hotels.roomSize);
+
+  const priceId = pkgItem?.prices?.id;
 
   const slug = Helpers.slugify(pkgItem?.title);
-  const detailUrl = `/packages/detail?id=${pkgItem?.id}&provider=${pkgItem?.provider}`;
+  const detailUrl = `/packages/detail?id=${pkgItem?.id}&provider=${pkgItem?.provider}&rooms=${rooms}&departureCity=${departureCity}&arrivalCity=${arrivalCity}&startDate=${startDate}&endDate=${endDate}&priceId=${priceId}`;
 
   return (
     <div className="flex flex-col md:flex-row md:justify-between w-full m-2 mx-auto p-1 md:p-2 h-fit overflow-hidden rounded-lg border border-gray-300 bg-white shadow-md">
@@ -107,7 +105,9 @@ const PkgGridItem = ({ pkgItem, departureCity }) => {
           <span className="flex items-center gap-1">
             {`${hotelName} `} {hotelStars}
           </span>
-          <span>{`Habitación: ${hotelRoomType} - ${hotelRoomSize}`}</span>
+          {hotelRoomType && hotelRoomSize && (
+            <span>{`Habitación: ${hotelRoomType} - ${hotelRoomSize}`}</span>
+          )}
           <span>{hotelMealPlan}</span>
         </div>
       </div>

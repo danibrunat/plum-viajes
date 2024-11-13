@@ -1,5 +1,4 @@
-import { set, unset } from "sanity";
-import { Api } from "../../app/services/api.service";
+import { unset } from "sanity";
 // components/HotelSelect.js
 import React, { useEffect, useState } from "react";
 

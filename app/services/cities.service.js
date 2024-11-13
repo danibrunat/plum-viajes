@@ -1,5 +1,6 @@
 import { ApiUtils } from "../api/services/apiUtils.service";
 import DatabaseService from "../api/services/database.service";
+import CACHE from "../constants/cachePolicies";
 
 /**
  * Service for handling city-related operations.
@@ -19,12 +20,13 @@ export const CitiesService = {
         `${process.env.URL}/api/cities/byCode?code=${code}`,
         {
           method: "GET",
-          cache: "no-cache",
+          next: {
+            revalidate: CACHE.revalidation.cities,
+          },
           headers: ApiUtils.getCommonHeaders(),
         }
       );
       const citiesResponse = await citiesSearch.json();
-      console.log("citiesResponse", citiesResponse);
       const mapResponse = citiesResponse.map(
         ({
           id,

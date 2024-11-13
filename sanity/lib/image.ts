@@ -9,5 +9,14 @@ const imageBuilder = createImageUrlBuilder({
 });
 
 export const urlForImage = (source: Image) => {
-  return imageBuilder?.image(source).auto("format").fit("max").url();
+  try {
+    const imageUrl = imageBuilder
+      ?.image(source)
+      .auto("format")
+      .fit("max")
+      .url();
+    return imageUrl;
+  } catch (error) {
+    return source;
+  }
 };

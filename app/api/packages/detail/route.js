@@ -6,32 +6,30 @@ export async function POST(req) {
   const body = await req.json();
 
   // Fetch package details
-  const pkgDetailRequest = await fetch(
+  const pBaseRequest = await fetch(
     Api.packages.detail.pbase.url(),
     Api.packages.detail.pbase.options(body)
   );
-  const pkgDetailResponse = await pkgDetailRequest.json();
+  const pBaseDetailResponse = await pBaseRequest.json();
+  // Fetch hotels data. Check if pkgDetailResponse is an array of more than one item. In that case, we fetch an array of hotels data.
+  //const provider = pkgDetailResponse[0].provider;
+  const provider = pBaseDetailResponse?.provider;
+  const hotelsArray = pBaseDetailResponse?.hotels;
 
   // Fetch hotels data
-  const hotelsData = await HotelsService.getHotelsData(
-    pkgDetailResponse.provider,
-    pkgDetailResponse.hotels
+  const hotelsData = await Promise.all(
+    hotelsArray.map((hotel) => HotelsService.getHotelData(provider, hotel))
   );
 
-  // Determine if multiple hotels exist
-  const hotelsArray = Array.isArray(hotelsData);
-
   // Fetch cities data
-  const citiesData = hotelsArray
-    ? await Promise.all(
-        hotelsData.map((hotel) => CitiesService.getCityByCode(hotel.city_id))
-      )
-    : await CitiesService.getCityByCode(hotelsData.city_id);
+  const citiesData = await Promise.all(
+    hotelsData.map((hotel) => CitiesService.getCityByCode(hotel.city_id, true))
+  );
   // Construct response
   const response = {
-    ...pkgDetailResponse,
+    ...pBaseDetailResponse,
     hotelsData,
-    citiesData: hotelsArray ? citiesData[0] : citiesData,
+    citiesData,
   };
 
   return Response.json(response);
