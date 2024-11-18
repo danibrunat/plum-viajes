@@ -47,13 +47,13 @@ export default function PkgDetail({ detailResponse }) {
             <Flights />
           </div>
           {hotelsData?.map((hotel) => (
-            <div className="flex flex-col w-full rounded">
+            <div key={Math.random()} className="flex flex-col w-full rounded">
               <h2 className="text-xl">Alojamiento</h2>
               <HotelCard hotelData={hotel} />
             </div>
           ))}
           {citiesData?.map((city) => (
-            <div className="flex flex-col w-full rounded">
+            <div key={Math.random()} className="flex flex-col w-full rounded">
               <h2 className="text-xl">Destino</h2>
               <DestinationCity sliderImages={sliderImages} city={city} />
             </div>
