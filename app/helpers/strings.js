@@ -5,3 +5,12 @@ export const sanitizeHtmlString = (string) => {
 export const sanitizeUrlFromDoubleSlash = (string) => {
   return string?.replace(/^\/\//, "https://") || "";
 };
+
+export const toLowerCase = (string) => {
+  return string?.toLowerCase() || "";
+};
+
+export const capitalizeFirstLetter = (string) => {
+  if (!string) return "";
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};

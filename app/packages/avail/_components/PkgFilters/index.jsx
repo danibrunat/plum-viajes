@@ -1,15 +1,31 @@
+// components/Filters.jsx (SSR y CSR)
 import React from "react";
-import PkgFilterItem from "./PkgFilterItem";
+import FilterCheckbox from "./_components/FilterCheckbox"; // Componente de checkbox interactivo
 
-const PkgFilters = ({ filters }) => {
+export default function PkgFilters({ filters, currentSearchParams }) {
+  console.log("PkgFilters | filters: ", JSON.stringify(filters));
   return (
-    <aside className="hidden p-3 my-2 md:flex md:flex-col md:w-1/4 text-plumPrimaryPink border border-opacity-35 rounded-lg">
-      <h1 className="text-xl">Filtros</h1>
-      {filters.map((item) => (
-        <PkgFilterItem key={item.id} item={item} />
+    <div className="bg-white p-6 shadow-lg rounded-lg">
+      <h2 className="text-2xl font-bold mb-4">Filtros</h2>
+      {filters.map((filter) => (
+        <div key={filter.id} className="mb-6">
+          <h3 className="text-lg font-semibold mb-2 text-gray-800">
+            {filter.title}
+          </h3>
+          <div className="space-y-2">
+            {filter.items.map((item) => (
+              <FilterCheckbox
+                key={item.value}
+                filterId={filter.id}
+                value={item.value}
+                checked={currentSearchParams[filter.id]?.includes(item.value)}
+              >
+                {item.label}
+              </FilterCheckbox>
+            ))}
+          </div>
+        </div>
       ))}
-    </aside>
+    </div>
   );
-};
-
-export default PkgFilters;
+}

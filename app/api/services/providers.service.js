@@ -309,7 +309,7 @@ export const ProviderService = {
    * @returns {Promise<Object>} The package availability data
    * @throws {Error} If the fetch request fails
    */
-  getPkgAvailability: async (searchParams) => {
+  getPkgAvailabilityAndFilters: async (searchParams) => {
     const pkgAvailabilityRequest = await fetch(
       `${process.env.URL}/api/packages/availability`,
       {
@@ -623,9 +623,7 @@ export const ProviderService = {
       const seenItems = new Set();
 
       mappedResponse.forEach((item) => {
-        console.log("item", item);
         const uniqueKey = `${item.id}-${item.hotels[0].name}-${item.hotels[0].roomType}-${item.hotels[0].roomSize}-${item.hotels[0].mealPlan}`;
-        console.log("uniqueKey", uniqueKey);
         if (!seenItems.has(uniqueKey)) {
           seenItems.add(uniqueKey);
           uniqueResponse.push(item);

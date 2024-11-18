@@ -2,6 +2,7 @@ import SearchEngines from "../../components/sections/SearchEngines";
 import PkgGrid from "./_components/PkgGrid";
 import PkgGridHeader from "./_components/PkgGrid/PkgGridHeader";
 import { ProviderService } from "../../api/services/providers.service";
+import { Filters } from "../../api/services/filters.service";
 
 export const metadata = {
   title: "Paquetes | Plum Viajes",
@@ -10,8 +11,17 @@ export const metadata = {
 
 // Convert to a Server Component
 export default async function PackagesAvailability({ searchParams }) {
-  const { arrivalCity, departureCity, startDate, endDate, rooms } =
-    searchParams;
+  const {
+    arrivalCity,
+    departureCity,
+    startDate,
+    endDate,
+    rooms,
+    mealPlans,
+    nights,
+    ratings,
+    hotels,
+  } = searchParams;
 
   const [searchEngineDefaultValues, pkgAvailabilityResponse] =
     await Promise.all([
@@ -20,7 +30,7 @@ export default async function PackagesAvailability({ searchParams }) {
         arrivalCity,
         departureCity
       ),
-      ProviderService.getPkgAvailability({
+      ProviderService.getPkgAvailabilityAndFilters({
         startDate,
         endDate,
         arrivalCity,
@@ -28,6 +38,9 @@ export default async function PackagesAvailability({ searchParams }) {
         rooms,
       }),
     ]);
+
+  const packages = pkgAvailabilityResponse.packages;
+  const filters = pkgAvailabilityResponse.filters;
 
   return (
     <>
@@ -38,7 +51,8 @@ export default async function PackagesAvailability({ searchParams }) {
       <div className="mx-2 py-2 md:py-5 md:mx-40">
         <PkgGridHeader searchParams={searchParams} />
         <PkgGrid
-          availResponse={pkgAvailabilityResponse}
+          filters={filters}
+          availResponse={packages}
           searchParams={searchParams}
         />
       </div>

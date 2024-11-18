@@ -3,6 +3,7 @@ import { sanityFetch } from "../../../../../sanity/lib/sanityFetch";
 import { Julia } from "../../../services/julia.service";
 import { ProviderService } from "../../../services/providers.service";
 import { OLA } from "../../../services/ola.service";
+import { Filters } from "../../../services/filters.service";
 
 async function fetchPlumPackages({
   arrivalCity,
@@ -123,6 +124,12 @@ export async function POST(req, res) {
   console.log("// OLA RESPONSE // ");
   //console.log(JSON.stringify(olaPkg));
   console.log("// OLA RESPONSE END // "); */
+
+  // Procesar los filtros con base en los paquetes devueltos
+
   const packagesResponse = plumPkgResponse.concat(olaPkg);
-  return Response.json(packagesResponse);
+  const filters = await Filters.process(packagesResponse);
+
+  console.log("packagesResponse", JSON.stringify(packagesResponse));
+  return Response.json({ packages: packagesResponse, filters });
 }
