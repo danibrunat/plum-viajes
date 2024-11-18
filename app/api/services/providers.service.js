@@ -309,12 +309,12 @@ export const ProviderService = {
    * @returns {Promise<Object>} The package availability data
    * @throws {Error} If the fetch request fails
    */
-  getPkgAvailabilityAndFilters: async (searchParams) => {
+  getPkgAvailabilityAndFilters: async (searchParams, selectedFilters) => {
     const pkgAvailabilityRequest = await fetch(
       `${process.env.URL}/api/packages/availability`,
       {
         method: "POST",
-        body: JSON.stringify({ searchParams }),
+        body: JSON.stringify({ searchParams, selectedFilters }),
         headers: ApiUtils.getCommonHeaders(),
       }
     );

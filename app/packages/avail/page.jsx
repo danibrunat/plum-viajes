@@ -11,18 +11,12 @@ export const metadata = {
 
 // Convert to a Server Component
 export default async function PackagesAvailability({ searchParams }) {
-  const {
-    arrivalCity,
-    departureCity,
-    startDate,
-    endDate,
-    rooms,
-    mealPlans,
-    nights,
-    ratings,
-    hotels,
-  } = searchParams;
+  const { arrivalCity, departureCity, startDate, endDate, rooms } =
+    searchParams;
 
+  // Generar selectedFilters en base a los filtros definidos en el servicio
+  const selectedFilters = extractSelectedFilters(searchParams, Filters.config);
+  console.log("selectedFilters", selectedFilters);
   const [searchEngineDefaultValues, pkgAvailabilityResponse] =
     await Promise.all([
       ProviderService.getSearchEngineDefaultValues(
@@ -30,13 +24,17 @@ export default async function PackagesAvailability({ searchParams }) {
         arrivalCity,
         departureCity
       ),
-      ProviderService.getPkgAvailabilityAndFilters({
-        startDate,
-        endDate,
-        arrivalCity,
-        departureCity,
-        rooms,
-      }),
+      ProviderService.getPkgAvailabilityAndFilters(
+        {
+          startDate,
+          endDate,
+          arrivalCity,
+          departureCity,
+          rooms,
+          // Pasamos los filtros seleccionados
+        },
+        selectedFilters
+      ),
     ]);
 
   const packages = pkgAvailabilityResponse.packages;
@@ -58,4 +56,19 @@ export default async function PackagesAvailability({ searchParams }) {
       </div>
     </>
   );
+}
+
+// Función que extrae los filtros seleccionados
+function extractSelectedFilters(searchParams, filtersConfig) {
+  const selectedFilters = {};
+
+  filtersConfig.forEach((filter) => {
+    const filterValue = searchParams[filter.id];
+    if (filterValue) {
+      // Si el valor del filtro está presente en searchParams
+      selectedFilters[filter.id] = filterValue.split(","); // Convertimos la cadena separada por comas a un array
+    }
+  });
+
+  return selectedFilters;
 }
