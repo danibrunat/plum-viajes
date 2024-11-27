@@ -234,8 +234,17 @@ export const ProviderService = {
       },
     },
     images: {
-      plum: "images",
-      ola: "Package.Pictures.Picture.[].$value",
+      isArray: true,
+      baseKey: {
+        ola: "Package.Pictures.Picture",
+        plum: "images",
+      },
+      items: {
+        sourceUrl: {
+          plum: "asset",
+          ola: "$value",
+        },
+      },
     },
     prices: {
       id: {
@@ -294,12 +303,175 @@ export const ProviderService = {
         },
       },
     },
+    flights: {
+      isArray: true,
+      baseKey: {
+        ola: "Flight.Trips.Trip",
+        plum: "departures.flights",
+      }, // Define el arreglo base principal
+      items: {
+        segments: {
+          isArray: true,
+          baseKey: {
+            ola: "Segments.Segment",
+            plum: "segments",
+          }, // Define el arreglo de segmentos dentro de cada trip
+          items: {
+            flightNumber: {
+              ola: "FlightNumber",
+              plum: "flightNumber",
+            },
+            departureDate: {
+              ola: "DepartureDate",
+              plum: "departureDate",
+            },
+            departureHour: {
+              ola: "DepartureHour",
+              plum: "departureHour",
+            },
+            airline: {
+              code: {
+                ola: "Supplier.Code",
+                plum: "airline.code",
+              },
+              name: {
+                ola: "Supplier.Name",
+                plum: "airline.name",
+              },
+            },
+            arrivalDate: {
+              ola: "ArrivalDate",
+              plum: "arrivalDate",
+            },
+            arrivalHour: {
+              ola: "ArrivalHour",
+              plum: "arrivalHour",
+            },
+            departureAirport: {
+              code: {
+                ola: "DepartureAirport.attributes.Iata",
+                plum: "departureAirport",
+              },
+              name: {
+                ola: "DepartureAirport.$value",
+                plum: "departureAirport",
+              },
+            },
+            departureCity: {
+              code: {
+                ola: "DepartureCity.attributes.Iata",
+                plum: "departureCity",
+              },
+              name: {
+                ola: "DepartureCity.$value",
+                plum: "departureCity",
+              },
+            },
+            arrivalCity: {
+              code: {
+                ola: "ArrivalCity.attributes.Iata",
+                plum: "arrivalCity",
+              },
+              name: {
+                ola: "ArrivalCity.$value",
+                plum: "arrivalCity",
+              },
+            },
+            arrivalAirport: {
+              code: {
+                ola: "ArrivalAirport.attributes.Iata",
+                plum: "arrivalAirport",
+              },
+              name: {
+                ola: "ArrivalAirport.$value",
+                plum: "arrivalAirport",
+              },
+            },
+          },
+        },
+        stopovers: {
+          plum: "segments.stopovers",
+          ola: "Stops",
+        },
+      },
+    },
     departures: {
       date: {
         plum: "departures.[].departureFrom",
         ola: "Flight.Trips.Trip.[0].DepartureDate",
       },
     },
+  },
+  /**
+   * Maps the response data according to the provider's configuration
+   * @param {Array} response - The response data to map
+   * @param {string} provider - The provider identifier
+   * @returns {Array} The mapped response data
+   */
+  mapper: (response, provider, consumer) => {
+    if (response.length === 0) return response;
+
+    const respConfig =
+      consumer === "detail"
+        ? ProviderService.detailResponseConfig
+        : ProviderService.availResponseConfig;
+
+    const isObject = (value) => value !== null && typeof value === "object";
+
+    const getBaseArray = (pkg, baseKeyConfig) => {
+      return ProviderService.getByDotOperator(pkg, baseKeyConfig) || [];
+    };
+
+    const mapNestedObject = (pkg, configObj) => {
+      let result = {};
+
+      Object.entries(configObj).forEach(([key, value]) => {
+        if (value.isArray) {
+          // Manejo de arrays
+          if (value.baseKey) {
+            const baseArray = getBaseArray(pkg, value.baseKey[provider]);
+            if (Array.isArray(baseArray)) {
+              // Si es un arreglo, vamos por el map, pero puede ser que ese segmento no tenga escalas ni nada que lo haga un array, entonces puede ser un objeto. Agregamos el else.
+              result[key] = baseArray.map((item) =>
+                mapNestedObject(item, value.items)
+              );
+            } else {
+              const baseObject = baseArray;
+              // Y acá lo asignamos como un objeto normal.
+              result[key] = mapNestedObject(baseObject, value.items);
+            }
+          } else {
+            result[key] = [mapNestedObject(pkg, value.items)];
+          }
+          return;
+        }
+
+        if (isObject(value) && !value[provider]) {
+          result[key] = mapNestedObject(pkg, value);
+          return;
+        }
+
+        if (!isObject(value) || !value[provider]) {
+          console.warn(`Unexpected value type for key ${key}:`, value);
+          return;
+        }
+
+        const providerConfigProp = value[provider];
+        result[key] = ProviderService.hasNestedProperty(providerConfigProp)
+          ? ProviderService.getByDotOperator(pkg, providerConfigProp)
+          : pkg[providerConfigProp];
+      });
+
+      return result;
+    };
+
+    const mappedResponse = response.map((pkg) => {
+      let mappedPkg = mapNestedObject(pkg, respConfig);
+      mappedPkg.provider = provider;
+      return mappedPkg;
+    });
+
+    return mappedResponse;
   },
 
   /**
@@ -462,97 +634,41 @@ export const ProviderService = {
    * @param {string} value - The dot-separated path to the desired property
    * @returns {*} The value at the specified path, or undefined if not found
    */
-  getByDotOperator: (object, value) => {
+  getByDotOperator: (object, value, isArray = false) => {
     if (!object || !value) return null;
 
     const reduced = value.split(".").reduce((acc, curr) => {
-      // Si encontramos un índice como "[0]", accedemos a la posición correspondiente
+      // Manejamos arrays de índices "[0]", "[1]", etc.
       if (/^\[\d+\]$/.test(curr)) {
         const index = parseInt(curr.slice(1, -1), 10); // Extraemos el índice
         return Array.isArray(acc) ? acc[index] : undefined;
       }
-      // Si encontramos "[]", recorremos el array y devolvemos un array de los valores resultantes
+      // Si encontramos "[]", procesamos según isArray
       else if (curr === "[]") {
-        if (Array.isArray(acc)) {
-          return acc.map((item) => item); // Mantenemos todos los elementos del array
+        if (Array.isArray(acc) && isArray) {
+          return acc.map((item) => item); // Devuelve los elementos si es un array y isArray es true
         } else {
-          return []; // Si no es un array, devolvemos un array vacío
+          return Array.isArray(acc) ? acc[0] : acc; // Devuelve solo un valor si no es isArray
         }
       }
-      // Si acc es un array, mapeamos la propiedad a todos los elementos
+      // Si acc es un array, aplicamos map a sus elementos
       else if (Array.isArray(acc)) {
         return acc.map((item) => (item ? item[curr] : undefined));
       }
-      // Si acc no es un array, simplemente accedemos a la propiedad del objeto
+      // Accedemos a la propiedad del objeto
       else {
         return acc ? acc[curr] : undefined;
       }
     }, object);
 
-    // Si el resultado es un array con un solo valor, devolvemos ese valor en lugar de un array
-    if (Array.isArray(reduced) && reduced.length === 1) {
+    // Si el resultado es un array con un solo valor, devolvemos ese valor si isArray no es true
+    if (Array.isArray(reduced) && reduced.length === 1 && !isArray) {
       return reduced[0];
     }
 
     return reduced;
   },
 
-  /**
-   * Maps the response data according to the provider's configuration
-   * @param {Array} response - The response data to map
-   * @param {string} provider - The provider identifier
-   * @returns {Array} The mapped response data
-   */
-  mapper: (response, provider, consumer) => {
-    if (response.length === 0) return response;
-    //if (provider === "plum") return response;
-    const respConfig =
-      consumer === "detail"
-        ? ProviderService.detailResponseConfig
-        : ProviderService.availResponseConfig;
-
-    // Función para verificar si es un objeto
-    const isObject = (value) => value !== null && typeof value === "object";
-    const mapNestedObject = (pkg, configObj) => {
-      let result = {};
-
-      Object.entries(configObj).forEach(([key, value]) => {
-        // Si la configuración es un array, lo manejamos inmediatamente
-        if (value.isArray) {
-          result[key] = [mapNestedObject(pkg, value.items)];
-          return;
-        }
-
-        // Verificamos si 'value' es un objeto anidado pero no contiene el proveedor directamente
-        if (isObject(value) && !value[provider]) {
-          // Recursivamente mapeamos este objeto
-          result[key] = mapNestedObject(pkg, value);
-          return;
-        }
-
-        // Si no es un objeto o no tiene el proveedor en la configuración, no hacemos nada
-        if (!isObject(value) || !value[provider]) {
-          console.warn(`Unexpected value type for key ${key}:`, value);
-          return;
-        }
-
-        const providerConfigProp = value[provider];
-        result[key] = ProviderService.hasNestedProperty(providerConfigProp)
-          ? ProviderService.getByDotOperator(pkg, providerConfigProp)
-          : pkg[providerConfigProp];
-      });
-
-      return result;
-    };
-
-    const mappedResponse = response.map((pkg) => {
-      let mappedPkg = mapNestedObject(pkg, respConfig);
-      mappedPkg.provider = provider;
-      return mappedPkg;
-    });
-
-    return mappedResponse;
-  },
   getSearchEngineDefaultValues: async (
     startDate,
     arrivalCity,
@@ -610,7 +726,6 @@ export const ProviderService = {
       const [day, month, year] = dayMonthYear.split("-");
       return `${year}-${month}-${day}`;
     },
-
     /**
      * This function groups the mapped response by unique keys.
      * It removes duplicate packages based on specific criteria.

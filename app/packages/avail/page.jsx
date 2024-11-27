@@ -16,7 +16,6 @@ export default async function PackagesAvailability({ searchParams }) {
 
   // Generar selectedFilters en base a los filtros definidos en el servicio
   const selectedFilters = extractSelectedFilters(searchParams, Filters.config);
-  console.log("selectedFilters", selectedFilters);
   const [searchEngineDefaultValues, pkgAvailabilityResponse] =
     await Promise.all([
       ProviderService.getSearchEngineDefaultValues(

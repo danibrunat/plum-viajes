@@ -1,6 +1,7 @@
 import { Api } from "../../../services/api.service";
 import { CitiesService } from "../../../services/cities.service";
 import HotelsService from "../../../services/hotels.service";
+import AirlinesService from "../../../services/airlines.service";
 
 export async function POST(req) {
   const body = await req.json();
@@ -15,6 +16,7 @@ export async function POST(req) {
   //const provider = pkgDetailResponse[0].provider;
   const provider = pBaseDetailResponse?.provider;
   const hotelsArray = pBaseDetailResponse?.hotels;
+  const flightSegments = pBaseDetailResponse?.flights;
 
   // Fetch hotels data
   const hotelsData = await Promise.all(
@@ -25,10 +27,23 @@ export async function POST(req) {
   const citiesData = await Promise.all(
     hotelsData.map((hotel) => CitiesService.getCityByCode(hotel.city_id, true))
   );
+
+  // Fetch airline Data
+  const updatedFlightSegments = await Promise.all(
+    flightSegments.map(async (flight) => {
+      const airlineData = await AirlinesService.getAirlineData(
+        flight.segments.airline.code
+      );
+      flight.segments.airline = airlineData;
+      return flight;
+    })
+  );
+
   // Construct response
   const response = {
     ...pBaseDetailResponse,
     hotelsData,
+    flights: updatedFlightSegments,
     citiesData,
   };
 

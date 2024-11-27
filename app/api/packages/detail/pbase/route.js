@@ -11,7 +11,38 @@ async function fetchPlumPackageDetail(id) {
     {
     ...,
     "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1,
-    "departures": departures[departureFrom > now()]
+    "departures": departures[departureFrom > now()] {
+      ...,
+      "flights": [
+          {
+            "segments": {
+              "flightNumber": flightNumberRt1,
+              "departureDate": departureDateRt1,
+              "arrivalDate": arrivalDateRt1,
+              "airline": airlineRt1,
+              "departureAirport": "Airport",
+              "arrivalAirport": "Airport",
+              "stopovers": stopoverRt1,
+              "departureCity": originDestinationRt1,
+              "arrivalCity": arrivalDestinationRt1
+            }
+          },
+          {
+            "segments": {
+              "flightNumber": flightNumberRt2,
+              "departureDate": departureDateRt2,
+              "arrivalDate": arrivalDateRt2,
+              "airline": airlineRt2,
+              "departureAirport": "Airport",
+              "arrivalAirport": "Airport",
+              "stopovers": stopoverRt2,
+              "departureCity": originDestinationRt2,
+              "arrivalCity": arrivalDestinationRt2
+
+            }
+          }
+        ]
+    }
    }`;
 
   const sanityQuery = await sanityFetch({ query: pkgDetailQuery });

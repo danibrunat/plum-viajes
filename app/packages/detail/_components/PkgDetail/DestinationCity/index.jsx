@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Slider from "../../../../../components/commons/Slider";
 
-const DestinationCity = ({ sliderImages, city }) => {
+const DestinationCity = ({ sliderImages = [], city }) => {
   // State to handle text expansion
   const [expanded, setExpanded] = useState(false);
   const { id, name, description, label, value, images } = city;

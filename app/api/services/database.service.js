@@ -43,7 +43,7 @@ const DatabaseService = {
     const cookieStore = require("next/headers").cookies();
     const supabase = serverClient(cookieStore);
     const { data, error } = await supabase.from(table).select().eq("id", id);
-    return data;
+    return data[0];
   },
   // Method to get all records from a table where a specified field matches a specified value
   getAllByFieldEqual: async (table, field, equalParam) => {

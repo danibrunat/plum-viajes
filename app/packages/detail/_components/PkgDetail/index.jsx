@@ -18,12 +18,14 @@ export default function PkgDetail({ detailResponse }) {
   const subtitle = detailResponse?.subtitle;
   const hotelsData = detailResponse?.hotelsData;
   const citiesData = detailResponse?.citiesData;
-  const sliderImages = detailResponse?.images.map((image) => {
+  const flights = detailResponse?.flights;
+  console.log("detailResponse?.images", detailResponse?.images);
+  const sliderImages = detailResponse?.images?.map(({ sourceUrl }) => {
     return {
       src:
         provider === "ola"
-          ? image.replace("//", "https://")
-          : urlForImage(image),
+          ? sourceUrl.replace("//", "https://")
+          : urlForImage(sourceUrl),
     };
   });
 
@@ -44,7 +46,7 @@ export default function PkgDetail({ detailResponse }) {
           </div>
           <div className="flex flex-col w-full rounded">
             <h1 className="text-xl">Itinerario de Vuelos</h1>
-            <Flights />
+            <Flights flights={flights} />
           </div>
           {hotelsData?.map((hotel) => (
             <div key={Math.random()} className="flex flex-col w-full rounded">

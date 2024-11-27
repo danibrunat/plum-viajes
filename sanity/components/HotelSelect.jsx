@@ -1,6 +1,7 @@
 import { unset } from "sanity";
 // components/HotelSelect.js
 import React, { useEffect, useState } from "react";
+import { Api } from "../../app/services/api.service";
 
 const HotelSelect = ({ value, onChange }) => {
   const [hotels, setHotels] = useState([]);

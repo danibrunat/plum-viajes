@@ -165,6 +165,7 @@ async function fetchOlaPackages(searchParams) {
       OLA.avail.options(getPackagesFaresRequest)
     );
     const olaAvailResponse = await olaAvailRequest.json();
+    console.log("olaAvailResponse", JSON.stringify(olaAvailResponse[0]));
     const mapResponse = ProviderService.mapper(
       olaAvailResponse,
       "ola",

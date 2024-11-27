@@ -1,6 +1,6 @@
 import { defineField } from "sanity";
-import { AIRLINES } from "../../../app/constants/airlines";
 import HotelSelect from "../../components/HotelSelect";
+import AirlineSelect from "../../components/AirlineSelect";
 
 export default defineField({
   title: "Salida",
@@ -128,18 +128,34 @@ export default defineField({
       },
       fieldset: "roundTripFlight1",
     },
-    {
+    defineField({
       name: "airlineRt1",
-      type: "string",
+      type: "object",
       title: "Aerolínea",
-      fieldset: "roundTripFlight1",
-      options: {
-        list: AIRLINES.map((o) => ({
-          title: o.name,
-          id: o.id,
-          value: o.name,
-        })),
+      fieldset: "roundTripFlight1", // Agrupación opcional
+      fields: [
+        defineField({
+          name: "id",
+          type: "number", // El id debe ser numérico
+          title: "Airline ID",
+          hidden: true, // Esconde este campo, ya que el id se selecciona automáticamente
+        }),
+        defineField({
+          name: "name",
+          type: "string", // El nombre será una cadena
+          title: "Airline Name",
+        }),
+      ],
+      components: {
+        input: AirlineSelect, // Aquí asignamos el componente `AirlineSelect` creado antes
       },
+    }),
+
+    {
+      name: "flightNumberRt1",
+      type: "string",
+      title: "Vuelo",
+      fieldset: "roundTripFlight1",
     },
     {
       name: "stopoverRt1",
@@ -209,18 +225,33 @@ export default defineField({
       },
       fieldset: "roundTripFlight2",
     },
-    {
+    defineField({
       name: "airlineRt2",
-      type: "string",
+      type: "object",
       title: "Aerolínea",
       fieldset: "roundTripFlight2",
-      options: {
-        list: AIRLINES.map((o) => ({
-          title: o.name,
-          id: o.id,
-          value: o.name,
-        })),
+      fields: [
+        defineField({
+          name: "id",
+          type: "number",
+          title: "Airline ID",
+          hidden: true,
+        }),
+        defineField({
+          name: "name",
+          type: "string",
+          title: "Airline Name",
+        }),
+      ],
+      components: {
+        input: AirlineSelect,
       },
+    }),
+    {
+      name: "flightNumberRt2",
+      type: "string",
+      title: "Vuelo",
+      fieldset: "roundTripFlight2",
     },
     {
       name: "stopoverRt2",
