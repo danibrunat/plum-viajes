@@ -32,6 +32,7 @@
     "@stripe/stripe-js": "^2.1.10",
     "@supabase/ssr": "^0.5.1",
     "@supabase/supabase-js": "^2.45.4",
+    "@vercel/speed-insights": "^1.1.0",
     "axios": "^1.6.8",
     "bcp47": "^1.1.2",
     "class-variance-authority": "^0.7.0",

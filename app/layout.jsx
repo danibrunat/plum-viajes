@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Whatsapp from "./components/Whatsapp";
 import ModalRoot from "./components/commons/Modal/ModalRoot";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -72,6 +73,7 @@ export default async function Layout({ children }) {
         <Footer navItems={footerNavigation} text={footerText} />
         {logoUrl && url && <LogoJsonLd url={url} logo={logoUrl} />}
         <Whatsapp />
+        <SpeedInsights />
       </body>
     </html>
   );
