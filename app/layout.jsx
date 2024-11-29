@@ -73,7 +73,6 @@ export default async function Layout({ children }) {
         <Footer navItems={footerNavigation} text={footerText} />
         {logoUrl && url && <LogoJsonLd url={url} logo={logoUrl} />}
         <Whatsapp />
-        <SpeedInsights />
       </body>
     </html>
   );
