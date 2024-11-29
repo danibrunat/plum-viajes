@@ -122,6 +122,7 @@ export default function PackagesEngine({ defaultValues = {} }) {
     handleSubmit,
     formState: { errors },
   } = useForm(defaultValues);
+  console.log("defaultValues", defaultValues);
 
   useEffect(() => {
     reset({

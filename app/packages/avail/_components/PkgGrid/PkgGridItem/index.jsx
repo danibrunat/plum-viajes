@@ -52,10 +52,10 @@ const getImgSource = (pkgItem, provider) => {
       return sanitizeUrlFromDoubleSlash(
         pkgItem?.thumbnails[
           Math.floor(Math.random() * pkgItem?.thumbnails.length)
-        ]
+        ].sourceUrl
       );
     case "plum":
-      return urlForImage(pkgItem?.thumbnails[0]);
+      return urlForImage(pkgItem?.thumbnails[0].sourceUrl);
   }
 };
 
@@ -65,7 +65,9 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
   const hotels = pkgItem.hotels[0];
   const pkgPrice = getPkgPrice(pkgItem?.prices);
   const hotelStars = getHotelRating(hotels.rating);
+  console.log("pkgItem", pkgItem);
   const imgSource = getImgSource(pkgItem, pkgItem?.provider);
+  console.log("imgSource", imgSource);
 
   const hotelName = Helpers.capitalizeFirstLetter(hotels.name);
   const hotelMealPlan = Helpers.capitalizeFirstLetter(hotels.mealPlan);

@@ -110,8 +110,17 @@ export const ProviderService = {
       },
     },
     thumbnails: {
-      plum: "images",
-      ola: "Package.Pictures.Picture.[].$value",
+      isArray: true,
+      baseKey: {
+        ola: "Package.Pictures.Picture",
+        plum: "images",
+      },
+      items: {
+        sourceUrl: {
+          plum: "asset",
+          ola: "$value",
+        },
+      },
     },
     prices: {
       id: {
@@ -558,7 +567,7 @@ export const ProviderService = {
     const currentDate = startDate ? new Date(startDate) : new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = startDate
-      ? parseInt(startDate.split("-")[1]) - 1
+      ? parseInt(startDate.split("-")[1]) - 1 // Mes en base 0
       : currentDate.getMonth();
 
     const months = [
@@ -576,22 +585,25 @@ export const ProviderService = {
       "Diciembre",
     ];
 
+    const options = [];
+
+    // Si se proporciona startDate, devolver solo el mes correspondiente
     if (startDate) {
-      const monthIndex = currentMonth;
-      const monthNumber = monthIndex + 1;
+      const monthNumber = currentMonth + 1; // Convertir a base 1
       const monthString = monthNumber.toString().padStart(2, "0");
       const value = `${monthString}-${currentYear}`;
 
       return {
         id: monthNumber,
         value: value,
-        label: `${months[monthIndex]}, ${currentYear}`,
+        label: `${months[currentMonth]}, ${currentYear}`,
       };
     }
 
-    return months
+    // Agregar meses del año actual
+    const currentYearOptions = months
       .map((month, index) => {
-        const monthNumber = index + 1;
+        const monthNumber = index + 1; // Convertir a base 1
         const monthString = monthNumber.toString().padStart(2, "0");
         const value = `${monthString}-${currentYear}`;
 
@@ -601,7 +613,36 @@ export const ProviderService = {
           label: `${month}, ${currentYear}`,
         };
       })
-      .filter((_, index) => index >= currentMonth);
+      .filter((_, index) => index >= currentMonth); // Filtrar para obtener solo los meses restantes
+
+    if (currentYearOptions.length > 0) {
+      options.push({
+        label: `Este año ${currentYear}`,
+        options: currentYearOptions,
+      });
+    }
+
+    // Agregar meses del próximo año
+    const nextYearOptions = months.map((month, index) => {
+      const monthNumber = index + 1; // Convertir a base 1
+      const monthString = monthNumber.toString().padStart(2, "0");
+      const value = `${monthString}-${currentYear + 1}`;
+
+      return {
+        id: monthNumber + 12, // Asegurar IDs únicos para el próximo año
+        value,
+        label: `${month}, ${currentYear + 1}`,
+      };
+    });
+
+    if (nextYearOptions.length > 0) {
+      options.push({
+        label: `Próximo año ${currentYear + 1}`,
+        options: nextYearOptions,
+      });
+    }
+
+    return options;
   },
 
   /**
