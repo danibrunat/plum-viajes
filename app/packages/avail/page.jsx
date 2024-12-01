@@ -11,7 +11,7 @@ export const metadata = {
 
 // Convert to a Server Component
 export default async function PackagesAvailability({ searchParams }) {
-  const { arrivalCity, departureCity, startDate, endDate, rooms } =
+  const { arrivalCity, departureCity, startDate, endDate, rooms, priceOrder } =
     searchParams;
 
   // Generar selectedFilters en base a los filtros definidos en el servicio
@@ -30,6 +30,7 @@ export default async function PackagesAvailability({ searchParams }) {
           arrivalCity,
           departureCity,
           rooms,
+          priceOrder,
           // Pasamos los filtros seleccionados
         },
         selectedFilters
@@ -38,6 +39,7 @@ export default async function PackagesAvailability({ searchParams }) {
 
   const packages = pkgAvailabilityResponse.packages;
   const filters = pkgAvailabilityResponse.filters;
+  const packagesQty = packages.length;
 
   return (
     <>
@@ -46,7 +48,7 @@ export default async function PackagesAvailability({ searchParams }) {
         defaultValues={searchEngineDefaultValues}
       />
       <div className="mx-2 py-2 md:py-5 md:mx-40">
-        <PkgGridHeader searchParams={searchParams} />
+        <PkgGridHeader searchParams={searchParams} packagesQty={packagesQty} />
         <PkgGrid
           filters={filters}
           availResponse={packages}

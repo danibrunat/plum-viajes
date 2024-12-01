@@ -232,9 +232,23 @@ export async function POST(req, res) {
 
   // Aplicar los filtros seleccionados
   const filteredPackages = applySelectedFilters(
-    packagesResponse || [],
-    selectedFilters || {}
+    packagesResponse,
+    selectedFilters
   );
 
-  return Response.json({ packages: filteredPackages, filters });
+  // TODO: Mover esto a pcom
+  console.log("searchParams.priceOrder", searchParams.priceOrder);
+  const sortCriteria =
+    searchParams.priceOrder && searchParams.priceOrder === "high" ? "+" : "-";
+  const sortedLowerHigherPkg = filteredPackages.sort((a, b) => {
+    const priceA = a.prices.pricesDetail.basePrice;
+    const priceB = b.prices.pricesDetail.basePrice;
+
+    // Si es "+" ordenar de mayor a menor, si es "-" ordenar de menor a mayor
+    return sortCriteria === "+"
+      ? priceB - priceA // Mayor precio primero
+      : priceA - priceB; // Menor precio primero
+  });
+
+  return Response.json({ packages: sortedLowerHigherPkg, filters });
 }

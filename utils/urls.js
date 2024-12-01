@@ -43,3 +43,15 @@ export function slugParamToPath(slugParam) {
       "/";
   return slug;
 }
+
+export const addOrUpdateParamInUrl = (key, value) => {
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.search);
+
+  // Agregar o actualizar el parámetro
+  params.set(key, value);
+
+  // Actualizar la URL y recargar la página
+  url.search = params.toString();
+  window.location = url.toString();
+};
