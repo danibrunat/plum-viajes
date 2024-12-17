@@ -1,12 +1,20 @@
 import imageUrlBuilder from "@sanity/image-url";
 import groq from "groq";
-import { client } from "../../../sanity/lib/client";
-import { sanityFetch } from "../../../sanity/lib/sanityFetch";
-import RenderSections from "../../components/RenderSections";
-import capitalizeString from "../../../utils/capitalizeString";
+import { client } from "../../../../sanity/lib/client";
+import { sanityFetch } from "../../../../sanity/lib/sanityFetch";
+import RenderSections from "../../../components/RenderSections";
+import capitalizeString from "../../../../utils/capitalizeString";
 import LandingGrid from "./LandingGrid";
+import { LandingService } from "../../../services/landing.service";
 
-async function fetchLandingDynamicData(product, destination) {}
+async function getLandingData(product, destination) {
+  const body = {
+    destination,
+    product,
+  };
+  const landingData = await LandingService.destination.get(body);
+  return landingData;
+}
 
 async function getData(params) {
   //console.log("params", params);
@@ -79,15 +87,16 @@ export default async function Landing({ params }) {
   const { content = [] } = await getData(params);
   const destination = params?.slug[1];
   const product = params?.slug[0];
-
+  const landingData = await getLandingData(product, destination);
   return (
     <main>
       {content && <RenderSections sections={content} />}
-      <div className="flex flex-col mx-32">
-        <h1>
+      <div className="flex flex-col mx-2 md:mx-12 text-center">
+        <h1 className="text-xl">
           {capitalizeString(product)} a {capitalizeString(destination)}{" "}
-        </h1>
-        <LandingGrid product={product} destination={destination} />
+        </h1>{" "}
+        <em className="text-md">Seleccione el destino de su interés</em>
+        <LandingGrid product={product} landingData={landingData} />
       </div>
     </main>
   );

@@ -3,6 +3,7 @@ import PkgGrid from "./_components/PkgGrid";
 import PkgGridHeader from "./_components/PkgGrid/PkgGridHeader";
 import { ProviderService } from "../../api/services/providers.service";
 import { Filters } from "../../api/services/filters.service";
+import NoResults from "./_components/NoResults";
 
 export const metadata = {
   title: "Paquetes | Plum Viajes",
@@ -48,12 +49,21 @@ export default async function PackagesAvailability({ searchParams }) {
         defaultValues={searchEngineDefaultValues}
       />
       <div className="mx-2 py-2 md:py-5 md:mx-40">
-        <PkgGridHeader searchParams={searchParams} packagesQty={packagesQty} />
-        <PkgGrid
-          filters={filters}
-          availResponse={packages}
-          searchParams={searchParams}
-        />
+        {packages.length > 0 ? (
+          <>
+            <PkgGridHeader
+              searchParams={searchParams}
+              packagesQty={packagesQty}
+            />
+            <PkgGrid
+              filters={filters}
+              availResponse={packages}
+              searchParams={searchParams}
+            />
+          </>
+        ) : (
+          <NoResults />
+        )}
       </div>
     </>
   );

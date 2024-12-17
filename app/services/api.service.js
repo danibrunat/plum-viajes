@@ -67,4 +67,17 @@ export const Api = {
       name: `GET airline by ID `,
     },
   },
+  landing: {
+    destination: {
+      getData: {
+        url: () => `${baseUrl}/api/landing/destination`,
+        options: (body) => ({
+          method: "POST",
+          body: JSON.stringify(body),
+          headers: ApiUtils.getCommonHeaders(),
+        }),
+        name: "POST landing/destination",
+      },
+    },
+  },
 };

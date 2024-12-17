@@ -55,6 +55,21 @@ const DatabaseService = {
       .eq(field, equalParam);
     return data;
   },
+  getAllByFieldEqualOr: async (table, orParams) => {
+    const cookieStore = require("next/headers").cookies();
+    const supabase = serverClient(cookieStore);
+    const { data, error } = await supabase.from(table).select().or(orParams);
+    return data;
+  },
+  getAllByFieldEqualOrAndCustomSelect: async (table, selectQuery, orParams) => {
+    const cookieStore = require("next/headers").cookies();
+    const supabase = serverClient(cookieStore);
+    const { data, error } = await supabase
+      .from(table)
+      .select(selectQuery)
+      .or(orParams);
+    return data;
+  },
   // Method to get records with a custom select query where a specified field matches a specified value
   getAllByFieldEqualAndCustomSelect: async (
     table,

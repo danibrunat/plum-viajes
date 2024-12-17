@@ -19,12 +19,23 @@ export default defineField({
       description: "Indicá a qué producto pertenece la landing",
       options: {
         list: [
-          { title: "Paquetes", id: "pkg", value: "paquetes" },
-          { title: "Vuelos", id: "air", value: "vuelos" },
-          { title: "Hoteles", id: "htl", value: "hoteles" },
-          { title: "Asistencia al Viajero", id: "ins", value: "asistencias" },
-          { title: "Cruceros", id: "cru", value: "cruceros" },
-          { title: "Autos", id: "car", value: "autos" },
+          { title: "Paquetes", id: "pkg", value: "packages" },
+          { title: "Vuelos", id: "air", value: "flights" },
+          { title: "Hoteles", id: "htl", value: "hotels" },
+          { title: "Asistencia al Viajero", id: "ins", value: "insurances" },
+          { title: "Cruceros", id: "cru", value: "cruzes" },
+          { title: "Autos", id: "car", value: "cars" },
+        ],
+      },
+    },
+    {
+      name: "type",
+      type: "string",
+      description: "Indicá de qué tipo configuramos la landing",
+      options: {
+        list: [
+          { title: "Por país", id: "country", value: "country" },
+          { title: "Por región", id: "region", value: "region" },
         ],
       },
     },
@@ -71,13 +82,16 @@ export default defineField({
   preview: {
     select: {
       slug: "destination.current",
+      type: "type",
       product: "product",
       pageTitle: "page.title",
     },
-    prepare({ slug, product, pageTitle }) {
+    prepare({ slug, product, pageTitle, type = "country" }) {
       return {
         title:
-          slug === "/" ? "/" : `/landing/${product && product + "/"}${slug}`,
+          slug === "/"
+            ? "/"
+            : `/landing/by-${type}/${product && product + "/"}${slug}`,
         subtitle: `Landing con destino a ${slug}`,
       };
     },

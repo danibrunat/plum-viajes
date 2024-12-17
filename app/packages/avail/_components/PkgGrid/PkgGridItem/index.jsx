@@ -47,16 +47,27 @@ const getHotelRating = (rating) => {
 };
 
 const getImgSource = (pkgItem, provider) => {
+  let imageSourceUrl = "/imageNotFound.jpg";
+  if (pkgItem?.thumbnails.length === 0) return imageSourceUrl;
   switch (provider) {
     case "ola":
-      return sanitizeUrlFromDoubleSlash(
+      if (!Array.isArray(pkgItem?.thumbnails)) {
+        imageSourceUrl = sanitizeUrlFromDoubleSlash(
+          pkgItem?.thumbnails.sourceUrl
+        );
+        return;
+      }
+
+      imageSourceUrl = sanitizeUrlFromDoubleSlash(
         pkgItem?.thumbnails[
           Math.floor(Math.random() * pkgItem?.thumbnails.length)
         ].sourceUrl
       );
     case "plum":
-      return urlForImage(pkgItem?.thumbnails[0].sourceUrl);
+      imageSourceUrl = urlForImage(pkgItem?.thumbnails[0].sourceUrl);
   }
+
+  return imageSourceUrl;
 };
 
 const PkgGridItem = ({ pkgItem, searchParams }) => {
