@@ -51,6 +51,20 @@ export const CitiesService = {
       return { error: error.message };
     }
   },
+  getCitiesAutocompleteApi: async (query, inputName) => {
+    const cities = await ApiUtils.requestHandler(
+      fetch(
+        `${process.env.SANITY_STUDIO_URL}/api/cities/autocomplete?query=${query}&input=${inputName}`,
+        {
+          method: "GET",
+          headers: ApiUtils.getCommonHeaders(),
+        }
+      ),
+      "getCitiesAutocompleteApi"
+    );
+    const citiesResponse = await cities.json();
+    return citiesResponse;
+  },
   getImagePublicUrl: (imagePath) =>
     DatabaseService.getStorageItemPublicUrl("city_images", imagePath),
 };

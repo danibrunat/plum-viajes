@@ -13,19 +13,11 @@ import {
 import PackageEngineItem from "./PackageEngineItem";
 import { ProviderService } from "../../../../api/services/providers.service";
 import { ApiUtils } from "../../../../api/services/apiUtils.service";
+import { CitiesService } from "../../../../services/cities.service";
 
 const getPackageEngineItems = () => {
-  const getCitiesAutocompleteApi = async (query, inputName) => {
-    const cities = await ApiUtils.requestHandler(
-      fetch(`/api/cities/autocomplete?query=${query}&input=${inputName}`, {
-        method: "GET",
-        headers: ApiUtils.getCommonHeaders(),
-      }),
-      "getCitiesAutocompleteApi"
-    );
-    const citiesResponse = await cities.json();
-    return citiesResponse;
-  };
+  const getCitiesAutocompleteApi = async (query, inputName) =>
+    await CitiesService.getCitiesAutocompleteApi(query, inputName);
 
   const loadOptions = async (query, callback, inputName) => {
     if (query.length >= 3) {
@@ -123,7 +115,6 @@ export default function PackagesEngine({ defaultValues = {} }) {
     handleSubmit,
     formState: { errors },
   } = useForm(defaultValues);
-  console.log("defaultValues", defaultValues);
 
   useEffect(() => {
     reset({

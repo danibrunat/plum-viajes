@@ -144,6 +144,12 @@ export default defineField({
       },
     },
     {
+      name: "tags",
+      type: "array",
+      title: "Tags",
+      of: [{ type: "reference", to: [{ type: "tag" }] }],
+    },
+    {
       name: "shortDescription",
       type: "text",
       title: "Descripción Corta",

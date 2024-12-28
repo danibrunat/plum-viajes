@@ -5,15 +5,8 @@ export const dataset = "production";
 
 export const projectId = "q5tnasgw";
 
-const token = `${process.env.NEXT_PUBLIC_SANITY_AUTH_TOKEN}`;
+const token = `${process.env.SANITY_STUDIO_AUTH_TOKEN}`;
+console.log("token", token);
 export const previewToken = token;
 
 export const useCdn = false;
-
-function assertValue<T>(v: T | undefined, errorMessage: string): T {
-  if (v === undefined) {
-    throw new Error(errorMessage);
-  }
-
-  return v;
-}

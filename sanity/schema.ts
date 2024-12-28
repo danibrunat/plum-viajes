@@ -7,6 +7,9 @@ import siteConfig from "./schemas/documents/siteConfig";
 import landing from "./schemas/documents/landing";
 import packages from "./schemas/documents/packages";
 import quotation from "./schemas/documents/quotation";
+import tags from "./schemas/documents/tags";
+import taggedPackages from "./schemas/documents/taggedPackages";
+import providerPackages from "./schemas/documents/providerPackages";
 
 // Object types
 import cta from "./schemas/objects/cta";
@@ -35,6 +38,9 @@ import slider from "./schemas/objects/slider";
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     packages,
+    tags,
+    taggedPackages,
+    providerPackages,
     quotation,
     cta,
     embedHTML,

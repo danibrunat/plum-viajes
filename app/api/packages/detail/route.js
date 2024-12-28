@@ -27,14 +27,16 @@ export async function POST(req) {
   const citiesData = await Promise.all(
     hotelsData.map((hotel) => CitiesService.getCityByCode(hotel.city_id, true))
   );
-
   // Fetch airline Data
   const updatedFlightSegments = await Promise.all(
-    flightSegments.map(async (flight) => {
-      const airlineData = await AirlinesService.getAirlineData(
-        flight.segments.airline.code
-      );
-      flight.segments.airline = airlineData;
+    flightSegments.map((flight) => {
+      flight.segments.map(async (segment) => {
+        const airlineData = await AirlinesService.getAirlineData(
+          segment.airline.code
+        );
+        segment.airline = airlineData;
+        return segment;
+      });
       return flight;
     })
   );

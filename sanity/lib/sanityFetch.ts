@@ -1,7 +1,6 @@
 "only server";
 
 import type { QueryParams } from "@sanity/client";
-import { draftMode } from "next/headers";
 import { client } from "./client";
 import { previewToken } from "../env";
 
@@ -19,26 +18,19 @@ export async function sanityFetch<QueryResponse>({
   params?: QueryParams;
   tags?: string[];
 }): Promise<QueryResponse> {
-  const isDraftMode = draftMode().isEnabled;
-  if (isDraftMode && !token) {
-    throw new Error(
-      "The `SANITY_API_READ_TOKEN` environment variable is required."
-    );
-  }
-  const isDevelopment = process.env.NODE_ENV === "development";
+  // Evitamos llamar a draftMode si no está en un contexto de solicitud HTTP
+  const useCdn = process.env.NODE_ENV === "production"; // Usar CDN solo en producción
 
-  return client
-    .withConfig({ useCdn: !isDraftMode })
-    .fetch<QueryResponse>(query, params, {
-      // cache: "no-store",
-      // ...(isDraftMode && {
-      //     token: token,
-      //     perspective: "previewDrafts",
-      // }),
+  return client.withConfig({ useCdn }).fetch<QueryResponse>(query, params, {
+    // cache: "no-store",
+    // ...(isDraftMode && {
+    //     token: token,
+    //     perspective: "previewDrafts",
+    // }),
 
-      next: { revalidate: 3600 },
-      // next: {
-      //     tags,
-      // },
-    });
+    next: { revalidate: 0 },
+    // next: {
+    //     tags,
+    // },
+  });
 }

@@ -7,6 +7,6 @@ export async function POST(request) {
     const avail = await XmlService.soap.request(url, body, "GetPackagesFares");
     return Response.json(avail);
   } catch (error) {
-    return Response.json(error);
+    return Response.json({ error: error.message });
   }
 }

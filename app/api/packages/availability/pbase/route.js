@@ -131,33 +131,7 @@ async function fetchPlumPackages({
  * @returns {Promise<Object>} - Paquetes disponibles agrupados por OLA.
  */
 async function fetchOlaPackages(searchParams) {
-  const { departureCity, arrivalCity, startDate, endDate, rooms } =
-    searchParams;
-  const formattedDateFrom = ProviderService.ola.olaDateFormat(startDate);
-  const formattedDateTo = ProviderService.ola.olaDateFormat(endDate);
-
-  const getPackagesFaresRequest = `<GetPackagesFaresRequest>
-    <GeneralParameters>
-      <Username>${process.env.OLA_USERNAME}</Username>
-      <Password>${process.env.OLA_API_KEY}</Password>
-      <CustomerIp>186.57.221.35</CustomerIp>
-    </GeneralParameters>
-    <DepartureDate>
-      <From>${formattedDateFrom}</From>
-      <To>${formattedDateTo}</To>
-    </DepartureDate>
-    <Rooms>
-      <Room>
-        <Passenger Type="ADL"/>
-        <Passenger Type="ADL"/>
-      </Room>
-    </Rooms>
-    <DepartureDestination>${departureCity}</DepartureDestination>
-    <ArrivalDestination>${arrivalCity}</ArrivalDestination>
-    <FareCurrency>ARS</FareCurrency>
-    <Outlet>1</Outlet>
-    <PackageType>ALL</PackageType>
-  </GetPackagesFaresRequest>`;
+  const getPackagesFaresRequest = OLA.avail.getRequest(searchParams);
 
   try {
     const olaAvailRequest = await fetch(
@@ -165,7 +139,6 @@ async function fetchOlaPackages(searchParams) {
       OLA.avail.options(getPackagesFaresRequest)
     );
     const olaAvailResponse = await olaAvailRequest.json();
-    console.log("olaAvailResponse", JSON.stringify(olaAvailResponse[0]));
     const mapResponse = ProviderService.mapper(
       olaAvailResponse,
       "ola",

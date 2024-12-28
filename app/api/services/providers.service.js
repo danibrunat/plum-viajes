@@ -228,17 +228,17 @@ export const ProviderService = {
         mealPlan: {
           plum: "departures.[].mealPlan",
           julia: "hotels",
-          ola: "Descriptions.Description.FareDescriptions.FareDescription.[1].$value",
+          ola: "Descriptions.Description.FareDescriptions.FareDescription.[1]._",
         },
         roomType: {
           plum: "departures.[].roomType",
           julia: "hotels",
-          ola: "Descriptions.Description.FareDescriptions.FareDescription.[0].$value",
+          ola: "Descriptions.Description.FareDescriptions.FareDescription.[0]._",
         },
         roomSize: {
           plum: "departures.[].roomSize",
           julia: "hotels",
-          ola: "Descriptions.Description.FareDescriptions.FareDescription.[2].$value",
+          ola: "Descriptions.Description.FareDescriptions.FareDescription.[2]._",
         },
       },
     },
@@ -774,12 +774,14 @@ export const ProviderService = {
      * @param {Array} mappedResponse - The array of mapped response objects.
      * @returns {Array} - The array of unique response objects.
      */
-    grouper: (mappedResponse) => {
+    grouper: (mappedResponse, criteria = null) => {
       const uniqueResponse = [];
       const seenItems = new Set();
 
       mappedResponse.forEach((item) => {
-        const uniqueKey = `${item.id}-${item.hotels[0].name}-${item.hotels[0].roomType}-${item.hotels[0].roomSize}-${item.hotels[0].mealPlan}`;
+        const uniqueKey = criteria
+          ? `${item[criteria]}`
+          : `${item.id}-${item.hotels[0].name}-${item.hotels[0].roomType}-${item.hotels[0].roomSize}-${item.hotels[0].mealPlan}`;
         if (!seenItems.has(uniqueKey)) {
           seenItems.add(uniqueKey);
           uniqueResponse.push(item);

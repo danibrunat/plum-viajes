@@ -1,6 +1,6 @@
 import moment from "moment";
 import "moment/locale/es-do";
-import { DateTransformer } from "../documentation/Date";
+import DateTransformer from "../documentation/Date";
 
 /**
  * Usage:

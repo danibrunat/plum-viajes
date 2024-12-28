@@ -2,6 +2,8 @@
  * This configuration is used to for the Sanity Studio that’s mounted on the `\src\app\studio\[[...index]]\page.tsx` route
  */
 
+import "./sanity/components/globals.css";
+
 import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
 
