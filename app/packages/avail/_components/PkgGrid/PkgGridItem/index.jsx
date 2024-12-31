@@ -8,7 +8,7 @@ import {
 import { Helpers } from "../../../../../services/helpers.service";
 import Link from "next/link";
 
-const getPkgPrice = (prices) => {
+export const getPkgPrice = (prices) => {
   if (!prices) return "Consulte";
   const currency = prices.pricesDetail.currency;
   const basePrice = parseFloat(prices.pricesDetail.basePrice);

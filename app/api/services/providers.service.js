@@ -492,7 +492,7 @@ export const ProviderService = {
    */
   getPkgAvailabilityAndFilters: async (searchParams, selectedFilters) => {
     const pkgAvailabilityRequest = await fetch(
-      `${process.env.URL}/api/packages/availability`,
+      `${process.env.NEXT_PUBLIC_URL}/api/packages/availability`,
       {
         method: "POST",
         body: JSON.stringify({ searchParams, selectedFilters }),
@@ -530,7 +530,7 @@ export const ProviderService = {
     rooms,
   }) => {
     const pkgDetailRequest = await fetch(
-      `${process.env.URL}/api/packages/detail`,
+      `${process.env.NEXT_PUBLIC_URL}/api/packages/detail`,
       {
         method: "POST",
         body: JSON.stringify({

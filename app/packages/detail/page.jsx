@@ -31,6 +31,8 @@ export default async function PackagesDetail({
     rooms,
   });
 
+  console.log("pkgDetailResponse", pkgDetailResponse);
+
   return (
     <>
       <div className="mx-2 py-2 md:py-5 md:mx-40">

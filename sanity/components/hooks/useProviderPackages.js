@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { OLA } from "../../../app/api/services/ola.service";
 import { ProviderService } from "../../../app/api/services/providers.service";
 import { fetchTags } from "../../services/tagService";
+import { getPkgPrice } from "../../../app/packages/avail/_components/PkgGrid/PkgGridItem";
 import { client } from "../../lib/client";
 import Dates from "../../../app/services/dates.service";
 
@@ -131,12 +132,17 @@ export const useProviderPackages = (formWatch) => {
 
   const handleTagSave = async (packageId) => {
     const selectedPkg = state.packages.find((pkg) => pkg.id === packageId);
+    const { finalPrice, currency } = getPkgPrice(selectedPkg.prices);
     if (selectedPkg) {
       try {
         await client.createOrReplace({
           _id: `tagged-package-${packageId}`,
           _type: "taggedPackages",
           packageId: selectedPkg.id,
+          productType: "package",
+          price: finalPrice,
+          currency,
+          nights: Number(selectedPkg.nights),
           title: selectedPkg.title,
           provider: selectedPkg.provider,
           thumbnail: selectedPkg.thumbnails[0].sourceUrl,

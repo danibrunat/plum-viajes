@@ -31,7 +31,7 @@ export const Filters = {
   // Método que procesa la respuesta de availability
   process: async (pkgAvailabilityResponse) => {
     // Hacemos la petición a la API para procesar los filtros (si es necesario)
-    const res = await fetch(`${process.env.URL}/api/filters`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/filters`, {
       headers: ApiUtils.getCommonHeaders(),
       method: "POST",
       body: JSON.stringify({ availability: pkgAvailabilityResponse }),

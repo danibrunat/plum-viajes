@@ -9,7 +9,10 @@ const NoResults = () => {
       <p className="text-xl text-center">
         <strong>No hemos encontrado resultados.</strong> <br />
         Puede modificar su búsqueda o dejarnos su consulta:{" "}
-        <Link className="text-blue-600" href={`${process.env.URL}/contacto`}>
+        <Link
+          className="text-blue-600"
+          href={`${process.env.NEXT_PUBLIC_URL}/contacto`}
+        >
           click aquí
         </Link>
       </p>

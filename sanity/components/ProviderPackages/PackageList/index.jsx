@@ -39,7 +39,7 @@ const PackageList = ({ packages, onTagClick }) => {
             <div className="flex justify-end self-center items-end ml-auto">
               <button
                 onClick={() => onTagClick(pkg)}
-                className="text-2xl p-3 bg-gradient-to-r bg-purple-500 text-white font-semibold rounded-lg transition-colors duration-200"
+                className="text-2xl p-3 bg-gradient-to-r bg-[#556bfc] text-white font-semibold rounded-lg transition-colors duration-200"
               >
                 <FaTags size={20} />
               </button>

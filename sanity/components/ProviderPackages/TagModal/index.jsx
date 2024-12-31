@@ -11,7 +11,7 @@ const TagModal = ({
   if (!isOpen || !selectedPackage) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-md flex justify-center items-center transition-opacity duration-300 ease-in-out">
+    <div className="fixed inset-0 backdrop-blur-md flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg shadow-lg relative mx-4 max-w-md w-full transform transition-transform duration-300 ease-in-out scale-100 border border-gray-300">
         {/* Icono de cierre en la esquina superior derecha */}
         <button
@@ -59,7 +59,7 @@ const TagModal = ({
               onSave(selectedPackage.id);
               onClose();
             }}
-            className="bg-purple-500 text-white font-semibold py-2 px-4 rounded hover:bg-purple-900 transition-colors duration-200"
+            className="bg-[#556bfc] text-white font-semibold py-2 px-4 rounded hover:bg-purple-900 transition-colors duration-200"
           >
             Guardar
           </button>

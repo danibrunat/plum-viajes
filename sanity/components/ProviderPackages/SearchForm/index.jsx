@@ -49,7 +49,7 @@ const SearchForm = ({ control, handleSearch, loadOptions }) => (
     <button
       type="button"
       onClick={handleSearch}
-      className="p-2 flex gap-3 items-center bg-gray-800 text-white rounded border-1"
+      className="p-2 flex gap-3 items-center bg-[#556bfc] text-white rounded border-1"
     >
       <FaSearch /> Buscar
     </button>

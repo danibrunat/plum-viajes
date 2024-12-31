@@ -12,6 +12,10 @@ export async function POST(req) {
     Api.packages.detail.pbase.options(body)
   );
   const pBaseDetailResponse = await pBaseRequest.json();
+
+  console.log("pBaseDetailResponse", pBaseDetailResponse);
+
+  if (pBaseDetailResponse.length === 0) return Response.json([]);
   // Fetch hotels data. Check if pkgDetailResponse is an array of more than one item. In that case, we fetch an array of hotels data.
   //const provider = pkgDetailResponse[0].provider;
   const provider = pBaseDetailResponse?.provider;

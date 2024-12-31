@@ -6,7 +6,7 @@ import "./sanity/components/globals.css";
 
 import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
-
+import { esESLocale } from "@sanity/locale-es-es";
 import { apiVersion, dataset, projectId } from "./sanity/env";
 import { deskStructure } from "./sanity/deskStructure";
 import { schema } from "./sanity/schema";
@@ -58,5 +58,6 @@ export default defineConfig({
     // Vision is a tool that lets you query your content with GROQ in the studio
     // https://www.sanity.io/docs/the-vision-plugin
     visionTool({ defaultApiVersion: apiVersion }),
+    esESLocale(),
   ],
 });

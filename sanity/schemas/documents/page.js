@@ -31,6 +31,31 @@ export default defineField({
         { type: "imageSection" },
         { type: "textSection" },
         { type: "iFrame" },
+        {
+          type: "object", // Sección para paquetes taggeados
+          name: "taggedPackages",
+          title: "Tags de paquetes",
+          fields: [
+            {
+              name: "tag",
+              type: "reference",
+              title: "Tag", // Solo un tag en lugar de un array
+              to: [{ type: "tag" }], // Referencia a un documento del tipo 'tag'
+            },
+          ],
+          preview: {
+            select: {
+              tag: "tag.name", // Nombre del tag seleccionado
+            },
+            prepare(selection) {
+              const { tag } = selection;
+
+              return {
+                title: `Paquetes con tag: ${tag || "Sin tag"}`, // Mostrar el tag seleccionado o "Sin tag"
+              };
+            },
+          },
+        },
       ],
     },
     {

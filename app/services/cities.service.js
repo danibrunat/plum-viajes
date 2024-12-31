@@ -2,6 +2,8 @@ import { ApiUtils } from "../api/services/apiUtils.service";
 import DatabaseService from "../api/services/database.service";
 import CACHE from "../constants/cachePolicies";
 
+const isFrontEndCall = typeof process.env.SANITY_STUDIO_URL == "undefined";
+
 /**
  * Service for handling city-related operations.
  */
@@ -17,7 +19,7 @@ export const CitiesService = {
   getCityByCode: async (code, asObject = false) => {
     try {
       const citiesSearch = await fetch(
-        `${process.env.URL}/api/cities/byCode?code=${code}`,
+        `${process.env.NEXT_PUBLIC_URL}/api/cities/byCode?code=${code}`,
         {
           method: "GET",
           next: {
@@ -28,15 +30,7 @@ export const CitiesService = {
       );
       const citiesResponse = await citiesSearch.json();
       const mapResponse = citiesResponse.map(
-        ({
-          id,
-          name,
-          country_name,
-          region_name,
-          iata_code,
-          description,
-          images,
-        }) => ({
+        ({ id, name, country_name, iata_code, description, images }) => ({
           id,
           name,
           description,
@@ -52,9 +46,12 @@ export const CitiesService = {
     }
   },
   getCitiesAutocompleteApi: async (query, inputName) => {
+    const baseUrl = isFrontEndCall
+      ? process.env.NEXT_PUBLIC_URL
+      : process.env.SANITY_STUDIO_URL;
     const cities = await ApiUtils.requestHandler(
       fetch(
-        `${process.env.SANITY_STUDIO_URL}/api/cities/autocomplete?query=${query}&input=${inputName}`,
+        `${baseUrl}/api/cities/autocomplete?query=${query}&input=${inputName}`,
         {
           method: "GET",
           headers: ApiUtils.getCommonHeaders(),

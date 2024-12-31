@@ -8,7 +8,7 @@ export async function GET(req) {
   /* if (input === "arrivalCity") { */
 
   const citiesSearch = await ApiUtils.requestHandler(
-    fetch(`${process.env.URL}/api/cities/byName?name=${query}`, {
+    fetch(`${process.env.NEXT_PUBLIC_URL}/api/cities/byName?name=${query}`, {
       method: "GET",
       next: {
         revalidate: CACHE.revalidation.cities,
@@ -33,7 +33,7 @@ export async function GET(req) {
   /* if (input === "departureCity") {
     try {
       const citiesSearch = await fetch(
-        `${process.env.URL}/api/cities/departureCity?name=${query}`,
+        `${process.env.NEXT_PUBLIC_URL}/api/cities/departureCity?name=${query}`,
         { method: "GET", cache: "no-cache" }
       );
       const citiesResponse = await citiesSearch.json();

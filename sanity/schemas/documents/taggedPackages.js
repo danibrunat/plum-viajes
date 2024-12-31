@@ -14,6 +14,26 @@ export default {
       title: "Package Title",
     },
     {
+      name: "nights",
+      type: "number",
+      title: "Noches",
+    },
+    {
+      name: "price",
+      type: "number",
+      title: "Precio",
+    },
+    {
+      name: "currency",
+      type: "string",
+      title: "Moneda",
+    },
+    {
+      name: "productType",
+      type: "string",
+      title: "Tipo de producto",
+    },
+    {
       name: "provider",
       type: "string",
       title: "Provider",
