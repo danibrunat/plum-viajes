@@ -9,17 +9,13 @@ import DestinationCity from "./DestinationCity";
 import AgentContact from "./AgentContact";
 import PricesAndAgentContact from "./PricesAndAgentContact";
 
-export default function PkgDetail({ detailResponse }) {
+export default function PkgDetail({ detailResponse, searchParams }) {
   const provider = detailResponse?.provider;
-  const departures = Array.isArray(detailResponse?.departures)
-    ? detailResponse?.departures.sort((a, b) => a.date < b.date)
-    : [detailResponse?.departures];
   const name = detailResponse?.title;
   const subtitle = detailResponse?.subtitle;
   const hotelsData = detailResponse?.hotelsData;
   const citiesData = detailResponse?.citiesData;
   const flights = detailResponse?.flights;
-  console.log("detailResponse?.images", detailResponse?.images);
   const sliderImages = detailResponse?.images?.map(({ sourceUrl }) => {
     return {
       src:
@@ -39,7 +35,7 @@ export default function PkgDetail({ detailResponse }) {
 
           <Slider slides={sliderImages} deviceType="desktop" />
           <div className="flex w-full rounded">
-            <Departures departures={departures} />
+            <Departures searchParams={searchParams} />
           </div>
           <div className="flex w-full rounded">
             <DepartureDetail />

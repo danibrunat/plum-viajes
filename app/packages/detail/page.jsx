@@ -8,8 +8,8 @@ export const metadata = {
   description: "Paquetes a Buzios - Detalle de paquetes",
 };
 
-export default async function PackagesDetail({
-  searchParams: {
+export default async function PackagesDetail({ searchParams }) {
+  const {
     provider,
     id,
     arrivalCity,
@@ -18,8 +18,7 @@ export default async function PackagesDetail({
     endDate,
     priceId,
     rooms,
-  },
-}) {
+  } = searchParams;
   const pkgDetailResponse = await ProviderService.getPkgDetail({
     provider,
     id,
@@ -31,12 +30,13 @@ export default async function PackagesDetail({
     rooms,
   });
 
-  console.log("pkgDetailResponse", pkgDetailResponse);
-
   return (
     <>
       <div className="mx-2 py-2 md:py-5 md:mx-40">
-        <PkgDetail detailResponse={pkgDetailResponse} />
+        <PkgDetail
+          detailResponse={pkgDetailResponse}
+          searchParams={searchParams}
+        />
       </div>
       <ReservationSummary />
     </>

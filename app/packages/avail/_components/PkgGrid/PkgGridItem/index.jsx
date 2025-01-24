@@ -6,6 +6,7 @@ import {
   sanitizeUrlFromDoubleSlash,
 } from "../../../../../helpers/strings";
 import { Helpers } from "../../../../../services/helpers.service";
+import Formatters from "../../../../../services/formatters.service";
 import Link from "next/link";
 
 export const getPkgPrice = (prices) => {
@@ -124,7 +125,9 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
       <div className="flex flex-col items-center text-center gap-1 md:w-1/4 md:my-5 border-l-0 md:border-l-2 ">
         <div className="flex flex-col">
           <em className="text-xs">Desde</em>
-          <span className="text-xl font-bold">{`${pkgPrice.currency} ${pkgPrice.finalPrice}`}</span>
+          <span className="text-xl font-bold">
+            {`${Formatters.price(pkgPrice.finalPrice, pkgPrice.currency)}`}
+          </span>
         </div>
         {/*         {<span className="text-sm text-slate-900 line-through">$699</span>}
          */}

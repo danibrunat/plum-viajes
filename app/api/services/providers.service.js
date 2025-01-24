@@ -652,10 +652,20 @@ export const ProviderService = {
    */
   departureDateFromTo: (monthYear) => {
     if (!monthYear) return null;
+
     const [month, year] = monthYear.split("-");
+    const today = new Date(); // Obtener la fecha de hoy
     const currentMonthLastDay = new Date(year, month, 0).getDate();
+
+    // Verificar si el mes y año proporcionados coinciden con el mes y año actual
+    const startDay =
+      today.getMonth() + 1 === parseInt(month) &&
+      today.getFullYear() === parseInt(year)
+        ? today.getDate() // Si coincide, usamos el día de hoy como inicio
+        : 1; // Si no coincide, empezamos desde el primer día del mes
+
     return {
-      startDate: `${year}-${month}-01`,
+      startDate: `${year}-${month}-${String(startDay).padStart(2, "0")}`, // Asegurarse que el día tenga 2 dígitos
       endDate: `${year}-${month}-${currentMonthLastDay}`,
     };
   },

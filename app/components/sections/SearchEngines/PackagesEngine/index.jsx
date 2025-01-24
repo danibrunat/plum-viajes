@@ -12,7 +12,6 @@ import {
 } from "react-icons/fa";
 import PackageEngineItem from "./PackageEngineItem";
 import { ProviderService } from "../../../../api/services/providers.service";
-import { ApiUtils } from "../../../../api/services/apiUtils.service";
 import { CitiesService } from "../../../../services/cities.service";
 
 const getPackageEngineItems = () => {

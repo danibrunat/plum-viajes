@@ -3,15 +3,7 @@ import React from "react";
 import { sanitizeUrlFromDoubleSlash } from "../../../../helpers/strings";
 import { urlForImage } from "../../../../../sanity/lib/image";
 import Dates from "../../../../services/dates.service";
-
-function formatPrice(price, currency) {
-  return price?.toLocaleString("en-ES", {
-    style: "currency",
-    currency: currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  });
-}
+import Formatters from "../../../../services/formatters.service";
 
 function getPkgPrice(departures) {
   // order by price
@@ -20,7 +12,7 @@ function getPkgPrice(departures) {
   );
 
   const lowestPrice = Math.ceil(orderedDepartures[0].prices[0].amount);
-  return formatPrice(lowestPrice, "ARS");
+  return Formatters.price(lowestPrice, "ARS");
 }
 
 const TaggedPackageItem = ({ taggedPackage }) => {
@@ -29,7 +21,7 @@ const TaggedPackageItem = ({ taggedPackage }) => {
 
   const pkgPrice =
     provider === "ola"
-      ? formatPrice(price, currency)
+      ? Formatters.price(price, currency)
       : getPkgPrice(taggedPackage.departures);
   const imgSrc =
     provider === "ola"
