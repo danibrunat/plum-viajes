@@ -1,5 +1,4 @@
 import groq from "groq";
-import { slugToAbsUrl } from "../utils/urls";
 import { client } from "../sanity/lib/client";
 
 export default async function sitem(req, res) {

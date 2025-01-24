@@ -18,7 +18,6 @@ const olaApiKey = isSanity
 const olaUrl = isSanity
   ? process.env.SANITY_STUDIO_OLA_URL
   : process.env.OLA_URL;
-console.log({ baseUrl, olaUserName, olaApiKey, olaUrl });
 
 export const OLA = {
   avail: {
