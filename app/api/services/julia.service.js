@@ -26,7 +26,7 @@ const getDeparturesRequest = (token, { IDPAQUETE }, searchParams) => {
     IDPaquete: IDPAQUETE,
     FechaDesde: searchParams.departureFrom,
     FechaHasta: searchParams.departureTo,
-    Ocupacion: searchParams.occupation,
+    Ocupacion: searchParams.occupancy,
   };
 };
 
@@ -88,7 +88,7 @@ export const Julia = {
       const departureHotelsGroupOptions = {
         Token: sessionToken,
         IDPaquete: Number(departure.IDPAQUETE),
-        Ocupacion: Number(searchParams.occupation),
+        Ocupacion: Number(searchParams.occupancy),
         NroGrupo: 0,
         FechaInicio1: Dates.get(departure.FECHADESDE).toFormat("YYYY-MM-DD"),
         FechaInicio2: Dates.get("2000-01-01").toFormat("YYYY-MM-DD"),
@@ -152,7 +152,7 @@ export const Julia = {
       const departurePricesOptions = {
         Token: sessionToken,
         IDPaquete: Number(departure.IDPAQUETE),
-        Ocupacion: Number(searchParams.occupation),
+        Ocupacion: Number(searchParams.occupancy),
         FechaInicio: Dates.get(departure.FECHADESDE).toFormat("YYYY-MM-DD"),
         NroGrupo: 0,
       };

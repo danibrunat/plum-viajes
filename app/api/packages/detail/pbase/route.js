@@ -59,11 +59,11 @@ async function fetchPlumPackageDetail(id) {
 }
 
 async function fetchOlaPackageDetail(id, searchParams) {
-  const { departureCity, arrivalCity, startDate, endDate, priceId, rooms } =
+  const { departureCity, arrivalCity, startDate, endDate, priceId, occupancy } =
     searchParams;
   const cacheKey = `${id}-${priceId}`;
 
-  const roomConfig = ProviderService.getRoomsConfig(rooms);
+  const roomConfig = ProviderService.getRoomsConfig(occupancy);
   const xmlRooms =
     ProviderService.ola.generateXMLRoomsByConfigString(roomConfig);
 
@@ -135,14 +135,14 @@ function generateXMLRequest(
   const departureCity = "BUE";
   const departureFrom = "2024-10-01";
   const departureTo = "2024-10-31";
-  const occupation = "2";
+  const occupancy = "2";
 
   const juliaPkgResponse = await Julia.pkgAvail({
     arrivalCity,
     departureCity,
     departureFrom,
     departureTo,
-    occupation,
+    occupancy,
   });
   const mapResponse = ProviderService.mapper(
     juliaPkgResponse,
@@ -163,7 +163,7 @@ export async function POST(req, res) {
     startDate,
     endDate,
     priceId,
-    rooms,
+    occupancy,
   } = body;
   const searchParams = {
     departureCity,
@@ -171,7 +171,7 @@ export async function POST(req, res) {
     startDate,
     endDate,
     priceId,
-    rooms,
+    occupancy,
   };
   // check the provider and fetch the corresponding package detail
   switch (provider) {

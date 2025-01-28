@@ -95,11 +95,11 @@ const FormWrapper = async ({
   departureCity,
   arrivalCity,
   startDate,
-  rooms,
+  occupancy,
   id,
   priceId,
 }) => {
-  const roomConfig = ProviderService.getRoomsConfig(rooms);
+  const roomConfig = ProviderService.getRoomsConfig(occupancy);
   const xmlRooms =
     ProviderService.ola.generateXMLRoomsByConfigString(roomConfig);
   const getPackagesFaresRequestForMonth = generateXMLRequestForMonth(
@@ -107,11 +107,6 @@ const FormWrapper = async ({
     arrivalCity,
     startDate,
     xmlRooms
-  );
-
-  console.log(
-    "getPackagesFaresRequestForMonth",
-    getPackagesFaresRequestForMonth
   );
 
   const cacheKey = `${id}-${priceId}`;
@@ -147,7 +142,7 @@ const Departures = ({ searchParams }) => {
     startDate,
     endDate,
     priceId,
-    rooms,
+    occupancy,
   } = searchParams;
 
   return (
@@ -159,7 +154,7 @@ const Departures = ({ searchParams }) => {
           departureCity={departureCity}
           arrivalCity={arrivalCity}
           startDate={startDate}
-          rooms={rooms}
+          occupancy={occupancy}
           id={id}
           priceId={priceId}
         />

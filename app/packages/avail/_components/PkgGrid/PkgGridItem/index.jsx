@@ -8,23 +8,8 @@ import {
 import { Helpers } from "../../../../../services/helpers.service";
 import Formatters from "../../../../../services/formatters.service";
 import Link from "next/link";
-
-export const getPkgPrice = (prices) => {
-  if (!prices) return "Consulte";
-  const currency = prices.pricesDetail.currency;
-  const basePrice = parseFloat(prices.pricesDetail.basePrice);
-  const iva = parseFloat(prices.taxes.iva);
-  const ivaAgency = parseFloat(prices.taxes.ivaAgency);
-  const paisTax = parseFloat(prices.taxes.paisTax);
-  const baseTax = parseFloat(prices.taxes.baseTax);
-  const additionalTax = parseFloat(prices.taxes.additionalTax.value);
-  const finalPrice = Math.ceil(basePrice + iva + paisTax + baseTax);
-
-  return {
-    currency,
-    finalPrice,
-  };
-};
+import PackageService from "../../../../../services/package.service";
+import { FLOW_STAGES } from "../../../../../constants/site";
 
 const getHotelRating = (rating) => {
   if (!rating) return null;
@@ -71,10 +56,13 @@ const getImgSource = (pkgItem, provider) => {
 };
 
 const PkgGridItem = ({ pkgItem, searchParams }) => {
-  const { departureCity, arrivalCity, startDate, endDate, rooms } =
+  const { departureCity, arrivalCity, startDate, endDate, occupancy } =
     searchParams;
   const hotels = pkgItem.hotels[0];
-  const pkgPrice = getPkgPrice(pkgItem?.prices);
+  const pkgPrice = PackageService.prices.getPkgPrice(
+    pkgItem?.prices,
+    FLOW_STAGES.PKG_AVAILABILITY
+  );
   const hotelStars = getHotelRating(hotels.rating);
   const imgSource = getImgSource(pkgItem, pkgItem?.provider);
 
@@ -86,7 +74,7 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
   const priceId = pkgItem?.prices?.id;
 
   const slug = Helpers.slugify(pkgItem?.title);
-  const detailUrl = `/packages/detail?id=${pkgItem?.id}&provider=${pkgItem?.provider}&rooms=${rooms}&departureCity=${departureCity}&arrivalCity=${arrivalCity}&startDate=${startDate}&endDate=${endDate}&priceId=${priceId}`;
+  const detailUrl = `/packages/detail?id=${pkgItem?.id}&provider=${pkgItem?.provider}&occupancy=${occupancy}&departureCity=${departureCity}&arrivalCity=${arrivalCity}&startDate=${startDate}&endDate=${endDate}&priceId=${priceId}`;
 
   return (
     <div className="flex flex-col md:flex-row md:justify-between w-full m-2 mx-auto p-1 md:p-2 h-fit overflow-hidden rounded-lg border border-gray-300 bg-white shadow-md">

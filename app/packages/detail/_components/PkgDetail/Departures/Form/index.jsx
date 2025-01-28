@@ -36,7 +36,7 @@ const DeparturesForm = ({ departures }) => {
 
   const onSubmit = (data) => {
     const { startDate } = data;
-    const roomsCount = parseInt(data.rooms, 10);
+    const roomsCount = parseInt(data.occupancy, 10);
 
     if (isNaN(roomsCount) || roomsCount <= 0) {
       console.error("Número de habitaciones no válido.");
@@ -52,7 +52,7 @@ const DeparturesForm = ({ departures }) => {
 
     currentUrl.searchParams.set("startDate", startDate);
     currentUrl.searchParams.set("endDate", startDate);
-    currentUrl.searchParams.set("rooms", configString);
+    currentUrl.searchParams.set("occupancy", configString);
     window.location.href = currentUrl.toString();
   };
 
@@ -157,7 +157,7 @@ const DeparturesForm = ({ departures }) => {
               Habitación
             </label>
             <select
-              {...register("rooms", {
+              {...register("occupancy", {
                 required: "Debes seleccionar la cantidad de habitaciones.",
               })}
               className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-orange-500 focus:border-orange-500 text-gray-700"
@@ -165,9 +165,9 @@ const DeparturesForm = ({ departures }) => {
               <option value="1">1</option>
               <option value="2">2</option>
             </select>
-            {errors.rooms && (
+            {errors.occupancy && (
               <p className="text-red-500 text-xs mt-2">
-                {errors.rooms.message}
+                {errors.occupancy.message}
               </p>
             )}
           </div>

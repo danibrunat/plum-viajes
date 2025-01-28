@@ -228,17 +228,17 @@ export const ProviderService = {
         mealPlan: {
           plum: "departures.[].mealPlan",
           julia: "hotels",
-          ola: "Descriptions.Description.FareDescriptions.FareDescription.[1]._",
+          ola: "Descriptions.Description.FareDescriptions.FareDescription.[1].$value",
         },
         roomType: {
           plum: "departures.[].roomType",
           julia: "hotels",
-          ola: "Descriptions.Description.FareDescriptions.FareDescription.[0]._",
+          ola: "Descriptions.Description.FareDescriptions.FareDescription.[0].$value",
         },
         roomSize: {
           plum: "departures.[].roomSize",
           julia: "hotels",
-          ola: "Descriptions.Description.FareDescriptions.FareDescription.[2]._",
+          ola: "Descriptions.Description.FareDescriptions.FareDescription.[2].$value",
         },
       },
     },
@@ -527,7 +527,7 @@ export const ProviderService = {
     startDate,
     endDate,
     priceId,
-    rooms,
+    occupancy,
   }) => {
     const pkgDetailRequest = await fetch(
       `${process.env.NEXT_PUBLIC_URL}/api/packages/detail`,
@@ -541,7 +541,7 @@ export const ProviderService = {
           startDate,
           endDate,
           priceId,
-          rooms,
+          occupancy,
         }),
         headers: ApiUtils.getCommonHeaders(),
       }

@@ -22,7 +22,7 @@ const olaUrl = isSanity
 export const OLA = {
   avail: {
     getRequest: (searchParams) => {
-      const { departureCity, arrivalCity, startDate, endDate, rooms } =
+      const { departureCity, arrivalCity, startDate, endDate, occupancy } =
         searchParams;
       const formattedDateFrom = ProviderService.ola.olaDateFormat(startDate);
       const formattedDateTo = ProviderService.ola.olaDateFormat(endDate);
@@ -69,7 +69,6 @@ export const OLA = {
   detail: {
     url: () => `${baseUrl}/api/providers/ola/detail`,
     options: (body, cacheKey) => {
-      console.log("cacheKey", cacheKey);
       return {
         body: JSON.stringify(body),
         method: "POST",

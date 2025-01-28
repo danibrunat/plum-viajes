@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default function LandingGridItem({ product, destination }) {
   const generateAvailUrl = (destination) =>
-    `/${product}/avail?arrivalCity=${destination.iata_code}&departureCity=BUE&startDate=${Dates.get().toFormat("YYYY-MM-DD")}&endDate=${Dates.getWithAddMonths(1).toFormat("YYYY-MM-DD")}&rooms=2`;
+    `/${product}/avail?arrivalCity=${destination.iata_code}&departureCity=BUE&startDate=${Dates.get().toFormat("YYYY-MM-DD")}&endDate=${Dates.getWithAddMonths(1).toFormat("YYYY-MM-DD")}&occupancy=2`;
   return (
     <div
       key={destination.id}

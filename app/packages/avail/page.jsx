@@ -12,8 +12,14 @@ export const metadata = {
 
 // Convert to a Server Component
 export default async function PackagesAvailability({ searchParams }) {
-  const { arrivalCity, departureCity, startDate, endDate, rooms, priceOrder } =
-    searchParams;
+  const {
+    arrivalCity,
+    departureCity,
+    startDate,
+    endDate,
+    occupancy,
+    priceOrder,
+  } = searchParams;
 
   // Generar selectedFilters en base a los filtros definidos en el servicio
   const selectedFilters = extractSelectedFilters(searchParams, Filters.config);
@@ -30,7 +36,7 @@ export default async function PackagesAvailability({ searchParams }) {
           endDate,
           arrivalCity,
           departureCity,
-          rooms,
+          occupancy,
           priceOrder,
           // Pasamos los filtros seleccionados
         },

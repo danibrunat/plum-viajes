@@ -161,14 +161,14 @@ async function fetchJuliaPackages(searchParams) {
   const departureCity = "BUE";
   const departureFrom = "2024-10-01";
   const departureTo = "2024-10-31";
-  const occupation = "2";
+  const occupancy = "2";
 
   const juliaPkgResponse = await Julia.pkgAvail({
     arrivalCity,
     departureCity,
     departureFrom,
     departureTo,
-    occupation,
+    occupancy,
   });
   const mapResponse = ProviderService.mapper(
     juliaPkgResponse,

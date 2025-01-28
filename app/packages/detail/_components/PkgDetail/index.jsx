@@ -8,14 +8,18 @@ import HotelCard from "./HotelCard";
 import DestinationCity from "./DestinationCity";
 import AgentContact from "./AgentContact";
 import PricesAndAgentContact from "./PricesAndAgentContact";
+import { ProviderService } from "../../../../api/services/providers.service";
 
 export default function PkgDetail({ detailResponse, searchParams }) {
   const provider = detailResponse?.provider;
   const name = detailResponse?.title;
+  const occupancy = ProviderService.getRoomsConfig(searchParams.occupancy);
   const subtitle = detailResponse?.subtitle;
+  const hotels = detailResponse?.hotels;
   const hotelsData = detailResponse?.hotelsData;
   const citiesData = detailResponse?.citiesData;
   const flights = detailResponse?.flights;
+  const prices = detailResponse?.prices;
   const sliderImages = detailResponse?.images?.map(({ sourceUrl }) => {
     return {
       src:
@@ -62,7 +66,11 @@ export default function PkgDetail({ detailResponse, searchParams }) {
           </div>
         </div>
         <aside className="hidden md:flex md:flex-col md:w-1/4">
-          <PricesAndAgentContact />
+          <PricesAndAgentContact
+            prices={prices}
+            occupancy={occupancy}
+            hotels={hotels}
+          />
         </aside>
       </div>
     </div>

@@ -17,7 +17,7 @@ export default async function PackagesDetail({ searchParams }) {
     startDate,
     endDate,
     priceId,
-    rooms,
+    occupancy,
   } = searchParams;
   const pkgDetailResponse = await ProviderService.getPkgDetail({
     provider,
@@ -27,7 +27,7 @@ export default async function PackagesDetail({ searchParams }) {
     startDate,
     endDate,
     priceId,
-    rooms,
+    occupancy,
   });
 
   return (
