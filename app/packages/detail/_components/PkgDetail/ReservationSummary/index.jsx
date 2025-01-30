@@ -60,7 +60,7 @@ const ReservationSummary = ({ currency, finalPrice, occupancy, hotels }) => {
           <p className="text-xl font-bold">{pricePerPerson}</p>
         </div>
         <div className="flex-1 flex-col md:flex">
-          <p className="text-xs md:text-md">{finalPriceText}</p>
+          <p className="text-md">{finalPriceText}</p>
         </div>
         <div className="flex-1 md:hidden">
           <button className="bg-plumPrimaryOrange text-md p-3 rounded">

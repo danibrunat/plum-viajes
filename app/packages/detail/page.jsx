@@ -1,6 +1,5 @@
 import PkgDetail from "./_components/PkgDetail";
 import { ProviderService } from "../../api/services/providers.service";
-import ReservationSummary from "./_components/PkgDetail/ReservationSummary";
 
 export const metadata = {
   title: "Paquetes | Plum Viajes",
@@ -38,7 +37,6 @@ export default async function PackagesDetail({ searchParams }) {
           searchParams={searchParams}
         />
       </div>
-      <ReservationSummary />
     </>
   );
 }

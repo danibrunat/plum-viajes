@@ -96,7 +96,8 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
           {pkgItem?.title ?? "Default Title"}
         </h5>
         {/* <em className="text-black">Salidas de Mayo a Junio</em> */}
-        <h3 className="text-lg">{sanitizeHtmlString(pkgItem?.subtitle)}</h3>
+        {/*         <h3 className="text-lg">{sanitizeHtmlString(pkgItem?.subtitle)}</h3>
+         */}{" "}
         <span className=" text-sm">
           {pkgItem?.nights} noches desde {departureCity}
         </span>

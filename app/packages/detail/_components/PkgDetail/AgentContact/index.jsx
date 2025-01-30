@@ -6,7 +6,7 @@ const AgentContact = () => {
   const recaptchaRef = useRef(null);
 
   return (
-    <div className="flex flex-col w-full bg-white p-6  shadow-md">
+    <div className="hidden md:flex md:flex-col w-full bg-white p-6  shadow-md">
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">
         Consultá con tu agente de viajes
       </h2>

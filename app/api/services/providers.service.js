@@ -202,6 +202,11 @@ export const ProviderService = {
       julia: "subtitle",
       ola: "Package.Description",
     },
+    description: {
+      plum: "description",
+      julia: "description",
+      ola: "Package.Description",
+    },
     nights: {
       plum: "nights",
       julia: "CANTNOCHES",
@@ -396,11 +401,11 @@ export const ProviderService = {
                 plum: "arrivalAirport",
               },
             },
+            stopovers: {
+              plum: "segments.stopovers",
+              ola: "Stops",
+            },
           },
-        },
-        stopovers: {
-          plum: "segments.stopovers",
-          ola: "Stops",
         },
       },
     },

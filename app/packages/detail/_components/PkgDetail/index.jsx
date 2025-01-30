@@ -14,7 +14,10 @@ export default function PkgDetail({ detailResponse, searchParams }) {
   const provider = detailResponse?.provider;
   const name = detailResponse?.title;
   const occupancy = ProviderService.getRoomsConfig(searchParams.occupancy);
-  const subtitle = detailResponse?.subtitle;
+  const departureDate = searchParams.startDate;
+  const departureCity = searchParams.departureCity;
+  const description = detailResponse?.description;
+  const nights = detailResponse?.nights;
   const hotels = detailResponse?.hotels;
   const hotelsData = detailResponse?.hotelsData;
   const citiesData = detailResponse?.citiesData;
@@ -35,14 +38,21 @@ export default function PkgDetail({ detailResponse, searchParams }) {
       <div className="flex flex-col md:flex-row md:gap-5">
         <div className="flex flex-col w-full md:w-3/4 p-3 md:p-0 my-3 gap-5">
           <h1 className="text-3xl font-bold">{name}</h1>
-          <p className="text-lg ">{subtitle}</p>
 
+          <span className=" text-sm uppercase">
+            {nights} noches desde {departureCity}
+          </span>
           <Slider slides={sliderImages} deviceType="desktop" />
           <div className="flex w-full rounded">
             <Departures searchParams={searchParams} />
           </div>
           <div className="flex w-full rounded">
-            <DepartureDetail />
+            <DepartureDetail
+              description={description}
+              departureDate={departureDate}
+              hotels={hotels}
+              roomConfig={occupancy}
+            />
           </div>
           <div className="flex flex-col w-full rounded">
             <h1 className="text-xl">Itinerario de Vuelos</h1>
@@ -65,7 +75,7 @@ export default function PkgDetail({ detailResponse, searchParams }) {
             <AgentContact />
           </div>
         </div>
-        <aside className="hidden md:flex md:flex-col md:w-1/4">
+        <aside className="flex flex-col w-full md:w-1/4">
           <PricesAndAgentContact
             prices={prices}
             occupancy={occupancy}

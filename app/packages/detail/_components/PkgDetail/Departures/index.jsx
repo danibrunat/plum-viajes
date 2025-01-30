@@ -148,7 +148,6 @@ const Departures = ({ searchParams }) => {
   return (
     <div>
       <h1>Reservar Salida</h1>
-      {/* Usamos Suspense para manejar el estado de carga */}
       <Suspense fallback={<Placeholder />}>
         <FormWrapper
           departureCity={departureCity}

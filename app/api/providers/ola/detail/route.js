@@ -5,10 +5,7 @@ export async function POST(request) {
   try {
     const url = process.env.OLA_URL;
     const detail = await XmlService.soap.request(url, body, "GetPackagesFares");
-    console.log(
-      "detail",
-      JSON.stringify(detail[0].Descriptions.Description.FareDescriptions)
-    );
+    console.log("detail", JSON.stringify(detail[0].Flight.Trips.Trip));
     return new Response(JSON.stringify(detail), {
       headers: { "Cache-Control": "s-maxage=3600, stale-while-revalidate" }, // Configuración del caché
     });

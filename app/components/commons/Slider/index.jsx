@@ -1,69 +1,77 @@
 "use client";
 import Image from "next/image";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
+// Skeleton Loader
+const Skeleton = () => (
+  <div className="flex gap-4">
+    {Array(4)
+      .fill("")
+      .map((_, index) => (
+        <div
+          key={index}
+          className="w-[300px] h-[200px] bg-gray-300 animate-pulse rounded-lg"
+        ></div>
+      ))}
+  </div>
+);
+
 const Slider = ({ slides, deviceType = "desktop" }) => {
-  const slideSizes = {
-    desktop: {
-      width: 1900,
-      height: 1200,
-    },
-    mobile: {
-      width: 300,
-      height: 250,
-    },
-  };
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (slides && slides.length > 0) {
+      setIsLoading(false);
+    }
+  }, [slides]);
+
   const responsive = {
-    superLargeDesktop: {
-      // the naming can be any, depends on you.
-      breakpoint: { max: 4000, min: 3000 },
-      items: 5,
-    },
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 3,
+      items: 4,
+      slidesToSlide: 1,
     },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 2,
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 1,
-    },
+    tablet: { breakpoint: { max: 1024, min: 768 }, items: 3, slidesToSlide: 1 },
+    mobile: { breakpoint: { max: 767, min: 464 }, items: 2, slidesToSlide: 1 },
   };
+
   return (
-    <Carousel
-      swipeable={true}
-      draggable={true}
-      showDots={true}
-      responsive={responsive}
-      infinite={true}
-      autoPlay={true}
-      autoPlaySpeed={3500}
-      keyBoardControl={true}
-      customTransition="all .5"
-      transitionDuration={500}
-      deviceType={deviceType}
-      partialVisible={true}
-    >
-      {slides?.map((slide, index) => (
-        <Image
-          key={index + 1}
-          src={slide.src}
-          alt={slide.alt || `Slide ${index + 1}`}
-          width={deviceType === "desktop" ? 300 : 0}
-          height={deviceType === "desktop" ? 250 : 0}
-          sizes="100vw"
-          style={{
-            width: "100%",
-            height: deviceType === "desktop" ? "200px" : "auto",
-          }}
-        />
-      ))}
-    </Carousel>
+    <>
+      {isLoading ? (
+        <Skeleton />
+      ) : slides?.length > 0 ? (
+        <Carousel
+          responsive={responsive}
+          autoPlay={true}
+          autoPlaySpeed={2500}
+          partialVisible={true}
+          itemClass="p-5"
+        >
+          {slides.map((slide, index) => (
+            <Image
+              key={index}
+              src={slide.src}
+              alt={slide.alt || "Imagen del slider"}
+              width={deviceType === "desktop" ? 300 : 200}
+              height={deviceType === "desktop" ? 250 : 150}
+              sizes="100vw"
+              style={{
+                width: "100%",
+                height: deviceType === "desktop" ? "200px" : "auto",
+                objectFit: "cover",
+                borderRadius: "8px",
+              }}
+            />
+          ))}
+        </Carousel>
+      ) : (
+        <p className="text-center text-gray-500">
+          No hay imágenes disponibles.
+        </p>
+      )}
+    </>
   );
 };
 

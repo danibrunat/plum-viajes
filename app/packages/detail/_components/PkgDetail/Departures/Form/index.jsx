@@ -73,7 +73,7 @@ const DeparturesForm = ({ departures }) => {
   }, [childrenCount, trigger]);
 
   return (
-    <div className="flex flex-col w-full items-center">
+    <div className="flex flex-col w-full items-center justify-center">
       <em className="text-sm text-gray-600 mb-4">
         Modifica la fecha de salida para ver otras tarifas disponibles:
       </em>
