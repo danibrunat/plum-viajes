@@ -32,8 +32,8 @@ function RenderSections(props) {
           );
         }
         return (
-          <div className="p-3 md:p-0 flex flex-col gap-2">
-            <SectionComponent {...section} key={section._key} />
+          <div key={section._key} className="p-3 md:p-0 flex flex-col gap-2">
+            <SectionComponent {...section} />
           </div>
         );
       })}

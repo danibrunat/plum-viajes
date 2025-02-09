@@ -9,7 +9,15 @@ export default function Carousel({ items }) {
       <div className="h-full w-full">
         <CommonCarousel desktopItems={1}>
           {items.map((item, index) => {
-            return <Image src={urlForImage(item)} priority fill alt="Slider" />;
+            return (
+              <Image
+                key={index}
+                src={urlForImage(item)}
+                priority
+                fill
+                alt="Slider"
+              />
+            );
           })}
         </CommonCarousel>
       </div>
