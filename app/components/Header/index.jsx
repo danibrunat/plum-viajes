@@ -10,19 +10,19 @@ export default function Header(props) {
   const { title = "Missing title", navItems, logo, contact } = props;
 
   return (
-    <nav className="flex flex-col md:flex-row border-b-4 border-plumPrimaryPink md:items-center md:justify-between md:flex-wrap">
-      <div className="p-4 mr-0 flex self-center md:self-start text-white md:mr-6 md:p-6">
+    <nav className="flex flex-col md:flex-row  md:items-center md:justify-between md:flex-wrap md:mx-12">
+      <div className="p-4 mr-0 flex self-center md:self-start text-white md:mr-2 md:p-1">
         <Link href={"/"}>
           <Image
             priority
             src={urlForImage(logo)}
             alt="logo"
-            width={220}
-            height={130}
+            width={238}
+            height={98}
           />
         </Link>
       </div>
-      <div className="hidden md:flex md:flex-grow md:justify-center md:self-end md:w-auto">
+      <div className="hidden md:flex md:flex-grow md:justify-end md:self-center">
         <menu className="flex md:text-sm items-center">
           {navItems &&
             navItems.map((item) => {
@@ -32,7 +32,7 @@ export default function Header(props) {
         </menu>
       </div>
 
-      {contact && (
+      {/*  {contact && (
         <div className="hidden md:flex md:justify-end md:p-4 ">
           <Link href={`/contactanos`}>
             <Image
@@ -44,7 +44,7 @@ export default function Header(props) {
             />
           </Link>
         </div>
-      )}
+      )} */}
       {/* Begin Mobile Menú */}
       <label
         className="z-40 cursor-pointer px-3 py-6 md:hidden"
@@ -56,8 +56,8 @@ export default function Header(props) {
           &nbsp;
         </div>
         <div className="fixed top-0 right-0 z-40 h-full w-full translate-x-full overflow-y-auto overscroll-y-none transition duration-500 peer-checked:translate-x-0">
-          <div className="float-right min-h-full w-[60%] bg-white px-6 pt-12 shadow-2xl">
-            <menu className="md:text-sm flex flex-col justify-center">
+          <div className="float-right min-h-full w-[60%] bg-white px-6 pt-6 shadow-2xl">
+            <menu className="md:text-sm flex flex-col justify-center gap-3">
               {navItems &&
                 navItems.map((item) => {
                   const Icon = getIconByName(item?.icon?.name);

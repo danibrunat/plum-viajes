@@ -39,9 +39,11 @@ export default async function TaggedPackages(props) {
   }
 
   if (taggedPackagesResponse.packages.length === 0) return null; // Si no hay taggedPackages, no renderizamos nada
+
+  console.log("taggedPackagesResponse", taggedPackagesResponse);
   // Renderizamos el carousel con los datos obtenidos o el placeholder si están vacíos
   return (
-    <section className="mx-20">
+    <section className="mx-2 md:mx-20">
       <h1 className="text-2xl">{taggedPackagesResponse.tagInfo.name}</h1>
       <TaggedCarousel
         taggedPackagesResponse={taggedPackagesResponse.packages}

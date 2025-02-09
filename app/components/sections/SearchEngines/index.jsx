@@ -14,7 +14,7 @@ export default function SearchEngines({
       <Tabs className="py-5">
         {packages ? (
           <Tab label="Buscar Paquetes">
-            <div className=" bg-plumPrimaryPink py-4">
+            <div className=" bg-plumPrimaryPurple py-4">
               <PackagesEngine defaultValues={defaultValues?.packages} />
             </div>
           </Tab>
@@ -24,7 +24,7 @@ export default function SearchEngines({
 
         {flights ? (
           <Tab label="Vuelos">
-            <div className=" bg-plumPrimaryPink py-4">
+            <div className=" bg-plumPrimaryPurple py-4">
               <FlightsEngine />
             </div>
           </Tab>
@@ -34,7 +34,7 @@ export default function SearchEngines({
 
         {assurances ? (
           <Tab label="Asistencia al Viajero">
-            <div className=" bg-plumPrimaryPink py-4">
+            <div className=" bg-plumPrimaryPurple py-4">
               <h1>Assurances</h1>
             </div>
           </Tab>
@@ -44,7 +44,7 @@ export default function SearchEngines({
 
         {hotels ? (
           <Tab label="Hoteles">
-            <div className=" bg-plumPrimaryPink py-4">
+            <div className=" bg-plumPrimaryPurple py-4">
               <h1>Hotels</h1>
             </div>
           </Tab>

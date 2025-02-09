@@ -112,7 +112,7 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
           }
           alt="Paquete"
         />
-        <span className="absolute top-0 left-0 m-2 rounded-full bg-plumPrimaryPink px-2 text-center text-sm font-medium text-white">
+        <span className="absolute top-0 left-0 m-2 rounded-full bg-plumPrimaryPurple px-2 text-center text-sm font-medium text-white">
           {`${pkgItem?.provider} - ${pkgItem?.id}`}
         </span>
       </div>
@@ -147,7 +147,7 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
          */}
         <Link
           href={detailUrl}
-          className="flex items-center justify-center rounded-xl bg-plumPrimaryPink hover:bg-plumSecondaryPink transition-all duration-500 px-5 py-2 md:py-2.5 text-center text-xs font-medium text-white hover:bg-plumPrimaryPink-500"
+          className="flex items-center justify-center rounded-xl bg-plumPrimaryPurple hover:bg-plumSecondaryPink transition-all duration-500 px-5 py-2 md:py-2.5 text-center text-xs font-medium text-white hover:bg-plumPrimaryPurple-500"
         >
           Ver paquete
         </Link>

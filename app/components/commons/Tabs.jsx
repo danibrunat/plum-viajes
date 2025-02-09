@@ -15,7 +15,7 @@ const Tabs = ({ children }) => {
             aria-label={child.props.label}
             className={`${
               activeTab === child.props.label
-                ? " bg-plumPrimaryPink text-white"
+                ? " bg-plumPrimaryPurple text-white"
                 : ""
             } flex-1 text-gray-700 font-normal md:font-medium py-2 `}
             onClick={(e) => handleClick(e, child.props.label)}

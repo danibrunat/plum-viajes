@@ -3,7 +3,7 @@ import { sanitizeHtmlString } from "../../../helpers/strings";
 
 const Newsletter = ({ title, subtitle }) => {
   return (
-    <div className="flex flex-col justify-center text-center text-white gap-3 bg-plumPrimaryPink p-5">
+    <div className="flex flex-col justify-center text-center text-white gap-3 bg-plumPrimaryPurple p-5">
       <h1 className="text-xl">{title}</h1>
       <form
         action=""

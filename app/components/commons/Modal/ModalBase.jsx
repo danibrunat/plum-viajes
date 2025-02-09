@@ -45,7 +45,7 @@ export default function ModalBase({ show = true, children, title, close }) {
                   <button
                     type="button"
                     aria-label="Genial!"
-                    className="inline-flex justify-center rounded-md border border-transparent bg-plumPrimaryPink px-4 py-2 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    className="inline-flex justify-center rounded-md border border-transparent bg-plumPrimaryPurple px-4 py-2 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                     onClick={handleClose}
                   >
                     Genial!

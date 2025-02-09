@@ -55,7 +55,7 @@ const AgentContact = () => {
           />
         </div>
         <button
-          className="bg-plumPrimaryPink hover:bg-plumPrimaryOrange text-white p-3 rounded  transition duration-300"
+          className="bg-plumPrimaryPurple hover:bg-plumPrimaryOrange text-white p-3 rounded  transition duration-300"
           type="submit"
         >
           Enviar Consulta

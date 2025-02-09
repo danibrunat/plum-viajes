@@ -73,7 +73,7 @@ const ContactForm = () => {
   }
 
   return (
-    <div className="flex flex-col p-2 gap-2 text-plumPrimaryPink">
+    <div className="flex flex-col p-2 gap-2 text-plumPrimaryPurple">
       <p className="text-xl">Formulario de contacto</p>
       <p>
         Puede comunicarse con nosotros completando el siguiente formulario. Uno
@@ -275,7 +275,7 @@ const ContactForm = () => {
         </div>
 
         <button
-          className="bg-plumPrimaryPink text-white rounded-md p-2"
+          className="bg-plumPrimaryPurple text-white rounded-md p-2"
           aria-label="Enviar"
           name="submit"
           id="submit"

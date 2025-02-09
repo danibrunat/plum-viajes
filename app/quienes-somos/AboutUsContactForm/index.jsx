@@ -99,7 +99,7 @@ const AboutUsContactForm = () => {
         </div>
 
         <button
-          className="bg-plumPrimaryPink text-white rounded-md p-2"
+          className="bg-plumPrimaryPurple text-white rounded-md p-2"
           aria-label="Enviar"
           name="submit"
           id="submit"
