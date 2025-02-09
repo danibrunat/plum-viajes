@@ -37,22 +37,46 @@ const getImgSource = (pkgItem, provider) => {
   if (pkgItem?.thumbnails.length === 0) return imageSourceUrl;
   switch (provider) {
     case "plum":
+      console.log("pkgItem?.thumbnails", pkgItem?.thumbnails);
       imageSourceUrl = urlForImage(pkgItem?.thumbnails[0].sourceUrl);
     case "ola":
       if (!Array.isArray(pkgItem?.thumbnails)) {
         imageSourceUrl = sanitizeUrlFromDoubleSlash(
-          pkgItem?.thumbnails.sourceUrl
+          pkgItem?.thumbnails[
+            Math.floor(Math.random() * pkgItem?.thumbnails.length)
+          ].sourceUrl
         );
         return;
       }
-
-      imageSourceUrl = sanitizeUrlFromDoubleSlash(
-        pkgItem?.thumbnails[
-          Math.floor(Math.random() * pkgItem?.thumbnails.length)
-        ].sourceUrl
-      );
   }
   return imageSourceUrl;
+};
+
+const mapMealPlan = (mealPlan) => {
+  const mealPlanDictionary = [
+    {
+      title: "Desayuno",
+      id: "breakfast",
+      value: "breakfast",
+    },
+    {
+      title: "Media Pensión",
+      id: "halfBoard",
+      value: "halfBoard",
+    },
+    {
+      title: "Pensión Completa",
+      id: "fullBoard",
+      value: "fullBoard",
+    },
+    {
+      title: "All Inclusive",
+      id: "allInclusive",
+      value: "allInclusive",
+    },
+  ];
+
+  return mealPlanDictionary.find((plan) => plan.id === mealPlan)?.title;
 };
 
 const PkgGridItem = ({ pkgItem, searchParams }) => {
@@ -68,6 +92,7 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
 
   const hotelName = Helpers.capitalizeFirstLetter(hotels.name);
   const hotelMealPlan = Helpers.capitalizeFirstLetter(hotels.mealPlan);
+  // const hotelMealPlan = mapMealPlan(hotels.mealPlan);
   const hotelRoomType = Helpers.capitalizeFirstLetter(hotels.roomType);
   const hotelRoomSize = Helpers.capitalizeFirstLetter(hotels.roomSize);
 

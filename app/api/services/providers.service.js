@@ -139,7 +139,7 @@ export const ProviderService = {
           ola: "FareTotal.Currency",
         },
         comission: {
-          plum: "default",
+          plum: "departures.[0].prices.[0].amount",
           julia: "prices",
           ola: "FareTotal.Comission",
         },
@@ -445,7 +445,6 @@ export const ProviderService = {
           if (value.baseKey) {
             const baseArray = getBaseArray(pkg, value.baseKey[provider]);
             if (Array.isArray(baseArray)) {
-              // Si es un arreglo, vamos por el map, pero puede ser que ese segmento no tenga escalas ni nada que lo haga un array, entonces puede ser un objeto. Agregamos el else.
               result[key] = baseArray.map((item) =>
                 mapNestedObject(item, value.items)
               );
@@ -478,6 +477,8 @@ export const ProviderService = {
 
       return result;
     };
+
+    console.log("response", response);
 
     const mappedResponse = response.map((pkg) => {
       let mappedPkg = mapNestedObject(pkg, respConfig);
@@ -713,6 +714,10 @@ export const ProviderService = {
       }
       // Accedemos a la propiedad del objeto
       else {
+        if (value == "amount") {
+          console.log("acc", acc);
+          console.log("curr", curr);
+        }
         return acc ? acc[curr] : undefined;
       }
     }, object);

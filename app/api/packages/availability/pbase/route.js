@@ -118,9 +118,15 @@ async function fetchPlumPackages({
 
   const sanityQuery = await sanityFetch({ query: pkgAvailQuery });
   const pkgAvailResponse = await sanityQuery;
-
+  const onlyPkgWithDepartures = pkgAvailResponse.filter(
+    (pkg) => pkg.departures.length > 0
+  );
   // Mapeamos la respuesta para adaptarla a nuestro formato interno
-  const mapResponse = ProviderService.mapper(pkgAvailResponse, "plum", "avail");
+  const mapResponse = ProviderService.mapper(
+    onlyPkgWithDepartures,
+    "plum",
+    "avail"
+  );
   return Response.json(mapResponse);
 }
 
@@ -199,6 +205,7 @@ export async function POST(req, res) {
 
   const plumPkgResponse = await plumPkg.json();
   const packagesResponse = plumPkgResponse.concat(olaPkg);
+  // TODO: Mover esto a pcom
 
   // Procesar los filtros de los paquetes obtenidos
   const filters = await Filters.process(packagesResponse);
@@ -209,8 +216,6 @@ export async function POST(req, res) {
     selectedFilters
   );
 
-  // TODO: Mover esto a pcom
-  console.log("searchParams.priceOrder", searchParams.priceOrder);
   const sortCriteria =
     searchParams.priceOrder && searchParams.priceOrder === "high" ? "+" : "-";
   const sortedLowerHigherPkg = filteredPackages.sort((a, b) => {

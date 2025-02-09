@@ -1,7 +1,6 @@
-import { unset } from "sanity";
-// components/HotelSelect.js
 import React, { useEffect, useState } from "react";
 import { Api } from "../../app/services/api.service";
+import { PatchEvent, set, unset } from "sanity";
 
 const HotelSelect = ({ value, onChange }) => {
   const [hotels, setHotels] = useState([]);
@@ -13,14 +12,17 @@ const HotelSelect = ({ value, onChange }) => {
     );
 
     if (selectedHotel) {
-      onChange([
-        {
-          id: selectedHotel.id,
-          name: selectedHotel.name,
-        },
-      ]);
+      onChange(
+        PatchEvent.from(
+          set({
+            _key: value?._key,
+            id: selectedHotel.id,
+            name: selectedHotel.name,
+          })
+        )
+      );
     } else {
-      onChange(unset());
+      onChange(PatchEvent.from(unset()));
     }
   };
 
@@ -34,7 +36,6 @@ const HotelSelect = ({ value, onChange }) => {
         );
 
         const data = await response.json();
-
         setHotels(data);
       } catch (error) {
         console.error("Error fetching hotels:", error);

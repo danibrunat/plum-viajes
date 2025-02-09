@@ -2,8 +2,8 @@ import { useEffect, useReducer, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { OLA } from "../../../app/api/services/ola.service";
 import { ProviderService } from "../../../app/api/services/providers.service";
+import PackageService from "../../../app/services/package.service";
 import { fetchTags } from "../../services/tagService";
-import { getPkgPrice } from "../../../app/packages/avail/_components/PkgGrid/PkgGridItem";
 import { client } from "../../lib/client";
 import Dates from "../../../app/services/dates.service";
 
@@ -132,7 +132,9 @@ export const useProviderPackages = (formWatch) => {
 
   const handleTagSave = async (packageId) => {
     const selectedPkg = state.packages.find((pkg) => pkg.id === packageId);
-    const { finalPrice, currency } = getPkgPrice(selectedPkg.prices);
+    const { finalPrice, currency } = PackageService.prices.getPkgPrice(
+      selectedPkg.prices
+    );
     if (selectedPkg) {
       try {
         await client.createOrReplace({

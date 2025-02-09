@@ -3,7 +3,6 @@ import React from "react";
 import FilterCheckbox from "./_components/FilterCheckbox"; // Componente de checkbox interactivo
 
 export default function PkgFilters({ filters, currentSearchParams }) {
-  console.log("PkgFilters | filters: ", JSON.stringify(filters));
   return (
     <div className="bg-white p-6 shadow-lg rounded-lg">
       <h2 className="text-2xl font-bold mb-4">Filtros</h2>

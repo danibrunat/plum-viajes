@@ -9,7 +9,8 @@ const PackageService = {
         consumer === FLOW_STAGES.PKG_AVAILABILITY ||
         consumer === FLOW_STAGES.PKG_DETAIL
       ) {
-        const currency = prices.pricesDetail.currency;
+        console.log("prices", prices);
+        const currency = prices.pricesDetail.currency || "ARS";
         const basePrice = parseFloat(prices.pricesDetail.basePrice);
         const iva = parseFloat(prices.taxes.iva);
         const ivaAgency = parseFloat(prices.taxes.ivaAgency);

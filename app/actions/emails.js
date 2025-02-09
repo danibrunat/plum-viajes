@@ -21,7 +21,7 @@ export const sendEmail = async (formData) => {
   const ringMe = formData.get("ringMe");
   const notifyPromotions = formData.get("notifyPromotions");
   try {
-    const resend = new Resend(process.env.RESEND_API_KEY);
+    const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
 
     const resendResponse = await resend.emails.send({
       from: "Confirmación de Contacto <posventaplumviajes@resend.dev>",
@@ -48,6 +48,7 @@ export const sendEmail = async (formData) => {
         })
       ),
     });
+    console.log("resendResponse", resendResponse);
     return {
       error: null,
       success: true,

@@ -48,7 +48,7 @@ async function fetchPlumPackageDetail(id) {
 
   const sanityQuery = await sanityFetch({ query: pkgDetailQuery });
   const pkgDetailResponse = await sanityQuery;
-  // console.log("PLUM | pkgAvailResponse", pkgAvailResponse);
+  console.log("PLUM | pkgDetailResponse", JSON.stringify(pkgDetailResponse));
   const mapResponse = ProviderService.mapper(
     pkgDetailResponse,
     "plum",

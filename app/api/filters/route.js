@@ -54,7 +54,6 @@ function buildFilters(availability) {
   return config.map((filter) => {
     // Extraemos los valores correspondientes a este filtro desde la disponibilidad
     const values = extractFilterValues(availability, filter.grouper);
-
     // Devolvemos el objeto filtro con los valores formateados correctamente
     return {
       id: filter.id, // Identificador del filtro

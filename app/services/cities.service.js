@@ -17,9 +17,12 @@ export const CitiesService = {
    * @throws {Object} An error object if the fetch operation fails.
    */
   getCityByCode: async (code, asObject = false) => {
+    const baseUrl = isFrontEndCall
+      ? process.env.NEXT_PUBLIC_URL
+      : process.env.SANITY_STUDIO_URL;
     try {
       const citiesSearch = await fetch(
-        `${process.env.NEXT_PUBLIC_URL}/api/cities/byCode?code=${code}`,
+        `${baseUrl}/api/cities/byCode?code=${code}`,
         {
           method: "GET",
           next: {

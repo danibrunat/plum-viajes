@@ -3,6 +3,7 @@ import React from "react";
 import { FaPlaneArrival, FaPlaneDeparture } from "react-icons/fa";
 
 const Flights = ({ flights }) => {
+  console.log("flights", JSON.stringify(flights));
   // Función para formatear la fecha
   function formatDateToString(dateString) {
     const daysOfWeek = [

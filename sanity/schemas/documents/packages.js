@@ -11,6 +11,7 @@ export default defineField({
   name: "packages",
   type: "document",
   title: "Paquetes Propios",
+
   icon: LinkIcon,
   fieldsets: [
     {
@@ -290,6 +291,14 @@ export default defineField({
       title: "Salidas",
       fieldset: "departures",
       of: [{ type: "departure" }],
+    },
+    {
+      name: "active",
+      title: "Activo",
+      type: "boolean",
+      description:
+        "Desactiva esta opción para ocultar el paquete en el frontend",
+      initialValue: true,
     },
   ],
   preview: {

@@ -1,5 +1,6 @@
 // We filter document types defined in structure to prevent
 import ProviderPackages from "./components/ProviderPackages";
+import PlumPackages from "./components/PlumPackages";
 
 // them from being listed twice
 const hiddenDocTypes = (listItem) =>
@@ -20,6 +21,13 @@ export const deskStructure = (S) => {
 
       S.documentTypeListItem("route").title("Rutas"),
       S.divider(), // Optional separator
+
+      S.listItem()
+        .title("Paquetes Propios")
+        .child(S.component(PlumPackages).title("Lista de Paquetes")),
+
+      S.divider(), // Optional separator
+
       S.listItem()
         .title("Paquetes de Proveedores")
         .child(

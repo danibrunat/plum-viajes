@@ -31,21 +31,19 @@ const AirlineSelect = ({ value, onChange }) => {
   const handleChange = (e) => {
     const selectedAirlineId = e.target.value;
     const selectedAirline = airlines.find(
-      (airline) => airline.id === Number(selectedAirlineId)
+      (airline) => airline.id === selectedAirlineId
     );
 
     if (selectedAirline) {
-      // Aquí, utilizamos PatchEvent para actualizar el valor en Sanity
-      onChange(
-        PatchEvent.from(
-          set({
-            id: selectedAirline.id,
-            name: selectedAirline.name,
-          })
-        )
+      const patch = PatchEvent.from(
+        set({
+          id: selectedAirline.id,
+          name: selectedAirline.name,
+        })
       );
+      onChange(patch);
     } else {
-      onChange(unset()); // Si no se selecciona nada, eliminamos el valor
+      onChange(PatchEvent.from(unset()));
     }
   };
 

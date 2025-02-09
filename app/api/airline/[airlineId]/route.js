@@ -9,11 +9,10 @@ export async function GET(req, { params }) {
   );
   const airlineResponse = airlineArrResponse[0];
 
-  const logoPublicUrl = await Airlines.getLogoPublicUrl(
-    airlineResponse.logo_url
-  );
-
-  console.log("logoPublicUrl", logoPublicUrl);
+  const logoPublicUrl =
+    (airlineResponse?.logo_url &&
+      (await Airlines.getLogoPublicUrl(airlineResponse.logo_url))) ||
+    "";
 
   const response = { ...airlineResponse, logoUrl: logoPublicUrl };
 

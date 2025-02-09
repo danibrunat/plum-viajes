@@ -136,7 +136,7 @@ export default defineField({
       fields: [
         defineField({
           name: "id",
-          type: "number", // El id debe ser numérico
+          type: "string", // El id debe ser numérico
           title: "Airline ID",
           hidden: true, // Esconde este campo, ya que el id se selecciona automáticamente
         }),
@@ -233,7 +233,7 @@ export default defineField({
       fields: [
         defineField({
           name: "id",
-          type: "number",
+          type: "string",
           title: "Airline ID",
           hidden: true,
         }),
