@@ -4,7 +4,7 @@ import PlumPackages from "./components/PlumPackages";
 
 // them from being listed twice
 const hiddenDocTypes = (listItem) =>
-  !["page", "route", "siteConfig", "providerPackages"].includes(
+  !["page", "route", "siteConfig", "providerPackages", "packages"].includes(
     listItem.getId()
   );
 
