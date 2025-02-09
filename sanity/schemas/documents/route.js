@@ -49,11 +49,25 @@ export default defineField({
     select: {
       slug: "slug.current",
       pageTitle: "page.title",
+      includeInSitemap: "includeInSitemap",
+      disallowRobots: "disallowRobots",
+      icon: "icon",
     },
-    prepare({ slug, pageTitle }) {
+    prepare({ slug, pageTitle, includeInSitemap, disallowRobots, icon }) {
+      // Arma el estado SEO de la ruta
+      const status = [];
+      if (includeInSitemap === false) {
+        status.push("No en Sitemap");
+      }
+      if (disallowRobots === true) {
+        status.push("Bloqueado en Robots.txt");
+      }
       return {
         title: slug === "/" ? "/" : `/${slug}`,
-        subtitle: `Page: ${pageTitle}`,
+        subtitle: `${pageTitle ? "Page: " + pageTitle : "Sin página asignada"}${
+          status.length ? " — " + status.join(" | ") : ""
+        }`,
+        media: icon || LinkIcon,
       };
     },
   },

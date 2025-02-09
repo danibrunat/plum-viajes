@@ -31,7 +31,11 @@ function RenderSections(props) {
             <div key={section._key || i}>Missing section {section._type}</div>
           );
         }
-        return <SectionComponent {...section} key={section._key} />;
+        return (
+          <div className="p-3 md:p-0 flex flex-col gap-2">
+            <SectionComponent {...section} key={section._key} />
+          </div>
+        );
       })}
     </main>
   );

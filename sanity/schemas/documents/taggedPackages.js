@@ -1,3 +1,5 @@
+import React from "react";
+
 export default {
   name: "taggedPackages",
   type: "document",
@@ -50,4 +52,44 @@ export default {
       of: [{ type: "reference", to: [{ type: "tag" }] }],
     },
   ],
+  preview: {
+    select: {
+      title: "title",
+      packageId: "packageId",
+      nights: "nights",
+      price: "price",
+      currency: "currency",
+      provider: "provider",
+      thumbnail: "thumbnail",
+    },
+    prepare({
+      title,
+      packageId,
+      nights,
+      price,
+      currency,
+      provider,
+      thumbnail,
+    }) {
+      return {
+        title: title || "Sin título",
+        subtitle: `ID: ${packageId || "N/A"} | Precio: ${
+          price ? price + " " + (currency || "") : "No definido"
+        } ${nights ? "| " + nights + " noches" : ""} ${
+          provider ? "| " + provider : ""
+        }`,
+        media: thumbnail
+          ? React.createElement("img", {
+              src: thumbnail,
+              alt: title,
+              style: {
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              },
+            })
+          : null,
+      };
+    },
+  },
 };

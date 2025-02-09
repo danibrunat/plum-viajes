@@ -81,18 +81,27 @@ export default defineField({
   ],
   preview: {
     select: {
-      slug: "destination.current",
-      type: "type",
+      title: "title",
+      destination: "destination.current",
       product: "product",
-      pageTitle: "page.title",
+      type: "type",
+      content: "content",
+      media: "openGraphImage",
     },
-    prepare({ slug, product, pageTitle, type = "country" }) {
+    prepare({ title, destination, product, type, content, media }) {
+      const sectionsCount = Array.isArray(content) ? content.length : 0;
+      // Si no se define el título, se arma uno dinámico basado en tipo, producto y destino
+      const computedTitle =
+        title ||
+        `/landing/by-${type || "country"}/${product ? product + "/" : ""}${
+          destination || "sin-destino"
+        }`;
+      const computedSubtitle = `Destino: ${destination || "No definido"} | Secciones: ${sectionsCount}`;
+
       return {
-        title:
-          slug === "/"
-            ? "/"
-            : `/landing/by-${type}/${product && product + "/"}${slug}`,
-        subtitle: `Landing con destino a ${slug}`,
+        title: computedTitle,
+        subtitle: computedSubtitle,
+        media,
       };
     },
   },

@@ -9,7 +9,7 @@ export default defineField({
     {
       name: "id",
       type: "number",
-      title: "id",
+      title: "ID",
     },
     {
       name: "name",
@@ -23,9 +23,11 @@ export default defineField({
       name: "name",
     },
     prepare({ id, name }) {
-      console.log("id", id);
+      const title = name || "Sin nombre";
+      const subtitle = id !== undefined ? `ID: ${id}` : "ID no definido";
       return {
-        subtitle: `${id}: ${name}`,
+        title,
+        subtitle,
       };
     },
   },

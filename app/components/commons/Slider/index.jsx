@@ -1,8 +1,7 @@
 "use client";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
+import CommonCarousel from "../Carousel";
 
 // Skeleton Loader
 const Skeleton = () => (
@@ -27,28 +26,12 @@ const Slider = ({ slides, deviceType = "desktop" }) => {
     }
   }, [slides]);
 
-  const responsive = {
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 4,
-      slidesToSlide: 1,
-    },
-    tablet: { breakpoint: { max: 1024, min: 768 }, items: 3, slidesToSlide: 1 },
-    mobile: { breakpoint: { max: 767, min: 464 }, items: 2, slidesToSlide: 1 },
-  };
-
   return (
     <>
       {isLoading ? (
         <Skeleton />
       ) : slides?.length > 0 ? (
-        <Carousel
-          responsive={responsive}
-          autoPlay={true}
-          autoPlaySpeed={2500}
-          partialVisible={true}
-          itemClass="p-5"
-        >
+        <CommonCarousel>
           {slides.map((slide, index) => (
             <Image
               key={index}
@@ -65,7 +48,7 @@ const Slider = ({ slides, deviceType = "desktop" }) => {
               }}
             />
           ))}
-        </Carousel>
+        </CommonCarousel>
       ) : (
         <p className="text-center text-gray-500">
           No hay imágenes disponibles.

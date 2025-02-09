@@ -304,12 +304,22 @@ export default defineField({
   preview: {
     select: {
       title: "title",
+      subtitle: "subtitle",
+      destination: "destination.0", // Muestra el primer destino
+      nights: "nights",
+      active: "active",
       image: "images.0.asset",
     },
-    prepare({ title, image }) {
+    prepare({ title, subtitle, destination, nights, active, image }) {
       return {
-        title,
+        title: title || "Sin título",
+        subtitle: `${subtitle || "Sin subtítulo"} | ${
+          destination || "Destino no especificado"
+        }`,
         media: image,
+        description: `Noches: ${nights || "N/A"} | ${
+          active ? "Activo" : "Inactivo"
+        }`,
       };
     },
   },

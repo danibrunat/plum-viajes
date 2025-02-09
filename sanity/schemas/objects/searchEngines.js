@@ -26,4 +26,26 @@ export default defineField({
       title: "Buscador de Hoteles",
     },
   ],
+  preview: {
+    select: {
+      packages: "packages",
+      assurances: "assurances",
+      flights: "flights",
+      hotels: "hotels",
+    },
+    prepare({ packages, assurances, flights, hotels }) {
+      const activeEngines = [];
+      if (packages) activeEngines.push("Paquetes");
+      if (assurances) activeEngines.push("Asistencia");
+      if (flights) activeEngines.push("Vuelos");
+      if (hotels) activeEngines.push("Hoteles");
+
+      return {
+        title: "Motores de Búsqueda",
+        subtitle: activeEngines.length
+          ? `Activos: ${activeEngines.join(", ")}`
+          : "Ningún motor activado",
+      };
+    },
+  },
 });

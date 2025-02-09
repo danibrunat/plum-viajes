@@ -18,13 +18,16 @@ export default defineField({
       previewImage: "content.0.image",
     },
     prepare({ content, previewImage }) {
-      let title = "";
-      Object.keys(content).map((item) => {
-        title = title + content[item]?.title + ", ";
-      });
+      // Validar que content sea un array
+      const items = Array.isArray(content) ? content : [];
+      // Extraer títulos de cada banner y filtrar valores nulos o vacíos
+      const titles = items.map((item) => item?.title).filter(Boolean);
+      const titleText = titles.length ? titles.join(", ") : "Sin títulos";
+      const count = items.length;
+
       return {
-        title: `Items: ${title}`,
-        subtitle: `Agregados ${Object.keys(content).length} banners`,
+        title: `Banners: ${titleText}`,
+        subtitle: `Agregados ${count} banner${count === 1 ? "" : "s"}`,
         media: previewImage,
       };
     },

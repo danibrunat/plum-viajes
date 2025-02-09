@@ -9,7 +9,7 @@ export default defineField({
   fieldsets: [
     {
       title:
-        "Para fechas de salidas especificas, 'Salidas desde' y 'Salidas hasta' deben coincidir",
+        "Para fechas de salidas específicas, 'Salidas desde' y 'Salidas hasta' deben coincidir",
       name: "departures",
       options: { columns: 4 },
     },
@@ -66,6 +66,7 @@ export default defineField({
         ],
       },
     },
+    // Vuelo de ida
     {
       name: "originDestinationRt1",
       type: "string",
@@ -108,22 +109,10 @@ export default defineField({
       title: "Tipo de vuelo",
       options: {
         list: [
-          {
-            title: "Vuelo regular",
-            value: "regular",
-          },
-          {
-            title: "Vuelo charter",
-            value: "charter",
-          },
-          {
-            title: "Cupos confirmados",
-            value: "confirmedSeats",
-          },
-          {
-            title: "Vuelo especial",
-            value: "special",
-          },
+          { title: "Vuelo regular", value: "regular" },
+          { title: "Vuelo charter", value: "charter" },
+          { title: "Cupos confirmados", value: "confirmedSeats" },
+          { title: "Vuelo especial", value: "special" },
         ],
       },
       fieldset: "roundTripFlight1",
@@ -132,25 +121,24 @@ export default defineField({
       name: "airlineRt1",
       type: "object",
       title: "Aerolínea",
-      fieldset: "roundTripFlight1", // Agrupación opcional
+      fieldset: "roundTripFlight1",
       fields: [
         defineField({
           name: "id",
-          type: "string", // El id debe ser numérico
+          type: "string",
           title: "Airline ID",
-          hidden: true, // Esconde este campo, ya que el id se selecciona automáticamente
+          hidden: true,
         }),
         defineField({
           name: "name",
-          type: "string", // El nombre será una cadena
+          type: "string",
           title: "Airline Name",
         }),
       ],
       components: {
-        input: AirlineSelect, // Aquí asignamos el componente `AirlineSelect` creado antes
+        input: AirlineSelect,
       },
     }),
-
     {
       name: "flightNumberRt1",
       type: "string",
@@ -163,6 +151,7 @@ export default defineField({
       title: "Escalas",
       fieldset: "roundTripFlight1",
     },
+    // Vuelo de vuelta
     {
       name: "originDestinationRt2",
       type: "string",
@@ -205,22 +194,10 @@ export default defineField({
       title: "Tipo de vuelo",
       options: {
         list: [
-          {
-            title: "Vuelo regular",
-            value: "regular",
-          },
-          {
-            title: "Vuelo charter",
-            value: "charter",
-          },
-          {
-            title: "Cupos confirmados",
-            value: "confirmedSeats",
-          },
-          {
-            title: "Vuelo especial",
-            value: "special",
-          },
+          { title: "Vuelo regular", value: "regular" },
+          { title: "Vuelo charter", value: "charter" },
+          { title: "Cupos confirmados", value: "confirmedSeats" },
+          { title: "Vuelo especial", value: "special" },
         ],
       },
       fieldset: "roundTripFlight2",
@@ -259,6 +236,7 @@ export default defineField({
       title: "Escalas",
       fieldset: "roundTripFlight2",
     },
+    // Hoteles
     defineField({
       name: "hotels",
       title: "Hotels",
@@ -295,26 +273,10 @@ export default defineField({
       fieldset: "hotels",
       options: {
         list: [
-          {
-            title: "Desayuno",
-            id: "breakfast",
-            value: "breakfast",
-          },
-          {
-            title: "Media Pensión",
-            id: "halfBoard",
-            value: "halfBoard",
-          },
-          {
-            title: "Pensión Completa",
-            id: "fullBoard",
-            value: "fullBoard",
-          },
-          {
-            title: "All Inclusive",
-            id: "allInclusive",
-            value: "allInclusive",
-          },
+          { title: "Desayuno", id: "breakfast", value: "breakfast" },
+          { title: "Media Pensión", id: "halfBoard", value: "halfBoard" },
+          { title: "Pensión Completa", id: "fullBoard", value: "fullBoard" },
+          { title: "All Inclusive", id: "allInclusive", value: "allInclusive" },
         ],
       },
     },
@@ -325,4 +287,73 @@ export default defineField({
       fieldset: "prices",
     },
   ],
+  preview: {
+    select: {
+      departureFrom: "departureFrom",
+      departureTo: "departureTo",
+      departureSeats: "departureSeats",
+      departureActive: "departureActive",
+      // Vuelo de ida
+      flightOrigin1: "originDestinationRt1",
+      flightDepartureDate1: "departureDateRt1",
+      flightArrival1: "arrivalDestinationRt1",
+      flightType1: "typeRt1",
+      airline1: "airlineRt1.name",
+      flightNumber1: "flightNumberRt1",
+      // Vuelo de vuelta
+      flightOrigin2: "originDestinationRt2",
+      flightDepartureDate2: "departureDateRt2",
+      flightArrival2: "arrivalDestinationRt2",
+      flightType2: "typeRt2",
+      airline2: "airlineRt2.name",
+    },
+    prepare(selection) {
+      const {
+        departureFrom,
+        departureTo,
+        departureSeats,
+        departureActive,
+        flightOrigin1,
+        flightDepartureDate1,
+        flightArrival1,
+        flightType1,
+        airline1,
+        flightNumber1,
+        flightOrigin2,
+        flightDepartureDate2,
+        flightArrival2,
+        flightType2,
+        airline2,
+      } = selection;
+
+      const title =
+        departureFrom && departureTo
+          ? `Salida: ${departureFrom} - ${departureTo}`
+          : "Fechas de salida no definidas";
+
+      let flightInfo = "";
+      if (flightOrigin1 || flightArrival1) {
+        flightInfo = `Ida: ${airline1 ? airline1 + " " : ""}${flightNumber1 || ""} ${flightOrigin1 || ""} → ${flightArrival1 || ""}`;
+      }
+
+      let returnInfo = "";
+      if (flightOrigin2 || flightArrival2) {
+        returnInfo = `Vuelta: ${airline2 ? airline2 + " " : ""}${flightOrigin2 || ""} → ${flightArrival2 || ""}`;
+      }
+
+      const seats =
+        departureSeats !== undefined ? `Cupos: ${departureSeats}` : "";
+      const activeStatus =
+        departureActive === 1 ? "Disponible" : "No Disponible";
+
+      let subtitle = `${seats} | ${activeStatus}`;
+      if (flightInfo) subtitle += ` | ${flightInfo}`;
+      if (returnInfo) subtitle += ` | ${returnInfo}`;
+
+      return {
+        title,
+        subtitle,
+      };
+    },
+  },
 });

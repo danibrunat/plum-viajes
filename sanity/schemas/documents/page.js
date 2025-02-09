@@ -45,13 +45,23 @@ export default defineField({
           ],
           preview: {
             select: {
-              tag: "tag.name", // Nombre del tag seleccionado
+              title: "title",
+              content: "content",
+              media: "openGraphImage",
             },
-            prepare(selection) {
-              const { tag } = selection;
+            prepare({ title, content, media }) {
+              const count = Array.isArray(content) ? content.length : 0;
+              const firstSection =
+                count > 0 && content[0] ? content[0]._type : null;
+              const subtitle =
+                count > 0
+                  ? `${count} sección${count > 1 ? "es" : ""} – Primera: ${firstSection}`
+                  : "Sin secciones definidas";
 
               return {
-                title: `Paquetes con tag: ${tag || "Sin tag"}`, // Mostrar el tag seleccionado o "Sin tag"
+                title: title || "Sin título",
+                subtitle,
+                media,
               };
             },
           },
