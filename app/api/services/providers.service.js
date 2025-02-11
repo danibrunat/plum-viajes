@@ -214,19 +214,22 @@ export const ProviderService = {
     },
     hotels: {
       isArray: true,
+      baseKey: {
+        plum: "departures.[].hotels",
+      },
       items: {
         id: {
-          plum: "departures.[].hotels.[0].id",
+          plum: "id",
           julia: "hotels",
           ola: "Descriptions.Description.Name",
         },
         name: {
-          plum: "departures.[].hotels.[0].name",
+          plum: "name",
           julia: "hotels",
           ola: "Descriptions.Description.Name",
         },
         rating: {
-          plum: "departures.[].hotels.[0].rating",
+          plum: "rating",
           julia: "rating",
           ola: "Descriptions.Description.HotelClass",
         },

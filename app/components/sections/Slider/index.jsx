@@ -6,21 +6,19 @@ import CommonCarousel from "../../commons/Carousel";
 export default function Carousel({ items }) {
   return (
     <div className="relative w-full h-[15vh] md:h-[64vh]">
-      <div className="h-full w-full">
-        <CommonCarousel desktopItems={1}>
-          {items.map((item, index) => {
-            return (
-              <Image
-                key={index}
-                src={urlForImage(item)}
-                priority
-                fill
-                alt="Slider"
-              />
-            );
-          })}
-        </CommonCarousel>
-      </div>
+      <CommonCarousel desktopItems={1} itemClass="p-0">
+        {items.map((item, index) => (
+          <div key={index} className="relative w-full h-[15vh] md:h-[64vh]">
+            <Image
+              src={urlForImage(item)}
+              priority
+              fill
+              className="object-cover"
+              alt="Slider"
+            />
+          </div>
+        ))}
+      </CommonCarousel>
     </div>
   );
 }

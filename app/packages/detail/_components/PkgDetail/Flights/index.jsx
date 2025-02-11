@@ -6,6 +6,8 @@ const Flights = ({ flights }) => {
   console.log("flights", JSON.stringify(flights));
   // Función para formatear la fecha
   function formatDateToString(dateString) {
+    if (!dateString) return "Fecha inválida"; // Manejo de errores
+
     const daysOfWeek = [
       "domingo",
       "lunes",
@@ -30,23 +32,36 @@ const Flights = ({ flights }) => {
       "diciembre",
     ];
 
-    // Crear un objeto Date a partir del string de fecha
-    const date = new Date(dateString);
+    try {
+      // Reemplazar espacio por 'T' para formato ISO válido
+      const normalizedDateString = dateString.replace(" ", "T");
 
-    // Extraer partes de la fecha
-    const dayOfWeek = daysOfWeek[date.getDay()];
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = monthsOfYear[date.getMonth()];
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
+      // Intentar crear el objeto Date
+      const date = new Date(normalizedDateString);
 
-    // Crear el string formateado
-    return `${capitalize(dayOfWeek)}, ${day} de ${month}\n${hours}:${minutes}`;
+      // Validar que la fecha es válida
+      if (isNaN(date.getTime())) {
+        console.error("Fecha inválida:", dateString);
+        return "Fecha inválida";
+      }
+
+      // Extraer partes de la fecha
+      const dayOfWeek = daysOfWeek[date.getDay()];
+      const day = date.getDate().toString().padStart(2, "0");
+      const month = monthsOfYear[date.getMonth()];
+      const hours = date.getHours().toString().padStart(2, "0");
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+
+      // Crear el string formateado
+      return `${capitalize(dayOfWeek)}, ${day} de ${month}\n${hours}:${minutes}`;
+    } catch (error) {
+      console.error("Error al formatear fecha:", error);
+      return "Fecha inválida";
+    }
   }
 
-  // Función auxiliar para capitalizar la primera letra de un string
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+  function capitalize(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
   }
 
   const renderSegments = (flight) => {

@@ -8,6 +8,7 @@ const DEFAULT_DESKTOP_ITEMS = 4;
 const CommonCarousel = ({
   desktopItems = DEFAULT_DESKTOP_ITEMS,
   children = [],
+  itemClass = "p-1 md:p-5",
 }) => {
   const responsive = {
     desktop: {
@@ -33,7 +34,7 @@ const CommonCarousel = ({
       infinite={true}
       autoPlaySpeed={2500}
       partialVisible={false}
-      itemClass="p-1 md:p-5"
+      itemClass={itemClass}
     >
       {children}
     </Carousel>

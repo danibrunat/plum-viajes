@@ -1,4 +1,3 @@
-// src/components/PlumPackages/PlumPackages.jsx
 import usePlumPackages from "../hooks/usePlumPackages";
 import AddNewPackageButton from "../AddNewPackageButton";
 import FilterForm from "./FilterForm";
@@ -19,25 +18,33 @@ const PlumPackages = () => {
     );
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen w-full">
-      <h1 className="text-2xl font-bold mb-4">Gestión de Paquetes</h1>
+    <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen w-full">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-3xl font-semibold text-gray-800 dark:text-white mb-6">
+          Gestión de Paquetes
+        </h1>
 
-      {/* Botón para crear un nuevo paquete */}
-      <AddNewPackageButton />
-      <FilterForm setFilters={setFilters} />
+        <div className="flex justify-between items-center mb-6">
+          <AddNewPackageButton />
+        </div>
 
-      <PackagesTable
-        packages={packages}
-        loading={loading}
-        refreshPackages={refresh}
-      />
+        <FilterForm setFilters={setFilters} />
 
-      <Pagination
-        page={page}
-        setPage={setPage}
-        limit={PKG_LIMIT}
-        totalRecords={packages.length}
-      />
+        <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+          <PackagesTable
+            packages={packages}
+            loading={loading}
+            refreshPackages={refresh}
+          />
+        </div>
+
+        <Pagination
+          page={page}
+          setPage={setPage}
+          limit={PKG_LIMIT}
+          totalRecords={packages.length}
+        />
+      </div>
     </div>
   );
 };

@@ -20,6 +20,7 @@ async function fetchPlumPackageDetail(id) {
               "flightNumber": flightNumberRt1,
               "departureDate": departureDateRt1,
               "arrivalDate": arrivalDateRt1,
+              "arrivalHour": arrivalTimeRt1,
               "airline": airlineRt1,
               "departureAirport": "Airport",
               "arrivalAirport": "Airport",
@@ -33,6 +34,7 @@ async function fetchPlumPackageDetail(id) {
               "flightNumber": flightNumberRt2,
               "departureDate": departureDateRt2,
               "arrivalDate": arrivalDateRt2,
+              "arrivalHour": arrivalTimeRt2,
               "airline": airlineRt2,
               "departureAirport": "Airport",
               "arrivalAirport": "Airport",
@@ -48,7 +50,6 @@ async function fetchPlumPackageDetail(id) {
 
   const sanityQuery = await sanityFetch({ query: pkgDetailQuery });
   const pkgDetailResponse = await sanityQuery;
-  console.log("PLUM | pkgDetailResponse", JSON.stringify(pkgDetailResponse));
   const mapResponse = ProviderService.mapper(
     pkgDetailResponse,
     "plum",
