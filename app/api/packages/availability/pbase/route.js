@@ -4,93 +4,114 @@ import { Julia } from "../../../services/julia.service";
 import { ProviderService } from "../../../services/providers.service";
 import { OLA } from "../../../services/ola.service";
 import { Filters } from "../../../services/filters.service";
+import CryptoService from "../../../services/cypto.service";
 
 /**
  * Filtra los paquetes de acuerdo a los filtros seleccionados por el usuario.
  *
  * @param {Array} packages - Lista de paquetes disponibles.
- * @param {Object} selectedFilters - Filtros aplicados por el usuario.
+ * @param {Object} selectedFilters - Objeto con los filtros aplicados, por ejemplo:
+ *   { mealPlan: ['desayuno'], night: ['4'], rating: ['3'], hotel: ['guamini mision'] }
  * @returns {Array} - Paquetes que coinciden con los filtros seleccionados.
  */
 function applySelectedFilters(packages, selectedFilters) {
-  // Verificamos si los paquetes son válidos
+  // Si no hay paquetes o no es un array, retorna vacío.
   if (!Array.isArray(packages) || packages.length === 0) {
-    return []; // Retornamos un array vacío si no hay paquetes
+    return [];
   }
 
-  // Si no hay filtros seleccionados, devolvemos todos los paquetes
+  // Si no hay filtros seleccionados, devuelve todos los paquetes.
   if (!selectedFilters || Object.keys(selectedFilters).length === 0) {
     return packages;
   }
 
-  // Filtramos los paquetes que coinciden con todos los filtros seleccionados
+  // Filtrar cada paquete según cada filtro seleccionado.
   return packages.filter((pkg) => {
+    // Para cada filtro, se verifica que exista al menos una coincidencia
     return Object.keys(selectedFilters).every((filterKey) => {
       const filterValues = selectedFilters[filterKey];
 
-      // Si no hay valores seleccionados para este filtro, lo ignoramos
+      // Si no hay valores seleccionados para este filtro, se ignora.
       if (!Array.isArray(filterValues) || filterValues.length === 0) {
         return true;
       }
 
-      // Extraemos los valores correspondientes del paquete
+      // Extraemos los valores del paquete para este filtro (normalizados a minúsculas).
       const packageValues = extractPackageValues(pkg, filterKey);
 
-      // Si no hay valores en el paquete para este filtro, no coincide
+      // Si no se encontraron valores en el paquete, no cumple el filtro.
       if (!Array.isArray(packageValues) || packageValues.length === 0) {
         return false;
       }
 
-      // Normalizamos los valores a minúsculas para compararlos
+      // Se normalizan los valores seleccionados.
       const normalizedFilterValues = filterValues.map((value) =>
         value.toLowerCase()
       );
-      const normalizedPackageValues = packageValues.map((value) =>
-        value.toLowerCase()
-      );
 
-      // Verificamos si hay intersección entre los valores seleccionados y los valores del paquete
+      // Verificar si existe intersección: al menos un valor del filtro se encuentra en los valores del paquete.
       return normalizedFilterValues.some((filterValue) =>
-        normalizedPackageValues.includes(filterValue)
+        packageValues.includes(filterValue)
       );
     });
   });
+}
+/**
+ * Función recursiva que recorre un objeto (o array) según un camino (path)
+ * y retorna un array con todos los valores encontrados.
+ *
+ * @param {Object|Array} obj - Objeto o array actual.
+ * @param {Array<string>} paths - Array de partes del camino.
+ * @returns {Array} - Array de valores encontrados.
+ */
+function getValuesAtPath(obj, paths) {
+  if (paths.length === 0) {
+    return [obj];
+  }
+
+  const [currentPath, ...restPaths] = paths;
+  let results = [];
+
+  if (typeof obj === "undefined" || obj === null) {
+    return results;
+  }
+
+  if (currentPath.endsWith("[]")) {
+    const key = currentPath.slice(0, -2);
+    const arr = obj[key];
+    if (!Array.isArray(arr)) return [];
+    arr.forEach((item) => {
+      results = results.concat(getValuesAtPath(item, restPaths));
+    });
+  } else {
+    const nextObj = obj[currentPath];
+    results = results.concat(getValuesAtPath(nextObj, restPaths));
+  }
+
+  return results;
 }
 
 /**
  * Extrae los valores de un paquete basándose en la clave del filtro.
  *
+ * La función utiliza la propiedad "grouper" definida en Filters.config para determinar
+ * la ruta (con notación dot y "[]" para arrays) y retorna todos los valores encontrados,
+ * normalizados a minúsculas.
+ *
  * @param {Object} pkg - El paquete que contiene la información.
  * @param {string} filterKey - La clave del filtro para extraer el valor correspondiente.
- * @returns {Array} - Lista de valores que corresponden a la clave del filtro.
+ * @returns {Array<string>} - Lista de valores (en minúscula) extraídos del paquete.
  */
 function extractPackageValues(pkg, filterKey) {
   const configItem = Filters.config.find((config) => config.id === filterKey);
-  if (!configItem) return [];
+  if (!configItem || !configItem.grouper) return [];
 
   const paths = configItem.grouper.split(".");
-  let current = pkg;
+  const values = getValuesAtPath(pkg, paths);
 
-  // Iteramos sobre los niveles anidados en la ruta (definida en `grouper`)
-  for (let path of paths) {
-    if (path.endsWith("[]")) {
-      const arrayKey = path.slice(0, -2);
-      if (Array.isArray(current[arrayKey])) {
-        // Accedemos al array y verificamos que el item sea un objeto y tenga el valor esperado
-        return current[arrayKey]
-          .map((item) =>
-            typeof item === "object" ? item[paths[paths.length - 1]] : item
-          )
-          .filter(Boolean) // Filtramos valores nulos o indefinidos
-          .map((item) => item.toLowerCase()); // Convertimos a minúsculas
-      }
-      return [];
-    }
-    current = current[path];
-    if (!current) return [];
-  }
-
-  return [current.toLowerCase()]; // Convertimos a minúsculas el valor final
+  return values
+    .filter((val) => val !== undefined && val !== null)
+    .map((val) => String(val).toLowerCase());
 }
 
 /**
@@ -113,7 +134,7 @@ async function fetchPlumPackages({
     && now() < validDateTo] {
     ...,
     "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1,
-    "departures": departures[departureFrom > now()]
+    "departures": departures[]
    }`;
 
   const sanityQuery = await sanityFetch({ query: pkgAvailQuery });
@@ -121,12 +142,26 @@ async function fetchPlumPackages({
   const onlyPkgWithDepartures = pkgAvailResponse.filter(
     (pkg) => pkg.departures.length > 0
   );
+  // Generar departureId en cada objeto de departures sin alterar la estructura
+
+  const pkgWithIdentifiedDepartures = onlyPkgWithDepartures.map((pkg) => {
+    console.log("pkg.departures", pkg.departures);
+    return {
+      ...pkg,
+      departures: pkg.departures.map((departure) => ({
+        ...departure,
+        id: CryptoService.generateDepartureId("plum", departure.departureFrom),
+      })),
+    };
+  });
+
   // Mapeamos la respuesta para adaptarla a nuestro formato interno
   const mapResponse = ProviderService.mapper(
-    onlyPkgWithDepartures,
+    pkgWithIdentifiedDepartures,
     "plum",
     "avail"
   );
+
   return Response.json(mapResponse);
 }
 
@@ -145,11 +180,23 @@ async function fetchOlaPackages(searchParams) {
       OLA.avail.options(getPackagesFaresRequest)
     );
     const olaAvailResponse = await olaAvailRequest.json();
+
+    const pkgWithIdentifiedDepartures = olaAvailResponse.map((pkg) => {
+      return {
+        ...pkg,
+        departureId: CryptoService.generateDepartureId(
+          "ola",
+          pkg.Flight.Trips.Trip[0].DepartureDate
+        ),
+      };
+    });
+
     const mapResponse = ProviderService.mapper(
-      olaAvailResponse,
+      pkgWithIdentifiedDepartures,
       "ola",
       "avail"
     );
+
     return ProviderService.ola.grouper(mapResponse);
   } catch (error) {
     console.error("Error fetching OLA packages", error);
@@ -185,6 +232,44 @@ async function fetchJuliaPackages(searchParams) {
 }
 
 /**
+ * Extrae un precio representativo para un paquete.
+ * En este caso, se utiliza el menor basePrice encontrado en el array de departures.
+ * Si no existen departures, se retorna Infinity para que el paquete quede al final.
+ *
+ * @param {Object} pkg - Un paquete con la propiedad departures.
+ * @returns {number} El precio representativo (el mínimo basePrice).
+ */
+const getRepresentativePrice = (pkg) => {
+  if (Array.isArray(pkg.departures) && pkg.departures.length > 0) {
+    const prices = pkg.departures.map((dep) => {
+      const price = dep?.prices?.pricesDetail?.basePrice;
+      return Number(price) || Infinity;
+    });
+    return Math.min(...prices);
+  }
+  return Infinity;
+};
+
+/**
+ * Ordena un array de paquetes por el basePrice (tomado de sus departures)
+ * sin modificar la estructura original.
+ *
+ * @param {Array} packages - Array de objetos de paquete.
+ * @param {string} priceOrder - Criterio de orden: "high" para ordenar de mayor a menor, cualquier otro valor para menor a mayor.
+ * @returns {Array} Un nuevo array de paquetes ordenado según el precio.
+ */
+function sortPackagesByBasePrice(packages, priceOrder) {
+  const isDescending = priceOrder === "high";
+  // Creamos una copia del array original y lo ordenamos
+  return [...packages].sort((a, b) => {
+    const priceA = getRepresentativePrice(a);
+    const priceB = getRepresentativePrice(b);
+    // Si es descendente, los paquetes con mayor precio primero; si no, menor precio primero.
+    return isDescending ? priceB - priceA : priceA - priceB;
+  });
+}
+
+/**
  * Controlador para manejar las solicitudes POST.
  * Recibe los parámetros de búsqueda y los filtros seleccionados,
  * obtiene los paquetes de los proveedores y devuelve los resultados filtrados.
@@ -209,24 +294,16 @@ export async function POST(req, res) {
 
   // Procesar los filtros de los paquetes obtenidos
   const filters = await Filters.process(packagesResponse);
-
   // Aplicar los filtros seleccionados
   const filteredPackages = applySelectedFilters(
     packagesResponse,
     selectedFilters
   );
 
-  const sortCriteria =
-    searchParams.priceOrder && searchParams.priceOrder === "high" ? "+" : "-";
-  const sortedLowerHigherPkg = filteredPackages.sort((a, b) => {
-    const priceA = a.prices.pricesDetail.basePrice;
-    const priceB = b.prices.pricesDetail.basePrice;
+  const sortedPackages = sortPackagesByBasePrice(
+    filteredPackages,
+    searchParams.priceOrder
+  );
 
-    // Si es "+" ordenar de mayor a menor, si es "-" ordenar de menor a mayor
-    return sortCriteria === "+"
-      ? priceB - priceA // Mayor precio primero
-      : priceA - priceB; // Menor precio primero
-  });
-
-  return Response.json({ packages: sortedLowerHigherPkg, filters });
+  return Response.json({ packages: sortedPackages, filters });
 }

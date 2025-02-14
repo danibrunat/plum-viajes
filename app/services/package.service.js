@@ -26,6 +26,38 @@ const PackageService = {
       }
     },
   },
+  hotels: {
+    getMealPlanName: (mealPlanId) => {
+      const mealPlanDictionary = [
+        {
+          title: "Desayuno",
+          id: ["desayuno", "breakfast"],
+          value: "breakfast",
+        },
+        {
+          title: "Media Pensión",
+          id: ["halfBoard"],
+          value: "halfBoard",
+        },
+        {
+          title: "Pensión Completa",
+          id: ["fullBoard"],
+          value: "fullBoard",
+        },
+        {
+          title: "All Inclusive",
+          id: ["allInclusive"],
+          value: "allInclusive",
+        },
+      ];
+
+      return mealPlanDictionary.find((plan) => {
+        const planId = plan.id.map((planId) => planId.toLowerCase());
+        console.log("planId", planId);
+        return planId.includes(mealPlanId.toLowerCase())?.title;
+      });
+    },
+  },
 };
 
 export default PackageService;

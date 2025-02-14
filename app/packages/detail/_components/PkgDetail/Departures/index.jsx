@@ -89,7 +89,21 @@ async function getOLAFlights(
   );
 }
 
-// Función para obtener salidas del proveedor Plum (lógica futura)
+// Función para determinar el tipo de habitación basado en el roomConfig
+function getRoomType(roomConfig) {
+  if (!roomConfig.length) return null;
+
+  // Solo tomamos la primera habitación para determinar el tipo
+  const { adults, children } = roomConfig[0];
+  console.log("roomConfig", roomConfig);
+  if (adults === 2) return "double";
+  if (adults === 3 && children.length === 0) return "triple";
+  if (adults === 4 && children.length === 0) return "quadruple";
+  if (adults === 2 && children.length === 1) return "familyOne";
+  if (adults === 2 && children.length === 2) return "familyTwo";
+}
+
+// Modificación en getPlumFlights para filtrar precios según el tipo de habitación
 async function getPlumFlights(
   departureCity,
   arrivalCity,
@@ -98,7 +112,10 @@ async function getPlumFlights(
   id,
   priceId
 ) {
-  // Query a Sanity
+  // Obtener configuración de habitaciones desde occupancy
+  const roomConfig = ProviderService.getRoomsConfig(occupancy);
+  const selectedRoomType = getRoomType(roomConfig);
+
   const pkgAvailQuery = groq`
     *[_type == "packages" 
       && "${departureCity}" in origin
@@ -111,11 +128,9 @@ async function getPlumFlights(
       "departures": departures[departureFrom > now()]
     }`;
 
-  // Ejecutamos la query en Sanity
   const sanityQuery = await sanityFetch({ query: pkgAvailQuery });
   const pkgAvailResponse = await sanityQuery;
 
-  // Filtramos solo paquetes que tengan `departures`
   const onlyPkgWithDepartures = pkgAvailResponse.filter(
     (pkg) => pkg.departures.length > 0
   );
@@ -126,8 +141,23 @@ async function getPlumFlights(
     "detail"
   );
 
-  // Devolvemos la respuesta con la lista de `departureFrom` para el FormWrapper
-  return unifyDepartures(mapResponse).sort(
+  // Filtrar precios dentro de las `departures`
+  const filteredPackages = mapResponse
+    .map((pkg) => ({
+      ...pkg,
+      departures: pkg.departures
+        .map((departure) => ({
+          ...departure,
+          prices: departure.prices.filter(
+            (price) => price.type === selectedRoomType
+          ),
+        }))
+        .filter((departure) => departure.prices.length > 0), // Eliminar departures sin precios válidos
+    }))
+    .filter((pkg) => pkg.departures.length > 0); // Eliminar paquetes sin departures válidas
+
+  // Devolvemos solo las fechas únicas de `departureFrom`
+  return unifyDepartures(filteredPackages).sort(
     (a, b) => new Date(a.date) - new Date(b.date)
   );
 }
@@ -160,7 +190,6 @@ const FormWrapper = async ({
       id,
       priceId
     );
-    console.log("plum departures", departures);
   }
 
   return <DeparturesForm departures={departures} />;

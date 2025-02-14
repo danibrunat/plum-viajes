@@ -34,7 +34,7 @@ const extractHtmlValuesToArray = (htmlString) => {
   // Expresión regular para encontrar el contenido dentro de las etiquetas <p>
   const matches = htmlString.match(/<p[^>]*>(.*?)<\/p>/g);
 
-  if (!matches) return []; // Si no hay coincidencias, retornar un array vacío
+  if (!matches) return htmlString; // Si no hay coincidencias, retornar un array vacío
 
   // Extraer el texto dentro de las etiquetas <p> y limpiar etiquetas adicionales
   return matches
@@ -48,11 +48,10 @@ const DepartureDetail = ({
   hotels,
   roomConfig,
 }) => {
-  console.log("roomConfig", roomConfig);
   const sanitizedDescription = extractHtmlValuesToArray(description);
-  const hotelName = capitalizeFirstLetter(toLowerCase(hotels[0].name));
-  const hotelMealPlan = capitalizeFirstLetter(toLowerCase(hotels[0].mealPlan));
-  const hotelRating = hotels[0].rating;
+  const hotelName = capitalizeFirstLetter(toLowerCase(hotels[0]?.name));
+  const hotelMealPlan = capitalizeFirstLetter(toLowerCase(hotels[0]?.mealPlan));
+  const hotelRating = hotels[0]?.rating;
   const roomSummary = getRoomSummary(roomConfig);
   return (
     <div className="flex flex-col w-full">
@@ -80,9 +79,11 @@ const DepartureDetail = ({
       <div className="flex flex-col border-2 gap-3 rounded-md border-gray-400 p-3">
         <em className="text-sm underline font-bold">Incluye:</em>
         <ul className="list-disc list-inside">
-          {sanitizedDescription.map((descItem) => (
-            <li key={descItem}>{descItem}</li>
-          ))}
+          {Array.isArray(sanitizedDescription)
+            ? sanitizedDescription.map((descItem) => (
+                <li key={descItem}>{descItem}</li>
+              ))
+            : sanitizedDescription}
         </ul>
       </div>
     </div>

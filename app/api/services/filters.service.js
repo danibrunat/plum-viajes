@@ -6,7 +6,7 @@ export const Filters = {
       id: "mealPlan",
       title: "Régimen de Comidas",
       type: "checkbox",
-      grouper: "hotels[].mealPlan", // Ruta dentro de la respuesta para agrupar los datos
+      grouper: "departures[].hotels[].mealPlan", // Actualizado
     },
     {
       id: "night",
@@ -18,19 +18,18 @@ export const Filters = {
       id: "rating",
       title: "Estrellas",
       type: "checkbox",
-      grouper: "hotels[].rating", // Valor dentro de cada hotel
+      grouper: "departures[].hotels[].rating", // Actualizado
     },
     {
       id: "hotel",
       title: "Alojamiento",
       type: "checkbox",
-      grouper: "hotels[].name", // Nombre del hotel
+      grouper: "departures[].hotels[].name", // Actualizado
     },
   ],
 
   // Método que procesa la respuesta de availability
   process: async (pkgAvailabilityResponse) => {
-    // Hacemos la petición a la API para procesar los filtros (si es necesario)
     const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/filters`, {
       headers: ApiUtils.getCommonHeaders(),
       method: "POST",
@@ -40,8 +39,6 @@ export const Filters = {
     if (!res.ok) {
       throw new Error("Failed to fetch filters");
     }
-
-    // Retornamos los filtros procesados
     return res.json();
   },
 };

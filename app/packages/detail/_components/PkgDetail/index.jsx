@@ -18,11 +18,11 @@ export default function PkgDetail({ detailResponse, searchParams }) {
   const departureCity = searchParams.departureCity;
   const description = detailResponse?.description;
   const nights = detailResponse?.nights;
-  const hotels = detailResponse?.hotels;
+  const hotels = detailResponse?.departures[0]?.hotels;
   const hotelsData = detailResponse?.hotelsData;
   const citiesData = detailResponse?.citiesData;
-  const flights = detailResponse?.flights;
-  const prices = detailResponse?.prices;
+  const flights = detailResponse?.departures[0].flights;
+  const prices = detailResponse?.departures[0]?.prices;
   const sliderImages = detailResponse?.images?.map(({ sourceUrl }) => {
     return {
       src:

@@ -37,6 +37,7 @@
     "axios": "^1.6.8",
     "bcp47": "^1.1.2",
     "class-variance-authority": "^0.7.0",
+    "clipboardy": "^4.0.0",
     "clsx": "^2.0.0",
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.1",

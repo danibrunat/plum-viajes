@@ -12,7 +12,7 @@ async function fetchPlumPackageDetail(id) {
     {
     ...,
     "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1,
-    "departures": departures[departureFrom > now()] {
+    "departures": departures[] {
       ...,
       "flights": [
           {

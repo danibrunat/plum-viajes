@@ -74,41 +74,7 @@ export const ProviderService = {
       julia: "CANTNOCHES",
       ola: "Package.Nights",
     },
-    hotels: {
-      isArray: true,
-      items: {
-        id: {
-          plum: "departures.[].hotels.[0].id",
-          julia: "hotels",
-          ola: "Descriptions.Description.Name",
-        },
-        name: {
-          plum: "departures.[].hotels.[0].name",
-          julia: "hotels",
-          ola: "Descriptions.Description.Name",
-        },
-        rating: {
-          plum: "departures.[].hotels.[0].rating",
-          julia: "rating",
-          ola: "Descriptions.Description.HotelClass",
-        },
-        mealPlan: {
-          plum: "departures.[].mealPlan",
-          julia: "hotels",
-          ola: "Descriptions.Description.FareDescriptions.FareDescription.[1].$value",
-        },
-        roomType: {
-          plum: "departures.[].roomType",
-          julia: "hotels",
-          ola: "Descriptions.Description.FareDescriptions.FareDescription.[0].$value",
-        },
-        roomSize: {
-          plum: "departures.[].roomSize",
-          julia: "hotels",
-          ola: "Descriptions.Description.FareDescriptions.FareDescription.[2].$value",
-        },
-      },
-    },
+
     thumbnails: {
       isArray: true,
       baseKey: {
@@ -122,67 +88,117 @@ export const ProviderService = {
         },
       },
     },
-    prices: {
-      id: {
-        plum: "1234",
-        ola: "FareCodes.FareOption",
-      },
-      pricesDetail: {
-        basePrice: {
-          plum: "departures.[0].prices.[0].amount",
-          julia: "prices",
-          ola: "FareTotal.Net",
-        },
-        currency: {
-          plum: "departures.[0].prices.[0].currency",
-          julia: "prices",
-          ola: "FareTotal.Currency",
-        },
-        comission: {
-          plum: "departures.[0].prices.[0].amount",
-          julia: "prices",
-          ola: "FareTotal.Comission",
-        },
-      },
-      taxes: {
-        baseTax: {
-          plum: "departures.[0].prices.[0].taxes",
-          julia: "prices",
-          ola: "FareTotal.Tax",
-        },
-        iva: {
-          plum: "departures.[0].prices.[0].iva",
-          julia: "prices",
-          ola: "FareTotal.Vat",
-        },
-        ivaAgency: {
-          plum: "departures.[0].prices.[0].ivaAgency",
-          julia: "prices",
-          ola: "FareTotal.VatAgency",
-        },
-        paisTax: {
-          plum: "departures.[0].prices.[0].paisTax",
-          julia: "prices",
-          ola: "FareTotal.R3450.$value",
-        },
-        additionalTax: {
-          description: {
-            plum: "prices",
-            julia: "prices",
-            ola: "Taxes.Tax.Name",
-          },
-          value: {
-            plum: "departures.[0].prices.[0].other",
-            julia: "prices",
-            ola: "Taxes.Tax.Value",
-          },
-        },
-      },
-    },
     departures: {
-      date: {
+      isArray: true,
+      baseKey: {
         plum: "departures",
-        ola: "Flight.Trips.Trip.[0].DepartureDate",
+        ola: "@self",
+      },
+      items: {
+        id: {
+          plum: "id",
+          ola: "departureId",
+        },
+        hotels: {
+          isArray: true,
+          baseKey: {
+            plum: "@self",
+            ola: "Descriptions",
+          },
+          items: {
+            id: {
+              plum: "hotels.[0].id",
+              julia: "hotels",
+              ola: "Description.Name",
+            },
+            name: {
+              plum: "hotels.[0].name",
+              julia: "hotels",
+              ola: "Description.Name",
+            },
+            rating: {
+              plum: "hotels.[0].rating",
+              julia: "rating",
+              ola: "Description.HotelClass",
+            },
+            mealPlan: {
+              plum: "mealPlan",
+              julia: "hotels",
+              ola: "Description.FareDescriptions.FareDescription.[1].$value",
+            },
+            roomType: {
+              plum: "prices.[0].type",
+              julia: "hotels",
+              ola: "Description.FareDescriptions.FareDescription.[0].$value",
+            },
+            roomSize: {
+              plum: "roomSize",
+              julia: "hotels",
+              ola: "Description.FareDescriptions.FareDescription.[2].$value",
+            },
+          },
+        },
+        prices: {
+          id: {
+            plum: "1234",
+            ola: "FareCodes.FareOption",
+          },
+          pricesDetail: {
+            basePrice: {
+              plum: "prices.[0].amount",
+              julia: "prices",
+              ola: "FareTotal.Net",
+            },
+            currency: {
+              plum: "prices.[0].currency",
+              julia: "prices",
+              ola: "FareTotal.Currency",
+            },
+            comission: {
+              plum: "prices.[0].amount",
+              julia: "prices",
+              ola: "FareTotal.Comission",
+            },
+          },
+          taxes: {
+            baseTax: {
+              plum: "prices.[0].taxes",
+              julia: "prices",
+              ola: "FareTotal.Tax",
+            },
+            iva: {
+              plum: "prices.[0].iva",
+              julia: "prices",
+              ola: "FareTotal.Vat",
+            },
+            ivaAgency: {
+              plum: "prices.[0].ivaAgency",
+              julia: "prices",
+              ola: "FareTotal.VatAgency",
+            },
+            paisTax: {
+              plum: "prices.[0].paisTax",
+              julia: "prices",
+              ola: "FareTotal.R3450.$value",
+            },
+            additionalTax: {
+              description: {
+                plum: "prices",
+                julia: "prices",
+                ola: "Taxes.Tax.Name",
+              },
+              value: {
+                plum: "prices.[0].other",
+                julia: "prices",
+                ola: "Taxes.Tax.Value",
+              },
+            },
+          },
+        },
+        date: {
+          plum: "departureFrom",
+          ola: "Flight.Trips.Trip.[0].DepartureDate",
+        },
       },
     },
   },
@@ -212,44 +228,6 @@ export const ProviderService = {
       julia: "CANTNOCHES",
       ola: "Package.Nights",
     },
-    hotels: {
-      isArray: true,
-      baseKey: {
-        plum: "departures.[].hotels",
-      },
-      items: {
-        id: {
-          plum: "id",
-          julia: "hotels",
-          ola: "Descriptions.Description.Name",
-        },
-        name: {
-          plum: "name",
-          julia: "hotels",
-          ola: "Descriptions.Description.Name",
-        },
-        rating: {
-          plum: "rating",
-          julia: "rating",
-          ola: "Descriptions.Description.HotelClass",
-        },
-        mealPlan: {
-          plum: "departures.[].mealPlan",
-          julia: "hotels",
-          ola: "Descriptions.Description.FareDescriptions.FareDescription.[1].$value",
-        },
-        roomType: {
-          plum: "departures.[].roomType",
-          julia: "hotels",
-          ola: "Descriptions.Description.FareDescriptions.FareDescription.[0].$value",
-        },
-        roomSize: {
-          plum: "departures.[].roomSize",
-          julia: "hotels",
-          ola: "Descriptions.Description.FareDescriptions.FareDescription.[2].$value",
-        },
-      },
-    },
     images: {
       isArray: true,
       baseKey: {
@@ -263,159 +241,209 @@ export const ProviderService = {
         },
       },
     },
-    prices: {
-      id: {
-        plum: "1234",
-        ola: "FareCodes.FareOption",
-      },
-      pricesDetail: {
-        basePrice: {
-          plum: "departures.[0].prices.[0].amount",
-          julia: "prices",
-          ola: "FareTotal.Net",
-        },
-        currency: {
-          plum: "departures.[0].prices.[0].currency",
-          julia: "prices",
-          ola: "FareTotal.Currency",
-        },
-        comission: {
-          plum: "default",
-          julia: "prices",
-          ola: "FareTotal.Comission",
-        },
-      },
-      taxes: {
-        baseTax: {
-          plum: "departures.[0].prices.[0].taxes",
-          julia: "prices",
-          ola: "FareTotal.Tax",
-        },
-        iva: {
-          plum: "departures.[0].prices.[0].iva",
-          julia: "prices",
-          ola: "FareTotal.Vat",
-        },
-        ivaAgency: {
-          plum: "departures.[0].prices.[0].ivaAgency",
-          julia: "prices",
-          ola: "FareTotal.VatAgency",
-        },
-        paisTax: {
-          plum: "departures.[0].prices.[0].paisTax",
-          julia: "prices",
-          ola: "FareTotal.R3450.$value",
-        },
-        additionalTax: {
-          description: {
-            plum: "prices",
-            julia: "prices",
-            ola: "Taxes.Tax.Name",
-          },
-          value: {
-            plum: "departures.[0].prices.[0].other",
-            julia: "prices",
-            ola: "Taxes.Tax.Value",
-          },
-        },
-      },
-    },
-    flights: {
+    departures: {
       isArray: true,
       baseKey: {
-        ola: "Flight.Trips.Trip",
-        plum: "departures.flights",
-      }, // Define el arreglo base principal
+        plum: "departures",
+        ola: "@self",
+      },
       items: {
-        segments: {
+        id: {
+          plum: "departureId",
+          ola: "departureId",
+        },
+        hotels: {
           isArray: true,
           baseKey: {
-            ola: "Segments.Segment",
-            plum: "segments",
-          }, // Define el arreglo de segmentos dentro de cada trip
+            plum: "@self",
+            ola: "Descriptions",
+          },
           items: {
-            flightNumber: {
-              ola: "FlightNumber",
-              plum: "flightNumber",
+            id: {
+              plum: "hotels.[0].id",
+              julia: "hotels",
+              ola: "Description.Name",
             },
-            departureDate: {
-              ola: "DepartureDate",
-              plum: "departureDate",
+            name: {
+              plum: "hotels.[0].name",
+              julia: "hotels",
+              ola: "Description.Name",
             },
-            departureHour: {
-              ola: "DepartureHour",
-              plum: "departureHour",
+            rating: {
+              plum: "hotels.[0].rating",
+              julia: "rating",
+              ola: "Description.HotelClass",
             },
-            airline: {
-              code: {
-                ola: "Supplier.Code",
-                plum: "airline.code",
-              },
-              name: {
-                ola: "Supplier.Name",
-                plum: "airline.name",
-              },
+            mealPlan: {
+              plum: "mealPlan",
+              julia: "hotels",
+              ola: "Description.FareDescriptions.FareDescription.[1].$value",
             },
-            arrivalDate: {
-              ola: "ArrivalDate",
-              plum: "arrivalDate",
+            roomType: {
+              plum: "roomType",
+              julia: "hotels",
+              ola: "Description.FareDescriptions.FareDescription.[0].$value",
             },
-            arrivalHour: {
-              ola: "ArrivalHour",
-              plum: "arrivalHour",
-            },
-            departureAirport: {
-              code: {
-                ola: "DepartureAirport.attributes.Iata",
-                plum: "departureAirport",
-              },
-              name: {
-                ola: "DepartureAirport.$value",
-                plum: "departureAirport",
-              },
-            },
-            departureCity: {
-              code: {
-                ola: "DepartureCity.attributes.Iata",
-                plum: "departureCity",
-              },
-              name: {
-                ola: "DepartureCity.$value",
-                plum: "departureCity",
-              },
-            },
-            arrivalCity: {
-              code: {
-                ola: "ArrivalCity.attributes.Iata",
-                plum: "arrivalCity",
-              },
-              name: {
-                ola: "ArrivalCity.$value",
-                plum: "arrivalCity",
-              },
-            },
-            arrivalAirport: {
-              code: {
-                ola: "ArrivalAirport.attributes.Iata",
-                plum: "arrivalAirport",
-              },
-              name: {
-                ola: "ArrivalAirport.$value",
-                plum: "arrivalAirport",
-              },
-            },
-            stopovers: {
-              plum: "segments.stopovers",
-              ola: "Stops",
+            roomSize: {
+              plum: "prices.[0].type",
+              julia: "hotels",
+              ola: "Description.FareDescriptions.FareDescription.[2].$value",
             },
           },
         },
-      },
-    },
-    departures: {
-      date: {
-        plum: "departures.[].departureFrom",
-        ola: "Flight.Trips.Trip.[0].DepartureDate",
+        prices: {
+          id: {
+            plum: "1234",
+            ola: "FareCodes.FareOption",
+          },
+          pricesDetail: {
+            basePrice: {
+              plum: "prices.[0].amount",
+              julia: "prices",
+              ola: "FareTotal.Net",
+            },
+            currency: {
+              plum: "prices.[0].currency",
+              julia: "prices",
+              ola: "FareTotal.Currency",
+            },
+            comission: {
+              plum: "prices.[0].amount",
+              julia: "prices",
+              ola: "FareTotal.Comission",
+            },
+          },
+          taxes: {
+            baseTax: {
+              plum: "prices.[0].taxes",
+              julia: "prices",
+              ola: "FareTotal.Tax",
+            },
+            iva: {
+              plum: "prices.[0].iva",
+              julia: "prices",
+              ola: "FareTotal.Vat",
+            },
+            ivaAgency: {
+              plum: "prices.[0].ivaAgency",
+              julia: "prices",
+              ola: "FareTotal.VatAgency",
+            },
+            paisTax: {
+              plum: "prices.[0].paisTax",
+              julia: "prices",
+              ola: "FareTotal.R3450.$value",
+            },
+            additionalTax: {
+              description: {
+                plum: "prices",
+                julia: "prices",
+                ola: "Taxes.Tax.Name",
+              },
+              value: {
+                plum: "prices.[0].other",
+                julia: "prices",
+                ola: "Taxes.Tax.Value",
+              },
+            },
+          },
+        },
+        flights: {
+          isArray: true,
+          baseKey: {
+            ola: "Flight.Trips.Trip",
+            plum: "flights",
+          }, // Define el arreglo base principal
+          items: {
+            segments: {
+              isArray: true,
+              baseKey: {
+                ola: "Segments.Segment",
+                plum: "segments",
+              }, // Define el arreglo de segmentos dentro de cada trip
+              items: {
+                flightNumber: {
+                  ola: "FlightNumber",
+                  plum: "flightNumber",
+                },
+                departureDate: {
+                  ola: "DepartureDate",
+                  plum: "departureDate",
+                },
+                departureHour: {
+                  ola: "DepartureHour",
+                  plum: "departureHour",
+                },
+                airline: {
+                  code: {
+                    ola: "Supplier.Code",
+                    plum: "airline.code",
+                  },
+                  name: {
+                    ola: "Supplier.Name",
+                    plum: "airline.name",
+                  },
+                },
+                arrivalDate: {
+                  ola: "ArrivalDate",
+                  plum: "arrivalDate",
+                },
+                arrivalHour: {
+                  ola: "ArrivalHour",
+                  plum: "arrivalHour",
+                },
+                departureAirport: {
+                  code: {
+                    ola: "DepartureAirport.attributes.Iata",
+                    plum: "departureAirport",
+                  },
+                  name: {
+                    ola: "DepartureAirport.$value",
+                    plum: "departureAirport",
+                  },
+                },
+                departureCity: {
+                  code: {
+                    ola: "DepartureCity.attributes.Iata",
+                    plum: "departureCity",
+                  },
+                  name: {
+                    ola: "DepartureCity.$value",
+                    plum: "departureCity",
+                  },
+                },
+                arrivalCity: {
+                  code: {
+                    ola: "ArrivalCity.attributes.Iata",
+                    plum: "arrivalCity",
+                  },
+                  name: {
+                    ola: "ArrivalCity.$value",
+                    plum: "arrivalCity",
+                  },
+                },
+                arrivalAirport: {
+                  code: {
+                    ola: "ArrivalAirport.attributes.Iata",
+                    plum: "arrivalAirport",
+                  },
+                  name: {
+                    ola: "ArrivalAirport.$value",
+                    plum: "arrivalAirport",
+                  },
+                },
+                stopovers: {
+                  plum: "segments.stopovers",
+                  ola: "Stops",
+                },
+              },
+            },
+          },
+        },
+        date: {
+          plum: "departureFrom",
+          ola: "Flight.Trips.Trip.[0].DepartureDate",
+        },
       },
     },
   },
@@ -435,35 +463,43 @@ export const ProviderService = {
 
     const isObject = (value) => value !== null && typeof value === "object";
 
-    const getBaseArray = (pkg, baseKeyConfig) => {
-      return ProviderService.getByDotOperator(pkg, baseKeyConfig) || [];
-    };
-
-    const mapNestedObject = (pkg, configObj) => {
+    const mapNestedObject = (pkg, configObj, provider) => {
       let result = {};
 
       Object.entries(configObj).forEach(([key, value]) => {
         if (value.isArray) {
-          // Manejo de arrays
-          if (value.baseKey) {
-            const baseArray = getBaseArray(pkg, value.baseKey[provider]);
-            if (Array.isArray(baseArray)) {
-              result[key] = baseArray.map((item) =>
-                mapNestedObject(item, value.items)
-              );
+          let arrayData = [];
+          // Si está definida la propiedad baseKey para el provider...
+          if (value.baseKey && value.baseKey[provider]) {
+            const baseKeyValue = value.baseKey[provider].trim();
+            // Si se define un valor especial, por ejemplo "@self" (o "continue"),
+            // se toma el objeto completo como fuente
+            if (baseKeyValue === "@self" || baseKeyValue === "continue") {
+              arrayData = pkg;
             } else {
-              const baseObject = baseArray;
-              // Y acá lo asignamos como un objeto normal.
-              result[key] = mapNestedObject(baseObject, value.items);
+              arrayData =
+                ProviderService.getByDotOperator(pkg, baseKeyValue) || [];
             }
           } else {
-            result[key] = [mapNestedObject(pkg, value.items)];
+            // Si no se configuró baseKey, se intenta obtener el array en pkg[key]
+            arrayData = pkg[key];
           }
+
+          // Si no se obtuvo un array, se envuelve en uno (si se obtuvo algo) o se asigna []
+          if (arrayData === undefined || arrayData === null) {
+            arrayData = [];
+          } else if (!Array.isArray(arrayData)) {
+            arrayData = [arrayData];
+          }
+
+          result[key] = arrayData.map((item) =>
+            isObject(item) ? mapNestedObject(item, value.items, provider) : item
+          );
           return;
         }
 
         if (isObject(value) && !value[provider]) {
-          result[key] = mapNestedObject(pkg, value);
+          result[key] = mapNestedObject(pkg, value, provider);
           return;
         }
 
@@ -484,7 +520,7 @@ export const ProviderService = {
     console.log("response", response);
 
     const mappedResponse = response.map((pkg) => {
-      let mappedPkg = mapNestedObject(pkg, respConfig);
+      let mappedPkg = mapNestedObject(pkg, respConfig, provider);
       mappedPkg.provider = provider;
       return mappedPkg;
     });
@@ -537,7 +573,9 @@ export const ProviderService = {
     endDate,
     priceId,
     occupancy,
+    departureId,
   }) => {
+    console.log("departureId", departureId);
     const pkgDetailRequest = await fetch(
       `${process.env.NEXT_PUBLIC_URL}/api/packages/detail`,
       {
@@ -551,6 +589,7 @@ export const ProviderService = {
           endDate,
           priceId,
           occupancy,
+          departureId,
         }),
         headers: ApiUtils.getCommonHeaders(),
       }
@@ -558,9 +597,8 @@ export const ProviderService = {
 
     if (!pkgDetailRequest.ok) {
       const response = await pkgDetailRequest.json();
-      // This will activate the closest `error.js` Error Boundary
       throw new Error(
-        `Ocurrió un error en el detail de paquetes. Razón: ${response.reason}`
+        `Ocurrió un error en el detail de paquetes. Razón: ${JSON.stringify(response)}`
       );
     }
 
@@ -800,17 +838,15 @@ export const ProviderService = {
     grouper: (mappedResponse, criteria = null) => {
       const uniqueResponse = [];
       const seenItems = new Set();
-
       mappedResponse.forEach((item) => {
         const uniqueKey = criteria
           ? `${item[criteria]}`
-          : `${item.id}-${item.hotels[0].name}-${item.hotels[0].roomType}-${item.hotels[0].roomSize}-${item.hotels[0].mealPlan}`;
+          : `${item.id}-${item.departures[0].hotels[0].name}-${item.departures[0].hotels[0].roomType}-${item.departures[0].hotels[0].roomSize}-${item.departures[0].hotels[0].mealPlan}`;
         if (!seenItems.has(uniqueKey)) {
           seenItems.add(uniqueKey);
           uniqueResponse.push(item);
         }
       });
-
       return uniqueResponse;
     },
 

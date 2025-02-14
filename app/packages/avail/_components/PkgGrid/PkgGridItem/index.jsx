@@ -52,43 +52,17 @@ const getImgSource = (pkgItem, provider) => {
   return imageSourceUrl;
 };
 
-const mapMealPlan = (mealPlan) => {
-  const mealPlanDictionary = [
-    {
-      title: "Desayuno",
-      id: "breakfast",
-      value: "breakfast",
-    },
-    {
-      title: "Media Pensión",
-      id: "halfBoard",
-      value: "halfBoard",
-    },
-    {
-      title: "Pensión Completa",
-      id: "fullBoard",
-      value: "fullBoard",
-    },
-    {
-      title: "All Inclusive",
-      id: "allInclusive",
-      value: "allInclusive",
-    },
-  ];
-
-  return mealPlanDictionary.find((plan) => plan.id === mealPlan)?.title;
-};
-
 const PkgGridItem = ({ pkgItem, searchParams }) => {
   const { departureCity, arrivalCity, startDate, endDate, occupancy } =
     searchParams;
-  const hotels = pkgItem.hotels[0];
+  const hotels = pkgItem?.departures[0].hotels[0];
   const pkgPrice = PackageService.prices.getPkgPrice(
-    pkgItem?.prices,
+    pkgItem?.departures[0].prices,
     FLOW_STAGES.PKG_AVAILABILITY
   );
   const hotelStars = getHotelRating(hotels.rating);
-  const imgSource = getImgSource(pkgItem, pkgItem?.provider);
+  const provider = pkgItem?.provider;
+  const imgSource = getImgSource(pkgItem, provider);
 
   const hotelName = Helpers.capitalizeFirstLetter(hotels.name);
   const hotelMealPlan = Helpers.capitalizeFirstLetter(hotels.mealPlan);
@@ -96,10 +70,13 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
   const hotelRoomType = Helpers.capitalizeFirstLetter(hotels.roomType);
   const hotelRoomSize = Helpers.capitalizeFirstLetter(hotels.roomSize);
 
-  const priceId = pkgItem?.prices?.id;
+  const priceId = pkgItem?.departures[0].prices?.id;
+
+  const departures = pkgItem?.departures;
+  const departureId = departures[0].id;
 
   const slug = Helpers.slugify(pkgItem?.title);
-  const detailUrl = `/packages/detail?id=${pkgItem?.id}&provider=${pkgItem?.provider}&occupancy=${occupancy}&departureCity=${departureCity}&arrivalCity=${arrivalCity}&startDate=${startDate}&endDate=${endDate}&priceId=${priceId}`;
+  const detailUrl = `/packages/detail?id=${pkgItem?.id}&departureId=${departureId}&provider=${provider}&occupancy=${occupancy}&departureCity=${departureCity}&arrivalCity=${arrivalCity}&startDate=${startDate}&endDate=${endDate}&priceId=${priceId}`;
 
   return (
     <div className="flex flex-col md:flex-row md:justify-between w-full m-2 mx-auto p-1 md:p-2 h-fit overflow-hidden rounded-lg border border-gray-300 bg-white shadow-md">
@@ -113,7 +90,7 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
           alt="Paquete"
         />
         <span className="absolute top-0 left-0 m-2 rounded-full bg-plumPrimaryPurple px-2 text-center text-sm font-medium text-white">
-          {`${pkgItem?.provider} - ${pkgItem?.id}`}
+          {`${provider} - ${pkgItem?.id}`}
         </span>
       </div>
       <div className="flex md:grow flex-col justify-start gap-1 p-2 mx-2 w-full md:w-2/5  text-xs">
@@ -130,7 +107,7 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
           <span className="flex items-center gap-1">
             {`${hotelName} `} {hotelStars}
           </span>
-          {hotelRoomType && hotelRoomSize && (
+          {(hotelRoomType || hotelRoomSize) && (
             <span>{`Habitación: ${hotelRoomType} - ${hotelRoomSize}`}</span>
           )}
           <span>{hotelMealPlan}</span>
