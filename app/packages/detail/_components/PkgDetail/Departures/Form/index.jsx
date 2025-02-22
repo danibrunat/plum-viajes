@@ -1,30 +1,26 @@
 "use client";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useSearchParams } from "next/navigation";
 
 const getConfigString = (roomsCount, data) => {
   let configString = "";
-
   for (let i = 0; i < roomsCount; i++) {
     const adultsCount = parseInt(data.adults, 10);
     const childrenCount = parseInt(data.children, 10);
     const childrenAges = childrenCount > 0 ? data.childrenAges : [];
-
-    const adultsPart = adultsCount;
-    const childrenPart = childrenAges.length > 0 ? childrenAges.join("-") : "";
-
-    const roomConfig = `${adultsPart}|${childrenPart}`;
-
-    if (i > 0) {
-      configString += ",";
-    }
+    const roomConfig = `${adultsCount}${childrenAges.length > 0 ? `|${childrenAges.join("-")}` : ""}`;
+    if (i > 0) configString += ",";
     configString += roomConfig;
   }
-
   return configString;
 };
 
 const DeparturesForm = ({ departures }) => {
+  // Obtenemos el valor "startDate" de la URL
+  const searchParams = useSearchParams();
+  const defaultStartDate = searchParams.get("startDate") || "";
+
   const {
     register,
     handleSubmit,
@@ -32,7 +28,9 @@ const DeparturesForm = ({ departures }) => {
     clearErrors,
     formState: { errors },
     trigger,
-  } = useForm();
+  } = useForm({
+    defaultValues: { startDate: defaultStartDate }, // Preseleccionamos el startDate
+  });
 
   const onSubmit = (data) => {
     const { startDate } = data;
@@ -46,10 +44,13 @@ const DeparturesForm = ({ departures }) => {
     const configString = getConfigString(roomsCount, data);
     const currentUrl = new URL(window.location.href);
 
-    // TODO: Resolver el initialDate para poder guardarlo. Ya que hoy startDate es el que vos elegís en departures. Si elijo otro, se actualiza el start date y por ende las departures del select se toman desde el nuevo startDate, se pierden las anteriores...
-    /*  if (!currentUrl.searchParams.get("initialDate"))
-      currentUrl.searchParams.set("initialDate", startDate); */
+    // Si no existe "initialDate", lo establecemos con el valor actual de "startDate"
+    if (!currentUrl.searchParams.has("initialDate")) {
+      const originalStartDate = currentUrl.searchParams.get("startDate");
+      currentUrl.searchParams.set("initialDate", originalStartDate);
+    }
 
+    // Actualizamos startDate y endDate con el nuevo valor seleccionado
     currentUrl.searchParams.set("startDate", startDate);
     currentUrl.searchParams.set("endDate", startDate);
     currentUrl.searchParams.set("occupancy", configString);
@@ -60,9 +61,7 @@ const DeparturesForm = ({ departures }) => {
 
   const handleChildrenCountChange = (event) => {
     const count = parseInt(event.target.value);
-    if (count === 0) {
-      clearErrors("childrenAges");
-    }
+    if (count === 0) clearErrors("childrenAges");
     trigger("childrenAges");
   };
 
@@ -77,7 +76,6 @@ const DeparturesForm = ({ departures }) => {
       <em className="text-sm text-gray-600 mb-4">
         Modifica la fecha de salida para ver otras tarifas disponibles:
       </em>
-
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col w-full bg-white p-6 rounded-lg shadow-lg space-y-6 md:flex-row md:items-center md:space-y-0 md:space-x-6"
@@ -105,6 +103,7 @@ const DeparturesForm = ({ departures }) => {
           )}
         </div>
 
+        {/* Resto del formulario */}
         <div className="flex flex-1 space-x-4">
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -114,7 +113,7 @@ const DeparturesForm = ({ departures }) => {
               {...register("adults", {
                 required: "Debes seleccionar el número de adultos.",
               })}
-              defaultValue={"2"}
+              defaultValue="2"
               className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-orange-500 focus:border-orange-500 text-gray-700"
             >
               <option value="1">1</option>
@@ -128,7 +127,6 @@ const DeparturesForm = ({ departures }) => {
               </p>
             )}
           </div>
-
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Menores
@@ -151,7 +149,6 @@ const DeparturesForm = ({ departures }) => {
               </p>
             )}
           </div>
-
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Habitación
@@ -172,7 +169,6 @@ const DeparturesForm = ({ departures }) => {
             )}
           </div>
         </div>
-
         {childrenCount > 0 && (
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -203,7 +199,6 @@ const DeparturesForm = ({ departures }) => {
             )}
           </div>
         )}
-
         <button
           type="submit"
           className="self-end bg-orange-500 text-white py-2 px-6 rounded-lg hover:bg-orange-600 transition-colors shadow-lg"

@@ -9,7 +9,6 @@ const PackageService = {
         consumer === FLOW_STAGES.PKG_AVAILABILITY ||
         consumer === FLOW_STAGES.PKG_DETAIL
       ) {
-        console.log("prices", prices);
         const currency = prices.pricesDetail.currency || "ARS";
         const basePrice = parseFloat(prices.pricesDetail.basePrice);
         const iva = parseFloat(prices.taxes.iva);
@@ -53,7 +52,6 @@ const PackageService = {
 
       return mealPlanDictionary.find((plan) => {
         const planId = plan.id.map((planId) => planId.toLowerCase());
-        console.log("planId", planId);
         return planId.includes(mealPlanId.toLowerCase())?.title;
       });
     },

@@ -74,7 +74,6 @@ export const ProviderService = {
       julia: "CANTNOCHES",
       ola: "Package.Nights",
     },
-
     thumbnails: {
       isArray: true,
       baseKey: {

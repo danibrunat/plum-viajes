@@ -13,7 +13,6 @@ export async function POST(req) {
   /* Response */
 
   const pkgAvailResponse = await pkgAvailRequest.json();
-  console.log("pkgAvailResponse", pkgAvailResponse);
 
   return Response.json(pkgAvailResponse);
 }

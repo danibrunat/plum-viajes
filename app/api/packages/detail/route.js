@@ -43,7 +43,6 @@ export async function POST(req) {
     return Response.json([]);
   }
 
-  console.log("pBaseDetailResponse", pBaseDetailResponse);
   // Verificar que departures es un array
   const departures = pBaseDetailResponse.departures;
   if (!Array.isArray(departures)) {
@@ -59,8 +58,6 @@ export async function POST(req) {
     ...departure,
     departureId: CryptoService.generateDepartureId("plum", departure.date),
   }));
-  console.log("departureIdFromQuery", departureIdFromQuery);
-  console.log("updatedDepartures", updatedDepartures);
   // Verificar que alguno de los departures coincide con el departureId recibido
   const matchingDeparture = updatedDepartures.find(
     (dep) => dep.departureId === departureIdFromQuery

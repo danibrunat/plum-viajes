@@ -5,6 +5,7 @@ import { ProviderService } from "../../../services/providers.service";
 import { OLA } from "../../../services/ola.service";
 import { Filters } from "../../../services/filters.service";
 import CryptoService from "../../../services/cypto.service";
+import PackageApiService from "../../../services/packages.service";
 
 /**
  * Filtra los paquetes de acuerdo a los filtros seleccionados por el usuario.
@@ -145,7 +146,6 @@ async function fetchPlumPackages({
   // Generar departureId en cada objeto de departures sin alterar la estructura
 
   const pkgWithIdentifiedDepartures = onlyPkgWithDepartures.map((pkg) => {
-    console.log("pkg.departures", pkg.departures);
     return {
       ...pkg,
       departures: pkg.departures.map((departure) => ({
@@ -155,12 +155,19 @@ async function fetchPlumPackages({
     };
   });
 
-  // Mapeamos la respuesta para adaptarla a nuestro formato interno
-  const mapResponse = ProviderService.mapper(
-    pkgWithIdentifiedDepartures,
-    "plum",
-    "avail"
+  const departuresGroup = PackageApiService.departures.plum.getDeparturesGroup(
+    pkgWithIdentifiedDepartures
   );
+
+  // Mapeamos la respuesta para adaptarla a nuestro formato interno
+  const mapResponse = {
+    packages: ProviderService.mapper(
+      pkgWithIdentifiedDepartures,
+      "plum",
+      "avail"
+    ),
+    departuresGroup,
+  };
 
   return Response.json(mapResponse);
 }
@@ -184,12 +191,16 @@ async function fetchOlaPackages(searchParams) {
     const pkgWithIdentifiedDepartures = olaAvailResponse.map((pkg) => {
       return {
         ...pkg,
-        departureId: CryptoService.generateDepartureId(
+        id: CryptoService.generateDepartureId(
           "ola",
           pkg.Flight.Trips.Trip[0].DepartureDate
         ),
       };
     });
+
+    const departuresGroup = PackageApiService.departures.ola.getDeparturesGroup(
+      pkgWithIdentifiedDepartures
+    );
 
     const mapResponse = ProviderService.mapper(
       pkgWithIdentifiedDepartures,
@@ -197,7 +208,14 @@ async function fetchOlaPackages(searchParams) {
       "avail"
     );
 
-    return ProviderService.ola.grouper(mapResponse);
+    const groupedResponse = ProviderService.ola.grouper(mapResponse);
+
+    const response = {
+      packages: groupedResponse,
+      departuresGroup,
+    };
+
+    return response;
   } catch (error) {
     console.error("Error fetching OLA packages", error);
   }
@@ -289,8 +307,16 @@ export async function POST(req, res) {
   ]);
 
   const plumPkgResponse = await plumPkg.json();
-  const packagesResponse = plumPkgResponse.concat(olaPkg);
+  const packagesResponse = plumPkgResponse.packages.concat(olaPkg.packages);
+  const departureGroups = plumPkgResponse.departuresGroup.concat(
+    olaPkg.departuresGroup
+  );
   // TODO: Mover esto a pcom
+
+  const departureGroupInCache = await PackageApiService.cache.get(searchParams);
+  if (!departureGroupInCache) {
+    await PackageApiService.cache.set(searchParams, departureGroups, 3600);
+  }
 
   // Procesar los filtros de los paquetes obtenidos
   const filters = await Filters.process(packagesResponse);
