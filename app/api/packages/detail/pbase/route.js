@@ -12,7 +12,7 @@ async function fetchPlumPackageDetail(id) {
     {
     ...,
     "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1,
-    "departures": departures[] {
+    "departures": departures[departureFrom > now()] {
       ...,
       "flights": [
           {
@@ -94,11 +94,10 @@ async function fetchOlaPackageDetail(id, searchParams) {
     "detail"
   );
 
-  /*  */
+  // Buscar el paquete seleccionado
 
-  // Filtrar paquete por id y priceId
-  const selectedPackage = mappedOriginalResponse.find(
-    (pkg) => pkg.id === id && pkg.prices.id == priceId
+  const selectedPackage = mappedOriginalResponse.find((pkg) =>
+    pkg.departures.some((departure) => departure.prices?.id === priceId)
   );
 
   return selectedPackage;

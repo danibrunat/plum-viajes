@@ -37,16 +37,14 @@ const getImgSource = (pkgItem, provider) => {
   if (pkgItem?.thumbnails.length === 0) return imageSourceUrl;
   switch (provider) {
     case "plum":
-      console.log("pkgItem?.thumbnails", pkgItem?.thumbnails);
       imageSourceUrl = urlForImage(pkgItem?.thumbnails[0].sourceUrl);
     case "ola":
-      if (!Array.isArray(pkgItem?.thumbnails)) {
+      if (Array.isArray(pkgItem?.thumbnails)) {
         imageSourceUrl = sanitizeUrlFromDoubleSlash(
           pkgItem?.thumbnails[
             Math.floor(Math.random() * pkgItem?.thumbnails.length)
           ].sourceUrl
         );
-        return;
       }
   }
   return imageSourceUrl;
@@ -63,6 +61,7 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
   const hotelStars = getHotelRating(hotels.rating);
   const provider = pkgItem?.provider;
   const imgSource = getImgSource(pkgItem, provider);
+  console.log("imgSource", imgSource);
 
   const hotelName = Helpers.capitalizeFirstLetter(hotels.name);
   const hotelMealPlan = Helpers.capitalizeFirstLetter(hotels.mealPlan);

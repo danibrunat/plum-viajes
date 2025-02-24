@@ -9,7 +9,9 @@ const getConfigString = (roomsCount, data) => {
     const adultsCount = parseInt(data.adults, 10);
     const childrenCount = parseInt(data.children, 10);
     const childrenAges = childrenCount > 0 ? data.childrenAges : [];
-    const roomConfig = `${adultsCount}${childrenAges.length > 0 ? `|${childrenAges.join("-")}` : ""}`;
+    const roomConfig = `${adultsCount}${
+      childrenAges.length > 0 ? `|${childrenAges.join("-")}` : ""
+    }`;
     if (i > 0) configString += ",";
     configString += roomConfig;
   }
@@ -17,9 +19,30 @@ const getConfigString = (roomsCount, data) => {
 };
 
 const DeparturesForm = ({ departures }) => {
-  // Obtenemos el valor "startDate" de la URL
   const searchParams = useSearchParams();
-  const defaultStartDate = searchParams.get("startDate") || "";
+  // Si existe "startDate" en la URL, se usa; sino se usa el primer departure recibido
+  const urlStartDate = searchParams.get("startDate");
+  const defaultStartDate =
+    urlStartDate || (departures?.length ? departures[0].date : "");
+
+  // Parseamos el parámetro occupancy (ejemplo: "2|11,2|11")
+  const occupancyParam = searchParams.get("occupancy");
+  let defaultOccupancy = "1"; // número de habitaciones
+  let defaultAdults = ""; // cantidad de adultos (del primer room)
+  let defaultChildren = "0"; // cantidad de menores
+  let defaultChildrenAges = []; // edades de los menores
+
+  if (occupancyParam) {
+    const rooms = occupancyParam.split(",");
+    defaultOccupancy = rooms.length.toString();
+    const firstRoom = rooms[0].split("|");
+    defaultAdults = firstRoom[0];
+    if (firstRoom.length > 1 && firstRoom[1].trim() !== "") {
+      const ages = firstRoom[1].split("-");
+      defaultChildren = ages.length.toString();
+      defaultChildrenAges = ages;
+    }
+  }
 
   const {
     register,
@@ -29,7 +52,13 @@ const DeparturesForm = ({ departures }) => {
     formState: { errors },
     trigger,
   } = useForm({
-    defaultValues: { startDate: defaultStartDate }, // Preseleccionamos el startDate
+    defaultValues: {
+      startDate: defaultStartDate,
+      occupancy: defaultOccupancy,
+      adults: defaultAdults,
+      children: defaultChildren,
+      childrenAges: defaultChildrenAges,
+    },
   });
 
   const onSubmit = (data) => {
@@ -44,13 +73,11 @@ const DeparturesForm = ({ departures }) => {
     const configString = getConfigString(roomsCount, data);
     const currentUrl = new URL(window.location.href);
 
-    // Si no existe "initialDate", lo establecemos con el valor actual de "startDate"
     if (!currentUrl.searchParams.has("initialDate")) {
       const originalStartDate = currentUrl.searchParams.get("startDate");
       currentUrl.searchParams.set("initialDate", originalStartDate);
     }
 
-    // Actualizamos startDate y endDate con el nuevo valor seleccionado
     currentUrl.searchParams.set("startDate", startDate);
     currentUrl.searchParams.set("endDate", startDate);
     currentUrl.searchParams.set("occupancy", configString);
@@ -66,29 +93,29 @@ const DeparturesForm = ({ departures }) => {
   };
 
   useEffect(() => {
-    if (childrenCount > 0) {
-      trigger("childrenAges");
-    }
+    if (childrenCount > 0) trigger("childrenAges");
   }, [childrenCount, trigger]);
 
   return (
-    <div className="flex flex-col w-full items-center justify-center">
-      <em className="text-sm text-gray-600 mb-4">
+    <div className="max-w-6xl mx-auto p-4">
+      <em className="block text-center text-lg font-medium text-gray-700 mb-4">
         Modifica la fecha de salida para ver otras tarifas disponibles:
       </em>
+
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col w-full bg-white p-6 rounded-lg shadow-lg space-y-6 md:flex-row md:items-center md:space-y-0 md:space-x-6"
+        className="bg-white shadow rounded-lg p-4 flex items-center space-x-4 overflow-x-auto"
       >
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+        {/* Fecha de Salida */}
+        <div className="flex flex-col min-w-[150px]">
+          <label className="text-sm font-medium text-gray-700 mb-1">
             Fecha de Salida
           </label>
           <select
             {...register("startDate", {
               required: "Este campo es obligatorio.",
             })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-orange-500 focus:border-orange-500 text-gray-700"
+            className="px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
           >
             {departures.map((departure) => (
               <option key={departure.date} value={departure.date}>
@@ -97,114 +124,131 @@ const DeparturesForm = ({ departures }) => {
             ))}
           </select>
           {errors.startDate && (
-            <p className="text-red-500 text-xs mt-2">
+            <span className="mt-1 text-xs text-red-600">
               {errors.startDate.message}
-            </p>
+            </span>
           )}
         </div>
 
-        {/* Resto del formulario */}
-        <div className="flex flex-1 space-x-4">
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Adultos
-            </label>
-            <select
-              {...register("adults", {
-                required: "Debes seleccionar el número de adultos.",
-              })}
-              defaultValue="2"
-              className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-orange-500 focus:border-orange-500 text-gray-700"
-            >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-            </select>
-            {errors.adults && (
-              <p className="text-red-500 text-xs mt-2">
-                {errors.adults.message}
-              </p>
-            )}
-          </div>
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Menores
-            </label>
-            <select
-              {...register("children", {
-                required: "Debes seleccionar el número de menores.",
-                onChange: handleChildrenCountChange,
-              })}
-              className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-orange-500 focus:border-orange-500 text-gray-700"
-            >
-              <option value="0">0</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-            </select>
-            {errors.children && (
-              <p className="text-red-500 text-xs mt-2">
-                {errors.children.message}
-              </p>
-            )}
-          </div>
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Habitación
-            </label>
-            <select
-              {...register("occupancy", {
-                required: "Debes seleccionar la cantidad de habitaciones.",
-              })}
-              className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-orange-500 focus:border-orange-500 text-gray-700"
-            >
-              <option value="1">1</option>
-              <option value="2">2</option>
-            </select>
-            {errors.occupancy && (
-              <p className="text-red-500 text-xs mt-2">
-                {errors.occupancy.message}
-              </p>
-            )}
-          </div>
+        {/* Adultos */}
+        <div className="flex flex-col min-w-[120px]">
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            Adultos
+          </label>
+          <select
+            {...register("adults", {
+              required: "Selecciona el número de adultos.",
+            })}
+            defaultValue="2"
+            className="px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+          >
+            {[1, 2, 3, 4].map((num) => (
+              <option key={num} value={num}>
+                {num}
+              </option>
+            ))}
+          </select>
+          {errors.adults && (
+            <span className="mt-1 text-xs text-red-600">
+              {errors.adults.message}
+            </span>
+          )}
         </div>
+
+        {/* Menores */}
+        <div className="flex flex-col min-w-[120px]">
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            Menores
+          </label>
+          <select
+            {...register("children", {
+              required: "Selecciona el número de menores.",
+              onChange: handleChildrenCountChange,
+            })}
+            className="px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+          >
+            {[0, 1, 2, 3].map((num) => (
+              <option key={num} value={num}>
+                {num}
+              </option>
+            ))}
+          </select>
+          {errors.children && (
+            <span className="mt-1 text-xs text-red-600">
+              {errors.children.message}
+            </span>
+          )}
+        </div>
+
+        {/* Habitaciones */}
+        <div className="flex flex-col min-w-[120px]">
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            Habitación
+          </label>
+          <select
+            {...register("occupancy", {
+              required: "Selecciona la cantidad de habitaciones.",
+            })}
+            className="px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+          >
+            {[1, 2].map((num) => (
+              <option key={num} value={num}>
+                {num}
+              </option>
+            ))}
+          </select>
+          {errors.occupancy && (
+            <span className="mt-1 text-xs text-red-600">
+              {errors.occupancy.message}
+            </span>
+          )}
+        </div>
+
+        {/* Edades de los Menores */}
         {childrenCount > 0 && (
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="flex flex-col min-w-[150px]">
+            <label className="text-sm font-medium text-gray-700 mb-1">
               Edades de los menores
             </label>
-            {Array.from({ length: childrenCount }, (_, index) => (
-              <select
-                key={index}
-                {...register(`childrenAges[${index}]`, {
-                  required: "Debes seleccionar una edad para cada menor.",
-                  validate: (value) =>
-                    value === "" ? "Selecciona una edad" : true,
-                })}
-                className="mb-2 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-orange-500 focus:border-orange-500 text-gray-700"
-              >
-                <option value="">-</option>
-                {Array.from({ length: 16 }, (_, age) => age + 2).map((age) => (
-                  <option key={age} value={age}>
-                    {age}
-                  </option>
-                ))}
-              </select>
-            ))}
+            <div className="space-y-2">
+              {Array.from({ length: childrenCount }, (_, index) => (
+                <select
+                  key={index}
+                  {...register(`childrenAges[${index}]`, {
+                    required: "Debes seleccionar una edad para cada menor.",
+                    validate: (value) =>
+                      value === "" ? "Selecciona una edad" : true,
+                  })}
+                  className="px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+                >
+                  <option value="">-</option>
+                  {Array.from({ length: 16 }, (_, age) => age + 2).map(
+                    (age) => (
+                      <option key={age} value={age}>
+                        {age}
+                      </option>
+                    )
+                  )}
+                </select>
+              ))}
+            </div>
             {errors.childrenAges && (
-              <p className="text-red-500 text-xs mt-2">
+              <span className="mt-1 text-xs text-red-600">
                 {errors.childrenAges.message}
-              </p>
+              </span>
             )}
           </div>
         )}
-        <button
-          type="submit"
-          className="self-end bg-orange-500 text-white py-2 px-6 rounded-lg hover:bg-orange-600 transition-colors shadow-lg"
-        >
-          Buscar
-        </button>
+
+        {/* Botón de Envío */}
+        <div className="flex-shrink-0">
+          <button
+            type="submit"
+            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-md shadow transition-colors whitespace-nowrap"
+          >
+            Buscar
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -2,21 +2,18 @@ import crypto from "crypto";
 import RedisService from "./redis.service";
 
 function generateCacheKey(searchParams) {
-  const { occupancy, departureCity, arrivalCity, startDate, initialDate } =
-    searchParams;
+  const { departureCity, arrivalCity, startDate, initialDate } = searchParams;
   // Si initialDate existe, la usamos como startDate efectiva
   const effectiveStartDate = initialDate || startDate;
 
   // Construimos el objeto de parámetros normalizado usando effectiveStartDate
   const normalizedParams = JSON.stringify(
     {
-      occupancy,
       departureCity,
       arrivalCity,
       startDate: effectiveStartDate,
     },
     Object.keys({
-      occupancy,
       departureCity,
       arrivalCity,
       startDate: effectiveStartDate,
@@ -47,7 +44,6 @@ const PackageApiService = {
     },
     ola: {
       getDeparturesGroup: (olaPkgAvailResponse) => {
-        console.log("olaPkgAvailResponse", JSON.stringify(olaPkgAvailResponse));
         const groupedPackages = {};
         olaPkgAvailResponse.forEach((pkg) => {
           const packageId = pkg.Package.Code; // ID único del paquete

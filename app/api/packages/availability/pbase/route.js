@@ -135,7 +135,7 @@ async function fetchPlumPackages({
     && now() < validDateTo] {
     ...,
     "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1,
-    "departures": departures[]
+    "departures": departures[departureFrom > now()]
    }`;
 
   const sanityQuery = await sanityFetch({ query: pkgAvailQuery });
@@ -214,6 +214,8 @@ async function fetchOlaPackages(searchParams) {
       packages: groupedResponse,
       departuresGroup,
     };
+
+    console.log("ola response", JSON.stringify(response, null, 2));
 
     return response;
   } catch (error) {
@@ -307,6 +309,7 @@ export async function POST(req, res) {
   ]);
 
   const plumPkgResponse = await plumPkg.json();
+  console.log("olaPkg", JSON.stringify(olaPkg, null, 2));
   const packagesResponse = plumPkgResponse.packages.concat(olaPkg.packages);
   const departureGroups = plumPkgResponse.departuresGroup.concat(
     olaPkg.departuresGroup

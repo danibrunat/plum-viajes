@@ -96,7 +96,7 @@ export const ProviderService = {
       items: {
         id: {
           plum: "id",
-          ola: "departureId",
+          ola: "id",
         },
         hotels: {
           isArray: true,

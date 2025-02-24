@@ -14,7 +14,7 @@ const Departures = async ({ searchParams }) => {
     <div>
       <h1>Reservar Salida</h1>
       <Suspense fallback={<Placeholder />}>
-        <DeparturesForm departures={filterDeparturesByPkgId[0].departures} />;
+        <DeparturesForm departures={filterDeparturesByPkgId[0].departures} />
       </Suspense>
     </div>
   );
