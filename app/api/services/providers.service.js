@@ -431,11 +431,11 @@ export const ProviderService = {
                     plum: "arrivalAirport",
                   },
                 },
-                stopovers: {
-                  plum: "segments.stopovers",
-                  ola: "Stops",
-                },
               },
+            },
+            stopovers: {
+              plum: "segments.stopovers",
+              ola: "Stops",
             },
           },
         },

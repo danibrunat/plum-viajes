@@ -106,7 +106,10 @@ export async function POST(req) {
   );
 
   pBaseDetailResponse.flights = updatedFlightSegments;
-  console.log("updatedFlightSegments", updatedFlightSegments);
+  console.log(
+    "updatedFlightSegments",
+    JSON.stringify(updatedFlightSegments, null, 2)
+  );
 
   // Devolver la respuesta manteniendo la estructura original
   // (departures ya contiene la propiedad departureId en cada objeto)

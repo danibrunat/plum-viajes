@@ -3,7 +3,6 @@ import React from "react";
 import { FaPlaneArrival, FaPlaneDeparture } from "react-icons/fa";
 
 const Flights = ({ flights }) => {
-  console.log("flights", JSON.stringify(flights));
   // Función para formatear la fecha
   function formatDateToString(dateString) {
     if (!dateString) return "Fecha inválida"; // Manejo de errores
@@ -97,9 +96,9 @@ const Flights = ({ flights }) => {
                 height={70}
                 alt={segment.airline.code}
               />
-              {flights.stopovers == 0
+              {flight.stopovers == 0
                 ? "Directo"
-                : `${flights.stopovers} Escalas`}
+                : `${flight.stopovers} Escalas`}
             </div>
 
             <div className="w-1/3 p-3">
