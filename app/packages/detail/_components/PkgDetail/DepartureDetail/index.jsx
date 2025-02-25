@@ -31,15 +31,27 @@ const getRoomSummary = (rooms) => {
 const extractHtmlValuesToArray = (htmlString) => {
   if (!htmlString || typeof htmlString !== "string") return [];
 
-  // Expresión regular para encontrar el contenido dentro de las etiquetas <p>
-  const matches = htmlString.match(/<p[^>]*>(.*?)<\/p>/g);
+  let document;
 
-  if (!matches) return htmlString; // Si no hay coincidencias, retornar un array vacío
+  if (typeof window !== "undefined" && window.DOMParser) {
+    // Estamos en el navegador
+    const parser = new DOMParser();
+    document = parser.parseFromString(htmlString, "text/html");
+  } else {
+    // Estamos en Node.js (Servidor en Next.js)
+    const { JSDOM } = require("jsdom");
+    document = new JSDOM(htmlString).window.document;
+  }
 
-  // Extraer el texto dentro de las etiquetas <p> y limpiar etiquetas adicionales
-  return matches
-    .map((match) => match.replace(/<[^>]*>/g, "").trim()) // Remover etiquetas HTML
-    .filter((text) => text.length > 0); // Filtrar valores vacíos
+  const extractedTexts = [];
+
+  // Extraer texto de etiquetas relevantes
+  document.querySelectorAll("p, div, span, strong, em").forEach((el) => {
+    const text = el.textContent.trim();
+    if (text) extractedTexts.push(text);
+  });
+
+  return extractedTexts;
 };
 
 const DepartureDetail = ({
@@ -77,14 +89,22 @@ const DepartureDetail = ({
         </div>
       </div>
       <div className="flex flex-col border-2 gap-3 rounded-md border-gray-400 p-3">
-        <em className="text-sm underline font-bold">Incluye:</em>
-        <ul className="list-disc list-inside">
-          {Array.isArray(sanitizedDescription)
-            ? sanitizedDescription.map((descItem) => (
-                <li key={descItem}>{descItem}</li>
-              ))
-            : sanitizedDescription}
-        </ul>
+        {sanitizedDescription.length > 0 ? (
+          <>
+            <em className="text-sm underline font-bold">Incluye:</em>
+            <ul className="list-disc list-inside">
+              {Array.isArray(sanitizedDescription)
+                ? sanitizedDescription.map((descItem) => (
+                    <li key={descItem}>{descItem}</li>
+                  ))
+                : sanitizedDescription}
+            </ul>
+          </>
+        ) : (
+          <span className="text-sm text-gray-500">
+            Sin descripción adicional
+          </span>
+        )}
       </div>
     </div>
   );

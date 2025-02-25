@@ -7,19 +7,20 @@ const withPWA = require("@ducanh2912/next-pwa").default({
   disable: false,
   workboxOptions: {
     disableDevLogs: true,
-    maximumFileSizeToCacheInBytes: 5000000, // <---- increasing the file size to cached 5mb
+    maximumFileSizeToCacheInBytes: 5000000, // Cachea archivos hasta 5 MB
   },
 });
+
 const nextConfig = {
   images: {
-    domains: [
-      "cdn.sanity.io",
-      "source.unsplash.com",
-      "aws-qa1.ola.com.ar",
-      "s3.amazonaws.com",
-      "plumviajes.com.ar",
-      "www.plumviajes.com.ar",
-      "guvpgxfgdpcfdtdvrpcd.supabase.co",
+    remotePatterns: [
+      { protocol: "https", hostname: "cdn.sanity.io" },
+      { protocol: "https", hostname: "source.unsplash.com" },
+      { protocol: "https", hostname: "aws-qa1.ola.com.ar" },
+      { protocol: "https", hostname: "s3.amazonaws.com" },
+      { protocol: "https", hostname: "plumviajes.com.ar" },
+      { protocol: "https", hostname: "www.plumviajes.com.ar" },
+      { protocol: "https", hostname: "guvpgxfgdpcfdtdvrpcd.supabase.co" },
     ],
   },
   logging: {
@@ -43,16 +44,13 @@ const nextConfig = {
   async headers() {
     return [
       {
-        // Aplicar los headers de CORS a todas las rutas de API
+        // Headers para CORS en rutas de API
         source: "/api/:path*",
         headers: [
-          {
-            key: "Access-Control-Allow-Credentials",
-            value: "true",
-          },
+          { key: "Access-Control-Allow-Credentials", value: "true" },
           {
             key: "Access-Control-Allow-Origin",
-            value: "http://localhost:3333", // Cambia al dominio que permita hacer peticiones
+            value: "http://localhost:3333",
           },
           {
             key: "Access-Control-Allow-Methods",
