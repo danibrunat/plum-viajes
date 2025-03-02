@@ -1,11 +1,12 @@
 import { LinkIcon } from "@sanity/icons";
 import { defineField } from "sanity";
 import { ORIGINS } from "../../../app/constants/origins";
-import { CITIES } from "../../../app/constants/destinations";
 import { OPERATORS } from "../../../app/constants/operators";
 import { SPECIAL_OFFER_TAGS } from "../../../app/constants/specialOfferTags";
 import { PAYMENT_TYPES } from "../../../app/constants/paymentTypes";
 import { CURRENCIES } from "../../../app/constants/currencies";
+
+import CustomDestinationInput from "../../components/Common/CustomDestinationInput";
 
 export default defineField({
   name: "packages",
@@ -70,7 +71,6 @@ export default defineField({
       title: "Subtítulo",
       fieldset: "generalData",
     },
-    // Presented as a tokenizing tag-field
     {
       title: "Origen",
       name: "origin",
@@ -84,18 +84,13 @@ export default defineField({
         })).slice(1, 5),
       },
     },
-    // Presented as a tokenizing tag-field
     {
-      title: "Destino",
       name: "destination",
+      title: "",
       type: "array",
       of: [{ type: "string" }],
-      options: {
-        layout: "grid",
-        list: CITIES.filter((c) => c.id === "IGR").map((o) => ({
-          title: o.name,
-          value: o.id,
-        })),
+      components: {
+        input: CustomDestinationInput,
       },
     },
     /* {

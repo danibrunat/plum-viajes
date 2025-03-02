@@ -65,6 +65,10 @@ const Flights = ({ flights }) => {
 
   const renderSegments = (flight) => {
     if (Array.isArray(flight.segments)) {
+      console.log(
+        "segment?.departureAirport",
+        flight.segments[0]?.departureAirport
+      );
       return flight.segments.map((segment, segmentIndex) => (
         <div key={segmentIndex}>
           {/* Cabecera con íconos de salida y llegada */}
@@ -80,8 +84,8 @@ const Flights = ({ flights }) => {
             <div className="w-1/3 p-3">
               <span>
                 <strong>
-                  {segment.departureAirport.name} (
-                  {segment.departureAirport.code})
+                  {segment?.departureAirport?.name || ""} (
+                  {segment?.departureAirport?.code || ""})
                 </strong>{" "}
                 {formatDateToString(
                   `${segment.departureDate} ${segment.departureHour}`
@@ -104,7 +108,8 @@ const Flights = ({ flights }) => {
             <div className="w-1/3 p-3">
               <span>
                 <strong>
-                  {segment.arrivalAirport.name} ({segment.arrivalAirport.code})
+                  {segment?.arrivalAirport.name ?? ""} (
+                  {segment?.arrivalAirport.code ?? ""})
                 </strong>{" "}
                 {formatDateToString(
                   `${segment.arrivalDate} ${segment.arrivalHour}`

@@ -56,7 +56,7 @@ export async function POST(req) {
   const provider = pBaseDetailResponse.provider;
   const updatedDepartures = departures.map((departure) => ({
     ...departure,
-    departureId: CryptoService.generateDepartureId("ola", departure.date),
+    departureId: CryptoService.generateDepartureId(provider, departure.date),
   }));
   // Verificar que alguno de los departures coincide con el departureId recibido
   const matchingDeparture = updatedDepartures.find(

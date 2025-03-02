@@ -132,11 +132,14 @@ async function fetchPlumPackages({
     && "${departureCity}" in origin
     && "${arrivalCity}" in destination
     && now() > validDateFrom 
-    && now() < validDateTo] {
+    && now() < validDateTo
+    && active == true] {
     ...,
     "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1,
-    "departures": departures[departureFrom > now()]
+    "departures": departures[departureFrom >= now()]
    }`;
+
+  console.log("pkgAvailQuery | groq", pkgAvailQuery);
 
   const sanityQuery = await sanityFetch({ query: pkgAvailQuery });
   const pkgAvailResponse = await sanityQuery;
@@ -309,7 +312,6 @@ export async function POST(req, res) {
   ]);
 
   const plumPkgResponse = await plumPkg.json();
-  console.log("olaPkg", JSON.stringify(olaPkg, null, 2));
   const packagesResponse = plumPkgResponse.packages.concat(olaPkg.packages);
   const departureGroups = plumPkgResponse.departuresGroup.concat(
     olaPkg.departuresGroup

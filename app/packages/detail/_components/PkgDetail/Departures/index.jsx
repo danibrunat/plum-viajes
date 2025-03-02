@@ -3,7 +3,6 @@ import DeparturesForm from "./Form";
 import Placeholder from "./Placeholder";
 import PackageApiService from "../../../../../api/services/packages.service";
 
-// TODO: HAY QUE HANDLEAR EL CAMBIO DE DEPARTURE.
 const Departures = async ({ searchParams }) => {
   const cacheDepartures = await PackageApiService.cache.get(searchParams);
   const filterDeparturesByPkgId = cacheDepartures.filter(

@@ -83,10 +83,7 @@ const PackageApiService = {
      */
     async get(searchParams) {
       const cacheKey = generateCacheKey(searchParams);
-      console.log("GET cacheKey", cacheKey);
-
       const cachedData = await RedisService.get(cacheKey);
-      console.log("cachedData", cachedData);
       if (!cachedData) return null; // Si no hay datos, devolvemos null
 
       return cachedData;

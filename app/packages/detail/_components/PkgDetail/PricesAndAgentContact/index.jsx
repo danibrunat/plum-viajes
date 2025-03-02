@@ -6,7 +6,7 @@ import { FLOW_STAGES } from "../../../../../constants/site";
 
 const PricesAndAgentContact = ({ prices, occupancy, hotels }) => {
   console.log("PricesAndAgentContact | hotels", hotels);
-  const { currency, finalPrice } = PackageService.prices.getPkgPrice(
+  const { currency = "", finalPrice } = PackageService.prices.getPkgPrice(
     prices,
     FLOW_STAGES.PKG_DETAIL
   );

@@ -34,6 +34,8 @@ import { ApiUtils } from "./apiUtils.service";
  * @property {Function} departureDateMonthYear
  * @property {Function} departureDateFromTo
  * @property {Function} hasNestedProperty
+ * @property {Function} getRoomsConfig
+ * @property {Function} getHotelDetailInfo
  * @property {Function} getByDotOperator
  * @property {Function} mapper
  * @property {Object} julia
@@ -394,11 +396,11 @@ export const ProviderService = {
                 departureAirport: {
                   code: {
                     ola: "DepartureAirport.attributes.Iata",
-                    plum: "departureAirport",
+                    plum: "departureCity",
                   },
                   name: {
                     ola: "DepartureAirport.$value",
-                    plum: "departureAirport",
+                    plum: "departureCity",
                   },
                 },
                 departureCity: {
@@ -424,11 +426,11 @@ export const ProviderService = {
                 arrivalAirport: {
                   code: {
                     ola: "ArrivalAirport.attributes.Iata",
-                    plum: "arrivalAirport",
+                    plum: "arrivalCity",
                   },
                   name: {
                     ola: "ArrivalAirport.$value",
-                    plum: "arrivalAirport",
+                    plum: "arrivalCity",
                   },
                 },
               },

@@ -3,7 +3,7 @@ import { FLOW_STAGES } from "../constants/site";
 const PackageService = {
   prices: {
     getPkgPrice: (prices, consumer) => {
-      if (!prices) return "Consulte";
+      if (prices.pricesDetail.length === 0) return "Consulte";
       // Podemos tener diferente política de precios según el consumer.
       if (
         consumer === FLOW_STAGES.PKG_AVAILABILITY ||

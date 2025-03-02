@@ -39,7 +39,9 @@ const getImgSource = (pkgItem, provider) => {
     case "plum":
       imageSourceUrl = urlForImage(pkgItem?.thumbnails[0].sourceUrl);
     case "ola":
-      if (Array.isArray(pkgItem?.thumbnails)) {
+      if (
+        Array.isArray(pkgItem?.thumbnails && pkgItem?.thumbnails.length > 0)
+      ) {
         imageSourceUrl = sanitizeUrlFromDoubleSlash(
           pkgItem?.thumbnails[
             Math.floor(Math.random() * pkgItem?.thumbnails.length)
