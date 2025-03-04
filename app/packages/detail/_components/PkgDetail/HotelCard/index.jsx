@@ -6,7 +6,7 @@ import Slider from "../../../../../components/commons/Slider";
 const HotelCard = ({ hotelData }) => {
   const { name, stars, city_id, description, latitude, longitude } = hotelData;
   const hotelImages = hotelData?.images.map((imageItem) => ({
-    src: imageItem.publicUrl,
+    src: imageItem,
   }));
   // State to handle text expansion
   const [expanded, setExpanded] = useState(false);

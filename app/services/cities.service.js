@@ -1,5 +1,5 @@
 import { ApiUtils } from "../api/services/apiUtils.service";
-import DatabaseService from "../api/services/database.service";
+import DatabaseService from "../api/services/sanity.service";
 import CACHE from "../constants/cachePolicies";
 
 const isFrontEndCall = typeof process.env.SANITY_STUDIO_URL == "undefined";

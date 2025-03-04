@@ -1,6 +1,4 @@
 import { defineField } from "sanity";
-import HotelSelect from "../../components/HotelSelect";
-import AirlineSelect from "../../components/AirlineSelect";
 
 export default defineField({
   title: "Salida",
@@ -117,28 +115,14 @@ export default defineField({
       },
       fieldset: "roundTripFlight1",
     },
-    defineField({
+    {
       name: "airlineRt1",
-      type: "object",
       title: "Aerolínea",
+      type: "reference", // Campo de referencia
+      to: [{ type: "airline" }], // Referencia al esquema "airline"
       fieldset: "roundTripFlight1",
-      fields: [
-        defineField({
-          name: "id",
-          type: "string",
-          title: "Airline ID",
-          hidden: true,
-        }),
-        defineField({
-          name: "name",
-          type: "string",
-          title: "Airline Name",
-        }),
-      ],
-      components: {
-        input: AirlineSelect,
-      },
-    }),
+    },
+
     {
       name: "flightNumberRt1",
       type: "string",
@@ -202,28 +186,14 @@ export default defineField({
       },
       fieldset: "roundTripFlight2",
     },
-    defineField({
+    {
       name: "airlineRt2",
-      type: "object",
       title: "Aerolínea",
+      type: "reference", // Tipo de campo de referencia directa
       fieldset: "roundTripFlight2",
-      fields: [
-        defineField({
-          name: "id",
-          type: "string",
-          title: "Airline ID",
-          hidden: true,
-        }),
-        defineField({
-          name: "name",
-          type: "string",
-          title: "Airline Name",
-        }),
-      ],
-      components: {
-        input: AirlineSelect,
-      },
-    }),
+      to: [{ type: "airline" }], // Referencia al schema "airline"
+    },
+
     {
       name: "flightNumberRt2",
       type: "string",
@@ -243,27 +213,10 @@ export default defineField({
       type: "array",
       fieldset: "hotels",
       of: [
-        defineField({
-          name: "hotel",
-          type: "object",
-          title: "Hotel",
-          fields: [
-            defineField({
-              name: "id",
-              type: "number",
-              title: "Hotel ID",
-              hidden: true,
-            }),
-            defineField({
-              name: "name",
-              type: "string",
-              title: "Hotel Name",
-            }),
-          ],
-          components: {
-            input: HotelSelect,
-          },
-        }),
+        {
+          type: "reference",
+          to: [{ type: "hotel" }], // Aquí defines el tipo de documento al que haces referencia
+        },
       ],
     }),
     {

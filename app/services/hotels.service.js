@@ -1,13 +1,39 @@
 import { ApiUtils } from "../api/services/apiUtils.service";
+import DatabaseService from "../api/services/sanity.service";
 import { Api } from "./api.service";
 
 const HotelsService = {
   getHotelData: async (provider, pkgHotel) => {
-    // TODO: Debería hacer un mapeo previo para obtener el ID del hotel correcto dependiendo del operador.
-    // Debemos tener una tabla de mapeos de operadores y hoteles. Ej: OLA: ABC123 = 1, PLUM: 123 = 1. Siendo este el mismo hotel.
-    if (provider === "plum" || provider === "ola") {
-      if (provider === "ola") pkgHotel.id = 2;
-      // TODO: Debemos también soportar que venga un array de hotels. Por ahora dejamos pkgHotels como nombre de la variable pero vendrá solo un objeto. DEbemos agregar la poibildiad del array desde provider.service
+    console.log("pkgHotel", pkgHotel);
+    if (provider === "plum") {
+      // Para PLUM se utiliza el ID que ya viene en pkgHotel
+      const hotelDataRequest = await ApiUtils.requestHandler(
+        fetch(
+          Api.hotels.getById.url(pkgHotel.id),
+          Api.hotels.getById.options()
+        ),
+        Api.hotels.getById.name
+      );
+      const hotelDataResponse = await hotelDataRequest.json();
+
+      return hotelDataResponse;
+    } else if (provider === "ola") {
+      // Para OLA, se busca por nombre (usando ilike) para obtener el common hotel id
+      const hotelsMatching =
+        await DatabaseService.getByFieldIlikeAndCustomSelect(
+          "hotels",
+          "name",
+          pkgHotel.name,
+          `*, hotels_images (image_name)`
+        );
+      if (!hotelsMatching || hotelsMatching.length === 0) {
+        throw new Error(`No se encontró mapeo para el hotel: ${pkgHotel.name}`);
+      }
+      // Tomamos el primer resultado (o aplicar otra lógica de selección si corresponde)
+      const mappedHotel = hotelsMatching[0];
+      // Asignamos el common hotel id obtenido al pkgHotel
+      pkgHotel.id = mappedHotel.id;
+      // Ahora se consulta el hotel usando el ID mapeado
       const hotelDataRequest = await ApiUtils.requestHandler(
         fetch(
           Api.hotels.getById.url(pkgHotel.id),

@@ -1,5 +1,5 @@
 import { CitiesService } from "../../../services/cities.service";
-import DatabaseService from "../../services/database.service";
+import DatabaseService from "../../services/sanity.service";
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);

@@ -2,6 +2,8 @@ import { type SchemaTypeDefinition } from "sanity";
 
 // Document types
 import page from "./schemas/documents/page";
+import cities from "./schemas/documents/cities";
+import hotels from "./schemas/documents/hotels";
 import route from "./schemas/documents/route";
 import siteConfig from "./schemas/documents/siteConfig";
 import landing from "./schemas/documents/landing";
@@ -10,6 +12,7 @@ import quotation from "./schemas/documents/quotation";
 import tags from "./schemas/documents/tags";
 import taggedPackages from "./schemas/documents/taggedPackages";
 import providerPackages from "./schemas/documents/providerPackages";
+import airlines from "./schemas/documents/airlines";
 
 // Object types
 import cta from "./schemas/objects/cta";
@@ -28,7 +31,6 @@ import newsletter from "./schemas/objects/newsletter";
 import iFrame from "./schemas/objects/iframe";
 import departure from "./schemas/objects/departure";
 import prices from "./schemas/objects/prices";
-import hotel from "./schemas/objects/hotel";
 
 // Landing page sections
 import hero from "./schemas/objects/hero";
@@ -38,6 +40,9 @@ import slider from "./schemas/objects/slider";
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     packages,
+    cities,
+    hotels,
+    airlines,
     tags,
     taggedPackages,
     providerPackages,
@@ -66,6 +71,5 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     iFrame,
     departure,
     prices,
-    hotel,
   ],
 };

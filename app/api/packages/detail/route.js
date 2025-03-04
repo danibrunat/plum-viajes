@@ -68,7 +68,6 @@ export async function POST(req) {
 
   // Actualizar la propiedad departures de la respuesta con la información enriquecida
   pBaseDetailResponse.departures = updatedDepartures;
-
   // Procesar hoteles asociados a la salida seleccionada
   const hotelsArray = Array.isArray(matchingDeparture.hotels)
     ? matchingDeparture.hotels
@@ -106,11 +105,6 @@ export async function POST(req) {
   );
 
   pBaseDetailResponse.flights = updatedFlightSegments;
-  console.log(
-    "updatedFlightSegments",
-    JSON.stringify(updatedFlightSegments, null, 2)
-  );
-
   // Devolver la respuesta manteniendo la estructura original
   // (departures ya contiene la propiedad departureId en cada objeto)
   const response = {

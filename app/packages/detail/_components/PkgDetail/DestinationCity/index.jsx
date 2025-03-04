@@ -7,7 +7,7 @@ const DestinationCity = ({ sliderImages = [], city }) => {
   const [expanded, setExpanded] = useState(false);
   const { id, name, description, label, value, images } = city;
   const cityImages = images.map((imageItem) => ({
-    src: imageItem.publicUrl,
+    src: imageItem,
   }));
 
   // Handler to toggle text expansion

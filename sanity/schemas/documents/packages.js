@@ -6,8 +6,6 @@ import { SPECIAL_OFFER_TAGS } from "../../../app/constants/specialOfferTags";
 import { PAYMENT_TYPES } from "../../../app/constants/paymentTypes";
 import { CURRENCIES } from "../../../app/constants/currencies";
 
-import CustomDestinationInput from "../../components/Common/CustomDestinationInput";
-
 export default defineField({
   name: "packages",
   type: "document",
@@ -86,12 +84,14 @@ export default defineField({
     },
     {
       name: "destination",
-      title: "",
+      title: "Destinos",
       type: "array",
-      of: [{ type: "string" }],
-      components: {
-        input: CustomDestinationInput,
-      },
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "city" }], // Aquí defines el tipo de documento al que haces referencia
+        },
+      ],
     },
     /* {
       name: "origin",

@@ -104,8 +104,6 @@ async function fetchPlumPackageDetail({ occupancy, id }) {
     }
    }`;
 
-  console.log("fetchPlumPackageDetail | pkgDetailQuery ", pkgDetailQuery);
-
   const sanityQuery = await sanityFetch({ query: pkgDetailQuery });
   const pkgDetailResponse = await sanityQuery;
   const mapResponse = ProviderService.mapper(
