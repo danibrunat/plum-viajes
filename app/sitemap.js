@@ -1,7 +1,7 @@
 import groq from "groq";
 import { client } from "../sanity/lib/client";
 
-export default async function sitem(req, res) {
+export async function GET(request) {
   const baseUrl = process.env.URL || "http://localhost:3000";
 
   const { allRoutes } = await client.fetch(groq`{
@@ -21,12 +21,17 @@ export default async function sitem(req, res) {
       url: `${baseUrl}/${slug === "/" ? "" : slug}`,
       lastModified: _updatedAt || new Date(),
       changeFrequency: slug === "/" ? "weekly" : "monthly",
-      priority: slug === "/" ? 1.0 : 0.8, // La home es la más prioritaria
+      priority: slug === "/" ? 1.0 : 0.8,
     };
   });
 
-  res.setHeader("Content-Type", "application/xml");
-  res.status(200).end(generateSitemapXml(sitemapEntries));
+  const sitemapXml = generateSitemapXml(sitemapEntries);
+
+  return new Response(sitemapXml, {
+    headers: {
+      "Content-Type": "application/xml",
+    },
+  });
 }
 
 function generateSitemapXml(entries) {
