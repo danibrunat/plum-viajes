@@ -1,4 +1,3 @@
-import DatabaseService from "../../services/database.service";
 import SanityService from "../../services/sanity.service";
 
 async function getPkgLandingData(destination) {
