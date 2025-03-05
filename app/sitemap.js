@@ -2,7 +2,7 @@ import groq from "groq";
 import { client } from "../sanity/lib/client";
 
 export default async function sitem(req, res) {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const baseUrl = process.env.URL || "http://localhost:3000";
 
   const { allRoutes } = await client.fetch(groq`{
     "allRoutes": *[
