@@ -4,6 +4,11 @@ const Tabs = ({ children }) => {
   const [activeTab, setActiveTab] = useState(children[0]?.props.label);
   const handleClick = (e, newActiveTab) => {
     e.preventDefault();
+    if (newActiveTab === "Hoteles") {
+      window.location.href =
+        "https://plumviajes.app.pricenavigator.net/#!/hotel";
+      return;
+    }
     setActiveTab(newActiveTab);
   };
   return (

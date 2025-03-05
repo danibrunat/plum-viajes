@@ -1,4 +1,3 @@
-import { url } from "inspector";
 import { ApiUtils } from "../api/services/apiUtils.service";
 
 const isSanity = typeof process.env.NEXT_PUBLIC_URL == "undefined"; // Desde Sanity no existen las variables no prefijadas en SANITY_STUDIO_
