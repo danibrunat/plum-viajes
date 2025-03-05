@@ -1,11 +1,7 @@
-import DatabaseService from "./database.service";
+import SanityService from "./sanity.service";
 
 export const Airlines = {
-  get: () => DatabaseService.get("airlines"),
-  getByAirlineCode: (field) =>
-    DatabaseService.getAllByFieldEqual("airlines", "code", field),
-  getLogoPublicUrl: (logoName) =>
-    DatabaseService.getStorageItemPublicUrl("airlines_images", logoName),
-  /* getImagePublicUrl: (imagePath) =>
-    DatabaseService.getStorageItemPublicUrl("hotel_images", imagePath), */
+  get: () => SanityService.getFromSanity(`*[_type == "airline"]`),
+  getByCode: (code) =>
+    SanityService.getFromSanity(`*[_type == "airline" && code == "${code}"]`),
 };

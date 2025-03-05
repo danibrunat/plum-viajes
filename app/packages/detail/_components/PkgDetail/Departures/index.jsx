@@ -9,6 +9,8 @@ const Departures = async ({ searchParams }) => {
     (cd) => cd.pkgId === searchParams.id
   );
 
+  console.log("filterDeparturesByPkgId", filterDeparturesByPkgId);
+
   return (
     <div>
       <h1>Reservar Salida</h1>

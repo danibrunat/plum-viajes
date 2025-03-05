@@ -4,7 +4,7 @@ import { FaMapMarkerAlt, FaStar } from "react-icons/fa";
 import Slider from "../../../../../components/commons/Slider";
 
 const HotelCard = ({ hotelData }) => {
-  const { name, stars, city_id, description, latitude, longitude } = hotelData;
+  const { name, stars, city, description, latitude, longitude } = hotelData;
   const hotelImages = hotelData?.images.map((imageItem) => ({
     src: imageItem,
   }));
@@ -27,7 +27,7 @@ const HotelCard = ({ hotelData }) => {
               <FaStar key={index} className="text-yellow-500 text-sm" />
             ))}
           </p>
-          <p>{city_id}</p>
+          <p>{`${city.name} (${city.iata_code})`}</p>
         </div>
       </h2>
 

@@ -1,13 +1,27 @@
-import DatabaseService from "./sanity.service";
+import SanityService from "./sanity.service";
 
 export const Hotels = {
-  get: () => DatabaseService.get("hotels"),
+  get: () => SanityService.getFromSanity(`*[_type == "hotel"]`),
   getById: (id) =>
-    DatabaseService.getByIdEqualAndCustomSelect("hotels", `*`, id),
+    SanityService.getFromSanity(`*[_type == "hotel" && _id == "${id}"] {
+      ...,
+       "city": city_id-> {
+          iata_code,
+          name,
+          country_name
+        }
+      }`),
   getByNameIlike: (name) =>
-    DatabaseService.getByFieldIlikeAndCustomSelect("hotels", "name", name, `*`),
+    SanityService.getFromSanity(`*[_type == "hotel" && name match "${name}"] {
+      ...,
+       "city": city_id-> {
+          iata_code,
+          name,
+          country_name
+        }
+          }`),
   getImagePublicUrl: (imagePath) =>
-    DatabaseService.getStorageItemPublicUrl("hotel_images", imagePath),
+    SanityService.getStorageItemPublicUrl("hotel_images", imagePath),
   getImagesForHotel: (hotelId) =>
-    DatabaseService.listImagesFromBucketNestedFolder("hotel_images", hotelId),
+    SanityService.listImagesFromBucketNestedFolder("hotel_images", hotelId),
 };

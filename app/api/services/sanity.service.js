@@ -32,7 +32,7 @@ const serverClient = (cookieStore) => {
 };
 
 // Database service object containing various methods for database operations
-const DatabaseService = {
+const SanityService = {
   // Method to get all records from a specified table
   getFromSanity: async (query) => {
     const sanityQuery = await ApiUtils.requestHandler(
@@ -40,7 +40,6 @@ const DatabaseService = {
       "Sanity fetch"
     );
     const response = await sanityQuery;
-
     return response;
   },
   get: async (table) => {
@@ -193,4 +192,4 @@ const DatabaseService = {
   },
 };
 
-export default DatabaseService;
+export default SanityService;

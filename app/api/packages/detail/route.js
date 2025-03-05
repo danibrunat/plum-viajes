@@ -2,15 +2,7 @@ import { Api } from "../../../services/api.service";
 import { CitiesService } from "../../../services/cities.service";
 import HotelsService from "../../../services/hotels.service";
 import AirlinesService from "../../../services/airlines.service";
-import crypto from "crypto";
 import CryptoService from "../../services/cypto.service";
-
-const generateDepartureId = (provider, departureDate) => {
-  return crypto
-    .createHash("md5")
-    .update(`${provider}-${departureDate}`)
-    .digest("hex");
-};
 
 const mapFlightSegment = async (segment) => {
   const airlineData = await AirlinesService.getAirlineData(
@@ -79,7 +71,9 @@ export async function POST(req) {
 
   // Procesar la data de ciudades según los hoteles
   const citiesData = await Promise.all(
-    hotelsData.map((hotel) => CitiesService.getCityByCode(hotel.city_id, true))
+    hotelsData.map((hotel) =>
+      CitiesService.getCityByCode(hotel.city.iata_code, true)
+    )
   );
 
   // Procesar segmentos de vuelo (si existen en la respuesta)

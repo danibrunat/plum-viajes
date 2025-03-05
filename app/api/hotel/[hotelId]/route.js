@@ -5,7 +5,7 @@ export async function GET(req, { params }) {
   const baseHotelsResponse = await Hotels.getById(hotelId);
   const hotelImagesWithPublicUrl = await Hotels.getImagesForHotel(hotelId);
   const response = {
-    ...baseHotelsResponse,
+    ...baseHotelsResponse[0],
     images: hotelImagesWithPublicUrl, // Ahora tienes las URLs públicas
   };
 

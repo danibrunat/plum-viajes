@@ -130,16 +130,44 @@ async function fetchPlumPackages({
   // Consulta GROQ para obtener paquetes desde Sanity
   const pkgAvailQuery = groq`*[_type == "packages" 
     && "${departureCity}" in origin
-    && "${arrivalCity}" in destination
+    && "${arrivalCity}" in destination[]->iata_code
     && now() > validDateFrom 
     && now() < validDateTo
     && active == true] {
     ...,
-    "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1,
-    "departures": departures[departureFrom >= now()]
-   }`;
-
-  console.log("pkgAvailQuery | groq", pkgAvailQuery);
+    "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1->name,
+    
+    // Filtramos las salidas que tienen fechas válidas
+    "departures": departures[departureFrom >= now()] {
+      ...,
+      
+      // Desreferenciar el array de hoteles
+      "hotels": hotels[]-> {
+        name, 
+        stars, 
+        description, 
+        latitude, 
+        longitude, 
+        plum_id,
+        
+        // Desreferenciamos la ciudad
+        "city": city_id-> {
+          iata_code,
+          name,
+          country_name
+        }
+      },
+      
+      "airlineRt1": airlineRt1-> {
+        code,
+        name
+      },
+      "airlineRt2": airlineRt2-> {
+        code,
+        name
+      }
+    }
+  }`;
 
   const sanityQuery = await sanityFetch({ query: pkgAvailQuery });
   const pkgAvailResponse = await sanityQuery;
@@ -217,8 +245,6 @@ async function fetchOlaPackages(searchParams) {
       packages: groupedResponse,
       departuresGroup,
     };
-
-    console.log("ola response", JSON.stringify(response, null, 2));
 
     return response;
   } catch (error) {

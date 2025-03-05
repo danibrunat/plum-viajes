@@ -48,6 +48,14 @@ export const Api = {
       }),
       name: `GET Hotel ID `,
     },
+    getByName: {
+      url: (name) => `${baseUrl}/api/hotels/byName?name=${name}`,
+      options: () => ({
+        method: "GET",
+        headers: ApiUtils.getCommonHeaders(),
+      }),
+      name: `GET Hotel By Name `,
+    },
   },
   airlines: {
     get: {

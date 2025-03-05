@@ -1,5 +1,5 @@
 import { ApiUtils } from "../api/services/apiUtils.service";
-import DatabaseService from "../api/services/sanity.service";
+import SanityService from "../api/services/sanity.service";
 import CACHE from "../constants/cachePolicies";
 
 const isFrontEndCall = typeof process.env.SANITY_STUDIO_URL == "undefined";
@@ -33,8 +33,8 @@ export const CitiesService = {
       );
       const citiesResponse = await citiesSearch.json();
       const mapResponse = citiesResponse.map(
-        ({ id, name, country_name, iata_code, description, images }) => ({
-          id,
+        ({ _id, name, country_name, iata_code, description, images }) => ({
+          id: _id,
           name,
           description,
           label: `${name}, ${country_name}`,
@@ -66,5 +66,5 @@ export const CitiesService = {
     return citiesResponse;
   },
   getImagePublicUrl: (imagePath) =>
-    DatabaseService.getStorageItemPublicUrl("city_images", imagePath),
+    SanityService.getStorageItemPublicUrl("city_images", imagePath),
 };

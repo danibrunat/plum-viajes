@@ -1,17 +1,13 @@
-import DatabaseService from "../../services/database.service";
+import SanityService from "../../services/sanity.service";
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const name = searchParams.get("name");
-  //console.log("name", name);
-
-  const response = await DatabaseService.getByFieldIlike(
-    "cities",
-    "name",
-    name
+  const sanityResponse = await SanityService.getFromSanity(
+    `*[_type == "city" && name match "${name}"]`
   );
 
-  if (response?.error) Response.json(response?.error);
+  if (sanityResponse?.error) Response.json(sanityResponse?.error);
 
-  return Response.json(response);
+  return Response.json(sanityResponse);
 }

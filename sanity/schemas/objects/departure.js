@@ -207,7 +207,7 @@ export default defineField({
       fieldset: "roundTripFlight2",
     },
     // Hoteles
-    defineField({
+    {
       name: "hotels",
       title: "Hotels",
       type: "array",
@@ -218,7 +218,7 @@ export default defineField({
           to: [{ type: "hotel" }], // Aquí defines el tipo de documento al que haces referencia
         },
       ],
-    }),
+    },
     {
       name: "mealPlan",
       type: "string",

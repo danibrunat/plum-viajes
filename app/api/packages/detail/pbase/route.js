@@ -67,6 +67,24 @@ async function fetchPlumPackageDetail({ occupancy, id }) {
     "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1,
     "departures": departures[departureFrom > now()] {
       ...,
+       // Desreferenciar el array de hoteles
+       "hotels": hotels[]-> {
+        "id": _id,
+        name, 
+        stars, 
+        description, 
+        latitude, 
+        longitude, 
+        plum_id,
+        
+        // Desreferenciamos la ciudad
+        "city": city_id-> {
+          iata_code,
+          name,
+          country_name
+        }
+      },
+    
       "flights": [
           {
             "segments": {
@@ -75,7 +93,10 @@ async function fetchPlumPackageDetail({ occupancy, id }) {
               "departureHour": departureTimeRt1,
               "arrivalDate": arrivalDateRt1,
               "arrivalHour": arrivalTimeRt1,
-              "airline": airlineRt1,
+              "airline": airlineRt1-> {
+                      code,
+                      name
+                    },              
               "departureAirport": "Airport",
               "arrivalAirport": "Airport",
               "stopovers": stopoverRt1,
@@ -90,7 +111,10 @@ async function fetchPlumPackageDetail({ occupancy, id }) {
               "departureHour": departureTimeRt2,
               "arrivalDate": arrivalDateRt2,
               "arrivalHour": arrivalTimeRt2,
-              "airline": airlineRt2,
+              "airline": airlineRt2-> {
+                      code,
+                      name
+                    },              
               "departureAirport": "Airport",
               "arrivalAirport": "Airport",
               "stopovers": stopoverRt2,
