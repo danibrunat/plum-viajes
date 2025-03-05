@@ -1,16 +1,19 @@
 import DatabaseService from "../../services/database.service";
+import SanityService from "../../services/sanity.service";
 
 async function getPkgLandingData(destination) {
-  const citiesQueryArr = `country_name.ilike.${destination}, region_name.ilike.${destination}`;
+  const citiesQueryArr = `country_name matches "${destination}" || region_name matches "${destination}" || name matches "${destination}"`;
 
-  const destinationData =
-    await DatabaseService.getAllByFieldEqualOrAndCustomSelect(
-      "cities",
-      "*, cities_images (image_name)",
-      citiesQueryArr
-    );
+  const cityData = await SanityService.getFromSanity(
+    `*[_type == "city" && (${citiesQueryArr})] {
+      name,
+      country_name,
+      region_name,
+      "images": coalesce(images[].asset->url, [])
+    }`
+  );
 
-  return destinationData;
+  return cityData;
 }
 
 export async function POST(req) {

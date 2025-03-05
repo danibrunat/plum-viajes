@@ -1,7 +1,7 @@
-import DatabaseService from "../services/database.service";
+import SanityService from "../services/sanity.service";
 
 export async function GET(req) {
-  const response = await DatabaseService.get("cities");
+  const response = await SanityService.getFromSanity(" *[_type == 'city'] ");
 
   if (response?.error) return Response.json(response?.error);
 
