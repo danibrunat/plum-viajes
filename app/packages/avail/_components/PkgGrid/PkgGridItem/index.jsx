@@ -39,6 +39,7 @@ const getImgSource = (pkgItem, provider) => {
     case "plum":
       imageSourceUrl = urlForImage(pkgItem?.thumbnails[0].sourceUrl);
     case "ola":
+      console.log("pkgItem?.thumbnails", pkgItem?.thumbnails);
       if (
         Array.isArray(pkgItem?.thumbnails && pkgItem?.thumbnails.length > 0)
       ) {
@@ -63,7 +64,6 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
   const hotelStars = getHotelRating(hotels.rating);
   const provider = pkgItem?.provider;
   const imgSource = getImgSource(pkgItem, provider);
-  console.log("imgSource", imgSource);
 
   const hotelName = Helpers.capitalizeFirstLetter(hotels.name);
   const hotelMealPlan = Helpers.capitalizeFirstLetter(hotels.mealPlan);

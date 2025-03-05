@@ -270,6 +270,10 @@ export const ProviderService = {
               julia: "hotels",
               ola: "Description.Name",
             },
+            description: {
+              plum: "hotels.[0].description",
+              ola: "Description.Description",
+            },
             rating: {
               plum: "hotels.[0].rating",
               julia: "rating",

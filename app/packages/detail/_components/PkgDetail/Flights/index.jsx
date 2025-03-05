@@ -65,10 +65,6 @@ const Flights = ({ flights }) => {
 
   const renderSegments = (flight) => {
     if (Array.isArray(flight.segments)) {
-      console.log(
-        "segment?.departureAirport",
-        flight.segments[0]?.departureAirport
-      );
       return flight.segments.map((segment, segmentIndex) => (
         <div key={segmentIndex}>
           {/* Cabecera con íconos de salida y llegada */}

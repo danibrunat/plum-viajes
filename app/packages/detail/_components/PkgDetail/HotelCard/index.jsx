@@ -4,8 +4,10 @@ import { FaMapMarkerAlt, FaStar } from "react-icons/fa";
 import Slider from "../../../../../components/commons/Slider";
 
 const HotelCard = ({ hotelData }) => {
-  const { name, stars, city, description, latitude, longitude } = hotelData;
-  const hotelImages = hotelData?.images.map((imageItem) => ({
+  const { name, stars, city, description, latitude, longitude, images } =
+    hotelData;
+
+  const hotelImages = images.map((imageItem) => ({
     src: imageItem,
   }));
   // State to handle text expansion

@@ -31,6 +31,7 @@ export async function POST(req) {
     Api.packages.detail.pbase.options(body)
   );
   const pBaseDetailResponse = await pBaseRequest.json();
+
   if (!pBaseDetailResponse || pBaseDetailResponse.length === 0) {
     return Response.json([]);
   }
@@ -66,7 +67,9 @@ export async function POST(req) {
     : [];
 
   const hotelsData = await Promise.all(
-    hotelsArray.map((hotel) => HotelsService.getHotelData(provider, hotel))
+    hotelsArray.map((hotel) =>
+      HotelsService.getHotelData(provider, hotel, body.arrivalCity)
+    )
   );
 
   // Procesar la data de ciudades según los hoteles
@@ -75,6 +78,8 @@ export async function POST(req) {
       CitiesService.getCityByCode(hotel.city.iata_code, true)
     )
   );
+
+  console.log("citiesData", citiesData);
 
   // Procesar segmentos de vuelo (si existen en la respuesta)
   const flightSegments = Array.isArray(

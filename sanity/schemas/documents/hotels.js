@@ -33,6 +33,12 @@ export default defineField({
       type: "number",
     },
     {
+      name: "images",
+      title: "Imagenes",
+      type: "array",
+      of: [{ type: "image" }],
+    },
+    {
       name: "longitude",
       title: "Longitude",
       type: "number",
