@@ -6,6 +6,8 @@ import PackageService from "../../../app/services/package.service";
 import { fetchTags } from "../../services/tagService";
 import { client } from "../../lib/client";
 import Dates from "../../../app/services/dates.service";
+import { ApiUtils } from "../../../app/api/services/apiUtils.service";
+import { Api } from "../../../app/services/api.service";
 
 const DEFAULT_FROM_DATE = Dates.get().toFormat("YYYY-MM-DD");
 const DEFAULT_TO_DATE = Dates.getWithAddYears(1).toFormat("YYYY-MM-DD");
@@ -137,12 +139,26 @@ export const useProviderPackages = (formWatch) => {
     );
     if (selectedPkg) {
       try {
+        const cityIdRequest = await ApiUtils.requestHandler(
+          fetch(
+            Api.cities.getByCode.url(formWatch.arrivalCity.value),
+            Api.cities.getByCode.options()
+          ),
+          "Fetch Cities"
+        );
+        const cityIdResponse = await cityIdRequest.json();
+        const cityId = cityIdResponse[0]._id;
+
         await client.createOrReplace({
           _id: `tagged-package-${packageId}`,
           _type: "taggedPackages",
           packageId: selectedPkg.id,
           productType: "package",
           price: finalPrice,
+          destination: {
+            _type: "reference",
+            _ref: cityId, // Asegúrate de tener el ID del documento city
+          },
           currency,
           nights: Number(selectedPkg.nights),
           title: selectedPkg.title,

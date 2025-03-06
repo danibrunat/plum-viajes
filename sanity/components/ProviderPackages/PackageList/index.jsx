@@ -2,7 +2,7 @@ import { FaTags } from "react-icons/fa";
 
 const PackageList = ({ packages, onTagClick }) => {
   return (
-    <div className="flex gap-3">
+    <div className="flex w-full flex-col gap-3">
       {packages.map((pkg) => (
         <div
           key={pkg.packageId}
