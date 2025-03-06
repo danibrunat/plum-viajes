@@ -7,7 +7,7 @@ import Cors from "cors";
 // Lista de dominios permitidos
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://tusubdominio-de-sanity.com",
+  "https://plumviajes.sanity.studio",
 ];
 
 // Inicializar CORS
