@@ -16,8 +16,17 @@ function getPkgPrice(departures) {
 }
 
 const TaggedPackageItem = ({ taggedPackage }) => {
-  const { title, provider, thumbnail, price, currency, nights, packageId } =
-    taggedPackage;
+  console.log("taggedPackage", taggedPackage);
+  const {
+    title,
+    provider,
+    thumbnail,
+    price,
+    currency,
+    nights,
+    packageId,
+    destination,
+  } = taggedPackage;
 
   const pkgPrice =
     provider === "ola"
@@ -28,7 +37,7 @@ const TaggedPackageItem = ({ taggedPackage }) => {
       ? sanitizeUrlFromDoubleSlash(thumbnail).replace("100x70", "700x500")
       : urlForImage(taggedPackage.images[0]);
 
-  const pkgDetailUrl = `/packages/detail?id=${packageId}&provider=${provider}&occupancy=2&departureCity=BUE&arrivalCity=IGR&startDate=${Dates.get().toFormat("YYYY-MM-DD")}&endDate=${Dates.getWithAddMonths(6).toFormat("YYYY-MM-DD")}`;
+  const pkgDetailUrl = `/packages/detail?id=${packageId}&provider=${provider}&occupancy=2&departureCity=BUE&arrivalCity=${destination[0].iata_code}&startDate=${Dates.get().toFormat("YYYY-MM-DD")}&endDate=${Dates.getWithAddMonths(6).toFormat("YYYY-MM-DD")}`;
 
   return (
     <div className="flex flex-col card cursor-pointer hover:shadow-lg transition-shadow duration-300 rounded-b-lg">

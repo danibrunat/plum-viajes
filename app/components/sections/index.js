@@ -1,13 +1,10 @@
-import dynamic from "next/dynamic";
-
 // Importamos las secciones de forma dinámica usando 'dynamic' de Next.js
-export const Hero = dynamic(() => import("./Hero"));
-export const HeroWithImages = dynamic(() => import("./HeroWithImages"));
-export const HomeLinksBanners = dynamic(() => import("./HomeLinksBanners"));
-export const TextSection = dynamic(() => import("./TextSection"));
-export const ImageSection = dynamic(() => import("./ImageSection"));
-export const Slider = dynamic(() => import("./Slider/index.jsx"));
-export const SearchEngines = dynamic(() => import("./SearchEngines"));
-export const Reviews = dynamic(() => import("./Reviews"));
-export const IFrame = dynamic(() => import("./iFrame"));
-export const TaggedPackages = dynamic(() => import("./TaggedPackages"));
+export { default as Hero } from "./Hero";
+export { default as HeroWithImages } from "./HeroWithImages";
+export { default as HomeLinksBanners } from "./HomeLinksBanners";
+export { default as TextSection } from "./TextSection";
+export { default as ImageSection } from "./ImageSection";
+export { default as Slider } from "./Slider";
+export { default as SearchEngines } from "./SearchEngines";
+export { default as Reviews } from "./Reviews";
+export { default as TaggedPackages } from "./TaggedPackages";

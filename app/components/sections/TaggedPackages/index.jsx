@@ -12,6 +12,9 @@ export default async function TaggedPackages(props) {
   {
     "packages": *[(_type == "taggedPackages" || _type == "packages") && references($tagRef)]{
       ...,
+      destination[]-> {
+        iata_code
+      },
       tags[]->{
         name
       }
@@ -33,6 +36,7 @@ export default async function TaggedPackages(props) {
       params,
     });
     taggedPackagesResponse = await sanityQuery;
+    console.log("taggedPackagesResponse", taggedPackagesResponse);
   } catch (error) {
     console.error("Error fetching tagged packages:", error);
     return <div>Error loading packages</div>;

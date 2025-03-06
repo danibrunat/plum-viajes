@@ -202,6 +202,11 @@ export const ProviderService = {
         },
       },
     },
+    specialOfferTags: {
+      plum: "specialOfferTags",
+      julia: "specialOfferTags",
+      ola: "Package.Tags.Tag",
+    },
   },
   detailResponseConfig: {
     id: {

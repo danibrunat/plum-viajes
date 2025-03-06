@@ -75,7 +75,6 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
 
   const departures = pkgItem?.departures;
   const departureId = departures[0].id;
-
   const slug = Helpers.slugify(pkgItem?.title);
   const detailUrl = `/packages/detail?id=${pkgItem?.id}&departureId=${departureId}&provider=${provider}&occupancy=${occupancy}&departureCity=${departureCity}&arrivalCity=${arrivalCity}&startDate=${startDate}&endDate=${endDate}&priceId=${priceId}`;
 
@@ -91,16 +90,13 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
           alt="Paquete"
         />
         <span className="absolute top-0 left-0 m-2 rounded-full bg-plumPrimaryPurple px-2 text-center text-sm font-medium text-white">
-          {`${provider} - ${pkgItem?.id}`}
+          {`${pkgItem?.specialOfferTags}`}
         </span>
       </div>
       <div className="flex md:grow flex-col justify-start gap-1 p-2 mx-2 w-full md:w-2/5  text-xs">
         <h5 className="tracking-tight font-bold text-sm ">
           {pkgItem?.title ?? "Default Title"}
         </h5>
-        {/* <em className="text-black">Salidas de Mayo a Junio</em> */}
-        {/*         <h3 className="text-lg">{sanitizeHtmlString(pkgItem?.subtitle)}</h3>
-         */}{" "}
         <span className=" text-sm">
           {pkgItem?.nights} noches desde {departureCity}
         </span>
@@ -121,8 +117,7 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
             {`${Formatters.price(pkgPrice.finalPrice, pkgPrice.currency)}`}
           </span>
         </div>
-        {/*         {<span className="text-sm text-slate-900 line-through">$699</span>}
-         */}
+
         <Link
           href={detailUrl}
           className="flex items-center justify-center rounded-xl bg-plumPrimaryPurple hover:bg-plumSecondaryPink transition-all duration-500 px-5 py-2 md:py-2.5 text-center text-xs font-medium text-white hover:bg-plumPrimaryPurple-500"

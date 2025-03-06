@@ -14,6 +14,17 @@ export default {
       title: "Package Title",
     },
     {
+      name: "destination",
+      title: "Destinos",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "city" }], // Aquí defines el tipo de documento al que haces referencia
+        },
+      ],
+    },
+    {
       name: "nights",
       type: "number",
       title: "Noches",

@@ -11,7 +11,7 @@ const buildQuery = (filters) => {
   }
 
   if (filters.destination) {
-    conditions.push(`"${filters.destination}" in destination`);
+    conditions.push(`"${filters.destination}" in destination[]->iata_code`);
   }
 
   if (filters.operator) {
@@ -26,6 +26,14 @@ const buildQuery = (filters) => {
     baseQuery += ` && ${conditions.join(" && ")}`;
   }
   baseQuery += `]`;
+  baseQuery += `{
+  ...,
+  destination[]-> {
+        iata_code
+      },
+}
+  `;
+  console.log("baseQuery", baseQuery);
   return baseQuery;
 };
 
@@ -58,14 +66,16 @@ const usePlumPackages = (initialFilters, initialLimit) => {
     query = query.replace(/\]$/, `][${offset}...${offset + limit}]`);
 
     const results = await client.fetch(query);
-
+    console.log("results", results);
     // Actualizar ciudades en lote
     const uniqueDestIds = new Set();
     const uniqueOriginIds = new Set();
 
     results.forEach((pkg) => {
       if (Array.isArray(pkg.destination)) {
-        pkg.destination.forEach((destId) => uniqueDestIds.add(destId));
+        pkg.destination.forEach((destId) =>
+          uniqueDestIds.add(destId.iata_code)
+        );
       }
       if (Array.isArray(pkg.origin)) {
         pkg.origin.forEach((originId) => uniqueOriginIds.add(originId));
