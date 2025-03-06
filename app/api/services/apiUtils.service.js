@@ -21,7 +21,8 @@ export const ApiUtils = {
       );
     }
   },
-  getAuthorizationToken: () => `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
+  getAuthorizationToken: () =>
+    `Bearer ${process.env.NEXT_PUBLIC_API_KEY || process.env.SANITY_STUDIO_NEXT_API_KEY}`,
   getCommonHeaders: () => ({
     Authorization: ApiUtils.getAuthorizationToken(),
   }),
