@@ -7,6 +7,7 @@ import Cors from "cors";
 // Lista de dominios permitidos
 const allowedOrigins = [
   "http://localhost:3000",
+  "https://plum-viajes.vercel.app/",
   "https://plumviajes.sanity.studio",
 ];
 
