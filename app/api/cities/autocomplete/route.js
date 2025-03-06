@@ -18,7 +18,6 @@ export async function GET(req) {
     "GET | Autocomplete Api"
   );
   const citiesResponse = await citiesSearch.json();
-  console.log("citiesResponse", citiesResponse);
   const autocompleteResponse = citiesResponse.map(
     ({ _id, name, country_name, region_name, iata_code }) => ({
       id: _id,

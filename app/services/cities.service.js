@@ -65,6 +65,4 @@ export const CitiesService = {
     const citiesResponse = await cities.json();
     return citiesResponse;
   },
-  getImagePublicUrl: (imagePath) =>
-    SanityService.getStorageItemPublicUrl("city_images", imagePath),
 };

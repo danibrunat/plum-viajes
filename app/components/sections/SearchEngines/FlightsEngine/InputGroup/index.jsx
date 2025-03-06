@@ -37,7 +37,7 @@ const InputGroup = ({
 
   return (
     <>
-      <div>
+      <div className="flex-1">
         <label
           htmlFor="origin"
           className="block text-sm font-medium text-white"
@@ -45,7 +45,7 @@ const InputGroup = ({
           Origen
         </label>
         <AsyncSelect
-          className="mt-1"
+          className="flex-1 mt-1"
           id="origin"
           placeholder="Seleccione la ciudad de Origen"
           loadOptions={(inputValue, callback) =>
@@ -56,7 +56,7 @@ const InputGroup = ({
           cacheOptions
         />
       </div>
-      <div>
+      <div className="flex-1">
         <label
           htmlFor="destination"
           className="block text-sm font-medium text-white"
@@ -75,7 +75,7 @@ const InputGroup = ({
           cacheOptions
         />
       </div>
-      <div>
+      <div className="flex-1">
         <label
           htmlFor="dateRange"
           className="block text-sm font-medium text-white"
