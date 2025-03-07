@@ -5,7 +5,7 @@
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://studio.plum-viajes.vercel.app"
+          "value": "https://plumviajes.sanity.studio"
         },
         {
           "key": "Access-Control-Allow-Methods",
