@@ -8,7 +8,7 @@ export async function GET(req) {
   /* if (input === "arrivalCity") { */
 
   const citiesSearch = await ApiUtils.requestHandler(
-    fetch(`${process.env.SANITY_STUDIO_URL}/api/cities/byName?name=${query}`, {
+    fetch(`/api/cities/byName?name=${query}`, {
       method: "GET",
       next: {
         revalidate: CACHE.revalidation.cities,
