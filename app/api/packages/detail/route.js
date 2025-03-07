@@ -79,8 +79,6 @@ export async function POST(req) {
     )
   );
 
-  console.log("citiesData", citiesData);
-
   // Procesar segmentos de vuelo (si existen en la respuesta)
   const flightSegments = Array.isArray(
     pBaseDetailResponse.departures[0].flights
