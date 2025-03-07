@@ -18,7 +18,7 @@ export async function GET(req) {
     }),
     "GET | Autocomplete Api"
   );
-  console.log("citiesResponse", citiesResponse);
+  console.log("citiesSearch", citiesSearch);
   const citiesResponse = await citiesSearch.json();
 
   if (!citiesResponse || citiesResponse.length === 0) {
