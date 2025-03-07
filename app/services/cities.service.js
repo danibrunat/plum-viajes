@@ -53,19 +53,35 @@ export const CitiesService = {
       ? process.env.NEXT_PUBLIC_URL
       : process.env.SANITY_STUDIO_URL;
 
-    console.log("getCitiesAutocompleteApi | baseUrl", baseUrl);
-    const cities = await ApiUtils.requestHandler(
-      fetch(
+    try {
+      const response = await fetch(
         `${baseUrl}/api/cities/autocomplete?query=${query}&input=${inputName}`,
         {
           method: "GET",
-          headers: ApiUtils.getCommonHeaders(),
-          mode: isFrontEndCall ? "same-origin" : "cors",
+          headers: {
+            ...ApiUtils.getCommonHeaders(),
+            Origin: process.env.SANITY_STUDIO_URL, // Enviar el origen correcto
+          },
+          mode: "cors",
         }
-      ),
-      "getCitiesAutocompleteApi"
-    );
-    const citiesResponse = await cities.json();
-    return citiesResponse;
+      );
+
+      // Verificar si la respuesta es exitosa (status 200-299)
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+
+      // Asegurarse de que la respuesta tenga un body antes de convertirlo a JSON
+      const text = await response.text();
+      if (!text) {
+        throw new Error("Error: La respuesta está vacía");
+      }
+
+      const citiesResponse = JSON.parse(text);
+      return citiesResponse;
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+      return { error: "Error fetching cities" }; // Manejo de error en caso de falla
+    }
   },
 };
