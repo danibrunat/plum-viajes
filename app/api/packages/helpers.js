@@ -1,3 +1,5 @@
+import { ProviderService } from "../services/providers.service";
+
 /**
  * Retorna el id de price para una habitación, basándose en la cantidad de adultos y niños.
  * @param {Object} roomConfig - Objeto con la configuración de la habitación: { adults, children }
