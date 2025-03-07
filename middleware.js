@@ -38,14 +38,6 @@ export async function middleware(req) {
     );
   }
 
-  // Manejar solicitudes preflight (OPTIONS)
-  if (req.method === "OPTIONS") {
-    return new NextResponse(null, {
-      headers: res.headers,
-      status: 204,
-    });
-  }
-
   // Aplicar limitación de tasa
   const rateLimitError = await applyRateLimit(req);
   if (rateLimitError) return rateLimitError;
