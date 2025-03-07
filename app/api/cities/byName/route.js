@@ -7,6 +7,8 @@ export async function GET(req) {
     `*[_type == "city" && name match "${name}"]`
   );
 
+  console.log("sanityResponse", sanityResponse);
+
   if (sanityResponse?.error) Response.json(sanityResponse?.error);
 
   return Response.json(sanityResponse);
