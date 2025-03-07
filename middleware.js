@@ -10,17 +10,19 @@ const allowedOrigins = [
   "https://plumviajes.sanity.studio",
 ];
 
-// Middleware para CORS
+// Valor por defecto para llamadas internas sin header "origin"
+const defaultOrigin = "https://plum-viajes.vercel.app";
+
 export async function middleware(req) {
   const origin = req.headers.get("origin");
   const res = NextResponse.next();
-  console.log("origin", origin);
-  // Añadir una política de referer más permisiva
+
+  // Agregar política de referer más permisiva
   res.headers.set("Referrer-Policy", "no-referrer-when-downgrade");
 
-  // Verificar si el origen está permitido
-  if (allowedOrigins.includes(origin)) {
-    res.headers.set("Access-Control-Allow-Origin", origin);
+  // Si no hay origin (llamada interna) o si el origin está permitido
+  if (!origin || allowedOrigins.includes(origin)) {
+    res.headers.set("Access-Control-Allow-Origin", origin || defaultOrigin);
     res.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.headers.set(
       "Access-Control-Allow-Headers",
@@ -31,15 +33,16 @@ export async function middleware(req) {
       JSON.stringify({ error: "CORS Error: Origin not allowed" }),
       {
         status: 403,
+        headers: { "Content-Type": "application/json" },
       }
     );
   }
 
-  // Manejar las solicitudes preflight (OPTIONS)
+  // Manejar solicitudes preflight (OPTIONS)
   if (req.method === "OPTIONS") {
     return new NextResponse(null, {
       headers: res.headers,
-      status: 204, // No Content, preflight exitoso
+      status: 204,
     });
   }
 
