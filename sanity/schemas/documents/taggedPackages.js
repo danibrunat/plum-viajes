@@ -1,7 +1,13 @@
-export default {
+import { FaTag } from "react-icons/fa";
+import { defineField } from "sanity";
+
+export default defineField({
   name: "taggedPackages",
   type: "document",
-  title: "Tagged Packages",
+  icon: FaTag,
+  description:
+    "Un listado de paquetes de proveedores que tienen tags. Desde acá se puede modificar datos relevantes como el precio y otras cuestiones para tener siempre la información fresca.",
+  title: "Paquetes de Proveedores Taggeados",
   fields: [
     {
       name: "packageId",
@@ -61,4 +67,4 @@ export default {
       of: [{ type: "reference", to: [{ type: "tag" }] }],
     },
   ],
-};
+});

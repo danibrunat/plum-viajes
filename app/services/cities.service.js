@@ -1,5 +1,4 @@
 import { ApiUtils } from "../api/services/apiUtils.service";
-import SanityService from "../api/services/sanity.service";
 import CACHE from "../constants/cachePolicies";
 
 const isFrontEndCall = typeof process.env.SANITY_STUDIO_URL == "undefined";

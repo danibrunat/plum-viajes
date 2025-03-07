@@ -1,10 +1,12 @@
 import { defineField } from "sanity";
+import { FaPlane } from "react-icons/fa";
 
 // with define field
 export default defineField({
   name: "airline",
   type: "document",
-  title: "Airlines",
+  title: "Aerolíneas",
+  icon: FaPlane,
   fields: [
     {
       name: "code",

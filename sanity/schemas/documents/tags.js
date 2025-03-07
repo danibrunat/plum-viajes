@@ -1,6 +1,10 @@
-export default {
+import { FaTags } from "react-icons/fa";
+import { defineField } from "sanity";
+
+export default defineField({
   name: "tag",
   type: "document",
+  icon: FaTags,
   title: "Tags de paquetes",
   fields: [
     {
@@ -16,4 +20,4 @@ export default {
       description: "Color de fondo del tag",
     },
   ],
-};
+});

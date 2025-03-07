@@ -1,12 +1,7 @@
-import {
-  CogIcon,
-  DocumentTextIcon,
-  EarthGlobeIcon,
-  PackageIcon,
-  ArrowRightIcon,
-} from "@sanity/icons";
+import { CogIcon, DocumentTextIcon, EarthGlobeIcon } from "@sanity/icons";
 import ProviderPackages from "./components/ProviderPackages";
 import PlumPackages from "./components/PlumPackages";
+import { FaBoxOpen, FaBoxes, FaPager, FaRoad } from "react-icons/fa";
 
 const hiddenDocTypes = (listItem) =>
   ![
@@ -15,6 +10,7 @@ const hiddenDocTypes = (listItem) =>
     "siteConfig",
     "providerPackages",
     "packages",
+    "taggedPackages",
     "landing",
   ].includes(listItem.getId());
 
@@ -41,28 +37,36 @@ export const deskStructure = (S) => {
 
       S.listItem()
         .title("Rutas")
-        .icon(ArrowRightIcon)
+        .icon(FaRoad)
         .child(S.documentTypeList("route").title("Rutas")),
 
       S.divider(),
 
       S.listItem()
         .title("Paquetes Propios")
-        .icon(PackageIcon)
+        .icon(FaBoxOpen)
         .child(S.component(PlumPackages).title("Lista de Paquetes")),
 
       S.listItem()
         .title("Paquetes de Proveedores")
-        .icon(PackageIcon)
+        .icon(FaBoxes)
         .child(
           S.component().id("providerPackages").component(ProviderPackages)
         ),
 
       S.listItem()
         .title("Landings por Destino")
-        .icon(PackageIcon)
+        .icon(FaPager)
         .child(S.documentTypeList("landing").title("Landings por destino")),
 
+      S.listItem()
+        .title("Paquetes de proveedores Taggeados")
+        .icon(FaPager)
+        .child(
+          S.documentTypeList("taggedPackages").title(
+            "Paquetes que han sido taggeados de proveedores. Utilizá esta pantalla para modificar datos relacionados a ellos."
+          )
+        ),
       S.divider(),
 
       S.listItem()
@@ -70,7 +74,7 @@ export const deskStructure = (S) => {
         .icon(EarthGlobeIcon)
         .child(
           S.list()
-            .title("Contenido Variado")
+            .title("Datos comunes al resto de schemas")
             .items(S.documentTypeListItems().filter(hiddenDocTypes))
         ),
     ]);

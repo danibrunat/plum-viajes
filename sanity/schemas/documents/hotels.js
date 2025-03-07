@@ -1,8 +1,10 @@
+import { FaHotel } from "react-icons/fa";
 import { defineField } from "sanity";
 
 export default defineField({
   name: "hotel",
   title: "Hotel",
+  icon: FaHotel,
   type: "document",
   fields: [
     {

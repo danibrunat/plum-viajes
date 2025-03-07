@@ -57,7 +57,7 @@ const PackagesTable = ({ packages, loading, refreshPackages }) => {
                         key={index}
                         className="block text-gray-600 dark:text-gray-400"
                       >
-                        {dest.name} desde {pkg.origin[index]?.name || "N/A"}
+                        {dest.name} desde {pkg.origin.map((d) => d)}
                       </span>
                     ))
                   : "N/A"}

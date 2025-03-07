@@ -1,17 +1,16 @@
-import { LinkIcon } from "@sanity/icons";
 import { defineField } from "sanity";
 import { ORIGINS } from "../../../app/constants/origins";
 import { OPERATORS } from "../../../app/constants/operators";
 import { SPECIAL_OFFER_TAGS } from "../../../app/constants/specialOfferTags";
 import { PAYMENT_TYPES } from "../../../app/constants/paymentTypes";
 import { CURRENCIES } from "../../../app/constants/currencies";
+import { FaTripadvisor } from "react-icons/fa";
 
 export default defineField({
   name: "packages",
   type: "document",
+  icon: FaTripadvisor,
   title: "Paquetes Propios",
-
-  icon: LinkIcon,
   fieldsets: [
     {
       title: "Datos descriptivos",

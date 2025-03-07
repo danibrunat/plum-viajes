@@ -1,9 +1,11 @@
 import { LinkIcon } from "@sanity/icons";
+import { FaPager } from "react-icons/fa";
 import { defineField } from "sanity";
 
 export default defineField({
   name: "landing",
   type: "document",
+  icon: FaPager,
   title: "Landing por destino",
   icon: LinkIcon,
   fieldsets: [

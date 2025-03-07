@@ -1,8 +1,10 @@
+import { FaCity } from "react-icons/fa";
 import { defineField } from "sanity";
 
 export default defineField({
   name: "city",
   title: "City",
+  icon: FaCity,
   type: "document",
   fields: [
     {
