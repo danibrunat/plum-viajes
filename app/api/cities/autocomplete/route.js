@@ -6,9 +6,10 @@ export async function GET(req) {
   const query = searchParams.get("query");
   //const input = searchParams.get("input");
   /* if (input === "arrivalCity") { */
+  const host = req.headers.get("host"); // Obtiene el host actual (ej. plum-viajes.vercel.app)
 
   const citiesSearch = await ApiUtils.requestHandler(
-    fetch(`api/cities/byName?name=${query}`, {
+    fetch(`https://${host}/api/cities/byName?name=${query}`, {
       method: "GET",
       next: {
         revalidate: CACHE.revalidation.cities,
@@ -17,7 +18,7 @@ export async function GET(req) {
     }),
     "GET | Autocomplete Api"
   );
-  console.log("citiesSearch", citiesSearch);
+  console.log("citiesResponse", citiesResponse);
   const citiesResponse = await citiesSearch.json();
 
   if (!citiesResponse || citiesResponse.length === 0) {
