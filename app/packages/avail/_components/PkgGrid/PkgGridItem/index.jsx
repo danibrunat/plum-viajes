@@ -89,9 +89,11 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
           }
           alt="Paquete"
         />
-        <span className="absolute top-0 left-0 m-2 rounded-full bg-plumPrimaryPurple px-2 text-center text-sm font-medium text-white">
-          {`${pkgItem?.specialOfferTags}`}
-        </span>
+        {pkgItem?.specialOfferTags && (
+          <span className="absolute top-0 left-0 m-2 rounded-full bg-plumPrimaryPurple px-2 text-center text-sm font-medium text-white">
+            {`${pkgItem?.specialOfferTags}`}
+          </span>
+        )}
       </div>
       <div className="flex md:grow flex-col justify-start gap-1 p-2 mx-2 w-full md:w-2/5  text-xs">
         <h5 className="tracking-tight font-bold text-sm ">

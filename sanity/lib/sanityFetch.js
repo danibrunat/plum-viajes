@@ -15,9 +15,7 @@ export async function sanityFetch({
 }) {
   // Usar CDN solo en producción
   const useCdn = process.env.NODE_ENV === "production";
-  console.log("useCdn", useCdn);
-
-  return client.withConfig({ useCdn: false }).fetch(query, params, {
+  return client.withConfig({ useCdn }).fetch(query, params, {
     next: { revalidate: 0 },
   });
 }

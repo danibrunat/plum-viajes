@@ -1,6 +1,5 @@
 import React from "react";
 import Dates from "../../../../services/dates.service";
-import { SupabaseService } from "../../../../services/supabase.service";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -23,16 +22,9 @@ export default function LandingGridItem({ product, destination }) {
         <Image
           fill
           className="rounded-2xl w-full object-cover transition-transform duration-300 transform group-hover:scale-105"
-          src={
-            destination.cities_images.length === 0
-              ? `/imageNotFound.png`
-              : SupabaseService.getPublicUrlPath(
-                  "city_images",
-                  destination.cities_images[0].image_name
-                )
-          }
+          src={"/imageNotFound.png"}
           loading="lazy"
-          alt={destination.cities_images[0]?.image_name}
+          alt={"City name"}
         />
         <Link
           className="flex justify-center items-center absolute top-0 left-0 w-full h-full text-white rounded-2xl opacity-0 transition-all duration-300 transform group-hover:scale-105 text-xl group-hover:opacity-100"
