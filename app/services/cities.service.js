@@ -52,6 +52,8 @@ export const CitiesService = {
     const baseUrl = isFrontEndCall
       ? process.env.NEXT_PUBLIC_URL
       : process.env.SANITY_STUDIO_URL;
+
+    console.log("getCitiesAutocompleteApi | baseUrl", baseUrl);
     const cities = await ApiUtils.requestHandler(
       fetch(
         `${baseUrl}/api/cities/autocomplete?query=${query}&input=${inputName}`,

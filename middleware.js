@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { applyRateLimit } from "./app/helpers/middleware/reteLimit";
 import { checkApiKey } from "./app/helpers/middleware/checkApiKey";
 import { setSecurityHeaders } from "./app/helpers/middleware/securityHeaders";
-import Cors from "cors";
 
 // Lista de dominios permitidos
 const allowedOrigins = [
@@ -11,40 +10,33 @@ const allowedOrigins = [
   "https://plumviajes.sanity.studio",
 ];
 
-// Inicializar CORS
-const cors = Cors({
-  methods: ["GET", "POST", "HEAD"],
-  origin: "*", // Permite temporalmente todos los orígenes para pruebas
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-});
-
-// Helper para ejecutar middlewares como cors
-function runMiddleware(req, res, fn) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      return resolve(result);
-    });
-  });
-}
-
+// Middleware para CORS
 export async function middleware(req) {
+  const origin = req.headers.get("origin");
   const res = NextResponse.next();
 
-  // Aplicar CORS antes de cualquier otra validación
-  try {
-    await runMiddleware(req, res, cors);
-  } catch (err) {
-    return new NextResponse(JSON.stringify({ error: "CORS Error" }), {
-      status: 403,
+  // Verificar si el origen está permitido
+  if (allowedOrigins.includes(origin)) {
+    res.headers.set("Access-Control-Allow-Origin", origin);
+    res.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.headers.set(
+      "Access-Control-Allow-Headers",
+      "Authorization, Content-Type"
+    );
+  } else {
+    return new NextResponse(
+      JSON.stringify({ error: "CORS Error: Origin not allowed" }),
+      {
+        status: 403,
+      }
+    );
+  }
+
+  // Manejar las solicitudes preflight (OPTIONS)
+  if (req.method === "OPTIONS") {
+    return new NextResponse(null, {
+      headers: res.headers,
+      status: 204, // No Content, preflight exitoso
     });
   }
 
