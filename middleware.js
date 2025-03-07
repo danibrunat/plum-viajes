@@ -15,7 +15,7 @@ export async function middleware(req) {
   if (apiKeyError) return apiKeyError;
 
   // Set security headers
-  setSecurityHeaders(req, res);
+  //setSecurityHeaders(req, res);
 
   return res;
 }
