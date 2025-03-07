@@ -69,6 +69,8 @@ export default defineField({
       name: "originDestinationRt1",
       type: "string",
       title: "Origen",
+      description:
+        "Por el momento, incluir todo completo como quieran verlo en el detalle del vuelo. Ejemplo: Buenos Aires (BUE), lo que ustedes quieran",
       fieldset: "roundTripFlight1",
     },
     {
@@ -87,6 +89,8 @@ export default defineField({
       name: "arrivalDestinationRt1",
       type: "string",
       title: "Destino",
+      description:
+        "Por el momento, incluir todo completo como quieran verlo en el detalle del vuelo. Ejemplo: Buenos Aires (BUE), lo que ustedes quieran",
       fieldset: "roundTripFlight1",
     },
     {
@@ -152,6 +156,7 @@ export default defineField({
       name: "departureTimeRt2",
       type: "string",
       title: "Hora",
+      description: "Ejemplo: 12:30. Incluir los dos puntos.",
       fieldset: "roundTripFlight2",
     },
     {
@@ -170,6 +175,7 @@ export default defineField({
       name: "arrivalTimeRt2",
       type: "string",
       title: "Hora",
+      description: "Ejemplo: 12:30. Incluir los dos puntos.",
       fieldset: "roundTripFlight2",
     },
     {

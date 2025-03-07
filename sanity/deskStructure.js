@@ -9,9 +9,14 @@ import ProviderPackages from "./components/ProviderPackages";
 import PlumPackages from "./components/PlumPackages";
 
 const hiddenDocTypes = (listItem) =>
-  !["page", "route", "siteConfig", "providerPackages", "packages"].includes(
-    listItem.getId()
-  );
+  ![
+    "page",
+    "route",
+    "siteConfig",
+    "providerPackages",
+    "packages",
+    "landing",
+  ].includes(listItem.getId());
 
 export const deskStructure = (S) => {
   return S.list()
@@ -52,6 +57,11 @@ export const deskStructure = (S) => {
         .child(
           S.component().id("providerPackages").component(ProviderPackages)
         ),
+
+      S.listItem()
+        .title("Landings por Destino")
+        .icon(PackageIcon)
+        .child(S.documentTypeList("landing").title("Landings por destino")),
 
       S.divider(),
 

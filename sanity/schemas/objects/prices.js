@@ -27,6 +27,7 @@ export default defineField({
       name: "currency",
       type: "string",
       title: "Moneda",
+      description: "Por el momento, solo con ARS. En desarrollo...",
     },
     {
       name: "taxes",
