@@ -7,7 +7,7 @@ import Cors from "cors";
 // Lista de dominios permitidos
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://plum-viajes.vercel.app/",
+  "https://plum-viajes.vercel.app",
   "https://plumviajes.sanity.studio",
 ];
 
@@ -15,13 +15,13 @@ const allowedOrigins = [
 const cors = Cors({
   methods: ["GET", "POST", "HEAD"],
   origin: "*", // Permite temporalmente todos los orígenes para pruebas
-  /*  origin: (origin, callback) => {
+  origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
-  }, */
+  },
 });
 
 // Helper para ejecutar middlewares como cors

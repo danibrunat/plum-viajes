@@ -58,6 +58,7 @@ export const CitiesService = {
         {
           method: "GET",
           headers: ApiUtils.getCommonHeaders(),
+          mode: isFrontEndCall ? "same-origin" : "cors",
         }
       ),
       "getCitiesAutocompleteApi"
