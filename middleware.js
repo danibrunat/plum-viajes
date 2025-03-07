@@ -14,7 +14,7 @@ const allowedOrigins = [
 export async function middleware(req) {
   const origin = req.headers.get("origin");
   const res = NextResponse.next();
-
+  console.log("origin", origin);
   // Añadir una política de referer más permisiva
   res.headers.set("Referrer-Policy", "no-referrer-when-downgrade");
 
