@@ -127,6 +127,8 @@ async function fetchPlumPackages({
   startDate,
   endDate,
 }) {
+  console.log("startDate", startDate);
+  console.log("endDate", endDate);
   // Consulta GROQ para obtener paquetes desde Sanity
   const pkgAvailQuery = groq`*[_type == "packages" 
     && "${departureCity}" in origin
@@ -138,7 +140,7 @@ async function fetchPlumPackages({
     "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1->name,
     
     // Filtramos las salidas que tienen fechas válidas
-    "departures": departures[departureFrom >= now()] {
+    "departures": departures[departureFrom >= "${startDate}" && departureFrom < "${endDate}"] {
       ...,
       
       // Desreferenciar el array de hoteles
@@ -168,6 +170,8 @@ async function fetchPlumPackages({
       }
     }
   }`;
+
+  console.log("pkgAvailQuery", pkgAvailQuery);
 
   const sanityQuery = await sanityFetch({ query: pkgAvailQuery });
   const pkgAvailResponse = await sanityQuery;
