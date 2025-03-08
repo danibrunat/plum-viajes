@@ -66,7 +66,6 @@ const Flights = ({ flights }) => {
 
   const renderSegments = (flight) => {
     if (Array.isArray(flight.segments)) {
-      console.log("flight.segments", JSON.stringify(flight.segments, null, 2));
       return flight.segments.map((segment, segmentIndex) => (
         <div key={segmentIndex}>
           {/* Cabecera con íconos de salida y llegada */}

@@ -1,13 +1,14 @@
 "use client";
 import { useState } from "react";
 import Slider from "../../../../../components/commons/Slider";
+import { urlForImage } from "../../../../../../sanity/lib/image";
 
-const DestinationCity = ({ sliderImages = [], city }) => {
+const DestinationCity = ({ city }) => {
   // State to handle text expansion
   const [expanded, setExpanded] = useState(false);
   const { id, name, description, label, value, images } = city;
   const cityImages = images.map((imageItem) => ({
-    src: imageItem,
+    src: imageItem?.asset ? urlForImage(imageItem) : imageItem,
   }));
 
   // Handler to toggle text expansion
@@ -21,7 +22,7 @@ const DestinationCity = ({ sliderImages = [], city }) => {
       <h2 className="flex text-xl font-bold mb-2">{name}</h2>
 
       {/* Image section */}
-      <div className="relative w-full h-48 mb-4">
+      <div className="relative w-full h-56 mb-4">
         <Slider slides={cityImages} deviceType="desktop" />
       </div>
 

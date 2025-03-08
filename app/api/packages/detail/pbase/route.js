@@ -30,7 +30,8 @@ async function fetchPlumPackageDetail({ occupancy, id, startDate, endDate }) {
         "city": city_id-> {
           iata_code,
           name,
-          country_name
+          country_name,
+          "images": coalesce(images[].asset->url, []),
         }
       },
     

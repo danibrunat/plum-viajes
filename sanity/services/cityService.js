@@ -10,8 +10,6 @@ export const loadOptions = async (inputValue, _, inputName) => {
   }
   try {
     const citiesFetch = await getCitiesAutocompleteApi(inputValue, inputName);
-    console.log("citiesFetch", citiesFetch);
-
     const formattedOptions = citiesFetch.map((city) => ({
       label: `${city.label}`,
       value: city.value,

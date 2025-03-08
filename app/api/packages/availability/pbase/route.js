@@ -127,8 +127,6 @@ async function fetchPlumPackages({
   startDate,
   endDate,
 }) {
-  console.log("startDate", startDate);
-  console.log("endDate", endDate);
   // Consulta GROQ para obtener paquetes desde Sanity
   const pkgAvailQuery = groq`*[_type == "packages" 
     && "${departureCity}" in origin
@@ -170,8 +168,6 @@ async function fetchPlumPackages({
       }
     }
   }`;
-
-  console.log("pkgAvailQuery", pkgAvailQuery);
 
   const sanityQuery = await sanityFetch({ query: pkgAvailQuery });
   const pkgAvailResponse = await sanityQuery;
