@@ -22,12 +22,12 @@ const AgentContact = () => {
           placeholder="Apellido"
         />
         <div className="flex">
-          <select className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <select className="p-3 border w-2/5 border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="movil">Móvil</option>
             <option value="fijo">Fijo</option>
           </select>
           <input
-            className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-3 border w-3/5 border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="text"
             placeholder="Teléfono"
           />
@@ -48,8 +48,9 @@ const AgentContact = () => {
             Deseo que se comuniquen telefónicamente
           </label>
         </div>
-        <div className="min-w-auto min-h-24">
+        <div className="flex justify-center min-h-24">
           <ReCAPTCHA
+            size="compact"
             ref={recaptchaRef}
             sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}
           />

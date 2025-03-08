@@ -225,7 +225,7 @@ export const ProviderService = {
       ola: "Package.Description",
     },
     description: {
-      plum: "description",
+      plum: "shortDescription",
       julia: "description",
       ola: "Package.Description",
     },

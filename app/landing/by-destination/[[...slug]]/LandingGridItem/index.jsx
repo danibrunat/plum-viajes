@@ -4,6 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function LandingGridItem({ product, destination }) {
+  const imageUrl =
+    destination?.images.length > 0
+      ? destination?.images[0]
+      : "/imageNotFound.png";
+
   const generateAvailUrl = (destination) =>
     `/${product}/avail?arrivalCity=${destination.iata_code}&departureCity=BUE&startDate=${Dates.get().toFormat("YYYY-MM-DD")}&endDate=${Dates.getWithAddMonths(1).toFormat("YYYY-MM-DD")}&occupancy=2`;
   return (
@@ -22,7 +27,7 @@ export default function LandingGridItem({ product, destination }) {
         <Image
           fill
           className="rounded-2xl w-full object-cover transition-transform duration-300 transform group-hover:scale-105"
-          src={"/imageNotFound.png"}
+          src={imageUrl}
           loading="lazy"
           alt={"City name"}
         />

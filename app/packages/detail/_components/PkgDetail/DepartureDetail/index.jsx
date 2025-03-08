@@ -60,6 +60,7 @@ const DepartureDetail = ({
   hotels,
   roomConfig,
 }) => {
+  console.log("longDescription", description);
   const sanitizedDescription = extractHtmlValuesToArray(description);
   const hotelName = capitalizeFirstLetter(toLowerCase(hotels[0]?.name));
   const hotelMealPlan = capitalizeFirstLetter(toLowerCase(hotels[0]?.mealPlan));

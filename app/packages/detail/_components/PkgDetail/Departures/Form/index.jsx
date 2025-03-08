@@ -241,10 +241,10 @@ const DeparturesForm = ({ departures }) => {
         )}
 
         {/* Botón de Envío */}
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0 self-end">
           <button
             type="submit"
-            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-md shadow transition-colors whitespace-nowrap"
+            className="bg-orange-500 hover:bg-orange-600  text-white font-semibold py-2 px-6 rounded-md shadow transition-colors whitespace-nowrap"
           >
             Buscar
           </button>
