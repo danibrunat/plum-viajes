@@ -131,8 +131,8 @@ async function fetchPlumPackages({
   const pkgAvailQuery = groq`*[_type == "packages" 
     && "${departureCity}" in origin
     && "${arrivalCity}" in destination[]->iata_code
-    && now() > validDateFrom 
-    && now() < validDateTo
+    && now() >= validDateFrom 
+    && now() =< validDateTo
     && active == true] {
     ...,
     "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1->name,
