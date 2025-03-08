@@ -393,6 +393,10 @@ export const ProviderService = {
                     ola: "Supplier.Name",
                     plum: "airline.name",
                   },
+                  logo: {
+                    ola: "Supplier.Code",
+                    plum: "airline.logoUrl",
+                  },
                 },
                 arrivalDate: {
                   ola: "ArrivalDate",

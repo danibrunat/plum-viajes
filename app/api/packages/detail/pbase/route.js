@@ -5,7 +5,7 @@ import { OLA } from "../../../services/ola.service";
 import { ApiUtils } from "../../../services/apiUtils.service";
 import { getPriceTypeFromOccupancy } from "../../helpers";
 
-async function fetchPlumPackageDetail({ occupancy, id, startDate }) {
+async function fetchPlumPackageDetail({ occupancy, id, startDate, endDate }) {
   const priceType = getPriceTypeFromOccupancy(occupancy);
   const pkgDetailQuery = groq`*[
     _id == "${id}" && 
@@ -14,7 +14,7 @@ async function fetchPlumPackageDetail({ occupancy, id, startDate }) {
     {
     ...,
     "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1,
-    "departures": departures[departureFrom >= "${startDate}"] {
+    "departures": departures[departureFrom >= "${startDate}" && departureFrom < "${endDate}"] {
       ...,
        // Desreferenciar el array de hoteles
        "hotels": hotels[]-> {
@@ -44,7 +44,8 @@ async function fetchPlumPackageDetail({ occupancy, id, startDate }) {
               "arrivalHour": arrivalTimeRt1,
               "airline": airlineRt1-> {
                       code,
-                      name
+                      name,
+                      "logoUrl": logo.asset->url
                     },              
               "departureAirport": "Airport",
               "arrivalAirport": "Airport",
@@ -62,7 +63,8 @@ async function fetchPlumPackageDetail({ occupancy, id, startDate }) {
               "arrivalHour": arrivalTimeRt2,
               "airline": airlineRt2-> {
                       code,
-                      name
+                      name,
+                      "logoUrl": logo.asset->url
                     },              
               "departureAirport": "Airport",
               "arrivalAirport": "Airport",

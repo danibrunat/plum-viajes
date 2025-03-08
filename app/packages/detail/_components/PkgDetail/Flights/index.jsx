@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { FaPlaneArrival, FaPlaneDeparture } from "react-icons/fa";
+import { urlForImage } from "../../../../../../sanity/lib/image";
 
 const Flights = ({ flights }) => {
   // Función para formatear la fecha
@@ -65,6 +66,7 @@ const Flights = ({ flights }) => {
 
   const renderSegments = (flight) => {
     if (Array.isArray(flight.segments)) {
+      console.log("flight.segments", JSON.stringify(flight.segments, null, 2));
       return flight.segments.map((segment, segmentIndex) => (
         <div key={segmentIndex}>
           {/* Cabecera con íconos de salida y llegada */}
@@ -91,8 +93,12 @@ const Flights = ({ flights }) => {
 
             <div className="flex flex-col justify-center items-center w-1/3 p-3">
               <Image
-                src={segment.airline.logoUrl}
-                width={125}
+                src={
+                  segment.airline.logo.asset
+                    ? urlForImage(segment.airline.logo)
+                    : segment.airline.logo
+                }
+                width={70}
                 height={70}
                 alt={segment.airline.code}
               />

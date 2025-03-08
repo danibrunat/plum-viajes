@@ -14,7 +14,7 @@ export const Hotels = {
         }
       }`),
   getByNameIlike: (name) =>
-    SanityService.getFromSanity(groq`*[_type == "hotel" && name match "${name}"] {
+    SanityService.getFromSanity(groq`*[_type == "hotel" && name match "*${name}*"] {
       ...,
       "images": coalesce(images[].asset->url, []),
        "city": city_id-> {
