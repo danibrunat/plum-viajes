@@ -38,19 +38,34 @@ const getImgSource = (pkgItem, provider) => {
   switch (provider) {
     case "plum":
       imageSourceUrl = urlForImage(pkgItem?.thumbnails[0].sourceUrl);
+      return imageSourceUrl;
     case "ola":
-      console.log("pkgItem?.thumbnails", pkgItem?.thumbnails);
       if (
-        Array.isArray(pkgItem?.thumbnails && pkgItem?.thumbnails.length > 0)
+        Array.isArray(pkgItem?.thumbnails) &&
+        pkgItem?.thumbnails.length > 0
       ) {
         imageSourceUrl = sanitizeUrlFromDoubleSlash(
           pkgItem?.thumbnails[
             Math.floor(Math.random() * pkgItem?.thumbnails.length)
           ].sourceUrl
         );
+        return imageSourceUrl;
       }
   }
   return imageSourceUrl;
+};
+
+const getHotelMealPlanName = (mealPlan) => {
+  const mealPlans = [
+    { title: "Desayuno", id: "breakfast", value: "breakfast" },
+    { title: "Media Pensión", id: "halfBoard", value: "halfBoard" },
+    { title: "Pensión Completa", id: "fullBoard", value: "fullBoard" },
+    { title: "All Inclusive", id: "allInclusive", value: "allInclusive" },
+  ];
+  const selectedMealPlan = mealPlans.filter((mp) => mp.id === mealPlan);
+
+  if (selectedMealPlan.length > 0) return selectedMealPlan[0].title;
+  return mealPlan;
 };
 
 const PkgGridItem = ({ pkgItem, searchParams }) => {
@@ -66,7 +81,8 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
   const imgSource = getImgSource(pkgItem, provider);
 
   const hotelName = Helpers.capitalizeFirstLetter(hotels.name);
-  const hotelMealPlan = Helpers.capitalizeFirstLetter(hotels.mealPlan);
+  const hotelMealPlan = getHotelMealPlanName(hotels.mealPlan);
+
   // const hotelMealPlan = mapMealPlan(hotels.mealPlan);
   const hotelRoomType = Helpers.capitalizeFirstLetter(hotels.roomType);
   const hotelRoomSize = Helpers.capitalizeFirstLetter(hotels.roomSize);
@@ -84,6 +100,7 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
         <Image
           className="rounded-xl hover:scale-110 transition-all duration-500"
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           src={
             imgSource && imgSource.length !== 0 ? imgSource : "/no-image.jpeg"
           }
@@ -107,7 +124,7 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
             {`${hotelName} `} {hotelStars}
           </span>
           {(hotelRoomType || hotelRoomSize) && (
-            <span>{`Habitación: ${hotelRoomType} - ${hotelRoomSize}`}</span>
+            <span>{`Habitación: ${hotelRoomType} ${hotelRoomSize && `- ${hotelRoomSize}`}`}</span>
           )}
           <span>{hotelMealPlan}</span>
         </div>

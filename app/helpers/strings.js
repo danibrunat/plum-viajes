@@ -3,6 +3,7 @@ export const sanitizeHtmlString = (string) => {
 };
 
 export const sanitizeUrlFromDoubleSlash = (string) => {
+  console.log("viene por acá?");
   return string?.replace(/^\/\//, "https://") || "";
 };
 

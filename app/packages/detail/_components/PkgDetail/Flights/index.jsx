@@ -2,6 +2,8 @@ import Image from "next/image";
 import React from "react";
 import { FaPlaneArrival, FaPlaneDeparture } from "react-icons/fa";
 import { urlForImage } from "../../../../../../sanity/lib/image";
+import { sanityFetch } from "../../../../../../sanity/lib/sanityFetch";
+import { groq } from "next-sanity";
 
 const Flights = ({ flights }) => {
   // Función para formatear la fecha
@@ -66,60 +68,64 @@ const Flights = ({ flights }) => {
 
   const renderSegments = (flight) => {
     if (Array.isArray(flight.segments)) {
-      return flight.segments.map((segment, segmentIndex) => (
-        <div key={segmentIndex}>
-          {/* Cabecera con íconos de salida y llegada */}
-          {segmentIndex === 0 && (
-            <div className="flex justify-between mx-10 border-b-2 border-gray-400 py-4">
-              <FaPlaneDeparture className="text-2xl" />
-              <FaPlaneArrival className="text-2xl" />
-            </div>
-          )}
+      return flight.segments.map((segment, segmentIndex) => {
+        const airlineLogoQuery = groq`*[_type == 'airline' && code == '${segment.airline.code}'] { logo }`;
+        const airlineLogo = sanityFetch({ query: airlineLogoQuery });
+        return (
+          <div key={segmentIndex}>
+            {/* Cabecera con íconos de salida y llegada */}
+            {segmentIndex === 0 && (
+              <div className="flex justify-between mx-10 border-b-2 border-gray-400 py-4">
+                <FaPlaneDeparture className="text-2xl" />
+                <FaPlaneArrival className="text-2xl" />
+              </div>
+            )}
 
-          {/* Información de los aeropuertos y fechas */}
-          <div className="flex justify-between text-center border-b-2 border-gray-400">
-            <div className="w-1/3 p-3">
-              <span>
-                <strong>
-                  {segment?.departureAirport?.name || ""} (
-                  {segment?.departureAirport?.code || ""})
-                </strong>{" "}
-                {formatDateToString(
-                  `${segment.departureDate} ${segment.departureHour}`
-                )}
-              </span>
-            </div>
+            {/* Información de los aeropuertos y fechas */}
+            <div className="flex justify-between text-center border-b-2 border-gray-400">
+              <div className="w-1/3 p-3">
+                <span>
+                  <strong>
+                    {segment?.departureAirport?.name || ""} (
+                    {segment?.departureAirport?.code || ""})
+                  </strong>{" "}
+                  {formatDateToString(
+                    `${segment.departureDate} ${segment.departureHour}`
+                  )}
+                </span>
+              </div>
 
-            <div className="flex flex-col justify-center items-center w-1/3 p-3">
-              <Image
-                src={
-                  segment.airline.logo.asset
-                    ? urlForImage(segment.airline.logo)
-                    : segment.airline.logo
-                }
-                width={70}
-                height={70}
-                alt={segment.airline.code}
-              />
-              {flight.stopovers == 0
-                ? "Directo"
-                : `${flight.stopovers} Escalas`}
-            </div>
+              <div className="flex flex-col justify-center items-center w-1/3 p-3">
+                <Image
+                  src={
+                    airlineLogo
+                      ? urlForImage(segment.airline.logo)
+                      : segment.airline.logo
+                  }
+                  width={70}
+                  height={70}
+                  alt={segment.airline.code}
+                />
+                {flight.stopovers == 0
+                  ? "Directo"
+                  : `${flight.stopovers} Escalas`}
+              </div>
 
-            <div className="w-1/3 p-3">
-              <span>
-                <strong>
-                  {segment?.arrivalAirport.name ?? ""} (
-                  {segment?.arrivalAirport.code ?? ""})
-                </strong>{" "}
-                {formatDateToString(
-                  `${segment.arrivalDate} ${segment.arrivalHour}`
-                )}
-              </span>
+              <div className="w-1/3 p-3">
+                <span>
+                  <strong>
+                    {segment?.arrivalAirport.name ?? ""} (
+                    {segment?.arrivalAirport.code ?? ""})
+                  </strong>{" "}
+                  {formatDateToString(
+                    `${segment.arrivalDate} ${segment.arrivalHour}`
+                  )}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      ));
+        );
+      });
     }
 
     return (
@@ -146,7 +152,11 @@ const Flights = ({ flights }) => {
 
           <div className="flex flex-col justify-center items-center w-1/3 p-3">
             <Image
-              src={flight.segments.airline.logoUrl}
+              src={
+                airlineLogo
+                  ? urlForImage(segment.airline.logo)
+                  : segment.airline.logo
+              }
               width={125}
               height={70}
               alt={flight.segments.airline.code}

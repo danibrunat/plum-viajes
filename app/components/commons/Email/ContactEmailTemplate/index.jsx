@@ -1,5 +1,5 @@
 import { Html, Heading, Text } from "@react-email/components";
-const EmailTemplate = ({
+const ContactEmailTemplate = ({
   name,
   surname,
   phoneType,
@@ -39,4 +39,4 @@ const EmailTemplate = ({
     </Html>
   );
 };
-export default EmailTemplate;
+export default ContactEmailTemplate;

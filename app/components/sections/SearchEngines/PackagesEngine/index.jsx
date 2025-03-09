@@ -15,15 +15,25 @@ import { ProviderService } from "../../../../api/services/providers.service";
 import { CitiesService } from "../../../../services/cities.service";
 
 const getPackageEngineItems = () => {
+  function debounce(fn, delay) {
+    let timeoutId;
+    return (...args) => {
+      if (timeoutId) clearTimeout(timeoutId); // Reiniciar el temporizador
+      timeoutId = setTimeout(() => {
+        fn(...args); // Ejecutar la función después del tiempo de espera
+      }, delay);
+    };
+  }
+
   const getCitiesAutocompleteApi = async (query, inputName) =>
     await CitiesService.getCitiesAutocompleteApi(query, inputName);
 
-  const loadOptions = async (query, callback, inputName) => {
+  const loadOptions = debounce(async (query, callback, inputName) => {
     if (query.length >= 3) {
       const citiesFetch = await getCitiesAutocompleteApi(query, inputName);
-      await callback(citiesFetch);
+      callback(citiesFetch);
     }
-  };
+  }, 500); // Espera de 500ms después de que el usuario deje de escribir
 
   const packageEngineItems = [
     {

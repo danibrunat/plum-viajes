@@ -1,21 +1,23 @@
 "use server";
-import { sendEmail } from "./emails";
+
+import { sendMail } from "../services/contact.service";
 
 export async function submitContactForm(formData) {
   try {
-    const sendEmailResponse = await sendEmail(formData);
+    const sendEmailResponse = await sendMail(formData, "contact");
     return sendEmailResponse;
   } catch (error) {
-    return error;
+    return { success: false, error };
   }
 }
 
-export async function submitAboutUsContactForm(formData) {
-  return {
-    statusCode: 200,
-
-    message: `Form submitted`,
-  };
+export async function submitAgentContactForm(formData) {
+  try {
+    const sendEmailResponse = await sendMail(formData, "agent");
+    return sendEmailResponse;
+  } catch (error) {
+    return { success: false, error };
+  }
 }
 
 export async function submitGenericForm(formData) {

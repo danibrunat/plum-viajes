@@ -34,7 +34,7 @@ const HotelCard = ({ hotelData }) => {
       </h2>
 
       {/* Image section */}
-      <div className="relative w-full h-48 mb-4">
+      <div className="relative w-full h-52 mb-4">
         <Slider slides={hotelImages} deviceType="desktop" />
       </div>
 
