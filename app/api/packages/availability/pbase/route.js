@@ -132,7 +132,7 @@ async function fetchPlumPackages({
     && "${departureCity}" in origin
     && "${arrivalCity}" in destination[]->iata_code
     && now() >= validDateFrom 
-    && now() =< validDateTo
+    && now() <= validDateTo
     && active == true] {
     ...,
     "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1->name,
