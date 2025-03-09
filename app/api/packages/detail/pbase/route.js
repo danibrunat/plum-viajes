@@ -14,7 +14,7 @@ async function fetchPlumPackageDetail({ occupancy, id, startDate, endDate }) {
     {
     ...,
     "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1,
-    "departures": departures[departureFrom >= "${startDate}" && departureFrom < "${endDate}"] {
+    "departures": departures[departureFrom >= "${startDate}" && departureFrom <= "${endDate}"] {
       ...,
        // Desreferenciar el array de hoteles
        "hotels": hotels[]-> {
