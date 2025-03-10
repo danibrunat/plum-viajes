@@ -48,15 +48,15 @@ const TaggedPackageItem = ({ taggedPackage }) => {
   // Dentro de useProviderPackages, estoy generando el departureId y guardandoló en el modelo. Esto es solo para providers, así que estaría bien.
   // Luego pregunto si es plum, me agarro las departures y tomo el departureFrom
   // Si es otro distinto, es un provider entonces tomo el que viene del modelo de provider packages tagged.
-  const departureDateForCrypto =
-    pkgProvider === "plum" ? departures[0].departureFrom : departureId;
-  console.log("departureDateForCrypto", departureDateForCrypto);
-  const urlDepartureId = CryptoService.generateDepartureId(
-    pkgProvider,
-    departureDateForCrypto
-  );
+  const urlDepartureDate =
+    pkgProvider === "plum"
+      ? CryptoService.generateDepartureId(
+          pkgProvider,
+          departures[0].departureFrom
+        )
+      : departureId;
 
-  const pkgDetailUrl = `/packages/detail?id=${pkgId}&departureId=${urlDepartureId}&provider=${pkgProvider}&occupancy=2&departureCity=BUE&arrivalCity=${destination[0].iata_code}&startDate=${startDate}&endDate=${Dates.getWithAddMonths(6).toFormat("YYYY-MM-DD")}`;
+  const pkgDetailUrl = `/packages/detail?id=${pkgId}&departureId=${urlDepartureDate}&provider=${pkgProvider}&occupancy=2&departureCity=BUE&arrivalCity=${destination[0].iata_code}&startDate=${startDate}&endDate=${Dates.getWithAddMonths(6).toFormat("YYYY-MM-DD")}`;
 
   return (
     <div className="flex flex-col card cursor-pointer hover:shadow-lg transition-shadow duration-300 rounded-b-lg">

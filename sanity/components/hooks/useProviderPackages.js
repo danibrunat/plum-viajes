@@ -166,7 +166,6 @@ export const useProviderPackages = (formWatch) => {
           "Fetch Cities"
         );
         const cityIdResponse = await cityIdRequest.json();
-
         const departureIdRequest = await fetch(
           Api.crypto.getDepartureId.url(),
           Api.crypto.getDepartureId.options({
