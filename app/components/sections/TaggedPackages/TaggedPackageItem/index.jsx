@@ -50,7 +50,10 @@ const TaggedPackageItem = ({ taggedPackage }) => {
   // Si es otro distinto, es un provider entonces tomo el que viene del modelo de provider packages tagged.
   const departureDateForCrypto =
     provider === "plum" ? departures[0].departureFrom : departureId;
-  const urlDepartureId = CryptoService.generateDepartureId(provider, startDate);
+  const urlDepartureId = CryptoService.generateDepartureId(
+    provider,
+    departureDateForCrypto
+  );
 
   const pkgDetailUrl = `/packages/detail?id=${pkgId}&departureId=${urlDepartureId}&provider=${pkgProvider}&occupancy=2&departureCity=BUE&arrivalCity=${destination[0].iata_code}&startDate=${startDate}&endDate=${Dates.getWithAddMonths(6).toFormat("YYYY-MM-DD")}`;
 
