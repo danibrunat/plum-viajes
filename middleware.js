@@ -6,6 +6,7 @@ import { setSecurityHeaders } from "./app/helpers/middleware/securityHeaders";
 // Lista de dominios permitidos
 const allowedOrigins = [
   "http://localhost:3000",
+  "http://localhost:3333",
   "http://localhost:3001",
   "https://plum-viajes.vercel.app",
   "https://plumviajes.sanity.studio",

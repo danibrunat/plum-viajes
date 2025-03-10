@@ -5,3 +5,6 @@ export const FLOW_STAGES = {
   PKG_AVAILABILITY: "pkg-avail",
   PKG_DETAIL: "pkg-detail",
 };
+export const CONSUMERS = {
+  TAGGED_PKG: "tagged-pkg",
+};

@@ -66,5 +66,11 @@ export default defineField({
       title: "Tags",
       of: [{ type: "reference", to: [{ type: "tag" }] }],
     },
+    {
+      name: "departureId",
+      type: "string",
+      title: "Departure Id (uso interno)",
+      description: "Este campo no debe ser modificado",
+    },
   ],
 });

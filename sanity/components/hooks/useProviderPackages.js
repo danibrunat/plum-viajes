@@ -8,6 +8,7 @@ import { client } from "../../lib/client";
 import Dates from "../../../app/services/dates.service";
 import { ApiUtils } from "../../../app/api/services/apiUtils.service";
 import { Api } from "../../../app/services/api.service";
+import { CONSUMERS } from "../../../app/constants/site";
 
 const DEFAULT_FROM_DATE = Dates.get().toFormat("YYYY-MM-DD");
 const DEFAULT_TO_DATE = Dates.getWithAddYears(1).toFormat("YYYY-MM-DD");
@@ -20,7 +21,7 @@ const initialState = {
   availableTags: [],
   selectedTags: [],
   selectedProviders: [],
-  isLoading: false, // Añadir estado de carga
+  isLoading: false,
 };
 
 // Definir el reducer que gestionará las acciones
@@ -43,15 +44,6 @@ const reducer = (state, action) => {
           ? state.selectedTags.filter((id) => id !== action.payload)
           : [...state.selectedTags, action.payload],
       };
-    case "TOGGLE_PROVIDER":
-      return {
-        ...state,
-        selectedProviders: state.selectedProviders.includes(action.payload)
-          ? state.selectedProviders.filter((p) => p !== action.payload)
-          : [...state.selectedProviders, action.payload],
-      };
-    case "RESET_SELECTED_TAGS":
-      return { ...state, selectedTags: [] };
     case "SET_LOADING":
       return { ...state, isLoading: action.payload };
     default:
@@ -68,12 +60,33 @@ export const useProviderPackages = (formWatch) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (state.selectedPackage) {
+      // Al seleccionar un paquete, recupera los tags previamente asignados
+      loadPackageTags(state.selectedPackage.id);
+    }
+  }, [state.selectedPackage]);
+
   const loadAvailableTags = async () => {
     try {
       const tags = await fetchTags();
       dispatch({ type: "SET_AVAILABLE_TAGS", payload: tags });
     } catch (error) {
       console.error("Error fetching tags", error);
+    }
+  };
+
+  const loadPackageTags = async (packageId) => {
+    try {
+      const sanityPackagesQuery = `*[_type == "taggedPackages" && packageId == "${packageId}"]{tags[]->{_id}}`;
+      const sanityPackage = await client.fetch(sanityPackagesQuery);
+
+      if (sanityPackage.length > 0 && sanityPackage[0].tags) {
+        const assignedTagIds = sanityPackage[0].tags.map((tag) => tag._id);
+        dispatch({ type: "SET_SELECTED_TAGS", payload: assignedTagIds });
+      }
+    } catch (error) {
+      console.error("Error loading package tags", error);
     }
   };
 
@@ -115,11 +128,15 @@ export const useProviderPackages = (formWatch) => {
         if (matchingPackage && matchingPackage.tags) {
           return {
             ...pkg,
-            tags: matchingPackage.tags.map((tag) => tag.name), // Asignar solo los IDs de los tags
+            tags: matchingPackage.tags.map((tag) => ({
+              id: tag._id,
+              name: tag.name,
+            })),
           };
         }
         return pkg;
       });
+
       dispatch({ type: "SET_PACKAGES", payload: updatedPackages });
     } catch (error) {
       console.error("Error fetching OLA packages", error);
@@ -135,8 +152,10 @@ export const useProviderPackages = (formWatch) => {
   const handleTagSave = async (packageId) => {
     const selectedPkg = state.packages.find((pkg) => pkg.id === packageId);
     const { finalPrice, currency } = PackageService.prices.getPkgPrice(
-      selectedPkg.prices
+      selectedPkg.departures[0].prices,
+      CONSUMERS.TAGGED_PKG
     );
+
     if (selectedPkg) {
       try {
         const cityIdRequest = await ApiUtils.requestHandler(
@@ -147,18 +166,27 @@ export const useProviderPackages = (formWatch) => {
           "Fetch Cities"
         );
         const cityIdResponse = await cityIdRequest.json();
-        const cityId = cityIdResponse[0]._id;
 
+        const departureIdRequest = await fetch(
+          Api.crypto.getDepartureId.url(),
+          Api.crypto.getDepartureId.options({
+            provider: "ola",
+            departureFrom: selectedPkg.departures[0].date,
+          })
+        );
+
+        const { departureId } = await departureIdRequest.json();
         await client.createOrReplace({
           _id: `tagged-package-${packageId}`,
           _type: "taggedPackages",
           packageId: selectedPkg.id,
           productType: "package",
           price: finalPrice,
-          destination: {
+          destination: cityIdResponse.map((city) => ({
             _type: "reference",
-            _ref: cityId, // Asegúrate de tener el ID del documento city
-          },
+            _ref: city._id,
+            _key: uuidv4(),
+          })), // Ahora es un array de referencias
           currency,
           nights: Number(selectedPkg.nights),
           title: selectedPkg.title,
@@ -169,17 +197,18 @@ export const useProviderPackages = (formWatch) => {
             _ref: tagId,
             _key: uuidv4(),
           })),
+          departureId,
         });
+
         console.log("Tags saved successfully");
         dispatch({ type: "RESET_SELECTED_TAGS" }); // Limpiar tags seleccionados después de guardar
+
+        // Realizar una nueva búsqueda para refrescar la pantalla
+        await handleSearch();
       } catch (error) {
         console.error("Error saving tags", error);
       }
     }
-  };
-
-  const handleProviderChange = (providerValue) => {
-    dispatch({ type: "TOGGLE_PROVIDER", payload: providerValue });
   };
 
   return {
@@ -190,6 +219,5 @@ export const useProviderPackages = (formWatch) => {
     handleSearch,
     handleTagAssign,
     handleTagSave,
-    handleProviderChange,
   };
 };

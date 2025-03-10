@@ -97,4 +97,15 @@ export const Api = {
       },
     },
   },
+  crypto: {
+    getDepartureId: {
+      url: () => `${baseUrl}/api/crypto/departureId`,
+      options: (body) => ({
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: ApiUtils.getCommonHeaders(),
+      }),
+      name: "POST Crypto / Departure Id",
+    },
+  },
 };

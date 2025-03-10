@@ -1,4 +1,4 @@
-import { FLOW_STAGES } from "../constants/site";
+import { CONSUMERS, FLOW_STAGES } from "../constants/site";
 
 const PackageService = {
   prices: {
@@ -8,7 +8,8 @@ const PackageService = {
       // Podemos tener diferente política de precios según el consumer.
       if (
         consumer === FLOW_STAGES.PKG_AVAILABILITY ||
-        consumer === FLOW_STAGES.PKG_DETAIL
+        consumer === FLOW_STAGES.PKG_DETAIL ||
+        consumer === CONSUMERS.TAGGED_PKG
       ) {
         const currency = prices.pricesDetail.currency || "ARS";
         const basePrice = parseFloat(prices.pricesDetail.basePrice);

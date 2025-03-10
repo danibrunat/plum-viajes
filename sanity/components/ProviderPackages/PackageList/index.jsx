@@ -10,7 +10,6 @@ const PackageList = ({ packages, onTagClick }) => {
         >
           {/* Tag List */}
           <div className="flex flex-wrap gap-2 mb-3">
-            {/* Ejemplo de etiquetas estáticas */}
             {pkg.tags?.length > 0 &&
               pkg.tags.map((tag, index) => (
                 <span
@@ -18,7 +17,8 @@ const PackageList = ({ packages, onTagClick }) => {
                   className="inline-flex items-center px-4 py-1 text-sm font-medium text-white bg-purple-500 rounded-full transition-colors duration-200 cursor-pointer"
                   onClick={() => onTagClick(tag)}
                 >
-                  {tag}
+                  {/* Asegúrate de que 'tag.name' es el campo correcto */}
+                  {tag.name || "Unnamed tag"}
                 </span>
               ))}
           </div>
