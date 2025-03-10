@@ -20,4 +20,16 @@ export default defineField({
       description: "Color de fondo del tag",
     },
   ],
+  preview: {
+    select: {
+      title: "name",
+      subtitle: "color",
+    },
+    prepare({ title }) {
+      return {
+        title: title,
+        media: FaTags,
+      };
+    },
+  },
 });

@@ -27,7 +27,6 @@ export default async function TaggedPackages(props) {
 
   // Parametrizamos la consulta para pasar el _ref del tag
   const params = { tagRef: tag._ref };
-
   // Mostramos el placeholder mientras los datos se están obteniendo
   let taggedPackagesResponse = [];
   try {
@@ -44,7 +43,6 @@ export default async function TaggedPackages(props) {
 
   if (taggedPackagesResponse.packages.length === 0) return null; // Si no hay taggedPackages, no renderizamos nada
 
-  console.log("taggedPackagesResponse", taggedPackagesResponse);
   // Renderizamos el carousel con los datos obtenidos o el placeholder si están vacíos
   return (
     <section className="mx-2 md:mx-20">

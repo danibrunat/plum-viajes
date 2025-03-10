@@ -1,4 +1,5 @@
 import { MasterDetailIcon } from "@sanity/icons";
+import { FaTags } from "react-icons/fa";
 import { defineField } from "sanity";
 
 export default defineField({
@@ -21,53 +22,46 @@ export default defineField({
     {
       name: "content",
       type: "array",
-      title: "Page sections",
+      title: "Secciones de la página",
       of: [
-        { type: "hero" },
+        //  { type: "hero" },
         { type: "slider" },
         { type: "homeLinksBanners" },
         { type: "searchEngines" },
         { type: "reviews" },
-        { type: "imageSection" },
-        { type: "textSection" },
-        { type: "iFrame" },
+        //  { type: "imageSection" },
+        //  { type: "textSection" },
+        //  { type: "iFrame" },
         {
           type: "object", // Sección para paquetes taggeados
           name: "taggedPackages",
-          title: "Tags de paquetes",
+          title: "Paquetes por Tag",
           fields: [
             {
               name: "tag",
               type: "reference",
-              title: "Tag", // Solo un tag en lugar de un array
-              to: [{ type: "tag" }], // Referencia a un documento del tipo 'tag'
+              title: "Tag", // Referencia a un solo tag
+              to: [{ type: "tag" }], // Documento de tipo 'tag'
+              validation: (Rule) =>
+                Rule.required().error("El campo 'Tag' es obligatorio."),
             },
           ],
           preview: {
             select: {
-              title: "title",
-              content: "content",
-              media: "openGraphImage",
+              title: "tag.name", // Asigna el nombre del tag como título
             },
-            prepare({ title, content, media }) {
-              const count = Array.isArray(content) ? content.length : 0;
-              const firstSection =
-                count > 0 && content[0] ? content[0]._type : null;
-              const subtitle =
-                count > 0
-                  ? `${count} sección${count > 1 ? "es" : ""} – Primera: ${firstSection}`
-                  : "Sin secciones definidas";
-
+            prepare({ title }) {
               return {
-                title: title || "Sin título",
-                subtitle,
-                media,
+                title: title || "Sin tag asignado",
+                subtitle: "Sección de paquetes por tag",
+                media: FaTags, // Icono opcional para la vista previa
               };
             },
           },
         },
       ],
     },
+
     {
       name: "description",
       type: "text",

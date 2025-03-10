@@ -10,7 +10,6 @@ const hiddenDocTypes = (listItem) =>
     "siteConfig",
     "providerPackages",
     "packages",
-    "taggedPackages",
     "landing",
   ].includes(listItem.getId());
 

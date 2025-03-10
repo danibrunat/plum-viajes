@@ -589,7 +589,6 @@ export const ProviderService = {
     occupancy,
     departureId,
   }) => {
-    console.log("departureId", departureId);
     const pkgDetailRequest = await fetch(
       `${process.env.NEXT_PUBLIC_URL}/api/packages/detail`,
       {

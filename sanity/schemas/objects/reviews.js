@@ -14,4 +14,16 @@ export default defineField({
       },
     },
   ],
+  preview: {
+    select: {
+      image: "image", // Seleccionamos la imagen de opiniones
+    },
+    prepare({ image }) {
+      return {
+        title: "Opiniones de usuarios",
+        subtitle: image ? "Imagen cargada" : "Sin imagen cargada",
+        media: image || undefined, // Mostrar la imagen si está disponible
+      };
+    },
+  },
 });

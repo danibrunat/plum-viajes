@@ -8,27 +8,29 @@ export default defineField({
     {
       name: "content",
       type: "array",
-      title: "Page sections",
+      title: "Secciones de la página",
       of: [{ type: "imageLink" }],
     },
   ],
   preview: {
     select: {
       content: "content",
-      previewImage: "content.0.image",
+      previewImage: "content.0.image", // Imagen del primer banner
     },
     prepare({ content, previewImage }) {
-      // Validar que content sea un array
+      // Verificar que content sea un array y tenga elementos
       const items = Array.isArray(content) ? content : [];
-      // Extraer títulos de cada banner y filtrar valores nulos o vacíos
+
+      // Extraer títulos de cada banner, si existen, y filtrar valores nulos o vacíos
       const titles = items.map((item) => item?.title).filter(Boolean);
       const titleText = titles.length ? titles.join(", ") : "Sin títulos";
+
+      // Contar el número de banners
       const count = items.length;
 
       return {
-        title: `Banners: ${titleText}`,
-        subtitle: `Agregados ${count} banner${count === 1 ? "" : "s"}`,
-        media: previewImage,
+        title: "Banners con Links",
+        media: previewImage || undefined, // Mostrar imagen del primer banner si existe
       };
     },
   },

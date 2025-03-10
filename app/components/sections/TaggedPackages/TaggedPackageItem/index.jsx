@@ -4,6 +4,7 @@ import { sanitizeUrlFromDoubleSlash } from "../../../../helpers/strings";
 import { urlForImage } from "../../../../../sanity/lib/image";
 import Dates from "../../../../services/dates.service";
 import Formatters from "../../../../services/formatters.service";
+import CryptoService from "../../../../api/services/cypto.service";
 
 function getPkgPrice(departures) {
   // order by price
@@ -28,6 +29,9 @@ const TaggedPackageItem = ({ taggedPackage }) => {
     destination,
   } = taggedPackage;
 
+  const pkgId = packageId ?? taggedPackage._id; // si packageId viene es de proveedor, y si no, tomamos el _id porque es nuestro, es de plum
+  const pkgProvider = provider ?? "plum"; // De la misma forma, asumimos que si no viene el provider, es nuestro, porque no corresponde al modelo de tagged packages
+
   const pkgPrice =
     provider === "ola"
       ? Formatters.price(price, currency)
@@ -37,7 +41,11 @@ const TaggedPackageItem = ({ taggedPackage }) => {
       ? sanitizeUrlFromDoubleSlash(thumbnail).replace("100x70", "700x500")
       : urlForImage(taggedPackage.images[0]);
 
-  const pkgDetailUrl = `/packages/detail?id=${packageId}&provider=${provider}&occupancy=2&departureCity=BUE&arrivalCity=${destination[0].iata_code}&startDate=${Dates.get().toFormat("YYYY-MM-DD")}&endDate=${Dates.getWithAddMonths(6).toFormat("YYYY-MM-DD")}`;
+  const startDate = Dates.get().toFormat("YYYY-MM-DD");
+
+  const departureId = CryptoService.generateDepartureId(provider, startDate);
+
+  const pkgDetailUrl = `/packages/detail?id=${pkgId}&departureId=${departureId}&provider=${pkgProvider}&occupancy=2&departureCity=BUE&arrivalCity=${destination[0].iata_code}&startDate=${startDate}&endDate=${Dates.getWithAddMonths(6).toFormat("YYYY-MM-DD")}`;
 
   return (
     <div className="flex flex-col card cursor-pointer hover:shadow-lg transition-shadow duration-300 rounded-b-lg">

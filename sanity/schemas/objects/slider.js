@@ -13,7 +13,7 @@ export default defineField({
         {
           name: "image",
           type: "image",
-          title: "Image",
+          title: "Imagen",
           options: {
             hotspot: true,
           },
@@ -21,7 +21,7 @@ export default defineField({
             {
               name: "alt",
               type: "string",
-              title: "Alternative text",
+              title: "Texto alternativo",
             },
           ],
         },
@@ -33,33 +33,39 @@ export default defineField({
     {
       name: "display",
       type: "string",
-      title: "Display as",
-      description: "How should we display these images?",
+      title: "Visualización",
+      description: "¿Cómo se deben mostrar estas imágenes?",
       options: {
-        list: [{ title: "Carousel", value: "carousel" }],
-        layout: "radio", // <-- defaults to 'dropdown'
+        list: [{ title: "Carrusel", value: "carousel" }],
+        layout: "radio", // Cambia la selección a botones de radio
       },
     },
     {
       name: "zoom",
       type: "boolean",
-      title: "Zoom enabled",
-      description: "Should we enable zooming of images?",
+      title: "Zoom habilitado",
+      description: "¿Se debe habilitar el zoom en las imágenes?",
     },
   ],
-  /* preview: {
+  preview: {
     select: {
-      images: "images",
-      image: "images.0",
+      images: "items", // Seleccionamos el array de imágenes
+      firstImage: "items.0", // Seleccionamos la primera imagen
+      display: "display", // Seleccionamos la opción de visualización
+      zoom: "zoom", // Seleccionamos la opción de zoom
     },
-    prepare(selection) {
-      const { images, image } = selection;
+    prepare({ images, firstImage, display, zoom }) {
+      // Validar si hay imágenes
+      const imageCount = Array.isArray(images) ? images.length : 0;
+      const altText = firstImage?.alt || "Sin texto alternativo";
+      const displayType = display === "carousel" ? "Carrusel" : "Desconocido";
+      const zoomText = zoom ? "Zoom habilitado" : "Zoom deshabilitado";
 
       return {
-        title: `Gallery block of ${Object.keys(images).length} images`,
-        subtitle: `Alt text: ${image.alt}`,
-        media: image,
+        title: `Slider de portada`,
+        subtitle: `Visualización: ${displayType}, ${zoomText}, Texto alt: ${altText}`,
+        media: firstImage, // Muestra la primera imagen como preview
       };
     },
-  }, */
+  },
 });
