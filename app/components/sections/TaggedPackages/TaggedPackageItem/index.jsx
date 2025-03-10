@@ -34,11 +34,11 @@ const TaggedPackageItem = ({ taggedPackage }) => {
   const pkgProvider = provider ?? "plum"; // De la misma forma, asumimos que si no viene el provider, es nuestro, porque no corresponde al modelo de tagged packages
 
   const pkgPrice =
-    provider === "ola"
+    pkgProvider === "ola"
       ? Formatters.price(price, currency)
       : getPkgPrice(taggedPackage.departures);
   const imgSrc =
-    provider === "ola"
+    pkgProvider === "ola"
       ? sanitizeUrlFromDoubleSlash(thumbnail).replace("100x70", "700x500")
       : urlForImage(taggedPackage.images[0]);
 
@@ -49,9 +49,10 @@ const TaggedPackageItem = ({ taggedPackage }) => {
   // Luego pregunto si es plum, me agarro las departures y tomo el departureFrom
   // Si es otro distinto, es un provider entonces tomo el que viene del modelo de provider packages tagged.
   const departureDateForCrypto =
-    provider === "plum" ? departures[0].departureFrom : departureId;
+    pkgProvider === "plum" ? departures[0].departureFrom : departureId;
+  console.log("departureDateForCrypto", departureDateForCrypto);
   const urlDepartureId = CryptoService.generateDepartureId(
-    provider,
+    pkgProvider,
     departureDateForCrypto
   );
 
