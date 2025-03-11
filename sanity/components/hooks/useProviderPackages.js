@@ -156,6 +156,8 @@ export const useProviderPackages = (formWatch) => {
       CONSUMERS.TAGGED_PKG
     );
 
+    console.log("selectedPkg", selectedPkg);
+
     if (selectedPkg) {
       try {
         const cityIdRequest = await ApiUtils.requestHandler(
@@ -197,6 +199,8 @@ export const useProviderPackages = (formWatch) => {
             _key: uuidv4(),
           })),
           departureId,
+          departureFrom: selectedPkg.departures[0].date,
+          priceId: selectedPkg.departures[0].prices.id,
         });
 
         console.log("Tags saved successfully");

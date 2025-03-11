@@ -24,7 +24,7 @@ const RedisService = {
   async get(key) {
     try {
       const data = await redis.get(key);
-      return data ? JSON.parse(data) : null;
+      return data ? data : null;
     } catch (error) {
       console.error(`Error getting key "${key}":`, error);
       return null;
@@ -40,6 +40,32 @@ const RedisService = {
       await redis.del(key);
     } catch (error) {
       console.error(`Error deleting key "${key}":`, error);
+    }
+  },
+
+  /**
+   * Crea y retorna un pipeline para agrupar comandos.
+   * Esto permite agregar múltiples comandos y ejecutarlos en una sola llamada.
+   * @returns {Pipeline} Instancia del pipeline.
+   */
+  pipeline() {
+    return redis.pipeline();
+  },
+
+  /**
+   * Guarda múltiples valores en Redis usando pipelining.
+   * @param {Array<{ key: string, value: any, expireInSeconds?: number }>} items - Arreglo de operaciones.
+   */
+  async pipelineSet(items) {
+    try {
+      const pipeline = redis.pipeline();
+      items.forEach((item) => {
+        const jsonValue = JSON.stringify(item.value);
+        pipeline.set(item.key, jsonValue, { EX: item.expireInSeconds || 3600 });
+      });
+      await pipeline.exec();
+    } catch (error) {
+      console.error("Error in pipelineSet:", error);
     }
   },
 };

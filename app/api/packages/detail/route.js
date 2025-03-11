@@ -14,11 +14,6 @@ const mapFlightSegment = async (segment) => {
 
 export async function POST(req) {
   const body = await req.json();
-  // Extraer el departureId de la query string
-  const departureIdFromQuery = body.departureId;
-  if (!departureIdFromQuery) {
-    return Response.json({ error: "Missing departureId" }, { status: 400 });
-  }
 
   // Extraer el cuerpo de la solicitud
   if (!body || Object.keys(body).length === 0) {
@@ -47,23 +42,9 @@ export async function POST(req) {
 
   // Generar el departureId en cada objeto de departures sin alterar la estructura
   const provider = pBaseDetailResponse.provider;
-  const updatedDepartures = departures.map((departure) => ({
-    ...departure,
-    departureId: CryptoService.generateDepartureId(provider, departure.date),
-  }));
-  // Verificar que alguno de los departures coincide con el departureId recibido
-  const matchingDeparture = updatedDepartures.find(
-    (dep) => dep.departureId === departureIdFromQuery
-  );
-  if (!matchingDeparture) {
-    return Response.json({ error: "Departure not found" }, { status: 404 });
-  }
-
-  // Actualizar la propiedad departures de la respuesta con la información enriquecida
-  pBaseDetailResponse.departures = updatedDepartures;
   // Procesar hoteles asociados a la salida seleccionada
-  const hotelsArray = Array.isArray(matchingDeparture.hotels)
-    ? matchingDeparture.hotels
+  const hotelsArray = Array.isArray(pBaseDetailResponse.hotels)
+    ? pBaseDetailResponse.hotels
     : [];
 
   const hotelsData = await Promise.all(

@@ -28,7 +28,11 @@ const TaggedPackageItem = ({ taggedPackage }) => {
     departures,
     departureId,
     destination,
+    departureFrom,
+    priceId,
   } = taggedPackage;
+
+  console.log("price ", price);
 
   const pkgId = packageId ?? taggedPackage._id; // si packageId viene es de proveedor, y si no, tomamos el _id porque es nuestro, es de plum
   const pkgProvider = provider ?? "plum"; // De la misma forma, asumimos que si no viene el provider, es nuestro, porque no corresponde al modelo de tagged packages
@@ -42,8 +46,6 @@ const TaggedPackageItem = ({ taggedPackage }) => {
       ? sanitizeUrlFromDoubleSlash(thumbnail).replace("100x70", "700x500")
       : urlForImage(taggedPackage.images[0]);
 
-  const startDate = Dates.get().toFormat("YYYY-MM-DD");
-
   // Dato para la posteridad, lo que hago acá es:
   // Dentro de useProviderPackages, estoy generando el departureId y guardandoló en el modelo. Esto es solo para providers, así que estaría bien.
   // Luego pregunto si es plum, me agarro las departures y tomo el departureFrom
@@ -56,7 +58,12 @@ const TaggedPackageItem = ({ taggedPackage }) => {
         )
       : departureId;
 
-  const pkgDetailUrl = `/packages/detail?id=${pkgId}&departureId=${urlDepartureDate}&provider=${pkgProvider}&occupancy=2&departureCity=BUE&arrivalCity=${destination[0].iata_code}&startDate=${startDate}&endDate=${Dates.getWithAddMonths(6).toFormat("YYYY-MM-DD")}`;
+  const urlStartDate =
+    pkgProvider === "plum" ? departures[0].departureFrom : departureFrom;
+
+  const startDate = Dates.get(urlStartDate).toFormat("YYYY-MM-DD");
+
+  const pkgDetailUrl = `/packages/detail?id=${pkgId}&departureId=${urlDepartureDate}&provider=${pkgProvider}&occupancy=2&departureCity=BUE&arrivalCity=${destination[0].iata_code}&startDate=${startDate}&endDate=${Dates.getWithAddMonths(6, startDate).toFormat("YYYY-MM-DD")} ${pkgProvider === "ola" && "&priceId=" + priceId}`;
 
   return (
     <div className="flex flex-col card cursor-pointer hover:shadow-lg transition-shadow duration-300 rounded-b-lg">

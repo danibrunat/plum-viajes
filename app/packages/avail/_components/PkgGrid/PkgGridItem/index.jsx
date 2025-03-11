@@ -89,10 +89,9 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
 
   const priceId = pkgItem?.departures[0].prices?.id;
 
-  const departures = pkgItem?.departures;
-  const departureId = departures[0].id;
+  const firstDepartureDate = pkgItem?.departures[0].date;
   const slug = Helpers.slugify(pkgItem?.title);
-  const detailUrl = `/packages/detail?id=${pkgItem?.id}&departureId=${departureId}&provider=${provider}&occupancy=${occupancy}&departureCity=${departureCity}&arrivalCity=${arrivalCity}&startDate=${startDate}&endDate=${endDate}&priceId=${priceId}`;
+  const detailUrl = `/packages/detail?name=${slug}&id=${pkgItem?.id}&provider=${provider}&occupancy=${occupancy}&departureCity=${departureCity}&arrivalCity=${arrivalCity}&startDate=${firstDepartureDate}&endDate=${endDate}&priceId=${priceId}`;
 
   return (
     <div className="flex flex-col md:flex-row md:justify-between w-full m-2 mx-auto p-1 md:p-2 h-fit overflow-hidden rounded-lg border border-gray-300 bg-white shadow-md">

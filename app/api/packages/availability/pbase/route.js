@@ -346,7 +346,7 @@ export async function POST(req, res) {
 
   const departureGroupInCache = await PackageApiService.cache.get(searchParams);
   if (!departureGroupInCache) {
-    await PackageApiService.cache.set(searchParams, departureGroups, 3600);
+    await PackageApiService.cache.set(departureGroups, 3600);
   }
 
   // Procesar los filtros de los paquetes obtenidos

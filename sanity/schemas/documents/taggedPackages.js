@@ -72,5 +72,17 @@ export default defineField({
       title: "Departure Id (uso interno)",
       description: "Este campo no debe ser modificado",
     },
+    {
+      name: "departureFrom",
+      type: "string",
+      title: "Departure From (uso interno)",
+      description: "Este campo no debe ser modificado y será oculto",
+    },
+    {
+      name: "priceId",
+      type: "string",
+      title: "Price Id (uso interno)",
+      description: "Este campo no debe ser modificado y será oculto",
+    },
   ],
 });

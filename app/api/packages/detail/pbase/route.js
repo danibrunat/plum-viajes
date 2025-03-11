@@ -213,6 +213,7 @@ export async function POST(req, res) {
       return Response.json(response);
     case "ola":
       const olaPkgDetail = await fetchOlaPackageDetail(id, searchParams);
+      console.log("olaPkgDetail", olaPkgDetail);
       return Response.json(olaPkgDetail);
     case "julia":
     /*  const juliaPkgDetail = await fetchJuliaPackageDetail(id);
