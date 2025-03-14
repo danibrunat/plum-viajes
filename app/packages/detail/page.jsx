@@ -1,5 +1,6 @@
 import PkgDetail from "./_components/PkgDetail";
 import { ProviderService } from "../../api/services/providers.service";
+import Link from "next/link";
 
 export const metadata = {
   title: "Paquetes | Plum Viajes",
@@ -30,6 +31,29 @@ export default async function PackagesDetail({ searchParams }) {
     occupancy,
     departureId,
   });
+
+  console.log("pkgDetailResponse", pkgDetailResponse);
+  if (
+    !pkgDetailResponse ||
+    !pkgDetailResponse.departures ||
+    pkgDetailResponse.departures.length === 0 ||
+    pkgDetailResponse.error
+  ) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold mb-4">Salida no disponible</h1>
+          <p className="text-lg mb-4">
+            Lo sentimos, esta salida ya no está disponible. Tenemos mucho mas
+            para vos, ¡No dejes de buscar!
+          </p>
+          <Link href="/" className="text-blue-500 hover:underline">
+            Volver a la página principal
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

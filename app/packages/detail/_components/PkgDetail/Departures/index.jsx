@@ -5,7 +5,6 @@ import PackageApiService from "../../../../../api/services/packages.service";
 
 const Departures = async ({ searchParams }) => {
   const cacheDepartures = await PackageApiService.cache.get(searchParams.id);
-  console.log("cacheDepartures", cacheDepartures);
 
   return (
     <div>

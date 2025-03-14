@@ -41,7 +41,6 @@ export async function POST(req) {
   }
 
   const provider = pBaseDetailResponse.provider;
-  console.log("pBaseDetailResponse", pBaseDetailResponse);
 
   // Seleccionar la salida correspondiente a startDate
   const selectedDeparture = departures.find(

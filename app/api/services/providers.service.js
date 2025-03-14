@@ -589,33 +589,39 @@ export const ProviderService = {
     occupancy,
     departureId,
   }) => {
-    const pkgDetailRequest = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/api/packages/detail`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          provider,
-          id,
-          arrivalCity,
-          departureCity,
-          startDate,
-          endDate,
-          priceId,
-          occupancy,
-          departureId,
-        }),
-        headers: ApiUtils.getCommonHeaders(),
-      }
-    );
-
-    if (!pkgDetailRequest.ok) {
-      const response = await pkgDetailRequest.json();
-      throw new Error(
-        `Ocurrió un error en el detail de paquetes. Razón: ${JSON.stringify(response)}`
+    try {
+      const pkgDetailRequest = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/packages/detail`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            provider,
+            id,
+            arrivalCity,
+            departureCity,
+            startDate,
+            endDate,
+            priceId,
+            occupancy,
+            departureId,
+          }),
+          headers: ApiUtils.getCommonHeaders(),
+        }
       );
-    }
 
-    return pkgDetailRequest.json();
+      if (!pkgDetailRequest.ok) {
+        const response = await pkgDetailRequest.json();
+        return {
+          error: `Ocurrió un error en el detail de paquetes. Razón: ${JSON.stringify(response)}`,
+        };
+      }
+
+      return pkgDetailRequest.json();
+    } catch (error) {
+      return {
+        error: `Ocurrió un error en el detail de paquetes. Razón: ${error.message}`,
+      };
+    }
   },
 
   /**
