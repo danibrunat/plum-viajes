@@ -40,13 +40,27 @@ export async function POST(req) {
     );
   }
 
-  // Generar el departureId en cada objeto de departures sin alterar la estructura
   const provider = pBaseDetailResponse.provider;
+  console.log("pBaseDetailResponse", pBaseDetailResponse);
+
+  // Seleccionar la salida correspondiente a startDate
+  const selectedDeparture = departures.find(
+    (departure) => departure.date === body.startDate
+  );
+
+  if (!selectedDeparture) {
+    return Response.json(
+      { error: "No se encontró la salida con la startDate especificada." },
+      { status: 404 }
+    );
+  }
+
   // Procesar hoteles asociados a la salida seleccionada
-  const hotelsArray = Array.isArray(pBaseDetailResponse.hotels)
-    ? pBaseDetailResponse.hotels
+  const hotelsArray = Array.isArray(selectedDeparture.hotels)
+    ? selectedDeparture.hotels
     : [];
 
+  console.log("selectedDeparture.hotels", hotelsArray);
   const hotelsData = await Promise.all(
     hotelsArray.map((hotel) =>
       HotelsService.getHotelData(provider, hotel, body.arrivalCity)

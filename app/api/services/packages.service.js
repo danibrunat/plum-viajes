@@ -4,18 +4,13 @@ const PackageApiService = {
   departures: {
     plum: {
       getDeparturesGroup: (plumPkgAvailResponse) => {
-        const departuresGroup = plumPkgAvailResponse.map((pkgItem) => {
-          return {
-            pkgId: pkgItem._id,
-            departures: pkgItem.departures.map((pkgDepartureItem) => {
-              return {
-                id: pkgDepartureItem.id,
-                date: pkgDepartureItem.departureFrom,
-              };
-            }),
-          };
-        });
-        return departuresGroup;
+        return plumPkgAvailResponse.map((pkgItem) => ({
+          pkgId: pkgItem._id,
+          departures: pkgItem.departures.map((pkgDepartureItem) => ({
+            id: pkgDepartureItem.id,
+            date: pkgDepartureItem.departureFrom,
+          })),
+        }));
       },
     },
     ola: {
@@ -41,7 +36,6 @@ const PackageApiService = {
           }
         });
 
-        // Eliminar duplicados usando un Map basado en id y ordenar por fecha
         return Object.values(groupedPackages).map((group) => ({
           ...group,
           departures: Array.from(
@@ -53,39 +47,77 @@ const PackageApiService = {
   },
   cache: {
     /**
-     * Obtiene los paquetes en cache según la key única.
-     * @param {object} pkgId - Parámetros de búsqueda.
-     * @returns {object|null} Data almacenada o null si no existe.
+     * Obtiene un paquete en cache según la key (pkgId).
+     * @param {string} pkgId - La clave a consultar.
+     * @returns {Promise<object|null>} Data almacenada o null si no existe.
      */
-    async get(pkgId) {
-      const cachedData = await RedisService.get(pkgId);
-      if (!cachedData) return null; // Si no hay datos, devolvemos null
-
-      return cachedData;
+    get: async (pkgId) => {
+      try {
+        return await RedisService.get(pkgId);
+      } catch (error) {
+        console.error(`Error al obtener ${pkgId} de cache:`, error);
+        return null;
+      }
     },
 
     /**
-     * Guarda la response de paquetes en cache usando una key única.
-     * @param {object} pkgDepartures - Objeto pkgId, departures. pkgId será la clave.
-     * @param {number} expireInSeconds - Tiempo de expiración en segundos (default 3600).
+     * Guarda múltiples pkgDepartures en cache usando pipelining.
+     * Se asume que pkgDepartures es un array de objetos con { pkgId, departures }.
+     * @param {Array} pkgDepartures
+     * @param {number} expireInSeconds
      */
-    async set(pkgDepartures, expireInSeconds = 3600) {
-      const pipelineItems = pkgDepartures.map((pkg) => ({
-        key: pkg.pkgId,
-        value: pkg.departures,
-        expireInSeconds,
-      }));
+    set: async (pkgDepartures, expireInSeconds = 3600) => {
+      try {
+        const pipelineItems = pkgDepartures.map((pkg) => ({
+          key: pkg.pkgId,
+          value: pkg.departures,
+          expireInSeconds,
+        }));
+        await RedisService.pipelineSet(pipelineItems);
+      } catch (error) {
+        console.error("Error al establecer valores en cache:", error);
+      }
+    },
 
-      await RedisService.pipelineSet(pipelineItems);
+    /**
+     * Guarda en cache sólo aquellos pkgDepartures cuyo pkgId no exista ya en Redis.
+     * @param {Array} pkgDepartures
+     * @param {number} expireInSeconds
+     */
+    setIfNotExists: async (pkgDepartures, expireInSeconds = 3600) => {
+      try {
+        // Extraer todas las keys (pkgId) del array
+        const keys = pkgDepartures.map((pkg) => pkg.pkgId);
+        // Consultar Redis por esos keys
+        const existingValues = await RedisService.pipelineGet(keys);
+        // Filtrar aquellos que no existen (null)
+        const newPackages = pkgDepartures.filter(
+          (pkg, index) => existingValues[index] === null
+        );
+        if (newPackages.length > 0) {
+          const pipelineItems = newPackages.map((pkg) => ({
+            key: pkg.pkgId,
+            value: pkg.departures,
+            expireInSeconds,
+          }));
+          await RedisService.pipelineSet(pipelineItems);
+        }
+      } catch (error) {
+        console.error("Error en setIfNotExists:", error);
+      }
     },
 
     /**
      * Elimina la cache de paquetes de una consulta específica.
      * @param {object} searchParams - Parámetros de búsqueda.
      */
-    async delete(searchParams) {
-      const cacheKey = generateCacheKey(searchParams);
-      await RedisService.delete(cacheKey);
+    delete: async (searchParams) => {
+      try {
+        const cacheKey = generateCacheKey(searchParams);
+        await RedisService.delete(cacheKey);
+      } catch (error) {
+        console.error("Error al eliminar cache:", error);
+      }
     },
   },
 };

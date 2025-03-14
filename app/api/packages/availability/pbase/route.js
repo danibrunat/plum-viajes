@@ -343,11 +343,8 @@ export async function POST(req, res) {
     olaPkg.departuresGroup
   );
   // TODO: Mover esto a pcom
-
-  const departureGroupInCache = await PackageApiService.cache.get(searchParams);
-  if (!departureGroupInCache) {
-    await PackageApiService.cache.set(departureGroups, 3600);
-  }
+  // Cacheo
+  await PackageApiService.cache.setIfNotExists(departureGroups, 3600);
 
   // Procesar los filtros de los paquetes obtenidos
   const filters = await Filters.process(packagesResponse);

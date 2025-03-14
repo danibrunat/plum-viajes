@@ -5,11 +5,12 @@ export async function POST(request) {
   try {
     const url = process.env.OLA_URL;
     const detail = await XmlService.soap.request(url, body, "GetPackagesFares");
-    console.log("detail", JSON.stringify(detail[0].Flight.Trips.Trip));
-    return new Response(JSON.stringify(detail), {
-      headers: { "Cache-Control": "s-maxage=3600, stale-while-revalidate" }, // Configuración del caché
-    });
+    if (!Array.isArray(detail)) {
+      const response = [detail];
+      return Response.json(response);
+    }
+    return Response.json(detail);
   } catch (error) {
-    return new Response(JSON.stringify(error), { status: 500 });
+    return new Response.json(error, { status: 500 });
   }
 }

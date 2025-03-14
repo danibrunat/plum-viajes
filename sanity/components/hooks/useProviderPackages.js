@@ -9,6 +9,8 @@ import Dates from "../../../app/services/dates.service";
 import { ApiUtils } from "../../../app/api/services/apiUtils.service";
 import { Api } from "../../../app/services/api.service";
 import { CONSUMERS } from "../../../app/constants/site";
+import CryptoService from "../../../app/api/services/cypto.service";
+import PackageApiService from "../../../app/api/services/packages.service";
 
 const DEFAULT_FROM_DATE = Dates.get().toFormat("YYYY-MM-DD");
 const DEFAULT_TO_DATE = Dates.getWithAddYears(1).toFormat("YYYY-MM-DD");
@@ -105,6 +107,22 @@ export const useProviderPackages = (formWatch) => {
         OLA.avail.options(getPackagesFaresRequest)
       );
       const olaAvailResponse = await olaAvailRequest.json();
+      const pkgWithIdentifiedDepartures = olaAvailResponse.map((pkg) => {
+        return {
+          ...pkg,
+          id: CryptoService.generateDepartureId(
+            "ola",
+            pkg.Flight.Trips.Trip[0].DepartureDate
+          ),
+        };
+      });
+
+      const departuresGroup =
+        PackageApiService.departures.ola.getDeparturesGroup(
+          pkgWithIdentifiedDepartures
+        );
+      await PackageApiService.cache.setIfNotExists(departuresGroup, 3600);
+
       const results = ProviderService.ola.grouper(
         ProviderService.mapper(olaAvailResponse, "ola", "avail"),
         "id"
@@ -112,7 +130,6 @@ export const useProviderPackages = (formWatch) => {
 
       // Obtener los IDs de los paquetes
       const packageIds = results.map((pkg) => pkg.id);
-
       // Hacer una consulta a Sanity para obtener los tags de los paquetes
       const sanityPackagesQuery = `*[_type == "taggedPackages" && packageId in [${packageIds
         .map((id) => `"${id}"`)
@@ -150,67 +167,77 @@ export const useProviderPackages = (formWatch) => {
   };
 
   const handleTagSave = async (packageId) => {
+    // Buscar el paquete seleccionado
     const selectedPkg = state.packages.find((pkg) => pkg.id === packageId);
+    if (!selectedPkg) return;
+    const departureFrom = selectedPkg.departures[0].date;
+
+    // Obtener el precio final y la moneda según la lógica de PackageService
     const { finalPrice, currency } = PackageService.prices.getPkgPrice(
       selectedPkg.departures[0].prices,
       CONSUMERS.TAGGED_PKG
     );
 
-    console.log("selectedPkg", selectedPkg);
+    try {
+      // 1. Obtener los datos de ciudad (destino)
+      const cityIdRequest = await ApiUtils.requestHandler(
+        fetch(
+          Api.cities.getByCode.url(formWatch.arrivalCity.value),
+          Api.cities.getByCode.options()
+        ),
+        "Fetch Cities"
+      );
+      const cityIdResponse = await cityIdRequest.json();
 
-    if (selectedPkg) {
-      try {
-        const cityIdRequest = await ApiUtils.requestHandler(
-          fetch(
-            Api.cities.getByCode.url(formWatch.arrivalCity.value),
-            Api.cities.getByCode.options()
-          ),
-          "Fetch Cities"
-        );
-        const cityIdResponse = await cityIdRequest.json();
-        const departureIdRequest = await fetch(
-          Api.crypto.getDepartureId.url(),
-          Api.crypto.getDepartureId.options({
-            provider: "ola",
-            departureFrom: selectedPkg.departures[0].date,
-          })
-        );
+      // 2. Obtener el departureId a partir de la fecha de salida
+      const departureIdRequest = await fetch(
+        Api.crypto.getDepartureId.url(),
+        Api.crypto.getDepartureId.options({
+          provider: "ola",
+          departureFrom,
+        })
+      );
+      const { departureId } = await departureIdRequest.json();
 
-        const { departureId } = await departureIdRequest.json();
-        await client.createOrReplace({
-          _id: `tagged-package-${packageId}`,
-          _type: "taggedPackages",
-          packageId: selectedPkg.id,
-          productType: "package",
-          price: finalPrice,
-          destination: cityIdResponse.map((city) => ({
-            _type: "reference",
-            _ref: city._id,
-            _key: uuidv4(),
-          })), // Ahora es un array de referencias
-          currency,
-          nights: Number(selectedPkg.nights),
-          title: selectedPkg.title,
-          provider: selectedPkg.provider,
-          thumbnail: selectedPkg.thumbnails[0].sourceUrl,
-          tags: state.selectedTags.map((tagId) => ({
-            _type: "reference",
-            _ref: tagId,
-            _key: uuidv4(),
-          })),
-          departureId,
-          departureFrom: selectedPkg.departures[0].date,
-          priceId: selectedPkg.departures[0].prices.id,
-        });
+      // 3. Crear o actualizar el documento en Sanity para el tag
+      await client.createOrReplace({
+        _id: `tagged-package-${packageId}`,
+        _type: "taggedPackages",
+        packageId: selectedPkg.id,
+        productType: "package",
+        price: finalPrice,
+        destination: cityIdResponse.map((city) => ({
+          _type: "reference",
+          _ref: city._id,
+          _key: uuidv4(),
+        })),
+        currency,
+        nights: Number(selectedPkg.nights),
+        title: selectedPkg.title,
+        provider: selectedPkg.provider,
+        thumbnail: selectedPkg.thumbnails[0].sourceUrl,
+        tags: state.selectedTags.map((tagId) => ({
+          _type: "reference",
+          _ref: tagId,
+          _key: uuidv4(),
+        })),
+        departureId,
+        departureFrom,
+        priceId: selectedPkg.departures[0].prices.id,
+      });
 
-        console.log("Tags saved successfully");
-        dispatch({ type: "RESET_SELECTED_TAGS" }); // Limpiar tags seleccionados después de guardar
+      // 4. Guardar en Redis la estructura key/value:
+      // Key: pkgId y Value: departures (manteniendo la misma estructura)
 
-        // Realizar una nueva búsqueda para refrescar la pantalla
-        await handleSearch();
-      } catch (error) {
-        console.error("Error saving tags", error);
-      }
+      console.log("Tags saved successfully");
+
+      // Reiniciar los tags seleccionados (asegúrate de tener este case en el reducer)
+      dispatch({ type: "RESET_SELECTED_TAGS" });
+
+      // Refrescar la búsqueda para actualizar la pantalla
+      await handleSearch();
+    } catch (error) {
+      console.error("Error saving tags", error);
     }
   };
 

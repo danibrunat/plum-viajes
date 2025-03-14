@@ -5,9 +5,16 @@ import RenderSections from "../components/RenderSections";
 import { getData } from "../actions/sanity";
 
 export async function generateMetadata({ params }, parent) {
-  const builder = imageUrlBuilder(client);
+  const data = await getData(params);
 
-  // read route params
+  if (!data) {
+    return {
+      title: "Landing no encontrada",
+      description: "La página solicitada no se encontró.",
+      manifest: "/manifest.json",
+    };
+  }
+
   const {
     title = "Missing title",
     description,
@@ -16,7 +23,9 @@ export async function generateMetadata({ params }, parent) {
     content = [],
     config = {},
     slug,
-  } = await getData(params);
+  } = data;
+
+  const builder = imageUrlBuilder(client);
 
   const openGraphImages = openGraphImage
     ? [
@@ -27,14 +36,14 @@ export async function generateMetadata({ params }, parent) {
           alt: title,
         },
         {
-          // Facebook recommended size
+          // Tamaño recomendado para Facebook
           url: builder.image(openGraphImage).width(1200).height(630).url(),
           width: 1200,
           height: 630,
           alt: title,
         },
         {
-          // Square 1:1
+          // Cuadrado 1:1
           url: builder.image(openGraphImage).width(600).height(600).url(),
           width: 600,
           height: 600,
@@ -43,15 +52,12 @@ export async function generateMetadata({ params }, parent) {
       ]
     : [];
 
-  // //console.log("title", title);
-
   return {
     title,
     titleTemplate: `%s | ${config.title}`,
     description,
     canonical: config.url && `${config.url}/${slug}`,
     manifest: "/manifest.json",
-
     openGraph: {
       images: openGraphImages,
     },
@@ -60,7 +66,17 @@ export async function generateMetadata({ params }, parent) {
 }
 
 export default async function LandingPage({ params }) {
-  const { content = [] } = await getData(params);
+  const data = await getData(params);
 
-  return content && <RenderSections sections={content} />;
+  // Verifica si no se obtuvo data o no hay contenido
+  if (!data || !data.content || data.content.length === 0) {
+    return (
+      <div style={{ padding: "2rem", textAlign: "center" }}>
+        <h1>Landing no encontrada</h1>
+        <p>No se encontró contenido para la página solicitada.</p>
+      </div>
+    );
+  }
+
+  return <RenderSections sections={data.content} />;
 }
