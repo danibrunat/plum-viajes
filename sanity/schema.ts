@@ -13,6 +13,7 @@ import tags from "./schemas/documents/tags";
 import taggedPackages from "./schemas/documents/taggedPackages";
 import providerPackages from "./schemas/documents/providerPackages";
 import airlines from "./schemas/documents/airlines";
+import providers from "./schemas/documents/providers";
 
 // Object types
 import cta from "./schemas/objects/cta";
@@ -43,6 +44,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     cities,
     hotels,
     airlines,
+    providers,
     tags,
     taggedPackages,
     providerPackages,
