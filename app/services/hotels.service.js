@@ -4,9 +4,8 @@ import { capitalizeFirstLetter, sanitizeHtmlString } from "../helpers/strings";
 import { Api } from "./api.service";
 
 const HotelsService = {
-  getHotelData: async (provider, pkgHotel, destination) => {
+  async getHotelData(provider, pkgHotel, destination) {
     if (provider === "plum") {
-      // Para PLUM se utiliza el ID que ya viene en pkgHotel
       const hotelDataRequest = await ApiUtils.requestHandler(
         fetch(
           Api.hotels.getById.url(pkgHotel.id),
@@ -14,11 +13,8 @@ const HotelsService = {
         ),
         Api.hotels.getById.name
       );
-      const hotelDataResponse = await hotelDataRequest.json();
-
-      return hotelDataResponse;
+      return await hotelDataRequest.json();
     } else if (provider === "ola") {
-      // Para OLA, se busca por nombre (usando ilike) para obtener el common hotel id
       const hotelsRequest = await ApiUtils.requestHandler(
         fetch(
           Api.hotels.getByName.url(pkgHotel.name),
@@ -27,9 +23,8 @@ const HotelsService = {
         Api.hotels.getByName.name
       );
       const hotelsMatching = await hotelsRequest.json();
-      if (!hotelsMatching || hotelsMatching.length === 0) {
-        // pkgHotel debe contener: name, stars, description, latitude, longitude y city (con _id)
 
+      if (!hotelsMatching || hotelsMatching.length === 0) {
         try {
           const cityIdRequest = await ApiUtils.requestHandler(
             fetch(
@@ -51,13 +46,12 @@ const HotelsService = {
             images: [],
             city_id: {
               _type: "reference",
-              _ref: cityId, // Asegúrate de tener el ID del documento city
+              _ref: cityId,
             },
           };
-          // No se encontró el hotel; lo insertamos.
+
           const insertedHotel = await SanityService.createObject(newHotel);
 
-          // Si lo inserta, lo vamos a buscar a la Api para normalizar la respuesta hacia el consumidor
           if (insertedHotel) {
             const hotelDataRequest = await ApiUtils.requestHandler(
               fetch(
@@ -66,8 +60,7 @@ const HotelsService = {
               ),
               Api.hotels.getById.name
             );
-            const hotelDataResponse = await hotelDataRequest.json();
-            return hotelDataResponse;
+            return await hotelDataRequest.json();
           }
 
           throw new Error("Cannot handle hotel");
@@ -75,7 +68,6 @@ const HotelsService = {
           console.error(error);
         }
       }
-      // Asignamos el common hotel id obtenido al pkgHotel
       return hotelsMatching[0];
     }
   },

@@ -12,7 +12,7 @@ import {
 } from "react-icons/fa";
 import PackageEngineItem from "./PackageEngineItem";
 import { ProviderService } from "../../../../api/services/providers.service";
-import { CitiesService } from "../../../../services/cities.service";
+import CitiesService from "../../../../services/cities.service";
 
 const getPackageEngineItems = () => {
   function debounce(fn, delay) {

@@ -2,15 +2,11 @@ import { Api } from "../../../services/api.service";
 
 export async function POST(req) {
   const body = await req.json();
-  /* PBase */
+  /* Pcom: Aplica políticas de negocio y lógica específica de cómo se visualizan los datos. Armado de datos para la decisión de negocio. */
   const pkgAvailRequest = await fetch(
-    Api.packages.avail.pbase.url(),
-    Api.packages.avail.pbase.options(body)
+    Api.packages.avail.pcom.url(),
+    Api.packages.avail.pcom.options(body)
   );
-
-  /* PCom */
-
-  /* Response */
 
   const pkgAvailResponse = await pkgAvailRequest.json();
 

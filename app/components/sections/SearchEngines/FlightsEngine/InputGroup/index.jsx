@@ -2,7 +2,7 @@ import React from "react";
 import AsyncSelect from "react-select/async";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { CitiesService } from "../../../../../services/cities.service";
+import CitiesService from "../../../../../services/cities.service";
 
 const getCitiesAutocompleteApi = async (query, inputName) =>
   await CitiesService.getCitiesAutocompleteApi(query, inputName);

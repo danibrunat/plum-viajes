@@ -9,6 +9,15 @@ const baseUrl = isSanity
 export const Api = {
   packages: {
     avail: {
+      pcom: {
+        url: () => `${baseUrl}/api/packages/availability/pcom`,
+        options: (body) => ({
+          body: JSON.stringify(body),
+          method: "POST",
+          headers: ApiUtils.getCommonHeaders(),
+        }),
+        name: "POST Availability | pcom",
+      },
       pbase: {
         url: () => `${baseUrl}/api/packages/availability/pbase`,
         options: (body) => ({
@@ -20,6 +29,15 @@ export const Api = {
       },
     },
     detail: {
+      pcom: {
+        url: () => `${baseUrl}/api/packages/detail/pcom`,
+        options: (body) => ({
+          body: JSON.stringify(body),
+          method: "POST",
+          headers: ApiUtils.getCommonHeaders(),
+        }),
+        name: "POST Detail | pcom",
+      },
       pbase: {
         url: () => `${baseUrl}/api/packages/detail/pbase`,
         options: (body) => ({

@@ -1,6 +1,6 @@
 import React from "react";
 import AsyncSelect from "react-select/async";
-import { CitiesService } from "../../../../../services/cities.service";
+import CitiesService from "../../../../../services/cities.service";
 import { FiTrash2 } from "react-icons/fi";
 
 const getCitiesAutocompleteApi = async (query, inputName) =>

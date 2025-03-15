@@ -1,5 +1,5 @@
 export const FilterClientService = {
-  handleFilterChange: (e, filterId, value) => {
+  handleFilterChange(e, filterId, value) {
     const url = new URL(window.location.href);
     const params = new URLSearchParams(url.search);
 

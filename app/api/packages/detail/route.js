@@ -1,8 +1,7 @@
 import { Api } from "../../../services/api.service";
-import { CitiesService } from "../../../services/cities.service";
+import CitiesService from "../../../services/cities.service";
 import HotelsService from "../../../services/hotels.service";
 import AirlinesService from "../../../services/airlines.service";
-import CryptoService from "../../services/cypto.service";
 
 const mapFlightSegment = async (segment) => {
   const airlineData = await AirlinesService.getAirlineData(

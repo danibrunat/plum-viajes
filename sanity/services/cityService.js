@@ -1,4 +1,4 @@
-import { CitiesService } from "../../app/services/cities.service";
+import CitiesService from "../../app/services/cities.service";
 
 export const getCitiesAutocompleteApi = async (query, inputName) => {
   return await CitiesService.getCitiesAutocompleteApi(query, inputName);

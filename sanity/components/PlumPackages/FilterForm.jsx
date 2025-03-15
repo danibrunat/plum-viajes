@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { CitiesService } from "../../../app/services/cities.service";
+import CitiesService from "../../../app/services/cities.service";
 import { OPERATORS } from "../../../app/constants/operators";
 import { ORIGINS } from "../../../app/constants/origins";
 

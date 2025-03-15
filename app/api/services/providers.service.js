@@ -10,7 +10,7 @@
   { id: "plum", label: "Plum Viajes", active: 1 },
 ]; */
 
-import { CitiesService } from "../../services/cities.service";
+import CitiesService from "../../services/cities.service";
 import { ApiUtils } from "./apiUtils.service";
 
 /**
