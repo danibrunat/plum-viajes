@@ -65,9 +65,20 @@ async function fetchPlumPackages({
   const onlyPkgWithDepartures = pkgAvailResponse.filter(
     (pkg) => pkg.departures.length > 0
   );
-  // Generar departureId en cada objeto de departures sin alterar la estructura
 
-  const pkgWithIdentifiedDepartures = onlyPkgWithDepartures.map((pkg) => {
+  // Ordenar las departures para que las agotadas se envíen al final
+  const sortedPkgWithDepartures = onlyPkgWithDepartures.map((pkg) => {
+    const sortedDepartures = pkg.departures.sort((a, b) => {
+      return a.departureSeats === 0 ? 1 : b.departureSeats === 0 ? -1 : 0;
+    });
+    return {
+      ...pkg,
+      departures: sortedDepartures,
+    };
+  });
+
+  // Generar departureId en cada objeto de departures sin alterar la estructura
+  const pkgWithIdentifiedDepartures = sortedPkgWithDepartures.map((pkg) => {
     return {
       ...pkg,
       departures: pkg.departures.map((departure) => ({

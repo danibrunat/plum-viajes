@@ -88,7 +88,10 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
   const hotelRoomSize = Helpers.capitalizeFirstLetter(hotels.roomSize);
 
   const priceId = pkgItem?.departures[0].prices?.id;
-
+  // Check if all departures are sold out or if there is only one departure and it is sold out
+  const isSoldOutDeparture =
+    (pkgItem?.departures.length === 1 && pkgItem?.departures[0].seats === 0) ||
+    pkgItem?.departures.every((departure) => departure.seats === 0);
   const firstDepartureDate = pkgItem?.departures[0].date;
   const slug = Helpers.slugify(pkgItem?.title);
   const detailUrl = `/packages/detail?name=${slug}&id=${pkgItem?.id}&provider=${provider}&occupancy=${occupancy}&departureCity=${departureCity}&arrivalCity=${arrivalCity}&startDate=${firstDepartureDate}&endDate=${endDate}&priceId=${priceId}`;
@@ -105,11 +108,18 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
           }
           alt="Paquete"
         />
-        {pkgItem?.specialOfferTags && (
-          <span className="absolute top-0 left-0 m-2 rounded-full bg-plumPrimaryPurple px-2 text-center text-sm font-medium text-white">
-            {`${pkgItem?.specialOfferTags}`}
-          </span>
-        )}
+        <div className="absolute top-0 left-0 m-2 flex space-x-2">
+          {pkgItem?.specialOfferTags && (
+            <span className="rounded-full bg-plumPrimaryPurple px-2 text-center text-sm font-medium text-white">
+              {`${pkgItem?.specialOfferTags}`}
+            </span>
+          )}
+          {isSoldOutDeparture && (
+            <span className="rounded-full bg-red-600 px-2 text-center text-sm font-medium text-white">
+              Agotado
+            </span>
+          )}
+        </div>
       </div>
       <div className="flex md:grow flex-col justify-start gap-1 p-2 mx-2 w-full md:w-2/5  text-xs">
         <h5 className="tracking-tight font-bold text-sm ">

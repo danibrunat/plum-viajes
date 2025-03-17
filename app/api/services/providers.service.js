@@ -200,6 +200,10 @@ export const ProviderService = {
           plum: "departureFrom",
           ola: "Flight.Trips.Trip.[0].DepartureDate",
         },
+        seats: {
+          plum: "departureSeats",
+          ola: "departureSeats",
+        },
       },
     },
     specialOfferTags: {
@@ -457,6 +461,10 @@ export const ProviderService = {
         date: {
           plum: "departureFrom",
           ola: "Flight.Trips.Trip.[0].DepartureDate",
+        },
+        seats: {
+          plum: "departureSeats",
+          ola: "departureSeats",
         },
       },
     },

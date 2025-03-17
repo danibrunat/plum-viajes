@@ -41,7 +41,13 @@ const getRoomSummaryText = (rooms, pricePerPerson, currency, roomType) => {
   return normalizeText(roomTexts.join(": ") + ".");
 };
 
-const ReservationSummary = ({ currency, finalPrice, occupancy, hotels }) => {
+const ReservationSummary = ({
+  currency,
+  finalPrice,
+  occupancy,
+  hotels,
+  isSoldOutDeparture,
+}) => {
   const roomType = hotels?.[0]?.roomSize;
   const pricePerPerson = Formatters.price(finalPrice, currency);
   const finalPriceText = getRoomSummaryText(
@@ -53,20 +59,28 @@ const ReservationSummary = ({ currency, finalPrice, occupancy, hotels }) => {
   return (
     <div className="flex w-full bg-plumPrimaryPurple fixed bottom-0 text-center justify-between p-4 z-[99999] text-white md:justify-center md:bottom-auto md:relative md:rounded-lg">
       <div className="flex flex-row  w-full md:flex-col md:w-1/2 md:gap-3">
-        <div className="flex-1 flex-col md:flex">
-          <em className="text-xs md:text-md">
-            Precio final por persona desde:
-          </em>
-          <p className="text-xl font-bold">{pricePerPerson}</p>
-        </div>
-        <div className="flex-1 flex-col md:flex">
-          <p className="text-md">{finalPriceText}</p>
-        </div>
-        <div className="flex-1 md:hidden">
-          <button className="bg-plumPrimaryOrange text-md p-3 rounded">
-            Consultar
-          </button>
-        </div>
+        {!isSoldOutDeparture ? (
+          <>
+            <div className="flex-1 flex-col md:flex">
+              <em className="text-xs md:text-md">
+                Precio final por persona desde:
+              </em>
+              <p className="text-xl font-bold">{pricePerPerson}</p>
+            </div>
+            <div className="flex-1 flex-col md:flex">
+              <p className="text-md">{finalPriceText}</p>
+            </div>
+            <div className="flex-1 md:hidden">
+              <button className="bg-plumPrimaryOrange text-md p-3 rounded">
+                Consultar
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="flex-1 flex-col md:flex">
+            <em className="text-xs md:text-md">Agotado</em>
+          </div>
+        )}
       </div>
     </div>
   );
