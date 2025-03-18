@@ -20,6 +20,7 @@ const PricesAndAgentContact = ({
         currency={currency}
         finalPrice={finalPrice}
         occupancy={occupancy}
+        hotels={hotels}
         isSoldOutDeparture={isSoldOutDeparture}
       />
       <AgentContact />

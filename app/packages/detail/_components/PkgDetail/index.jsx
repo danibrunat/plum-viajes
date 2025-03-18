@@ -19,6 +19,7 @@ export default function PkgDetail({ detailResponse, searchParams }) {
   const description = detailResponse?.description;
   const nights = detailResponse?.nights;
   const hotels = detailResponse?.departures[0]?.hotels;
+  console.log("hotels detail", hotels);
   const hotelsData = detailResponse?.hotelsData;
   const citiesData = detailResponse?.citiesData;
   const flights = detailResponse?.departures[0].flights;

@@ -58,7 +58,6 @@ export async function POST(req) {
     ? selectedDeparture.hotels
     : [];
 
-  console.log("selectedDeparture.hotels", hotelsArray);
   const hotelsData = await Promise.all(
     hotelsArray.map((hotel) =>
       HotelsService.getHotelData(provider, hotel, body.arrivalCity)
