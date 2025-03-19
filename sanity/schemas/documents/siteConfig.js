@@ -24,7 +24,6 @@ export default defineField({
       description: "Elegí una página de inicio",
       to: { type: "page" },
     },
-
     {
       title: "Logo",
       description:
@@ -91,6 +90,24 @@ export default defineField({
       name: "footerText",
       type: "simplePortableText",
       fieldset: "footer",
+    },
+    {
+      title: "Enlace de WhatsApp",
+      name: "whatsappLink",
+      type: "url",
+      description: "URL del enlace de WhatsApp",
+    },
+    {
+      title: "Enlace de Facebook",
+      name: "facebookLink",
+      type: "url",
+      description: "URL del enlace de Facebook",
+    },
+    {
+      title: "Enlace de Instagram",
+      name: "instagramLink",
+      type: "url",
+      description: "URL del enlace de Instagram",
     },
   ],
 });

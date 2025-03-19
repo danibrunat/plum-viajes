@@ -3,7 +3,6 @@ import {
   capitalizeFirstLetter,
   toLowerCase,
 } from "../../../../../helpers/strings";
-import { render } from "@react-email/render";
 
 const getRoomSummary = (rooms) => {
   if (!rooms || rooms.length === 0) return "Sin habitaciones seleccionadas.";

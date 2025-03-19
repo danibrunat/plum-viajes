@@ -8,7 +8,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Whatsapp from "./components/Whatsapp";
 import ModalRoot from "./components/commons/Modal/ModalRoot";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import SocialWidget from "./components/Widgets/SocialWidget"; // Importa el componente
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +24,10 @@ export default async function Layout({ children }) {
     footerNavigation[] -> {
       ...,
       "title": page->title
-    }
+    },
+    whatsappLink,
+    facebookLink,
+    instagramLink
   }[0]
   `;
 
@@ -50,6 +53,9 @@ export default async function Layout({ children }) {
     logo,
     url,
     contact,
+    whatsappLink,
+    facebookLink,
+    instagramLink,
   } = config;
   const logoUrl = logo && logo.asset && logo.asset.url;
 
@@ -73,6 +79,12 @@ export default async function Layout({ children }) {
         <Footer navItems={footerNavigation} text={footerText} />
         {logoUrl && url && <LogoJsonLd url={url} logo={logoUrl} />}
         <Whatsapp />
+        <SocialWidget
+          whatsappLink={whatsappLink}
+          facebookLink={facebookLink}
+          instagramLink={instagramLink}
+        />{" "}
+        {/* Pasa los enlaces como props */}
       </body>
     </html>
   );
