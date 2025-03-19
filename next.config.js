@@ -1,3 +1,5 @@
+const { hostname } = require("os");
+
 const withPWA = require("@ducanh2912/next-pwa").default({
   dest: "public",
   cacheOnFrontEndNav: true,
@@ -20,6 +22,9 @@ const nextConfig = {
       { protocol: "https", hostname: "s3.amazonaws.com" },
       { protocol: "https", hostname: "plumviajes.com.ar" },
       { protocol: "https", hostname: "www.plumviajes.com.ar" },
+      { protocol: "https", hostname: "www.afip.gob.ar" },
+      { protocol: "http", hostname: "qr.afip.gob.ar" },
+      { protocol: "http", hostname: "localhost" },
       { protocol: "https", hostname: "guvpgxfgdpcfdtdvrpcd.supabase.co" },
     ],
   },

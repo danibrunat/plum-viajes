@@ -14,6 +14,7 @@ import {
 } from "react-icons/fa";
 import Newsletter from "./Newsletter";
 import { openModalBase } from "../../helpers/modals";
+import SubFooter from "../SubFooter";
 
 const contactInfo = [
   {
@@ -51,7 +52,7 @@ const contactInfo = [
 export default function Footer(props) {
   const { navItems, text } = props;
   return (
-    <footer className=" bg-plumPrimaryBlue border-b-2 text-white">
+    <footer className=" bg-plumSecondaryPurple border-b-2 text-white">
       <Newsletter />
       <div className="flex flex-col md:flex-row p-4">
         <div className="flex gap-2 justify-center p-4 text-xl w-full md:w-1/3">
@@ -73,7 +74,7 @@ export default function Footer(props) {
             })}
         </ul>
       </div>
-      <div className="flex flex-col md:flex-row w-full justify-normal md:justify-around text-md bg-plumSecondaryBlue">
+      <div className="flex flex-col md:flex-row w-full justify-normal p-0 md:p-10 text-lg bg-plumPrimaryPurple">
         <div className="flex p-8 flex-col gap-4">
           <h1 className="text-xl">Dónde encontrarnos</h1>
           {contactInfo.map((ci) => (
@@ -97,6 +98,7 @@ export default function Footer(props) {
           ></iframe>
         </div> */}
       </div>
+      <SubFooter />
     </footer>
   );
 }
