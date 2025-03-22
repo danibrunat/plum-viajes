@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import React from "react";
+import { FaWhatsapp, FaWhatsappSquare } from "react-icons/fa";
 
 const Whatsapp = () => {
   const handleClick = async () => {
@@ -21,16 +22,24 @@ const Whatsapp = () => {
   return (
     <>
       <div
-        className="p-2 fixed 
-          bottom-28 right-4 cursor-pointer md:right-4"
+        className="p-2 fixed bottom-28 right-4 cursor-pointer md:right-4"
         onClick={handleClick}
       >
-        <Image
-          alt="Whatsapp"
-          src={`${process.env.NEXT_PUBLIC_URL}/Whatsapp.png`}
-          width={200}
-          height={84}
-        />
+        {/* Mostrar imagen en dispositivos de escritorio */}
+        <div className="hidden md:block">
+          <Image
+            alt="Whatsapp"
+            src={`${process.env.NEXT_PUBLIC_URL}/Whatsapp.png`}
+            width={200}
+            height={84}
+          />
+        </div>
+        {/* Mostrar ícono en dispositivos móviles */}
+        <div className="block md:hidden z-50">
+          <div className="bg-[#25D366] p-3 rounded-full shadow-lg">
+            <FaWhatsapp className="text-white w-10 h-10" />
+          </div>
+        </div>
       </div>
     </>
   );

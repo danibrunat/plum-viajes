@@ -270,21 +270,21 @@ export const ProviderService = {
           },
           items: {
             id: {
-              plum: "hotels.[0].id",
+              plum: "hotels.[].id",
               julia: "hotels",
               ola: "Description.Name",
             },
             name: {
-              plum: "hotels.[0].name",
+              plum: "hotels.[].name",
               julia: "hotels",
               ola: "Description.Name",
             },
             description: {
-              plum: "hotels.[0].description",
+              plum: "hotels.[].description",
               ola: "Description.Description",
             },
             rating: {
-              plum: "hotels.[0].rating",
+              plum: "hotels.[].rating",
               julia: "rating",
               ola: "Description.HotelClass",
             },

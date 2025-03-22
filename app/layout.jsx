@@ -6,7 +6,7 @@ import { LogoJsonLd } from "next-seo";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Whatsapp from "./components/Whatsapp";
+import Whatsapp from "./components/Widgets/Whatsapp";
 import ModalRoot from "./components/commons/Modal/ModalRoot";
 import SocialWidget from "./components/Widgets/SocialWidget"; // Importa el componente
 

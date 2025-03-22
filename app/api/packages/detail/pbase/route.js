@@ -82,12 +82,15 @@ async function fetchPlumPackageDetail({ occupancy, id, startDate, endDate }) {
 
   const sanityQuery = await sanityFetch({ query: pkgDetailQuery });
   const pkgDetailResponse = await sanityQuery;
+  console.log("pkgDetailResponse", JSON.stringify(pkgDetailResponse, null, 2));
   const mapResponse = ProviderService.mapper(
     pkgDetailResponse,
     "plum",
     "detail"
   );
-  // TODO refactor when detail mapper is ready
+
+  console.log("mapResponse", JSON.stringify(mapResponse, null, 2));
+
   return Response.json(mapResponse[0]);
 }
 

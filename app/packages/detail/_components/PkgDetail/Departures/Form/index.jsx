@@ -97,17 +97,17 @@ const DeparturesForm = ({ departures }) => {
   }, [childrenCount, trigger]);
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
-      <em className="block text-center text-lg font-medium text-gray-700 mb-4">
+    <div className="w-full px-4 md:max-w-6xl md:mx-auto">
+      <em className="block text-center text-base md:text-lg font-medium text-gray-700 mb-4">
         Modifica la fecha de salida para ver otras tarifas disponibles:
       </em>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white shadow rounded-lg p-4 flex items-center space-x-4 overflow-x-auto"
+        className="bg-white shadow rounded-lg p-4 flex flex-col md:flex-row md:items-end gap-4 md:space-x-4"
       >
         {/* Fecha de Salida */}
-        <div className="flex flex-col min-w-[150px]">
+        <div className="flex flex-col w-full md:w-auto">
           <label className="text-sm font-medium text-gray-700 mb-1">
             Fecha de Salida
           </label>
@@ -115,7 +115,7 @@ const DeparturesForm = ({ departures }) => {
             {...register("startDate", {
               required: "Este campo es obligatorio.",
             })}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
           >
             {departures.map((departure) => (
               <option key={departure.date} value={departure.date}>
@@ -130,87 +130,90 @@ const DeparturesForm = ({ departures }) => {
           )}
         </div>
 
-        {/* Adultos */}
-        <div className="flex flex-col min-w-[120px]">
-          <label className="text-sm font-medium text-gray-700 mb-1">
-            Adultos
-          </label>
-          <select
-            {...register("adults", {
-              required: "Selecciona el número de adultos.",
-            })}
-            defaultValue="2"
-            className="px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-          >
-            {[1, 2, 3, 4].map((num) => (
-              <option key={num} value={num}>
-                {num}
-              </option>
-            ))}
-          </select>
-          {errors.adults && (
-            <span className="mt-1 text-xs text-red-600">
-              {errors.adults.message}
-            </span>
-          )}
-        </div>
+        {/* Grid for Adultos, Menores, Habitación */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full md:w-auto">
+          {/* Adultos */}
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1">
+              Adultos
+            </label>
+            <select
+              {...register("adults", {
+                required: "Selecciona el número de adultos.",
+              })}
+              defaultValue="2"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+            >
+              {[1, 2, 3, 4].map((num) => (
+                <option key={num} value={num}>
+                  {num}
+                </option>
+              ))}
+            </select>
+            {errors.adults && (
+              <span className="mt-1 text-xs text-red-600">
+                {errors.adults.message}
+              </span>
+            )}
+          </div>
 
-        {/* Menores */}
-        <div className="flex flex-col min-w-[120px]">
-          <label className="text-sm font-medium text-gray-700 mb-1">
-            Menores
-          </label>
-          <select
-            {...register("children", {
-              required: "Selecciona el número de menores.",
-              onChange: handleChildrenCountChange,
-            })}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-          >
-            {[0, 1, 2, 3].map((num) => (
-              <option key={num} value={num}>
-                {num}
-              </option>
-            ))}
-          </select>
-          {errors.children && (
-            <span className="mt-1 text-xs text-red-600">
-              {errors.children.message}
-            </span>
-          )}
-        </div>
+          {/* Menores */}
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1">
+              Menores
+            </label>
+            <select
+              {...register("children", {
+                required: "Selecciona el número de menores.",
+                onChange: handleChildrenCountChange,
+              })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+            >
+              {[0, 1, 2, 3].map((num) => (
+                <option key={num} value={num}>
+                  {num}
+                </option>
+              ))}
+            </select>
+            {errors.children && (
+              <span className="mt-1 text-xs text-red-600">
+                {errors.children.message}
+              </span>
+            )}
+          </div>
 
-        {/* Habitaciones */}
-        <div className="flex flex-col min-w-[120px]">
-          <label className="text-sm font-medium text-gray-700 mb-1">
-            Habitación
-          </label>
-          <select
-            {...register("occupancy", {
-              required: "Selecciona la cantidad de habitaciones.",
-            })}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-          >
-            {[1, 2].map((num) => (
-              <option key={num} value={num}>
-                {num}
-              </option>
-            ))}
-          </select>
-          {errors.occupancy && (
-            <span className="mt-1 text-xs text-red-600">
-              {errors.occupancy.message}
-            </span>
-          )}
+          {/* Habitaciones */}
+          <div className="flex flex-col col-span-2 md:col-span-1">
+            <label className="text-sm font-medium text-gray-700 mb-1">
+              Habitación
+            </label>
+            <select
+              {...register("occupancy", {
+                required: "Selecciona la cantidad de habitaciones.",
+              })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+            >
+              {[1, 2].map((num) => (
+                <option key={num} value={num}>
+                  {num}
+                </option>
+              ))}
+            </select>
+            {errors.occupancy && (
+              <span className="mt-1 text-xs text-red-600">
+                {errors.occupancy.message}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Edades de los Menores */}
         {childrenCount > 0 && (
-          <div className="flex flex-col min-w-[150px]">
+          <div className="flex flex-col w-full md:w-auto">
             <label className="text-sm font-medium text-gray-700 mb-1">
               Edades de los menores
             </label>
-            <div className="space-y-2">
+            <div className="grid grid-cols-2 md:grid-cols-1 gap-2">
               {Array.from({ length: childrenCount }, (_, index) => (
                 <select
                   key={index}
@@ -219,7 +222,7 @@ const DeparturesForm = ({ departures }) => {
                     validate: (value) =>
                       value === "" ? "Selecciona una edad" : true,
                   })}
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
                 >
                   <option value="">-</option>
                   {Array.from({ length: 16 }, (_, age) => age + 2).map(
@@ -241,10 +244,10 @@ const DeparturesForm = ({ departures }) => {
         )}
 
         {/* Botón de Envío */}
-        <div className="flex-shrink-0 self-end">
+        <div className="w-full md:w-auto">
           <button
             type="submit"
-            className="bg-orange-500 hover:bg-orange-600  text-white font-semibold py-2 px-6 rounded-md shadow transition-colors whitespace-nowrap"
+            className="w-full md:w-auto bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-md shadow transition-colors"
           >
             Buscar
           </button>

@@ -77,10 +77,10 @@ export default function PkgDetail({ detailResponse, searchParams }) {
               <DestinationCity sliderImages={sliderImages} city={city} />
             </div>
           ))}
-          <div className="flex flex-col md:hidden w-full rounded">
+          {/*  <div className="flex flex-col md:hidden w-full rounded">
             <h2 className="text-xl">Consultá con tu agente de viajes</h2>
             <AgentContact />
-          </div>
+          </div> */}
         </div>
         <aside className="flex flex-col w-full md:w-1/4">
           <PricesAndAgentContact
