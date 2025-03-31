@@ -18,7 +18,6 @@ import {
 import { structureTool } from "sanity/structure";
 
 import { codeInput } from "@sanity/code-input";
-import { iconPicker } from "sanity-plugin-icon-picker";
 //import { tags } from "sanity-plugin-tags";
 
 import DownloadPDFAction from "./sanity/actions/PDFDownload";
@@ -50,7 +49,6 @@ export default defineConfig({
     structureTool({
       structure: deskStructure,
     }),
-    iconPicker(),
     codeInput(),
     dashboardTool({
       widgets: [projectInfoWidget(), projectUsersWidget()],
