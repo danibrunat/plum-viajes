@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { submitAboutUsContactForm } from "../../actions/forms";
+import { submitContactForm } from "../../actions/forms";
 import { openModalBase } from "../../helpers/modals";
 
 const AboutUsContactForm = () => {
@@ -10,7 +10,7 @@ const AboutUsContactForm = () => {
   const submitForm = async (formData) => {
     if (formData) {
       try {
-        const response = await submitAboutUsContactForm(formData);
+        const response = await submitContactForm(formData, "agent");
         if (response.statusCode === 200) {
           openModalBase({
             title: "Éxito",

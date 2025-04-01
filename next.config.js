@@ -30,6 +30,19 @@ const nextConfig = {
       { protocol: "https", hostname: "guvpgxfgdpcfdtdvrpcd.supabase.co" },
     ],
   },
+  experimental: {
+    turbo: {
+      resolveExtensions: [
+        ".mdx",
+        ".tsx",
+        ".ts",
+        ".jsx",
+        ".js",
+        ".mjs",
+        ".json",
+      ],
+    },
+  },
   logging: {
     fetches: {
       fullUrl: true,

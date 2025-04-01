@@ -191,7 +191,7 @@ async function fetchJuliaPackages(searchParams) {
  * @param {Response} res - Respuesta HTTP saliente.
  * @returns {Promise<Response>} - Paquetes y filtros disponibles.
  */
-export async function POST(req, res) {
+export async function POST(req) {
   const body = await req.json();
   const { searchParams } = body;
 
