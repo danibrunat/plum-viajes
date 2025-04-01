@@ -11,7 +11,8 @@ export const metadata = {
 };
 
 // Convert to a Server Component
-export default async function PackagesAvailability({ searchParams }) {
+export default async function PackagesAvailability(props) {
+  const searchParams = await props.searchParams;
   const {
     arrivalCity,
     departureCity,

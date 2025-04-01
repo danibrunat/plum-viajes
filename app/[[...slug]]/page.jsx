@@ -4,7 +4,8 @@ import { client } from "../../sanity/lib/client";
 import RenderSections from "../components/RenderSections";
 import { getData } from "../actions/sanity";
 
-export async function generateMetadata({ params }, parent) {
+export async function generateMetadata(props, parent) {
+  const params = await props.params;
   const data = await getData(params);
 
   if (!data) {
@@ -65,7 +66,8 @@ export async function generateMetadata({ params }, parent) {
   };
 }
 
-export default async function LandingPage({ params }) {
+export default async function LandingPage(props) {
+  const params = await props.params;
   const data = await getData(params);
 
   // Verifica si no se obtuvo data o no hay contenido

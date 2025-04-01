@@ -38,7 +38,8 @@ async function getData(params) {
   }
 }
 
-export async function generateMetadata({ params }, parent) {
+export async function generateMetadata(props, parent) {
+  const params = await props.params;
   const builder = imageUrlBuilder(client);
 
   try {
@@ -88,7 +89,8 @@ export async function generateMetadata({ params }, parent) {
   }
 }
 
-export default async function Landing({ params }) {
+export default async function Landing(props) {
+  const params = await props.params;
   try {
     const { content = [] } = await getData(params);
     const destination = params?.slug[1];

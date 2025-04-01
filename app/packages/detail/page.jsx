@@ -8,7 +8,8 @@ export const metadata = {
   description: "Paquetes a Buzios - Detalle de paquetes",
 };
 
-export default async function PackagesDetail({ searchParams }) {
+export default async function PackagesDetail(props) {
+  const searchParams = await props.searchParams;
   const {
     provider,
     id,
