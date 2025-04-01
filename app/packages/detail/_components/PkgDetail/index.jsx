@@ -49,7 +49,9 @@ export default function PkgDetail({ detailResponse, searchParams }) {
           <span className=" text-sm uppercase">
             {nights} noches desde {departureCity}
           </span>
-          <Slider slides={sliderImages} deviceType="desktop" />
+          {sliderImages.length > 0 && (
+            <Slider slides={sliderImages} deviceType="desktop" />
+          )}
           <div className="flex w-full rounded">
             <Departures searchParams={searchParams} />
           </div>

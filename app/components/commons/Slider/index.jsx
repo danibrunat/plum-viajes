@@ -21,7 +21,7 @@ const Slider = ({ slides, deviceType = "desktop" }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (slides && slides.length > 0) {
+    if (slides) {
       setIsLoading(false);
     }
   }, [slides]);

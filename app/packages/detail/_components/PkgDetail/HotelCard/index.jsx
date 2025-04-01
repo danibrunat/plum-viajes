@@ -33,10 +33,11 @@ const HotelCard = ({ hotelData }) => {
         </div>
       </h2>
 
-      {/* Image section */}
-      <div className="relative w-full h-52 mb-4">
-        <Slider slides={hotelImages} deviceType="desktop" />
-      </div>
+      {hotelImages.length > 0 && (
+        <div className="relative w-full h-52 mb-4">
+          <Slider slides={hotelImages} deviceType="desktop" />
+        </div>
+      )}
 
       {/* Map link with marker icon */}
       <a

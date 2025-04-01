@@ -22,9 +22,11 @@ const DestinationCity = ({ city }) => {
       <h2 className="flex text-xl font-bold mb-2">{name}</h2>
 
       {/* Image section */}
-      <div className="relative w-full h-56 mb-4">
-        <Slider slides={cityImages} deviceType="desktop" />
-      </div>
+      {cityImages.length > 0 && (
+        <div className="relative w-full h-56 mb-4">
+          <Slider slides={cityImages} deviceType="desktop" />
+        </div>
+      )}
 
       {/* Large text (expandable) with ellipsis */}
       <div className={`transition-all ${expanded ? "" : "line-clamp-5"}`}>

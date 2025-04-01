@@ -66,11 +66,12 @@ const Flights = ({ flights }) => {
     return text.charAt(0).toUpperCase() + text.slice(1);
   }
 
-  const renderSegments = (flight) => {
+  const renderSegments = async (flight) => {
     if (Array.isArray(flight.segments)) {
-      return flight.segments.map((segment, segmentIndex) => {
+      return flight.segments.map(async (segment, segmentIndex) => {
         const airlineLogoQuery = groq`*[_type == 'airline' && code == '${segment.airline.code}'] { logo }`;
-        const airlineLogo = sanityFetch({ query: airlineLogoQuery });
+        const airlineLogo = await sanityFetch({ query: airlineLogoQuery });
+
         return (
           <div key={segmentIndex}>
             {/* Cabecera con íconos de salida y llegada */}
@@ -98,9 +99,9 @@ const Flights = ({ flights }) => {
               <div className="flex flex-col justify-center items-center w-1/3 p-3">
                 <Image
                   src={
-                    airlineLogo
-                      ? urlForImage(segment.airline.logo)
-                      : segment.airline.logo
+                    airlineLogo && airlineLogo[0].logo
+                      ? urlForImage(airlineLogo[0].logo)
+                      : "/imageNotFound.jpg"
                   }
                   width={70}
                   height={70}
@@ -128,6 +129,8 @@ const Flights = ({ flights }) => {
       });
     }
 
+    const airlineLogoQuery = groq`*[_type == 'airline' && code == '${segment.airline.code}'] { logo }`;
+    const airlineLogo = await sanityFetch({ query: airlineLogoQuery });
     return (
       <div key={flight.segments.flightNumber}>
         {/* Cabecera con íconos de salida y llegada */}
