@@ -1,4 +1,3 @@
-"use server";
 import { Resend } from "resend";
 import { render } from "@react-email/render";
 import AgentEmailTemplate from "../components/commons/Email/AgentEmailTemplate";

@@ -45,6 +45,8 @@ const getPackageEngineItems = () => {
         <div className="w-full md:w-72">
           <AsyncSelect
             {...field}
+            id="arrivalCity"
+            instanceId="arrivalCity"
             placeholder="Seleccione"
             loadOptions={(query, callback) =>
               loadOptions(query, callback, "arrivalCity")
@@ -61,6 +63,8 @@ const getPackageEngineItems = () => {
       children: (field) => (
         <Select
           {...field}
+          id="departureDateMonthYear"
+          instanceId="departureDateMonthYear"
           className="w-full p-1"
           placeholder="Seleccione"
           options={ProviderService.departureDateMonthYear()}
@@ -75,6 +79,8 @@ const getPackageEngineItems = () => {
       children: (field) => (
         <AsyncSelect
           {...field}
+          id="departureCity"
+          instanceId="departureCity"
           className="w-full p-1"
           placeholder="Seleccione"
           loadOptions={(query, callback) =>

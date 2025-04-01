@@ -1,10 +1,13 @@
 "use server";
 
-import { sendMail } from "../services/contact.service";
+import ContactService from "../services/contact.service";
 
 export async function submitContactForm(formData) {
   try {
-    const sendEmailResponse = await sendMail(formData, "contact");
+    const sendEmailResponse = await ContactService.sendMail(
+      formData,
+      "contact"
+    );
     return sendEmailResponse;
   } catch (error) {
     return { success: false, error };
@@ -13,7 +16,7 @@ export async function submitContactForm(formData) {
 
 export async function submitAgentContactForm(formData) {
   try {
-    const sendEmailResponse = await sendMail(formData, "agent");
+    const sendEmailResponse = await ContactService.sendMail(formData, "agent");
     return sendEmailResponse;
   } catch (error) {
     return { success: false, error };
