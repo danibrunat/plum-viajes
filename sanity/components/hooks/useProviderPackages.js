@@ -121,7 +121,26 @@ export const useProviderPackages = (formWatch) => {
         PackageApiService.departures.ola.getDeparturesGroup(
           pkgWithIdentifiedDepartures
         );
-      await PackageApiService.cache.setIfNotExists(departuresGroup, 3600);
+
+      // Guardar en Redis la estructura key/value:
+      // Key: pkgId y Value: departures (manteniendo la misma estructura)
+      if (
+        typeof window !== "undefined" &&
+        window.location.href.includes("sanity")
+      ) {
+        // Estamos en el cliente y en una ruta que contiene "sanity"
+        await fetch("/api/redis/departures", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            pkgDepartures: departuresGroup,
+            expireInSeconds: 3600,
+          }),
+        });
+      } else {
+        // Estamos en el server o fuera del contexto de "sanity"
+        await PackageApiService.cache.setIfNotExists(departuresGroup, 3600);
+      }
 
       const results = ProviderService.ola.grouper(
         ProviderService.mapper(olaAvailResponse, "ola", "avail"),
