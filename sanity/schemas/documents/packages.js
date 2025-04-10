@@ -203,8 +203,6 @@ export default defineField({
     },
     {
       name: "cancellationPolicy",
-      fieldset: "generalData",
-
       type: "text",
       fieldset: "generalData",
       title: "Política de cancelación",
