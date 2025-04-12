@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import { urlForImage } from "../../../../sanity/lib/image";
+import { urlForImage } from "../../../lib/image";
 
 const Reviews = ({ image }) => {
   return (

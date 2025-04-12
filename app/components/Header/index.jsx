@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { urlForImage } from "../../../sanity/lib/image";
+import { urlForImage } from "../../lib/image";
 import Image from "next/image";
 import MenuItem from "./MenuItem";
 import { getIconByName } from "../../helpers/iconHelper";

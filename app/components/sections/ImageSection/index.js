@@ -1,10 +1,8 @@
 import React from "react";
 import Image from "next/image";
 import PropTypes from "prop-types";
-import imageUrlBuilder from "@sanity/image-url";
 import styles from "./ImageSection.module.css";
-import client from "@/sanity/lib/client";
-import { urlForImage } from "../../../../sanity/lib/image";
+import { urlForImage } from "../../../lib/image";
 import SimpleBlockContent from "../../SimpleBlockContent";
 import Cta from "../../Cta";
 

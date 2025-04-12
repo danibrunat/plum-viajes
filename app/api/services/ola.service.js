@@ -3,21 +3,11 @@ import { ApiUtils } from "./apiUtils.service";
 import { ProviderService } from "./providers.service";
 import XmlService from "./xml.service";
 
-const isSanity = typeof process.env.NEXT_PUBLIC_URL == "undefined"; // Desde Sanity no existen las variables no prefijadas en SANITY_STUDIO_
-const baseUrl = isSanity
-  ? process.env.SANITY_STUDIO_URL // URL para Sanity
-  : process.env.NEXT_PUBLIC_URL; // URL para Next.js o Frontend
+const baseUrl = process.env.NEXT_PUBLIC_URL; // URL para Next.js o Frontend
 
-const olaUserName = isSanity
-  ? process.env.SANITY_STUDIO_OLA_USERNAME
-  : process.env.OLA_USERNAME;
-const olaApiKey = isSanity
-  ? process.env.SANITY_STUDIO_OLA_API_KEY
-  : process.env.OLA_API_KEY;
-
-const olaUrl = isSanity
-  ? process.env.SANITY_STUDIO_OLA_URL
-  : process.env.OLA_URL;
+const olaUserName = process.env.OLA_USERNAME;
+const olaApiKey = process.env.OLA_API_KEY;
+const olaUrl = process.env.OLA_URL;
 
 export const OLA = {
   avail: {

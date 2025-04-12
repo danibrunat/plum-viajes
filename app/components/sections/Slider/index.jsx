@@ -1,7 +1,7 @@
 "use client";
-import { urlForImage } from "@/sanity/lib/image";
 import Image from "next/image";
 import CommonCarousel from "../../commons/Carousel";
+import { urlForImage } from "../../../lib/image";
 
 export default function Carousel({ items }) {
   return (

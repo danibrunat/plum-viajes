@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Slider from "../../../../../components/commons/Slider";
-import { urlForImage } from "../../../../../../sanity/lib/image";
+import { urlForImage } from "../../../../../lib/image";
 
 const DestinationCity = ({ city }) => {
   // State to handle text expansion

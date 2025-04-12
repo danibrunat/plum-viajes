@@ -1,6 +1,6 @@
 import { groq } from "next-sanity";
-import { sanityFetch } from "../../../../sanity/lib/sanityFetch";
 import TaggedCarousel from "./TaggedCarousel";
+import { sanityFetch } from "../../../lib/sanityFetch";
 
 export default async function TaggedPackages(props) {
   const { tag } = props;

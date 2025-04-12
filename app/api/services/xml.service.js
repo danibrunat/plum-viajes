@@ -1,4 +1,3 @@
-import axios from "axios";
 import { parseStringPromise } from "xml2js"; // Para parsear el XML
 
 // Función general para simplificar arrays de un solo elemento, mapear "_" a "$value" y cambiar "$" a "attributes"

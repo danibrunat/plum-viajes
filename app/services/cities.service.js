@@ -1,8 +1,6 @@
 import { ApiUtils } from "../api/services/apiUtils.service";
 import CACHE from "../constants/cachePolicies";
 
-const isFrontEndCall = typeof process.env.SANITY_STUDIO_URL === "undefined";
-
 /**
  * Service for handling city-related operations.
  */
@@ -16,9 +14,7 @@ const CitiesService = {
    * @throws {Object} An error object if the fetch operation fails.
    */
   async getCityByCode(code, asObject = false) {
-    const baseUrl = isFrontEndCall
-      ? process.env.NEXT_PUBLIC_URL
-      : process.env.SANITY_STUDIO_URL;
+    const baseUrl = process.env.NEXT_PUBLIC_URL;
     try {
       const citiesSearch = await fetch(
         `${baseUrl}/api/cities/byCode?code=${code}`,
@@ -48,9 +44,8 @@ const CitiesService = {
   },
 
   async getCitiesAutocompleteApi(query, inputName) {
-    const baseUrl = isFrontEndCall
-      ? process.env.NEXT_PUBLIC_URL
-      : process.env.SANITY_STUDIO_URL;
+    const baseUrl = process.env.NEXT_PUBLIC_URL;
+
     try {
       const response = await fetch(
         `${baseUrl}/api/cities/autocomplete?query=${query}&input=${inputName}`,

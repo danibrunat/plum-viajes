@@ -1,14 +1,13 @@
 import GoBackAndShare from "./GoBackAndShare";
-import { urlForImage } from "../../../../../sanity/lib/image";
 import Slider from "../../../../components/commons/Slider";
 import Departures from "./Departures";
 import DepartureDetail from "./DepartureDetail";
 import Flights from "./Flights";
 import HotelCard from "./HotelCard";
 import DestinationCity from "./DestinationCity";
-import AgentContact from "./AgentContact";
 import PricesAndAgentContact from "./PricesAndAgentContact";
 import { ProviderService } from "../../../../api/services/providers.service";
+import { urlForImage } from "../../../../lib/image";
 
 export default function PkgDetail({ detailResponse, searchParams }) {
   const provider = detailResponse?.provider;

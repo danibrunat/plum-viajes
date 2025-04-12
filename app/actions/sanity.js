@@ -1,6 +1,6 @@
-import groq from "groq";
+import { groq } from "next-sanity";
+import { sanityFetch } from "../lib/sanityFetch";
 import { getSlugVariations, slugParamToPath } from "../../utils/urls";
-import { sanityFetch } from "@/sanity/lib/sanityFetch";
 
 export async function getData(params) {
   let data;

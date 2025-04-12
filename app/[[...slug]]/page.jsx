@@ -1,8 +1,8 @@
 import imageUrlBuilder from "@sanity/image-url";
 import React from "react";
-import { client } from "../../sanity/lib/client";
 import RenderSections from "../components/RenderSections";
 import { getData } from "../actions/sanity";
+import { client } from "../lib/client";
 
 export async function generateMetadata(props, parent) {
   const params = await props.params;

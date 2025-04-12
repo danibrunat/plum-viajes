@@ -1,9 +1,9 @@
 import { groq } from "next-sanity";
-import { sanityFetch } from "../../../../../sanity/lib/sanityFetch";
 import { ProviderService } from "../../../services/providers.service";
 import { OLA } from "../../../services/ola.service";
 import { ApiUtils } from "../../../services/apiUtils.service";
 import { getPriceTypeFromOccupancy } from "../../helpers";
+import { sanityFetch } from "../../../../lib/sanityFetch";
 
 async function fetchPlumPackageDetail({ occupancy, id, startDate, endDate }) {
   const priceType = getPriceTypeFromOccupancy(occupancy);

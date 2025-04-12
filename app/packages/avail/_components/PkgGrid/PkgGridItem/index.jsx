@@ -1,6 +1,5 @@
 import Image from "next/image";
 import React from "react";
-import { urlForImage } from "../../../../../../sanity/lib/image";
 import {
   sanitizeHtmlString,
   sanitizeUrlFromDoubleSlash,
@@ -10,6 +9,7 @@ import Formatters from "../../../../../services/formatters.service";
 import Link from "next/link";
 import PackageService from "../../../../../services/package.service";
 import { FLOW_STAGES } from "../../../../../constants/site";
+import { urlForImage } from "../../../../../lib/image";
 
 const getHotelRating = (rating) => {
   if (!rating) return null;

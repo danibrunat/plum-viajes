@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { urlForImage } from "../../../../sanity/lib/image";
+import { urlForImage } from "../../../lib/image";
 
 export default async function Hero({ image1 = "", image2 = "" }) {
   return (

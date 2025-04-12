@@ -1,6 +1,5 @@
-import { sanityCreate, sanityFetch } from "../../../sanity/lib/sanityFetch";
+import { sanityCreate, sanityFetch } from "../../lib/sanityFetch";
 import { ApiUtils } from "./apiUtils.service";
-
 // Database service object containing various methods for database operations
 const SanityService = {
   // Method to get all records from a specified table

@@ -1,11 +1,11 @@
 import imageUrlBuilder from "@sanity/image-url";
 import groq from "groq";
-import { client } from "../../../../sanity/lib/client";
-import { sanityFetch } from "../../../../sanity/lib/sanityFetch";
 import RenderSections from "../../../components/RenderSections";
 import capitalizeString from "../../../../utils/capitalizeString";
 import LandingGrid from "./LandingGrid";
 import { LandingService } from "../../../services/landing.service";
+import { sanityFetch } from "../../../lib/sanityFetch";
+import { client } from "../../../lib/client";
 
 async function getLandingData(product, destination) {
   const body = { destination, product };

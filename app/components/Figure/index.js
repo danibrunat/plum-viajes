@@ -3,8 +3,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import imageUrlBuilder from "@sanity/image-url";
 import styles from "./Figure.module.css";
-import { client } from "../../../sanity/lib/client";
 import Image from "next/image";
+import { client } from "../../lib/client";
 
 const builder = imageUrlBuilder(client);
 

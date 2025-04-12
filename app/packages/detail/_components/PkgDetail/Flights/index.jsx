@@ -1,9 +1,9 @@
 import Image from "next/image";
 import React from "react";
 import { FaPlaneArrival, FaPlaneDeparture } from "react-icons/fa";
-import { urlForImage } from "../../../../../../sanity/lib/image";
-import { sanityFetch } from "../../../../../../sanity/lib/sanityFetch";
 import { groq } from "next-sanity";
+import { urlForImage } from "../../../../../lib/image";
+import { sanityFetch } from "../../../../../lib/sanityFetch";
 
 const Flights = ({ flights }) => {
   // Función para formatear la fecha

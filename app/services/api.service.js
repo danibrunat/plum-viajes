@@ -1,10 +1,6 @@
 import { ApiUtils } from "../api/services/apiUtils.service";
 
-const isSanity = typeof process.env.NEXT_PUBLIC_URL == "undefined"; // Desde Sanity no existen las variables no prefijadas en SANITY_STUDIO_
-
-const baseUrl = isSanity
-  ? process.env.SANITY_STUDIO_URL // URL para Sanity
-  : process.env.NEXT_PUBLIC_URL; // URL para Next.js o Frontend
+const baseUrl = process.env.NEXT_PUBLIC_URL; // URL para Next.js o Frontend
 
 export const Api = {
   packages: {

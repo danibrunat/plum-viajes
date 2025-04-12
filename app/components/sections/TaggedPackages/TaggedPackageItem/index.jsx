@@ -1,10 +1,10 @@
 import Image from "next/image";
 import React from "react";
 import { sanitizeUrlFromDoubleSlash } from "../../../../helpers/strings";
-import { urlForImage } from "../../../../../sanity/lib/image";
 import Dates from "../../../../services/dates.service";
 import Formatters from "../../../../services/formatters.service";
 import CryptoService from "../../../../api/services/cypto.service";
+import { urlForImage } from "../../../../lib/image";
 
 function getPkgPrice(departures) {
   // order by price

@@ -1,10 +1,10 @@
 import { groq } from "next-sanity";
-import { sanityFetch } from "../../../../../sanity/lib/sanityFetch";
 import { Julia } from "../../../services/julia.service";
 import { ProviderService } from "../../../services/providers.service";
 import { OLA } from "../../../services/ola.service";
 import CryptoService from "../../../services/cypto.service";
 import PackageApiService from "../../../services/packages.service";
+import { sanityFetch } from "../../../../lib/sanityFetch";
 
 /**
  * Obtiene paquetes disponibles desde el proveedor Plum usando Sanity.

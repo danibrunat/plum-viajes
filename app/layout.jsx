@@ -1,6 +1,5 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { sanityFetch } from "@/sanity/lib/sanityFetch";
 import Head from "next/head";
 import { LogoJsonLd } from "next-seo";
 
@@ -9,6 +8,7 @@ import Footer from "./components/Footer";
 import Whatsapp from "./components/Widgets/Whatsapp";
 import ModalRoot from "./components/commons/Modal/ModalRoot";
 import SocialWidget from "./components/Widgets/SocialWidget"; // Importa el componente
+import { sanityFetch } from "./lib/sanityFetch";
 
 const inter = Inter({ subsets: ["latin"] });
 

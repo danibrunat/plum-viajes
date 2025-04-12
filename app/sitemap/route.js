@@ -1,5 +1,5 @@
 import groq from "groq";
-import { client } from "../../sanity/lib/client";
+import { client } from "../lib/client";
 
 export async function GET(request) {
   const baseUrl = process.env.URL || "http://localhost:3000";
