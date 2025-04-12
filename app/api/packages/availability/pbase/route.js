@@ -83,7 +83,7 @@ async function fetchPlumPackages({
       ...pkg,
       departures: pkg.departures.map((departure) => ({
         ...departure,
-        id: CryptoService.generateDepartureId("plum", departure.departureFrom),
+        id: departure._key,
       })),
     };
   });
