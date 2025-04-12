@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PackageApiService } from "../../services/packages.service";
+import PackageApiService from "../../services/packages.service";
 
 export async function POST(req) {
   try {
