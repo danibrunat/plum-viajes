@@ -4,7 +4,7 @@
  * Para activar el modo mantenimiento, establecer MAINTENANCE_MODE = true
  * Para desactivar el modo mantenimiento, establecer MAINTENANCE_MODE = false
  */
-export const MAINTENANCE_MODE = false;
+export const MAINTENANCE_MODE = true;
 
 /**
  * Configuración de mensajes para la página de mantenimiento
