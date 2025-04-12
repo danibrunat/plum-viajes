@@ -112,11 +112,15 @@ const DepartureDetail = ({
   // Esto debemos mejorarlo en el futuro TODO.
 
   const renderDescription = () => {
-    const sanitizedDescription = description[0].children
+    const packageDescription =
+      description && description.length > 0
+        ? description[0].children
+        : "Sin descripción";
+    const sanitizedDescription = packageDescription
       ? convertSanityBlockToHtml(description)
       : extractHtmlValuesToArray(description);
 
-    if (description[0].children) {
+    if (packageDescription) {
       return (
         <div
           className="text-sm text-gray-500"
