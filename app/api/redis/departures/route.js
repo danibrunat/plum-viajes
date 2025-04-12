@@ -4,9 +4,6 @@ import PackageApiService from "../../services/packages.service";
 export async function POST(req) {
   try {
     const body = await req.json();
-    console.log("body", body);
-
-    return body;
     const { pkgDepartures, expireInSeconds } = body;
 
     if (!Array.isArray(pkgDepartures)) {
