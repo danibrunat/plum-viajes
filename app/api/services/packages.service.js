@@ -84,7 +84,7 @@ const PackageApiService = {
      * @param {Array} pkgDepartures
      * @param {number} expireInSeconds
      */
-    setIfNotExists: async (pkgDepartures, expireInSeconds = 3600) => {
+    setIfNotExists: async (pkgDepartures, expireInSeconds) => {
       try {
         // Extraer todas las keys (pkgId) del array
         const keys = pkgDepartures.map((pkg) => pkg.pkgId);

@@ -15,7 +15,7 @@ export async function POST(req) {
 
     await PackageApiService.cache.setIfNotExists(
       pkgDepartures,
-      expireInSeconds || 3600
+      expireInSeconds || 100000000 // 100000000 seconds = 1157 days
     );
 
     return NextResponse.json({

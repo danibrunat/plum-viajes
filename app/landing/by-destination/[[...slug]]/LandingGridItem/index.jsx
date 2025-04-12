@@ -7,7 +7,7 @@ export default function LandingGridItem({ product, destination }) {
   const imageUrl =
     destination?.images.length > 0
       ? destination?.images[0]
-      : "/imageNotFound.png";
+      : "/images/imageNotFound.png";
 
   const generateAvailUrl = (destination) =>
     `/${product}/avail?arrivalCity=${destination.iata_code}&departureCity=BUE&startDate=${Dates.get().toFormat("YYYY-MM-DD")}&endDate=${Dates.getWithAddMonths(1).toFormat("YYYY-MM-DD")}&occupancy=2`;

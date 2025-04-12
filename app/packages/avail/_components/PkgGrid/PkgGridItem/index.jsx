@@ -33,7 +33,7 @@ const getHotelRating = (rating) => {
 };
 
 const getImgSource = (pkgItem, provider) => {
-  let imageSourceUrl = "/imageNotFound.jpg";
+  let imageSourceUrl = "/images/imageNotFound.jpg";
   if (pkgItem?.thumbnails.length === 0) return imageSourceUrl;
   switch (provider) {
     case "plum":
@@ -104,7 +104,9 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           src={
-            imgSource && imgSource.length !== 0 ? imgSource : "/no-image.jpeg"
+            imgSource && imgSource.length !== 0
+              ? imgSource
+              : "/images/no-image.jpeg"
           }
           alt="Paquete"
         />

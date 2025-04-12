@@ -9,7 +9,7 @@ export default function Loading() {
           width={250}
           height={250}
           className="align-middle self-center"
-          src={`/avail-loader.gif`}
+          src={`/images/avail-loader.gif`}
         />
         <h1 className="text-xl">Cargando..</h1>
       </div>

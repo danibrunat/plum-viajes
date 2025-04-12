@@ -101,7 +101,7 @@ const Flights = ({ flights }) => {
                   src={
                     airlineLogo && airlineLogo[0].logo
                       ? urlForImage(airlineLogo[0].logo)
-                      : "/imageNotFound.jpg"
+                      : "/images/imageNotFound.jpg"
                   }
                   width={70}
                   height={70}
