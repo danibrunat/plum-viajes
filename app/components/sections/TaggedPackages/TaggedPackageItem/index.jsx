@@ -63,7 +63,7 @@ const TaggedPackageItem = ({ taggedPackage }) => {
 
   const startDate = Dates.get(urlStartDate).toFormat("YYYY-MM-DD");
 
-  const pkgDetailUrl = `/packages/detail?id=${pkgId}&departureId=${urlDepartureDate}&provider=${pkgProvider}&occupancy=2&departureCity=BUE&arrivalCity=${destination[0].iata_code}&startDate=${startDate}&endDate=${Dates.getWithAddMonths(6, startDate).toFormat("YYYY-MM-DD")} ${pkgProvider === "ola" && "&priceId=" + priceId}`;
+  const pkgDetailUrl = `/packages/detail?id=${pkgId}&departureId=${urlDepartureDate}&provider=${pkgProvider}&occupancy=2&departureCity=BUE&arrivalCity=${destination[0].iata_code}&startDate=${startDate}&endDate=${Dates.getWithAddMonths(12, startDate).toFormat("YYYY-MM-DD")}${pkgProvider === "ola" && "&priceId=" + priceId}`;
 
   return (
     <div className="flex flex-col card cursor-pointer hover:shadow-lg transition-shadow duration-300 rounded-b-lg">

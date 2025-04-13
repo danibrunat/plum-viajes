@@ -111,6 +111,7 @@ async function fetchOlaPackageDetail(id, searchParams) {
     endDate,
     xmlRooms
   );
+
   const olaPkgDetailRequest = await ApiUtils.requestHandler(
     fetch(
       OLA.detail.url(),
@@ -120,7 +121,7 @@ async function fetchOlaPackageDetail(id, searchParams) {
   );
 
   const olaResponse = await olaPkgDetailRequest.json();
-
+  console.log("olaResponse", olaResponse);
   if (olaResponse.length === 0) return olaResponse;
   // Mapeo de ambas respuestas
   const mappedOriginalResponse = ProviderService.mapper(

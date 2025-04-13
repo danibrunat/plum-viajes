@@ -50,7 +50,7 @@ export const OLA = {
         method: "POST",
         headers: ApiUtils.getCommonHeaders(),
         next: {
-          revalidate: 10000,
+          revalidate: 0,
         },
       };
     },

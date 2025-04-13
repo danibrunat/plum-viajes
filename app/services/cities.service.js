@@ -53,7 +53,6 @@ const CitiesService = {
           method: "GET",
           headers: {
             ...ApiUtils.getCommonHeaders(),
-            Origin: process.env.SANITY_STUDIO_URL,
           },
           mode: "cors",
         }

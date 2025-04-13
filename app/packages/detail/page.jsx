@@ -33,7 +33,6 @@ export default async function PackagesDetail(props) {
     departureId,
   });
 
-  console.log("pkgDetailResponse", pkgDetailResponse);
   if (
     !pkgDetailResponse ||
     !pkgDetailResponse.departures ||

@@ -1,6 +1,7 @@
-import { OLA } from "../../../../../services/ola.service";
-import PackageApiService from "../../../../../services/packages.service";
-import { ProviderService } from "../../../../../services/providers.service";
+import { OLA } from "../../../services/ola.service";
+import PackageApiService from "../../../services/packages.service";
+import { ProviderService } from "../../../services/providers.service";
+import CryptoService from "../../../services/cypto.service";
 
 async function fetchOlaPackages(searchParams) {
   const getPackagesFaresRequest = OLA.avail.getRequest(searchParams);
@@ -32,7 +33,7 @@ async function fetchOlaPackages(searchParams) {
       "avail"
     );
 
-    const groupedResponse = ProviderService.ola.grouper(mapResponse);
+    const groupedResponse = ProviderService.ola.grouper(mapResponse, "id");
 
     const response = {
       packages: groupedResponse,

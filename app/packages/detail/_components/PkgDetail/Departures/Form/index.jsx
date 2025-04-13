@@ -197,6 +197,11 @@ const DeparturesForm = ({ departures = [] }) => {
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
             aria-invalid={errors.startDate ? "true" : "false"}
           >
+            {!departures ||
+              (departures.length === 0 && (
+                <option value="">No hay fechas disponibles</option>
+              ))}
+            {/* Mapear las fechas de salida disponibles */}
             {departures.map((departure) => (
               <option key={departure.date} value={departure.date}>
                 {departure.date}
