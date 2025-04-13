@@ -729,9 +729,7 @@ export const ProviderService = {
 
     const [month, year] = monthYear.split("-");
     // Fecha de hoy + 1 día.
-
     const today = new Date();
-    today.setDate(today.getDate() + 1); // Sumar un día a la fecha de hoy
     const currentMonthLastDay = new Date(year, month, 0).getDate();
 
     // Verificar si el mes y año proporcionados coinciden con el mes y año actual
