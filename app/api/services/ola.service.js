@@ -1,6 +1,5 @@
-import CACHE from "../../constants/cachePolicies";
 import { ApiUtils } from "./apiUtils.service";
-import { ProviderService } from "./providers.service";
+//import { ProviderService } from "./providers.service";
 import XmlService from "./xml.service";
 
 const baseUrl = process.env.NEXT_PUBLIC_URL; // URL para Next.js o Frontend
@@ -14,8 +13,6 @@ export const OLA = {
     getRequest: (searchParams) => {
       const { departureCity, arrivalCity, startDate, endDate, occupancy } =
         searchParams;
-      const formattedDateFrom = ProviderService.ola.olaDateFormat(startDate);
-      const formattedDateTo = ProviderService.ola.olaDateFormat(endDate);
 
       const getPackagesFaresRequest = `
       <GetPackagesFaresRequest>
@@ -25,8 +22,8 @@ export const OLA = {
           <CustomerIp>186.57.221.35</CustomerIp>
         </GeneralParameters>
         <DepartureDate>
-          <From>${formattedDateFrom}</From>
-          <To>${formattedDateTo}</To>
+          <From>${startDate}</From>
+          <To>${endDate}</To>
         </DepartureDate>
         <Rooms>
           <Room>

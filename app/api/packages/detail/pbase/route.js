@@ -82,14 +82,11 @@ async function fetchPlumPackageDetail({ occupancy, id, startDate, endDate }) {
 
   const sanityQuery = await sanityFetch({ query: pkgDetailQuery });
   const pkgDetailResponse = await sanityQuery;
-  console.log("pkgDetailResponse", JSON.stringify(pkgDetailResponse, null, 2));
   const mapResponse = ProviderService.mapper(
     pkgDetailResponse,
     "plum",
     "detail"
   );
-
-  console.log("mapResponse", JSON.stringify(mapResponse, null, 2));
 
   return Response.json(mapResponse[0]);
 }
@@ -121,7 +118,6 @@ async function fetchOlaPackageDetail(id, searchParams) {
   );
 
   const olaResponse = await olaPkgDetailRequest.json();
-  console.log("olaResponse", olaResponse);
   if (olaResponse.length === 0) return olaResponse;
   // Mapeo de ambas respuestas
   const mappedOriginalResponse = ProviderService.mapper(

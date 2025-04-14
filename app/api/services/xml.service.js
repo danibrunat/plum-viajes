@@ -86,8 +86,6 @@ const XmlService = {
         </SOAP-ENV:Body>
       </SOAP-ENV:Envelope>`;
 
-      console.log("soapEnvelope", soapEnvelope);
-
       try {
         const response = await fetch(url, {
           body: soapEnvelope,

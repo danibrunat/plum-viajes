@@ -539,8 +539,6 @@ export const ProviderService = {
       return result;
     };
 
-    console.log("response", response);
-
     const mappedResponse = response.map((pkg) => {
       let mappedPkg = mapNestedObject(pkg, respConfig, provider);
       mappedPkg.provider = provider;

@@ -17,6 +17,9 @@ const Skeleton = () => (
   </div>
 );
 
+// Define a fallback image URL (replace with your actual placeholder image)
+const FALLBACK_IMAGE_URL = "/images/no-image.jpeg"; // Example path
+
 const Slider = ({ slides, deviceType = "desktop" }) => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,6 +28,13 @@ const Slider = ({ slides, deviceType = "desktop" }) => {
       setIsLoading(false);
     }
   }, [slides]);
+
+  // onError handler for next/image
+  const handleImageError = (e) => {
+    e.target.onerror = null; // Prevent infinite loop if fallback also fails
+    e.target.src = FALLBACK_IMAGE_URL;
+    e.target.srcset = ""; // Clear srcset to prevent browser trying other sources
+  };
 
   return (
     <>
@@ -46,6 +56,8 @@ const Slider = ({ slides, deviceType = "desktop" }) => {
                 objectFit: "cover",
                 borderRadius: "8px",
               }}
+              onError={handleImageError} // Add the onError handler here
+              priority={index === 0} // Optional: Prioritize loading the first image
             />
           ))}
         </CommonCarousel>

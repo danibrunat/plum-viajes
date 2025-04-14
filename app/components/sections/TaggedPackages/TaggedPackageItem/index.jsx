@@ -32,8 +32,6 @@ const TaggedPackageItem = ({ taggedPackage }) => {
     priceId,
   } = taggedPackage;
 
-  console.log("price ", price);
-
   const pkgId = packageId ?? taggedPackage._id; // si packageId viene es de proveedor, y si no, tomamos el _id porque es nuestro, es de plum
   const pkgProvider = provider ?? "plum"; // De la misma forma, asumimos que si no viene el provider, es nuestro, porque no corresponde al modelo de tagged packages
 

@@ -5,7 +5,6 @@ export async function POST(request) {
   try {
     const url = process.env.OLA_URL;
     const detail = await XmlService.soap.request(url, body, "GetPackagesFares");
-    console.log("detail response", detail);
     if (!Array.isArray(detail)) {
       const response = [detail];
       return Response.json(response);

@@ -1,7 +1,6 @@
 import React from "react";
 
 const IFrame = ({ url }) => {
-  console.log("url", url);
   return (
     <iframe
       src={url}

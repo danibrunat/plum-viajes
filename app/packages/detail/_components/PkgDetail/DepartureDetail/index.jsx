@@ -138,7 +138,7 @@ const DepartureDetail = ({
           <ul className="list-disc list-inside">
             {Array.isArray(sanitizedDescription)
               ? sanitizedDescription.map((descItem) => (
-                  <li key={descItem}>{descItem}</li>
+                  <li key={Math.random()}>{descItem}</li>
                 ))
               : sanitizedDescription}
           </ul>

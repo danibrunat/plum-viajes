@@ -20,6 +20,4 @@ export async function submitAgentContactForm(formData) {
   }
 }
 
-export async function submitGenericForm(formData) {
-  console.log("formData", formData);
-}
+export async function submitGenericForm(formData) {}

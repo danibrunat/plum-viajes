@@ -18,18 +18,20 @@ export default function PkgDetail({ detailResponse, searchParams }) {
   const description = detailResponse?.description;
   const nights = detailResponse?.nights;
   const hotels = detailResponse?.departures[0]?.hotels;
-  console.log("hotels detail", hotels);
   const hotelsData = detailResponse?.hotelsData;
   const citiesData = detailResponse?.citiesData;
   const flights = detailResponse?.departures[0].flights;
-  console.log("detailResponse?.departures[0]", detailResponse?.departures[0]);
   const isSoldOutDeparture = detailResponse?.departures[0]?.seats === 0;
   const prices = detailResponse?.departures[0]?.prices;
   const sliderImages = detailResponse?.images?.map(({ sourceUrl }) => {
     return {
       src:
         provider === "ola"
-          ? sourceUrl.replace("//", "https://")
+          ? sourceUrl.startsWith("https://")
+            ? sourceUrl
+            : sourceUrl.startsWith("//")
+              ? `https:${sourceUrl}`
+              : `https://${sourceUrl}`
           : urlForImage(sourceUrl),
     };
   });

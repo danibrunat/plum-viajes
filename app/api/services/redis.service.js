@@ -72,6 +72,11 @@ const RedisService = {
    */
   pipelineGet: async (keys) => {
     try {
+      // Verificar si el array de keys está vacío
+      if (!keys || !Array.isArray(keys) || keys.length === 0) {
+        return [];
+      }
+
       const pipeline = redis.pipeline();
       keys.forEach((key) => pipeline.get(key));
 
