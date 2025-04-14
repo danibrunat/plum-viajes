@@ -29,7 +29,7 @@ const Whatsapp = () => {
         <div className="hidden md:block">
           <Image
             alt="Whatsapp"
-            src={`${process.env.NEXT_PUBLIC_URL}/images/Whatsapp.png`}
+            src={`/images/Whatsapp.png`}
             width={200}
             height={84}
           />
