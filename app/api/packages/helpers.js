@@ -1,4 +1,4 @@
-import { ProviderService } from "../services/providers.service";
+import { ProviderService } from "../services/providers";
 
 /**
  * Retorna el id de price para una habitación, basándose en la cantidad de adultos y niños.

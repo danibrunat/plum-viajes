@@ -6,7 +6,7 @@ import Flights from "./Flights";
 import HotelCard from "./HotelCard";
 import DestinationCity from "./DestinationCity";
 import PricesAndAgentContact from "./PricesAndAgentContact";
-import { ProviderService } from "../../../../api/services/providers.service";
+import { ProviderService } from "../../../../api/services/providers";
 import { urlForImage } from "../../../../lib/image";
 
 export default function PkgDetail({ detailResponse, searchParams }) {

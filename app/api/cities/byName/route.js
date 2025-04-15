@@ -1,3 +1,4 @@
+"use cache";
 import SanityService from "../../services/sanity.service";
 
 export async function GET(req) {

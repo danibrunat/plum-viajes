@@ -11,7 +11,7 @@ import {
   FaSearch,
 } from "react-icons/fa";
 import PackageEngineItem from "./PackageEngineItem";
-import { ProviderService } from "../../../../api/services/providers.service";
+import { ProviderService } from "../../../../api/services/providers";
 import CitiesService from "../../../../services/cities.service";
 
 const getPackageEngineItems = () => {

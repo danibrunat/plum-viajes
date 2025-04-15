@@ -1,6 +1,6 @@
 import { groq } from "next-sanity";
 import { Julia } from "../../../services/julia.service";
-import { ProviderService } from "../../../services/providers.service";
+import { ProviderService } from "../../../services/providers";
 import { OLA } from "../../../services/ola.service";
 import CryptoService from "../../../services/cypto.service";
 import PackageApiService from "../../../services/packages.service";

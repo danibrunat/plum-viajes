@@ -1,5 +1,5 @@
 import { groq } from "next-sanity";
-import { ProviderService } from "../../../services/providers.service";
+import { ProviderService } from "../../../services/providers";
 import { OLA } from "../../../services/ola.service";
 import { ApiUtils } from "../../../services/apiUtils.service";
 import { getPriceTypeFromOccupancy } from "../../helpers";

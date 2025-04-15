@@ -1,7 +1,7 @@
 import SearchEngines from "../../components/sections/SearchEngines";
 import PkgGrid from "./_components/PkgGrid";
 import PkgGridHeader from "./_components/PkgGrid/PkgGridHeader";
-import { ProviderService } from "../../api/services/providers.service";
+import { ProviderService } from "../../api/services/providers";
 import { Filters } from "../../api/services/filters.service";
 import NoResults from "./_components/NoResults";
 

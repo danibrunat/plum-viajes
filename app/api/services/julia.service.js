@@ -1,4 +1,4 @@
-import { ProviderService } from "./providers.service";
+import { ProviderService } from "./providers";
 import Dates from "../../services/dates.service";
 import XmlService from "./xml.service";
 import { ApiUtils } from "./apiUtils.service";

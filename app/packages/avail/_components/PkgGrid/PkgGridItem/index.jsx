@@ -1,9 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import {
-  sanitizeHtmlString,
-  sanitizeUrlFromDoubleSlash,
-} from "../../../../../helpers/strings";
+import { sanitizeUrlFromDoubleSlash } from "../../../../../helpers/strings";
 import { Helpers } from "../../../../../services/helpers.service";
 import Formatters from "../../../../../services/formatters.service";
 import Link from "next/link";
@@ -34,24 +31,39 @@ const getHotelRating = (rating) => {
 
 const getImgSource = (pkgItem, provider) => {
   let imageSourceUrl = "/images/imageNotFound.jpg";
-  if (pkgItem?.thumbnails.length === 0) return imageSourceUrl;
-  switch (provider) {
-    case "plum":
-      imageSourceUrl = urlForImage(pkgItem?.thumbnails[0].sourceUrl);
-      return imageSourceUrl;
-    case "ola":
-      if (
-        Array.isArray(pkgItem?.thumbnails) &&
-        pkgItem?.thumbnails.length > 0
-      ) {
-        imageSourceUrl = sanitizeUrlFromDoubleSlash(
-          pkgItem?.thumbnails[
-            Math.floor(Math.random() * pkgItem?.thumbnails.length)
-          ].sourceUrl
-        );
-        return imageSourceUrl;
-      }
+
+  // Early return if no thumbnails
+  if (!pkgItem?.thumbnails || pkgItem?.thumbnails.length === 0)
+    return imageSourceUrl;
+
+  try {
+    switch (provider) {
+      case "plum":
+        if (pkgItem?.thumbnails[0]?.sourceUrl) {
+          imageSourceUrl = urlForImage(pkgItem?.thumbnails[0].sourceUrl);
+        }
+        break;
+      case "ola":
+        if (
+          Array.isArray(pkgItem?.thumbnails) &&
+          pkgItem?.thumbnails.length > 0
+        ) {
+          const randomIndex = Math.floor(
+            Math.random() * pkgItem?.thumbnails.length
+          );
+          if (pkgItem?.thumbnails[randomIndex]?.sourceUrl) {
+            imageSourceUrl = sanitizeUrlFromDoubleSlash(
+              pkgItem?.thumbnails[randomIndex].sourceUrl
+            );
+          }
+        }
+        break;
+    }
+  } catch (error) {
+    console.error("Error getting image source:", error);
+    // Fall back to default image
   }
+
   return imageSourceUrl;
 };
 
@@ -79,10 +91,8 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
   const hotelStars = getHotelRating(hotels.rating);
   const provider = pkgItem?.provider;
   const imgSource = getImgSource(pkgItem, provider);
-
   const hotelName = Helpers.capitalizeFirstLetter(hotels.name);
   const hotelMealPlan = getHotelMealPlanName(hotels.mealPlan);
-
   // const hotelMealPlan = mapMealPlan(hotels.mealPlan);
   const hotelRoomType = Helpers.capitalizeFirstLetter(hotels.roomType);
   const hotelRoomSize = Helpers.capitalizeFirstLetter(hotels.roomSize);
@@ -109,6 +119,9 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
               : "/images/no-image.jpeg"
           }
           alt="Paquete"
+          unoptimized={imgSource.startsWith("http")}
+          placeholder="blur"
+          blurDataURL="/images/no-image.jpeg"
         />
         <div className="absolute top-0 left-0 m-2 flex space-x-2">
           {pkgItem?.specialOfferTags && (

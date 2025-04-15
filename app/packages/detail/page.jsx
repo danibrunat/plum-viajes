@@ -1,5 +1,5 @@
 import PkgDetail from "./_components/PkgDetail";
-import { ProviderService } from "../../api/services/providers.service";
+import { ProviderService } from "../../api/services/providers";
 import Link from "next/link";
 
 export const metadata = {
