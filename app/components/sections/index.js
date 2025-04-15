@@ -6,5 +6,6 @@ export { default as TextSection } from "./TextSection";
 export { default as ImageSection } from "./ImageSection";
 export { default as Slider } from "./Slider";
 export { default as SearchEngines } from "./SearchEngines";
+export { default as IFrame } from "./iFrame";
 export { default as Reviews } from "./Reviews";
 export { default as TaggedPackages } from "./TaggedPackages";

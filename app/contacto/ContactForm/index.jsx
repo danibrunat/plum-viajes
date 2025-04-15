@@ -200,7 +200,7 @@ const ContactForm = () => {
                 ))}
               </select>
             </div>
-            <flex className="flex">
+            <div className="flex">
               <div className="flex flex-col w-1/2 gap-2 p-1">
                 <label htmlFor="adultsQty">Adultos</label>
                 <input
@@ -229,7 +229,7 @@ const ContactForm = () => {
                   id="childQty"
                 />
               </div>
-            </flex>
+            </div>
           </div>
         </div>
 

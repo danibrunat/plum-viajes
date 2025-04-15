@@ -1,46 +1,153 @@
-/* const PROVIDERS = [
-  {
-    id: "julia",
-    label: "Julia Tours",
-    active: 1,
-    policies: {
-      //  availChunkQty: 7,
-    },
-  },
-  { id: "plum", label: "Plum Viajes", active: 1 },
-]; */
-
 import CitiesService from "../../services/cities.service";
 import { ApiUtils } from "./apiUtils.service";
 
+// Utility functions - defined once outside to prevent recreating on each call
 /**
- * @typedef {Object} AvailResponseConfig
- * @property {Object} id
- * @property {Object} title
- * @property {Object} subtitle
- * @property {Object} nights
- * @property {Object} hotels
- * @property {Object} thumbnails
- * @property {Object} prices
- * @property {Object} departures
+ * Checks if a value is a non-null object
+ * @param {*} value - The value to check
+ * @returns {boolean} - True if value is an object
  */
+const isObject = (value) => value !== null && typeof value === "object";
 
 /**
- * @typedef {Object}
- * @property {AvailResponseConfig} availResponseConfig
- * @property {Function} getPkgAvailability
- * @property {Function} getSearchEngineDefaultValues
- * @property {Function} getPkgDetail
- * @property {Function} departureDateMonthYear
- * @property {Function} departureDateFromTo
- * @property {Function} hasNestedProperty
- * @property {Function} getRoomsConfig
- * @property {Function} getHotelDetailInfo
- * @property {Function} getByDotOperator
- * @property {Function} mapper
- * @property {Object} julia
- * @property {Object} ola
+ * Checks if a string contains nested properties (indicated by dots)
+ * @param {string} string - The string to check
+ * @returns {boolean} - True if the string contains dots
  */
+const hasNestedProperty = (string) => string && string.includes(".");
+
+/**
+ * Retrieves a value from an object using a dot-separated string path
+ * @param {Object} object - The object to search in
+ * @param {string} path - The dot-separated path to the desired property
+ * @param {boolean} isArray - Whether to return array or first element
+ * @returns {*} - The value at the specified path, or undefined if not found
+ */
+const getByDotOperator = (object, path, isArray = false) => {
+  if (!object || !path) return null;
+
+  const reduced = path.split(".").reduce((acc, curr) => {
+    // Handle array indices like "[0]", "[1]"
+    if (/^\[\d+\]$/.test(curr)) {
+      const index = parseInt(curr.slice(1, -1), 10);
+      return Array.isArray(acc) ? acc[index] : undefined;
+    }
+    // Handle "[]" notation
+    else if (curr === "[]") {
+      if (Array.isArray(acc) && isArray) {
+        return acc.map((item) => item);
+      } else {
+        return Array.isArray(acc) ? acc[0] : acc;
+      }
+    }
+    // Handle arrays by mapping over elements
+    else if (Array.isArray(acc)) {
+      return acc.map((item) => (item ? item[curr] : undefined));
+    }
+    // Regular property access
+    else {
+      return acc ? acc[curr] : undefined;
+    }
+  }, object);
+
+  // If result is an array with a single value, return that value unless isArray is true
+  if (Array.isArray(reduced) && reduced.length === 1 && !isArray) {
+    return reduced[0];
+  }
+
+  return reduced;
+};
+
+/**
+ * Maps nested object structure according to configuration
+ * @param {Object} pkg - Source package data
+ * @param {Object} configObj - Mapping configuration
+ * @param {string} provider - Provider identifier
+ * @returns {Object} - Mapped object
+ */
+const mapNestedObject = (
+  pkg,
+  configObj,
+  provider,
+  getByDotOperatorFn,
+  hasNestedPropertyFn
+) => {
+  let result = {};
+
+  Object.entries(configObj).forEach(([key, value]) => {
+    if (value.isArray) {
+      let arrayData = [];
+      if (value.baseKey && value.baseKey[provider]) {
+        const baseKeyValue = value.baseKey[provider].trim();
+        if (baseKeyValue === "@self" || baseKeyValue === "continue") {
+          arrayData = pkg;
+        } else {
+          arrayData = getByDotOperatorFn(pkg, baseKeyValue) || [];
+        }
+      } else {
+        arrayData = pkg[key];
+      }
+
+      if (arrayData === undefined || arrayData === null) {
+        arrayData = [];
+      } else if (!Array.isArray(arrayData)) {
+        arrayData = [arrayData];
+      }
+
+      result[key] = arrayData.map((item) =>
+        isObject(item)
+          ? mapNestedObject(
+              item,
+              value.items,
+              provider,
+              getByDotOperatorFn,
+              hasNestedPropertyFn
+            )
+          : item
+      );
+      return;
+    }
+
+    if (isObject(value) && !value[provider]) {
+      result[key] = mapNestedObject(
+        pkg,
+        value,
+        provider,
+        getByDotOperatorFn,
+        hasNestedPropertyFn
+      );
+      return;
+    }
+
+    if (!isObject(value) || !value[provider]) {
+      // Skip warning for performance in production
+      return;
+    }
+
+    const providerConfigProp = value[provider];
+    result[key] = hasNestedPropertyFn(providerConfigProp)
+      ? getByDotOperatorFn(pkg, providerConfigProp)
+      : pkg[providerConfigProp];
+  });
+
+  return result;
+};
+
+// Months array - defined once to avoid recreation
+const MONTHS = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
 
 /**
  * Service for handling Plum Viajes related operations
@@ -473,116 +580,68 @@ export const ProviderService = {
    * Maps the response data according to the provider's configuration
    * @param {Array} response - The response data to map
    * @param {string} provider - The provider identifier
+   * @param {string} consumer - The consumer type ("detail" or other)
    * @returns {Array} The mapped response data
    */
   mapper: (response, provider, consumer) => {
-    if (response.length === 0) return response;
+    if (!response || !Array.isArray(response) || response.length === 0)
+      return response;
 
     const respConfig =
       consumer === "detail"
         ? ProviderService.detailResponseConfig
         : ProviderService.availResponseConfig;
 
-    const isObject = (value) => value !== null && typeof value === "object";
-
-    const mapNestedObject = (pkg, configObj, provider) => {
-      let result = {};
-
-      Object.entries(configObj).forEach(([key, value]) => {
-        if (value.isArray) {
-          let arrayData = [];
-          // Si está definida la propiedad baseKey para el provider...
-          if (value.baseKey && value.baseKey[provider]) {
-            const baseKeyValue = value.baseKey[provider].trim();
-            // Si se define un valor especial, por ejemplo "@self" (o "continue"),
-            // se toma el objeto completo como fuente
-            if (baseKeyValue === "@self" || baseKeyValue === "continue") {
-              arrayData = pkg;
-            } else {
-              arrayData =
-                ProviderService.getByDotOperator(pkg, baseKeyValue) || [];
-            }
-          } else {
-            // Si no se configuró baseKey, se intenta obtener el array en pkg[key]
-            arrayData = pkg[key];
-          }
-
-          // Si no se obtuvo un array, se envuelve en uno (si se obtuvo algo) o se asigna []
-          if (arrayData === undefined || arrayData === null) {
-            arrayData = [];
-          } else if (!Array.isArray(arrayData)) {
-            arrayData = [arrayData];
-          }
-
-          result[key] = arrayData.map((item) =>
-            isObject(item) ? mapNestedObject(item, value.items, provider) : item
-          );
-          return;
-        }
-
-        if (isObject(value) && !value[provider]) {
-          result[key] = mapNestedObject(pkg, value, provider);
-          return;
-        }
-
-        if (!isObject(value) || !value[provider]) {
-          console.warn(`Unexpected value type for key ${key}:`, value);
-          return;
-        }
-
-        const providerConfigProp = value[provider];
-        result[key] = ProviderService.hasNestedProperty(providerConfigProp)
-          ? ProviderService.getByDotOperator(pkg, providerConfigProp)
-          : pkg[providerConfigProp];
-      });
-
-      return result;
-    };
-
-    const mappedResponse = response.map((pkg) => {
-      let mappedPkg = mapNestedObject(pkg, respConfig, provider);
+    return response.map((pkg) => {
+      const mappedPkg = mapNestedObject(
+        pkg,
+        respConfig,
+        provider,
+        getByDotOperator,
+        hasNestedProperty
+      );
       mappedPkg.provider = provider;
       return mappedPkg;
     });
-
-    return mappedResponse;
   },
 
   /**
    * Fetches package availability based on search parameters
    * @async
    * @param {Object} searchParams - The search parameters
+   * @param {Object} selectedFilters - Filters to apply
    * @returns {Promise<Object>} The package availability data
    * @throws {Error} If the fetch request fails
    */
   getPkgAvailabilityAndFilters: async (searchParams, selectedFilters) => {
-    const pkgAvailabilityRequest = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/api/packages/availability`,
-      {
-        method: "POST",
-        body: JSON.stringify({ searchParams, selectedFilters }),
-        headers: ApiUtils.getCommonHeaders(),
-      }
-    );
-
-    if (!pkgAvailabilityRequest.ok) {
-      const response = await pkgAvailabilityRequest.json();
-      // This will activate the closest `error.js` Error Boundary
-      throw new Error(
-        `Ocurrió un error en el avail de paquetes. Razón: ${response.reason}`
+    try {
+      const pkgAvailabilityRequest = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/packages/availability`,
+        {
+          method: "POST",
+          body: JSON.stringify({ searchParams, selectedFilters }),
+          headers: ApiUtils.getCommonHeaders(),
+        }
       );
-    }
 
-    return pkgAvailabilityRequest.json();
+      if (!pkgAvailabilityRequest.ok) {
+        const response = await pkgAvailabilityRequest.json();
+        throw new Error(
+          `Ocurrió un error en el avail de paquetes. Razón: ${response.reason || "Desconocida"}`
+        );
+      }
+
+      return pkgAvailabilityRequest.json();
+    } catch (error) {
+      throw new Error(`Error en disponibilidad: ${error.message}`);
+    }
   },
 
   /**
    * Fetches package detail based on provider and id
    * @async
-   * @param {string} provider - The provider identifier
-   * @param {string} id - The package identifier
+   * @param {Object} params - Parameters for fetching package details
    * @returns {Promise<Object>} The package detail data
-   * @throws {Error} If the fetch request fails
    */
   getPkgDetail: async ({
     provider,
@@ -633,7 +692,7 @@ export const ProviderService = {
   /**
    * Generates departure date options for the current month and year
    * @param {string} [startDate] - Optional start date in 'YYYY-MM-DD' format
-   * @returns {Array<Object>} Array of departure date options
+   * @returns {Array<Object>|Object} Array of departure date options or single option
    */
   departureDateMonthYear: (startDate) => {
     const currentDate = startDate ? new Date(startDate) : new Date();
@@ -641,23 +700,6 @@ export const ProviderService = {
     const currentMonth = startDate
       ? parseInt(startDate.split("-")[1]) - 1 // Mes en base 0
       : currentDate.getMonth();
-
-    const months = [
-      "Enero",
-      "Febrero",
-      "Marzo",
-      "Abril",
-      "Mayo",
-      "Junio",
-      "Julio",
-      "Agosto",
-      "Septiembre",
-      "Octubre",
-      "Noviembre",
-      "Diciembre",
-    ];
-
-    const options = [];
 
     // Si se proporciona startDate, devolver solo el mes correspondiente
     if (startDate) {
@@ -668,24 +710,24 @@ export const ProviderService = {
       return {
         id: monthNumber,
         value: value,
-        label: `${months[currentMonth]}, ${currentYear}`,
+        label: `${MONTHS[currentMonth]}, ${currentYear}`,
       };
     }
 
-    // Agregar meses del año actual
-    const currentYearOptions = months
-      .map((month, index) => {
-        const monthNumber = index + 1; // Convertir a base 1
-        const monthString = monthNumber.toString().padStart(2, "0");
-        const value = `${monthString}-${currentYear}`;
+    const options = [];
 
-        return {
-          id: monthNumber,
-          value,
-          label: `${month}, ${currentYear}`,
-        };
-      })
-      .filter((_, index) => index >= currentMonth); // Filtrar para obtener solo los meses restantes
+    // Agregar meses del año actual
+    const currentYearOptions = MONTHS.map((month, index) => {
+      const monthNumber = index + 1; // Convertir a base 1
+      const monthString = monthNumber.toString().padStart(2, "0");
+      const value = `${monthString}-${currentYear}`;
+
+      return {
+        id: monthNumber,
+        value,
+        label: `${month}, ${currentYear}`,
+      };
+    }).filter((_, index) => index >= currentMonth); // Filtrar para obtener solo los meses restantes
 
     if (currentYearOptions.length > 0) {
       options.push({
@@ -695,7 +737,7 @@ export const ProviderService = {
     }
 
     // Agregar meses del próximo año
-    const nextYearOptions = months.map((month, index) => {
+    const nextYearOptions = MONTHS.map((month, index) => {
       const monthNumber = index + 1; // Convertir a base 1
       const monthString = monthNumber.toString().padStart(2, "0");
       const value = `${monthString}-${currentYear + 1}`;
@@ -726,77 +768,32 @@ export const ProviderService = {
     if (!monthYear) return null;
 
     const [month, year] = monthYear.split("-");
-    // Fecha de hoy + 1 día.
     const today = new Date();
     const currentMonthLastDay = new Date(year, month, 0).getDate();
 
     // Verificar si el mes y año proporcionados coinciden con el mes y año actual
-    const startDay =
+    const isCurrentMonth =
       today.getMonth() + 1 === parseInt(month) &&
-      today.getFullYear() === parseInt(year)
-        ? today.getDate() // Si coincide, usamos el día de hoy como inicio
-        : 1; // Si no coincide, empezamos desde el primer día del mes
+      today.getFullYear() === parseInt(year);
+    const startDay = isCurrentMonth ? today.getDate() : 1;
 
     return {
-      startDate: `${year}-${month}-${String(startDay).padStart(2, "0")}`, // Asegurarse que el día tenga 2 dígitos
+      startDate: `${year}-${month}-${String(startDay).padStart(2, "0")}`,
       endDate: `${year}-${month}-${currentMonthLastDay}`,
     };
   },
 
-  /**
-   * Checks if a string contains nested properties (indicated by dots)
-   * @param {string} string - The string to check
-   * @returns {boolean} True if the string contains nested properties, false otherwise
-   */
-  hasNestedProperty: (string) => {
-    return string.includes(".");
-  },
+  // Reuse the utility functions
+  hasNestedProperty,
+  getByDotOperator,
 
   /**
-   * Retrieves a value from an object using a dot-separated string path
-   * @param {Object} object - The object to search in
-   * @param {string} value - The dot-separated path to the desired property
-   * @returns {*} The value at the specified path, or undefined if not found
+   * Gets default values for search engine
+   * @param {string} startDate - Start date
+   * @param {string} arrivalCity - Arrival city code
+   * @param {string} departureCity - Departure city code
+   * @returns {Promise<Object>} Default values
    */
-  getByDotOperator: (object, value, isArray = false) => {
-    if (!object || !value) return null;
-
-    const reduced = value.split(".").reduce((acc, curr) => {
-      // Manejamos arrays de índices "[0]", "[1]", etc.
-      if (/^\[\d+\]$/.test(curr)) {
-        const index = parseInt(curr.slice(1, -1), 10); // Extraemos el índice
-        return Array.isArray(acc) ? acc[index] : undefined;
-      }
-      // Si encontramos "[]", procesamos según isArray
-      else if (curr === "[]") {
-        if (Array.isArray(acc) && isArray) {
-          return acc.map((item) => item); // Devuelve los elementos si es un array y isArray es true
-        } else {
-          return Array.isArray(acc) ? acc[0] : acc; // Devuelve solo un valor si no es isArray
-        }
-      }
-      // Si acc es un array, aplicamos map a sus elementos
-      else if (Array.isArray(acc)) {
-        return acc.map((item) => (item ? item[curr] : undefined));
-      }
-      // Accedemos a la propiedad del objeto
-      else {
-        if (value == "amount") {
-          console.log("acc", acc);
-          console.log("curr", curr);
-        }
-        return acc ? acc[curr] : undefined;
-      }
-    }, object);
-
-    // Si el resultado es un array con un solo valor, devolvemos ese valor si isArray no es true
-    if (Array.isArray(reduced) && reduced.length === 1 && !isArray) {
-      return reduced[0];
-    }
-
-    return reduced;
-  },
-
   getSearchEngineDefaultValues: async (
     startDate,
     arrivalCity,
@@ -815,31 +812,24 @@ export const ProviderService = {
       },
     };
   },
+
+  /**
+   * Parses room configuration string
+   * @param {string} configString - Room configuration string
+   * @returns {Array<Object>} Array of room configurations
+   */
   getRoomsConfig: (configString) => {
-    // Si el string está vacío o indefinido, retornar un array vacío
     if (!configString || configString.trim() === "") return [];
 
-    // Dividimos las habitaciones usando la coma ","
-    const rooms = configString.split(",");
-
-    // Recorremos cada habitación para procesar adultos y niños
-    return rooms.map((room) => {
-      // Dividimos adultos de niños usando "|"
+    return configString.split(",").map((room) => {
       const [adultsPart, childrenPart] = room.split("|");
-
-      // Convertimos la cantidad de adultos en número
       const adults = parseInt(adultsPart, 10) || 0;
-
-      // Procesamos las edades de los niños si existen, si no, devolvemos un array vacío
       const children = childrenPart ? childrenPart.split("-").map(Number) : [];
 
-      // Devolvemos un objeto con adultos y niños para cada habitación
-      return {
-        adults,
-        children,
-      };
+      return { adults, children };
     });
   },
+
   getHotelDetailInfo: async () => {},
 
   julia: {},
@@ -851,54 +841,75 @@ export const ProviderService = {
      * @returns {string} Date in YYYY-MM-DD format
      */
     olaDateFormat: (dayMonthYear) => {
+      if (!dayMonthYear) return "";
       const [day, month, year] = dayMonthYear.split("-");
       return `${year}-${month}-${day}`;
     },
+
     /**
-     * This function groups the mapped response by unique keys.
-     * It removes duplicate packages based on specific criteria.
-     *
-     * @param {Array} mappedResponse - The array of mapped response objects.
-     * @returns {Array} - The array of unique response objects.
+     * Groups response by unique keys to remove duplicates
+     * @param {Array} mappedResponse - Array of response objects
+     * @param {string} criteria - Grouping criteria
+     * @returns {Array} Deduplicated array
      */
     grouper: (mappedResponse, criteria = null) => {
+      if (!mappedResponse || !Array.isArray(mappedResponse)) return [];
+
       const uniqueResponse = [];
       const seenItems = new Set();
+
       mappedResponse.forEach((item) => {
-        const uniqueKey = criteria
-          ? `${item[criteria]}`
-          : `${item.id}-${item.departures[0].hotels[0].name}-${item.departures[0].hotels[0].roomType}-${item.departures[0].hotels[0].roomSize}-${item.departures[0].hotels[0].mealPlan}`;
+        if (!item) return;
+
+        let uniqueKey;
+        if (criteria) {
+          uniqueKey = `${item[criteria]}`;
+        } else if (item.departures?.[0]?.hotels?.[0]) {
+          const hotel = item.departures[0].hotels[0];
+          uniqueKey = `${item.id}-${hotel.name}-${hotel.roomType}-${hotel.roomSize}-${hotel.mealPlan}`;
+        } else {
+          uniqueKey = `${item.id}-${Date.now()}-${Math.random()}`;
+        }
+
         if (!seenItems.has(uniqueKey)) {
           seenItems.add(uniqueKey);
           uniqueResponse.push(item);
         }
       });
+
       return uniqueResponse;
     },
 
-    // Helper para generar el XML
+    /**
+     * Generates XML for room configuration
+     * @param {Array} roomsConfig - Room configuration array
+     * @returns {string} XML string
+     */
     generateXMLRoomsByConfigString: (roomsConfig) => {
-      let xmlString = "<Rooms>\n";
+      if (!roomsConfig || !Array.isArray(roomsConfig)) return "<Rooms></Rooms>";
 
-      roomsConfig.forEach((room) => {
-        xmlString += "  <Room>\n";
+      const roomStrings = roomsConfig.map((room) => {
+        if (!room) return "";
 
-        // Agregar tantos adultos (Passenger Type="ADL") como indique el objeto
-        for (let i = 0; i < room.adults; i++) {
-          xmlString += '    <Passenger Type="ADL"/>\n';
-        }
+        const adultStrings = Array(room.adults || 0)
+          .fill('    <Passenger Type="ADL"/>')
+          .join("\n");
 
-        // Agregar tantos niños (Passenger Type="CHD") con la propiedad age como niños haya
-        room.children.forEach((age) => {
-          xmlString += `    <Passenger Type="CHD" Age="${age}"/>\n`;
-        });
+        const childStrings = (room.children || [])
+          .map((age) => `    <Passenger Type="CHD" Age="${age}"/>`)
+          .join("\n");
 
-        xmlString += "  </Room>\n";
+        return `  <Room>\n${adultStrings}${adultStrings && childStrings ? "\n" : ""}${childStrings}\n  </Room>`;
       });
 
-      xmlString += "</Rooms>";
-      return xmlString;
+      return `<Rooms>\n${roomStrings.join("\n")}\n</Rooms>`;
     },
   },
+
+  /**
+   * Helper for fetch with json response
+   * @param  {...any} args - Fetch arguments
+   * @returns {Promise<any>} JSON response
+   */
   clientFetch: (...args) => fetch(...args).then((res) => res.json()),
 };

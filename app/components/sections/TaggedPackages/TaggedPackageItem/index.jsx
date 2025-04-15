@@ -42,7 +42,9 @@ const TaggedPackageItem = ({ taggedPackage }) => {
   const imgSrc =
     pkgProvider === "ola"
       ? sanitizeUrlFromDoubleSlash(thumbnail).replace("100x70", "700x500")
-      : urlForImage(taggedPackage.images[0]);
+      : taggedPackage.images && taggedPackage.images[0]
+        ? urlForImage(taggedPackage.images[0])
+        : "/images/no-image.jpeg";
 
   // Dato para la posteridad, lo que hago acá es:
   // Dentro de useProviderPackages, estoy generando el departureId y guardandoló en el modelo. Esto es solo para providers, así que estaría bien.

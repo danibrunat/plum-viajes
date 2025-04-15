@@ -6,7 +6,7 @@ function TextSection(props) {
   const { heading, label, text } = props;
 
   return (
-    <section className="p-5">
+    <section className="mx-0 p-5 flex text-md md:text-xl flex-col md:mx-10">
       <h1 className={`text-2xl my-3`}>{heading}</h1>
       {text && <SimpleBlockContent blocks={text} />}
     </section>

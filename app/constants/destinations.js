@@ -3525,18 +3525,6 @@ export const CITIES = [
     regionName: "Oceanía",
   },
   {
-    id: "CHC",
-    name: "Christchurch",
-    label: "Christchurch",
-    description:
-      "<p>Christchurch, conocida por su herencia inglesa, se ubica en la costa este de la Isla Sur de Nueva Zelanda. Chalanas de fondo plano se deslizan por el r&iacute;o Avon, que serpentea por el centro de la ciudad. En sus orillas, hay ciclov&iacute;as, est&aacute;n tambi&eacute;n la gran extensi&oacute;n de Hagley Park y los Jardines Bot&aacute;nicos de Christchurch. En 2010 y 2011, se produjeron terremotos que destruyeron muchos de los edificios de piedra del centro hist&oacute;rico</p>\r\n",
-    longDescription: "",
-    active: "1",
-    origin: "0",
-    countryName: "Nueva Zelanda",
-    regionName: "Oceanía",
-  },
-  {
     id: "CJM",
     name: "Chumphon",
     label: "Chumphon",
@@ -4428,18 +4416,6 @@ export const CITIES = [
     origin: "0",
     countryName: "Francia",
     regionName: "Europa",
-  },
-  {
-    id: "DJE",
-    name: "Djerba",
-    label: "Djerba",
-    description:
-      '<p>La&nbsp;isla de Djerba&nbsp;ya aparec&iacute;a en la &ldquo;Odisea&rdquo; de Homero: huyendo del canto de las sirenas, Ulises llega a una isla de gran belleza y extra&ntilde;os frutos con sabor a miel, la isla de los lot&oacute;fagos. Quien los probase con sabor a miel, no tendr&iacute;a ganas de dejar la isla. Es lo que casi le ocurre a Ulises que qued&oacute; encantado con este lugar, aunque se abstuvo de comer el peligroso fruto &nbsp;y salvar a sus marineros de la amnesia que les produjo el fruto del loto (&iquest;era el d&aacute;til?). Ah&iacute; empez&oacute; el mito de Djerba, una isla que conquista a los viajeros con su extra&ntilde;a belleza.</p>\r\n\r\n<p>Situada en el Golfo de Gab&eacute;s, en el sur de Tunez, con un clima mediterr&aacute;neo (con 330 d&iacute;as de sol al a&ntilde;o), esta isla sin apenas relieve (el punto m&aacute;s alto est&aacute; a 50 metros) tambi&eacute;n es conocida como &ldquo;la isla de las cien mezquitas&rdquo; por la cantidad de santuarios desperdigados por la isla con sus imponentes minaretes. Y tiene uno de sus mayores atractivos en sus inmensas playas paradis&iacute;acas de aguas azul turquesa y arena dorada; y tambi&eacute;n en su encantadora capital, Houmt Souk, con sus bellas casas encaladas. Una ciudad llena de historia, en la que hay una medina, tres mezquitas y varios zocos, lugares predilectos para los turistas, donde pueden hacer buenas compras de productos artesanales t&iacute;picos de T&uacute;nez.</p>\r\n\r\n<p>A 10 km de Houmt Souk se encuentra Guellala, un pueblo imprescindible, rodeada de palmeras, conocida por su cer&aacute;mica de colores. Y no olviden la ciudad de Ajim, situada en la zona de&nbsp;<a href="https://blog-tunez.com/ciudades-de-tunez/tataouine/">Tataouine</a>, donde todav&iacute;a pueden verse los escenarios donde George Lucas rod&oacute; algunas escenas de La Guerra de las Galaxias. Pueden entrar gratis, aunque hay guardias que &ldquo;aceptan&rdquo; propinas.</p>\r\n',
-    longDescription: "",
-    active: "1",
-    origin: "0",
-    countryName: "Túnez",
-    regionName: "Africa",
   },
   {
     id: "DJE",
@@ -6825,18 +6801,6 @@ export const CITIES = [
     origin: "0",
     countryName: "Grecia",
     regionName: "Europa",
-  },
-  {
-    id: "IQQ",
-    name: "Iquique",
-    label: "Iquique",
-    description:
-      "<p>Iquique es una ciudad costera en el norte de Chile, al oeste del desierto de Atacama. Fue un pr&oacute;spero pueblo minero de salitre en el siglo XIX y hoy es un destino vacacional popular, con una zona portuaria libre de impuestos, playas del Pac&iacute;fico y un casino frente al mar. En su barrio hist&oacute;rico, una ic&oacute;nica torre del reloj del siglo XIX se ubica en la Plaza Arturo Prat, la plaza principal de la ciudad.</p>\r\n",
-    longDescription: "",
-    active: "0",
-    origin: "0",
-    countryName: "Chile",
-    regionName: "Sudamérica",
   },
   {
     id: "IQQ",
@@ -9270,29 +9234,6 @@ export const CITIES = [
     origin: "0",
     countryName: "Maldivas",
     regionName: "Asia",
-  },
-  {
-    id: "MLK",
-    name: "Malta",
-    label: "Malta",
-    description: "",
-    longDescription: "",
-    active: "0",
-    origin: "0",
-    countryName: "Italia",
-    regionName: "Europa",
-  },
-  {
-    id: "MLK",
-    name: "Malta",
-    label: "Malta",
-    description:
-      "<p>La Rep&uacute;blica de Malta es un archipi&eacute;lago formado por tres islas situadas en el medio del mar Mediterr&aacute;neo.&nbsp;Estas islas limitan al sur con Sicilia y al norte con Libia.&nbsp;</p>\r\n\r\n<p>Actualmente, Malta es un pa&iacute;s independiente, miembro de la Uni&oacute;n Europea&nbsp;desde el 2004, con una extensi&oacute;n de 316 km cuadrados y 413 mil habitantes.&nbsp;Su capital es La Valletta (o Valeta), aunque no es la ciudad m&aacute;s poblada del&nbsp;pa&iacute;s, hist&oacute;ricamente ha sido el centro urbano de mayor relevancia en todo el&nbsp;archipi&eacute;lago.&nbsp;</p>\r\n\r\n<p>Debido a su situaci&oacute;n estrat&eacute;gica (un punto de uni&oacute;n entre los continentes&nbsp;Europeo y Africano que permite tener un buen control sobre el Mar&nbsp;Mediterr&aacute;neo) el archipi&eacute;lago de Malta ha sido disputado por muchos pa&iacute;ses a&nbsp;lo largo de la historia; de hecho, hasta el a&ntilde;o 1964 estuvo bajo el dominio&nbsp;de los Ingleses, Los Malteses adoptaron el sistema brit&aacute;nico de&nbsp;administraci&oacute;n, educaci&oacute;n y legislaci&oacute;n. Malta se convirti&oacute; en Rep&uacute;blica en&nbsp;1974.</p>\r\n\r\n<p>Las Islas tuvieron un periodo dorado en el Neol&iacute;tico que puede contemplarse&nbsp;en los restos de sus misteriosos templos megal&iacute;ticos dedicados a la diosa de&nbsp;la fertilidad. Posteriormente, los fenicios, los cartagineses, los romanos y&nbsp;los bizantinos dejaron su huella en las Islas.</p>\r\n\r\n<p>En el a&ntilde;o 60 despu&eacute;s de Cristo, San Pablo naufrag&oacute; en la isla de Malta&nbsp;cuando estaba de camino a Roma e introdujo el Cristianismo en Malta. Los&nbsp;&aacute;rabes conquistaron las islas en el a&ntilde;o 870 despu&eacute;s de Cristo y dejaron una&nbsp;importante impronta en el idioma de los malteses. Hasta 1530 Malta fue una&nbsp;extensi&oacute;n de Sicilia: los Normandos, los Aragoneses y otros conquistadores&nbsp;que gobernaron en Sicilia tambi&eacute;n gobernaron las Islas Maltesas. Fue Carlos&nbsp;V quien leg&oacute; Malta a la Soberana Orden Militar de San Juan de Jerusal&eacute;n, que&nbsp;gobern&oacute; en Malta desde 1530 hasta 1798. Los Caballeros de dicha Orden&nbsp;llevaron a Malta a una nueva edad de oro convirti&eacute;ndola en un actor clave en&nbsp;la arena cultural europea durante los siglos XVII y XVIII. Las corrientes&nbsp;art&iacute;sticas y culturales de las islas recibieron una injecci&oacute;n con la&nbsp;presencia de artistas de la talla de Caravaggio, Mattia Preti y Favray&nbsp;(entre muchos otros), que, por encargo de los Caballeros, embellecieron&nbsp;iglesias, palacios y albergues.</p>\r\n\r\n<p>En 1798 Bonaparte, durante su viaje Egipto, arrebat&oacute; Malta a los Caballeros.&nbsp;La presencia francesa en las islas no dur&oacute; mucho ya que los ingleses, que&nbsp;fueron llamados por los malteses para que les ayudasen a luchar contra los&nbsp;franceses, bloquearon las islas en 1800.</p>\r\n\r\n<p>El dominio de los ingleses en Malta dur&oacute; hasta 1964 cuando Malta obtuvo su&nbsp;independencia. Los Malteses adoptaron el sistema brit&aacute;nico de&nbsp;administraci&oacute;n, educaci&oacute;n y legislaci&oacute;n. Malta se convirti&oacute; en Rep&uacute;blica en&nbsp;1974 y en estado miembro de la Uni&oacute;n Europea en mayo de 2004.</p>\r\n\r\n<p>El clima de Malta est&aacute; influenciado por el mar y es el t&iacute;pico del&nbsp;Mediterr&aacute;neo. Las Islas tienen un clima muy soleado con un promedio de cinco&nbsp;a seis horas de sol a mitad del invierno y unas 12 horas de sol en verano.&nbsp;</p>\r\n\r\n<p>Los veranos son calurosos, secos y muy soleados. Es posible ba&ntilde;arse en el&nbsp;mar en los meses de invierno, y la temporada alta puede durar hasta mitad o&nbsp;final de octubre.</p>\r\n\r\n<p>En Malta se conduce por la izquierda, si la visita a la isla es de pocos&nbsp;d&iacute;as, te recomendamos que utilices los medios de transporte publico, porque&nbsp;el trafico puede resultar un poco estresante.</p>\r\n\r\n<p>El suministro el&eacute;ctrico es de 230 voltios /- 10%. Se utiliza el sistema de&nbsp;enchufe rectangular de tres clavijas, como en Gran Breta&ntilde;a, te recomendamos&nbsp;no olvides los adaptadores, aunque en cualquier tienda de la isla son&nbsp;f&aacute;ciles de encontrar.</p>\r\n\r\n<p>El agua corriente del grifo es buena para beber en todas las islas maltesas.</p>\r\n\r\n<p>Tambi&eacute;n se puede adquirir agua mineral embotellada local y de importaci&oacute;n.</p>\r\n\r\n<p>En Malta los idiomas oficiales son el malt&eacute;s y el ingl&eacute;s. El malt&eacute;s es un&nbsp;idioma de origen sem&iacute;tico que se escribe con caracteres latinos, durante&nbsp;siglos ha ido incorporando muchas palabras derivadas del ingl&eacute;s, del&nbsp;italiano y del franc&eacute;s, con mucha influencia de los &aacute;rabes que estuvieron en&nbsp;las islas desde el siglo IX hasta el siglo XIII, por su cercan&iacute;a a Italia&nbsp;el italiano tambi&eacute;n se habla mucho.</p>\r\n\r\n<p>Actualmente los pasajeros Argentinos no necesitamos Visado para ingresar a&nbsp;Malta ya que forma parte de la Union Europea (Espac io Schengen).</p>\r\n\r\n<p>La mayor&iacute;a de los malteses profesa la religi&oacute;n Cat&oacute;lica y Romana, pero&nbsp;tambi&eacute;n hay representadas otras denominaciones.</p>\r\n\r\n<p>Malta es un lugar ideal para tus vacaciones. Con el sol luciendo casi todo&nbsp;el a&ntilde;o, podr&aacute;s disfrutar de la vida al aire libre.</p>\r\n",
-    longDescription: "",
-    active: "1",
-    origin: "0",
-    countryName: "Isla de Malta",
-    regionName: "Europa",
   },
   {
     id: "626",
@@ -12176,18 +12117,6 @@ export const CITIES = [
     id: "PNY",
     name: "Pondicherry",
     label: "Pondicherry",
-    description:
-      "<p>Pondicherry (o Puducherry), un asentamiento colonial franc&eacute;s en la India hasta 1954, ahora es una ciudad del Territorio de la Uni&oacute;n limitada por el estado del sureste de Tamil Nadu. Su legado franc&eacute;s se conserva en su barrio franc&eacute;s, con calles arboladas, villas coloniales de color mostaza y boutiques elegantes. Un paseo mar&iacute;timo corre a lo largo de la Bah&iacute;a de Bengala y pasa varias estatuas, incluido un Gandhi Memorial de 4 m de altura.</p>\r\n",
-    longDescription: "",
-    active: "0",
-    origin: "0",
-    countryName: "India",
-    regionName: "Asia",
-  },
-  {
-    id: "PNY",
-    name: "Pondicherry",
-    label: "Pondicherry",
     description: "",
     longDescription: "",
     active: "0",
@@ -13552,18 +13481,6 @@ export const CITIES = [
     origin: "0",
     countryName: "Jamaica",
     regionName: "Caribe",
-  },
-  {
-    id: "XGQ",
-    name: "Saariselka",
-    label: "Saariselka",
-    description:
-      "<p>Saariselk&auml; es un pueblo tur&iacute;stico en el norte de Finlandia.&nbsp;Es una puerta de entrada a los senderos y &aacute;reas de esqu&iacute; del monta&ntilde;oso Parque Nacional Urho Kekkonen.&nbsp;La exhibici&oacute;n del pueblo Destination Northernmost Europe tiene un teatro panor&aacute;mico con pel&iacute;culas sobre la vida vegetal y animal de la regi&oacute;n, incluidos los renos.&nbsp;Al norte, el Sami Cultural Center Sajos, frente al lago, incluye una tienda de artesan&iacute;a y una biblioteca dedicada a los ind&iacute;genas Sami.</p>\r\n",
-    longDescription: "",
-    active: "0",
-    origin: "0",
-    countryName: "Finlandia",
-    regionName: "Europa",
   },
   {
     id: "XGQ",
@@ -15546,18 +15463,6 @@ export const CITIES = [
     origin: "0",
     countryName: "Tanzania",
     regionName: "Africa",
-  },
-  {
-    id: "QGN",
-    name: "Tarragona",
-    label: "Tarragona",
-    description:
-      "<p>A orillas del Mediterr&aacute;neo, en plena Costa Daurada, la antigua Tarraco romana nos ofrece un importante legado monumental entre extensas playas. Su conjunto arqueol&oacute;gico, Patrimonio de la Humanidad, es uno de los puntos de inter&eacute;s de esta ciudad catalana.</p>\r\n\r\n<p>Desde aqu&iacute; se pueden realizar innumerables excursiones, como la que llevar&aacute; al visitante a conocer uno de los monasterios cistercienses mejor conservados y tambi&eacute;n declarado Patrimonio de la Humanidad: el monasterio de Poblet. Propuesta cultural que se suma a la que posibilita un litoral a orillas del mar Mediterr&aacute;neo: villas marineras, sabrosos pescados y mariscos, e infinidad de deportes n&aacute;uticos.</p>\r\n",
-    longDescription: "",
-    active: "0",
-    origin: "0",
-    countryName: "España",
-    regionName: "Europa",
   },
   {
     id: "QGN",
