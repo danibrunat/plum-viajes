@@ -1,3 +1,4 @@
+import { Filters } from "../../api/services/filters.service";
 const pcomService = {
   avail: {
     /**
