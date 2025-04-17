@@ -46,22 +46,23 @@ export default {
       hotels: {
         isArray: true,
         baseKey: {
-          plum: "@self",
+          plum: "hotels",
           ola: "Descriptions",
         },
         items: {
+          // TODO: Ajustar mealPlan, roomType y roomSize. Analizar si debe ser por hotel.
           id: {
-            plum: "hotels.[0].id",
+            plum: "_id",
             julia: "hotels",
             ola: "Description.Name",
           },
           name: {
-            plum: "hotels.[0].name",
+            plum: "name",
             julia: "hotels",
             ola: "Description.Name",
           },
           rating: {
-            plum: "hotels.[0].rating",
+            plum: "stars",
             julia: "rating",
             ola: "Description.HotelClass",
           },
@@ -71,7 +72,7 @@ export default {
             ola: "Description.FareDescriptions.FareDescription.[1].$value",
           },
           roomType: {
-            plum: "prices.[0].type",
+            plum: "roomType",
             julia: "hotels",
             ola: "Description.FareDescriptions.FareDescription.[0].$value",
           },

@@ -34,6 +34,7 @@ async function fetchPlumPackages({
       
       // Desreferenciar el array de hoteles
       "hotels": hotels[]-> {
+        _id,
         name, 
         stars, 
         description, 
@@ -46,7 +47,13 @@ async function fetchPlumPackages({
           iata_code,
           name,
           country_name
-        }
+        },
+        // TODO: El mealPlan debe ir por hotel, no debería ser el mismo para todos.
+        "mealPlan": ^.mealPlan,
+        // TODO: No obtener el roomtype del tipo de price. Debemos refactorizar esto y ver si es necesario
+        // Incluir el tipo de habitación.
+        "roomType": ^.prices[0].type,
+        "roomSize": ^.roomSize,
       },
       
       "airlineRt1": airlineRt1-> {

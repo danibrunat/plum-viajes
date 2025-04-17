@@ -68,18 +68,25 @@ export default function PkgDetail({ detailResponse, searchParams }) {
             <h1 className="text-xl">Itinerario de Vuelos</h1>
             <Flights flights={flights} />
           </div>
-          {hotelsData?.map((hotel) => (
-            <div key={Math.random()} className="flex flex-col w-full rounded">
-              <h2 className="text-xl">Alojamiento</h2>
-              <HotelCard hotelData={hotel} />
-            </div>
-          ))}
-          {citiesData?.map((city) => (
-            <div key={Math.random()} className="flex flex-col w-full rounded">
-              <h2 className="text-xl">Destino</h2>
-              <DestinationCity sliderImages={sliderImages} city={city} />
-            </div>
-          ))}
+
+          <div key={Math.random()} className="flex flex-col w-full rounded">
+            <h2 className="text-xl">Alojamiento</h2>
+            {hotelsData?.map((hotel) => (
+              <HotelCard key={hotel?.id} hotelData={hotel} />
+            ))}
+          </div>
+
+          <div key={Math.random()} className="flex flex-col w-full rounded">
+            <h2 className="text-xl">Destino</h2>
+            {citiesData?.map((city) => (
+              <DestinationCity
+                key={city.name}
+                sliderImages={sliderImages}
+                city={city}
+              />
+            ))}
+          </div>
+
           {/*  <div className="flex flex-col md:hidden w-full rounded">
             <h2 className="text-xl">Consultá con tu agente de viajes</h2>
             <AgentContact />

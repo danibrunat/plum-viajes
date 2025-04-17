@@ -64,6 +64,8 @@ export async function POST(req) {
     )
   );
 
+  console.log("hotelsData", hotelsData);
+
   // Procesar la data de ciudades según los hoteles
   const citiesData = await Promise.all(
     hotelsData.map((hotel) =>
