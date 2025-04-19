@@ -84,13 +84,14 @@ const InputGroup = ({
         </label>
         <DatePicker
           selectsRange
-          id="dateRange"
+          id="dateRange" // Ensure ID matches label's for attribute
           startDate={startDate}
           endDate={endDate}
           onChange={(update) => setDateRange(update)}
           isClearable
           placeholderText="Seleccione fechas"
           className="col-span-3 p-3 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          aria-labelledby="dateRange-label" // Add if needed for complex DatePickers
         />
       </div>
     </>

@@ -31,6 +31,6 @@ export default async function robots() {
 
   return {
     rules,
-    sitemap: `${process.env.URL || "http://localhost:3000"}/sitemap.xml`,
+    sitemap: `${process.env.NEXT_PUBLIC_URL || "https://plumviajes.com.ar"}/sitemap.xml`,
   };
 }

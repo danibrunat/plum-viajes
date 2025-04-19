@@ -34,6 +34,7 @@ const Passengers = ({
                       type="button"
                       onClick={() => updatePassenger("adults", -1)}
                       className="px-3 py-1 border rounded-md"
+                      aria-label="Disminuir cantidad de adultos"
                     >
                       -
                     </button>
@@ -42,6 +43,7 @@ const Passengers = ({
                       type="button"
                       onClick={() => updatePassenger("adults", 1)}
                       className="px-3 py-1 border rounded-md"
+                      aria-label="Aumentar cantidad de adultos"
                     >
                       +
                     </button>
@@ -55,6 +57,7 @@ const Passengers = ({
                       type="button"
                       onClick={() => updatePassenger("children", -1)}
                       className="px-3 py-1 border rounded-md"
+                      aria-label="Disminuir cantidad de niños"
                     >
                       -
                     </button>
@@ -63,6 +66,7 @@ const Passengers = ({
                       type="button"
                       onClick={() => updatePassenger("children", 1)}
                       className="px-3 py-1 border rounded-md"
+                      aria-label="Aumentar cantidad de niños"
                     >
                       +
                     </button>
@@ -76,6 +80,7 @@ const Passengers = ({
                       type="button"
                       onClick={() => updatePassenger("babies", -1)}
                       className="px-3 py-1 border rounded-md"
+                      aria-label="Disminuir cantidad de bebés"
                     >
                       -
                     </button>
@@ -84,6 +89,7 @@ const Passengers = ({
                       type="button"
                       onClick={() => updatePassenger("babies", 1)}
                       className="px-3 py-1 border rounded-md"
+                      aria-label="Aumentar cantidad de bebés"
                     >
                       +
                     </button>
