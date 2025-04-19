@@ -12,8 +12,9 @@ const NoResults = () => {
         <Link
           className="text-blue-600"
           href={`${process.env.NEXT_PUBLIC_URL}/contacto`}
+          aria-label="Ir a la página de contacto para realizar una consulta"
         >
-          click aquí
+          contactar con nosotros
         </Link>
       </p>
     </div>

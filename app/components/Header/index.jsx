@@ -12,11 +12,11 @@ export default function Header(props) {
   return (
     <nav className="flex flex-col md:flex-row  md:items-center md:justify-between md:flex-wrap md:mx-12">
       <div className="p-4 mr-0 flex self-center md:self-start text-white md:mr-2 md:p-1">
-        <Link href={"/"}>
+        <Link href={"/"} aria-label="Ir a la página principal">
           <Image
             priority
             src={urlForImage(logo)}
-            alt="logo"
+            alt="Logo de Plum Viajes"
             width={238}
             height={98}
           />

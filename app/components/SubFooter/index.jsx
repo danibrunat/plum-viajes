@@ -12,10 +12,11 @@ export default function SubFooter() {
             href="http://qr.afip.gob.ar/?qr=xDw61Q_xW_agsSKRU95oww,,"
             target="_F960AFIPInfo"
             rel="noopener noreferrer"
+            aria-label="Ver datos fiscales en AFIP"
           >
             <Image
               src="https://www.afip.gob.ar/images/f960/DATAWEB.jpg"
-              alt="AFIP"
+              alt="Datos fiscales AFIP"
               width={60}
               height={60}
             />
@@ -23,7 +24,12 @@ export default function SubFooter() {
         </p>
         <p>
           Plum Viajes - Legajo 18.156 -&nbsp;
-          <Link href="#" target="_blank" className="text-blue-300">
+          <Link
+            href="#"
+            target="_blank"
+            className="text-blue-300"
+            aria-label="Ver licencia de Plum Viajes"
+          >
             ver licencia
           </Link>
         </p>

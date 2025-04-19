@@ -22,6 +22,7 @@ export default function LandingGridItem({ product, destination }) {
         target="_blank"
         rel="noopener"
         className="absolute opacity-0 top-0 right-0 left-0 bottom-0"
+        aria-label={`Ver paquetes disponibles para ${destination.name}`}
       />
       <div className="relative w-full h-40">
         <Image
@@ -29,13 +30,14 @@ export default function LandingGridItem({ product, destination }) {
           className="rounded-2xl w-full object-cover transition-transform duration-300 transform group-hover:scale-105"
           src={imageUrl}
           loading="lazy"
-          alt={"City name"}
+          alt={`Imagen de ${destination.name || "destino turístico"}`}
         />
         <Link
           className="flex justify-center items-center absolute top-0 left-0 w-full h-full text-white rounded-2xl opacity-0 transition-all duration-300 transform group-hover:scale-105 text-xl group-hover:opacity-100"
           href={generateAvailUrl(destination)}
           target="_blank"
           rel="noopener noreferrer"
+          aria-label={`Ver paquetes disponibles para ${destination.name}`}
         >
           {destination.name}
         </Link>

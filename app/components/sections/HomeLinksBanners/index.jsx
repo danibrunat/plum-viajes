@@ -12,10 +12,13 @@ export default function HomeLinksBanners(imageLinks) {
       <div className="hidden md:flex gap-3 py-0 mx-2 md:py-5 md:mx-16 md:gap-5 overflow-scroll md:overflow-visible md:justify-center lg:justify-center">
         {links.map((il) => (
           <div key={il._key} className="shrink-0 md:shrink w-full md:w-1/5">
-            <Link href={il.link}>
+            <Link
+              href={il.link}
+              aria-label={`Ver ofertas de ${il.title || "destino"}`}
+            >
               <Image
                 src={urlForImage(il.image)}
-                alt={il.title}
+                alt={il.title || "Imagen promocional de destino turístico"}
                 width={250}
                 height={100}
                 className="object-cover w-full h-full"
@@ -28,10 +31,13 @@ export default function HomeLinksBanners(imageLinks) {
         <CommonCarousel>
           {links.map((il) => (
             <div key={il._key} className="w-full h-72 p-5">
-              <Link href={il.link}>
+              <Link
+                href={il.link}
+                aria-label={`Ver ofertas de ${il.title || "destino"}`}
+              >
                 <Image
                   src={urlForImage(il.image)}
-                  alt={il.title}
+                  alt={il.title || "Imagen promocional de destino turístico"}
                   fill
                   className="object-cover w-full h-full"
                 />
