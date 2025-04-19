@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { applyRateLimit } from "./app/helpers/middleware/reteLimit";
 import { checkApiKey } from "./app/helpers/middleware/checkApiKey";
-import { setSecurityHeaders } from "./app/helpers/middleware/securityHeaders";
 import {
   MAINTENANCE_MODE,
   MAINTENANCE_EXCLUDED_PATHS,
@@ -69,9 +68,6 @@ export async function middleware(req) {
         const apiKeyError = checkApiKey(req);
         if (apiKeyError) return apiKeyError;
 
-        // Configurar encabezados de seguridad
-        setSecurityHeaders(req, res);
-
         return res;
       }
 
@@ -114,9 +110,6 @@ export async function middleware(req) {
   // Verificar clave API
   const apiKeyError = checkApiKey(req);
   if (apiKeyError) return apiKeyError;
-
-  // Configurar encabezados de seguridad
-  setSecurityHeaders(req, res);
 
   return res;
 }
