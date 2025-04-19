@@ -24,6 +24,7 @@ function ImageSection(props) {
           width={2000}
           height={1000}
           alt={heading}
+          loading="lazy"
         />
         <figcaption>
           <div className={styles.caption}>

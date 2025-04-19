@@ -56,8 +56,9 @@ const Slider = ({ slides, deviceType = "desktop" }) => {
                 objectFit: "cover",
                 borderRadius: "8px",
               }}
-              onError={handleImageError} // Add the onError handler here
-              priority={index === 0} // Optional: Prioritize loading the first image
+              onError={handleImageError}
+              priority={index === 0}
+              loading={index === 0 ? "eager" : "lazy"}
             />
           ))}
         </CommonCarousel>

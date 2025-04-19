@@ -87,6 +87,7 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
           unoptimized={imgSource.startsWith("http")}
           placeholder="blur"
           blurDataURL="/images/no-image.jpeg"
+          loading="lazy"
         />
         <div className="absolute top-0 left-0 m-2 flex space-x-2">
           {pkgItem?.specialOfferTags && (

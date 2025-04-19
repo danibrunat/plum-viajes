@@ -21,6 +21,7 @@ function Figure({ node }) {
         height={1000}
         className={styles.image}
         alt={alt}
+        loading="lazy"
       />
       {caption && (
         <figcaption>

@@ -11,7 +11,8 @@ export default function Carousel({ items }) {
           <div key={index} className="relative w-full h-[15vh] md:h-[64vh]">
             <Image
               src={urlForImage(item)}
-              priority
+              priority={index === 0}
+              loading={index === 0 ? "eager" : "lazy"}
               fill
               className="object-cover"
               alt="Slider"

@@ -10,7 +10,7 @@ export default function HomeLinksBanners(imageLinks) {
   return (
     <>
       <div className="hidden md:flex gap-3 py-0 mx-2 md:py-5 md:mx-16 md:gap-5 overflow-scroll md:overflow-visible md:justify-center lg:justify-center">
-        {links.map((il) => (
+        {links.map((il, index) => (
           <div key={il._key} className="shrink-0 md:shrink w-full md:w-1/5">
             <Link
               href={il.link}
@@ -22,6 +22,7 @@ export default function HomeLinksBanners(imageLinks) {
                 width={250}
                 height={100}
                 className="object-cover w-full h-full"
+                loading={index === 0 ? "eager" : "lazy"}
               />
             </Link>
           </div>
@@ -29,7 +30,7 @@ export default function HomeLinksBanners(imageLinks) {
       </div>
       <div className="lg:hidden">
         <CommonCarousel>
-          {links.map((il) => (
+          {links.map((il, index) => (
             <div key={il._key} className="w-full h-72 p-5">
               <Link
                 href={il.link}
@@ -40,6 +41,7 @@ export default function HomeLinksBanners(imageLinks) {
                   alt={il.title || "Imagen promocional de destino turístico"}
                   fill
                   className="object-cover w-full h-full"
+                  loading={index === 0 ? "eager" : "lazy"}
                 />
               </Link>
             </div>
