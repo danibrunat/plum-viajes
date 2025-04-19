@@ -9,40 +9,28 @@ import { FLOW_STAGES } from "../../../../../constants/site";
 import { urlForImage } from "../../../../../lib/image";
 import HotelInfo from "./HotelInfo";
 
+// Simplificada y optimizada
 const getImgSource = (pkgItem, provider) => {
-  let imageSourceUrl = "/images/imageNotFound.jpg";
+  const defaultImage = "/images/imageNotFound.jpg";
 
-  if (!pkgItem?.thumbnails || pkgItem?.thumbnails.length === 0)
-    return imageSourceUrl;
+  if (!pkgItem?.thumbnails || pkgItem.thumbnails.length === 0)
+    return defaultImage;
 
   try {
-    switch (provider) {
-      case "plum":
-        if (pkgItem?.thumbnails[0]?.sourceUrl) {
-          imageSourceUrl = urlForImage(pkgItem?.thumbnails[0].sourceUrl);
-        }
-        break;
-      case "ola":
-        if (
-          Array.isArray(pkgItem?.thumbnails) &&
-          pkgItem?.thumbnails.length > 0
-        ) {
-          const randomIndex = Math.floor(
-            Math.random() * pkgItem?.thumbnails.length
-          );
-          if (pkgItem?.thumbnails[randomIndex]?.sourceUrl) {
-            imageSourceUrl = sanitizeUrlFromDoubleSlash(
-              pkgItem?.thumbnails[randomIndex].sourceUrl
-            );
-          }
-        }
-        break;
+    if (provider === "plum" && pkgItem.thumbnails[0]?.sourceUrl) {
+      return urlForImage(pkgItem.thumbnails[0].sourceUrl);
+    }
+
+    if (provider === "ola" && pkgItem.thumbnails.length > 0) {
+      const randomIndex = Math.floor(Math.random() * pkgItem.thumbnails.length);
+      const url = pkgItem.thumbnails[randomIndex]?.sourceUrl;
+      return url ? sanitizeUrlFromDoubleSlash(url) : defaultImage;
     }
   } catch (error) {
     console.error("Error getting image source:", error);
   }
 
-  return imageSourceUrl;
+  return defaultImage;
 };
 
 // Main package grid item component (server component)

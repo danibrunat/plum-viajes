@@ -17,57 +17,53 @@ const Skeleton = () => (
   </div>
 );
 
-// Define a fallback image URL (replace with your actual placeholder image)
-const FALLBACK_IMAGE_URL = "/images/no-image.jpeg"; // Example path
+// Define a fallback image URL
+const FALLBACK_IMAGE_URL = "/images/no-image.jpeg";
 
 const Slider = ({ slides, deviceType = "desktop" }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (slides) {
-      setIsLoading(false);
-    }
+    // Simplificar la lógica
+    setIsLoading(!slides);
   }, [slides]);
 
-  // onError handler for next/image
+  // onError handler simplificado
   const handleImageError = (e) => {
-    e.target.onerror = null; // Prevent infinite loop if fallback also fails
+    e.target.onerror = null;
     e.target.src = FALLBACK_IMAGE_URL;
-    e.target.srcset = ""; // Clear srcset to prevent browser trying other sources
   };
 
+  if (isLoading) return <Skeleton />;
+
+  if (!slides || slides.length === 0) {
+    return (
+      <p className="text-center text-gray-500">No hay imágenes disponibles.</p>
+    );
+  }
+
   return (
-    <>
-      {isLoading ? (
-        <Skeleton />
-      ) : slides?.length > 0 ? (
-        <CommonCarousel>
-          {slides.map((slide, index) => (
-            <Image
-              key={index}
-              src={slide.src}
-              alt={slide.alt || "Imagen del slider"}
-              width={deviceType === "desktop" ? 300 : 200}
-              height={deviceType === "desktop" ? 250 : 150}
-              sizes="100vw"
-              style={{
-                width: "100%",
-                height: deviceType === "desktop" ? "200px" : "auto",
-                objectFit: "cover",
-                borderRadius: "8px",
-              }}
-              onError={handleImageError}
-              priority={index === 0}
-              loading={index === 0 ? "eager" : "lazy"}
-            />
-          ))}
-        </CommonCarousel>
-      ) : (
-        <p className="text-center text-gray-500">
-          No hay imágenes disponibles.
-        </p>
-      )}
-    </>
+    <CommonCarousel>
+      {slides.map((slide, index) => (
+        <Image
+          key={index}
+          src={slide.src}
+          alt={slide.alt || "Imagen del slider"}
+          width={deviceType === "desktop" ? 300 : 200}
+          height={deviceType === "desktop" ? 250 : 150}
+          sizes="100vw"
+          style={{
+            width: "100%",
+            height: deviceType === "desktop" ? "200px" : "auto",
+            objectFit: "cover",
+            borderRadius: "8px",
+          }}
+          onError={handleImageError}
+          priority={index === 0}
+          loading={index === 0 ? "eager" : "lazy"}
+        />
+      ))}
+    </CommonCarousel>
   );
 };
 
