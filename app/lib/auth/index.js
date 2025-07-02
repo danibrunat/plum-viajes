@@ -3,9 +3,13 @@
  * Exports all authentication functionality
  */
 
-export { apiKeyManager, ApiKeyManager } from "./apiKeys.js";
+import { apiKeyManager } from "./apiKeys.js";
+import { AuthConfig } from "./config.js";
+import { AuthUtils } from "./utils.js";
+
+/* export { apiKeyManager, ApiKeyManager } from "./apiKeys.js";
 export { AuthMiddleware } from "./middleware.js";
-export { AuthUtils, AuthDecorators } from "./utils.js";
+export { AuthUtils, AuthDecorators } from "./utils.js"; */
 export { AuthConfig, getRouteConfig, validateConfig } from "./config.js";
 
 // Convenience exports for common use cases

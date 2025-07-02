@@ -10,7 +10,8 @@
     "generate-api-key": "node scripts/generate-api-key.js",
     "check-api-keys": "node scripts/check-api-keys.js",
     "test-auth": "node scripts/test-auth.js",
-    "auth:help": "echo '📖 Para documentación completa: cat API_AUTHENTICATION.md' && echo '🔑 Para generar API key: npm run generate-api-key [nombre-proveedor]' && echo '🔍 Para verificar configuración: npm run check-api-keys' && echo '🧪 Para probar autenticación: npm run test-auth'"
+    "test-cron": "node scripts/test-cron-cleanup.js",
+    "auth:help": "echo '📖 Para documentación completa: cat API_AUTHENTICATION.md' && echo '🔑 Para generar API key: npm run generate-api-key [nombre-proveedor]' && echo '🔍 Para verificar configuración: npm run check-api-keys' && echo '🧪 Para probar autenticación: npm run test-auth' && echo '🧹 Para probar cron job: npm run test-cron'"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.5",

@@ -32,7 +32,7 @@ export const AuthConfig = {
     publicRoutes: ["/api/health", "/api/status"],
 
     // Routes that only allow internal access
-    internalOnlyRoutes: ["/api/admin", "/api/internal"],
+    internalOnlyRoutes: ["/api/admin", "/api/internal", "/api/cron"],
 
     // Routes that require external authentication
     externalRoutes: ["/api/external", "/api/webhook"],
