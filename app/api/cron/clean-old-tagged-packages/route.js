@@ -127,10 +127,36 @@ export async function POST(request, context) {
 }
 
 // GET para testing manual con autenticación
-export const GET = auth.internal(async (request, context) => {
+export async function GET(request, context) {
   console.log("🧪 Ejecutando limpieza manual (modo testing)");
+
+  // Verificar autenticación interna para testing manual
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return Response.json(
+      {
+        error: "No autorizado",
+        message: "Se requiere autenticación para acceso manual",
+      },
+      { status: 401 }
+    );
+  }
+
+  const token = authHeader.split(" ")[1];
+  const { PLUM_INTERNAL_API_KEY } = process.env;
+
+  if (!token || token !== PLUM_INTERNAL_API_KEY) {
+    return Response.json(
+      {
+        error: "Token inválido",
+        message: "API key interna requerida para testing manual",
+      },
+      { status: 403 }
+    );
+  }
+
   return cleanOldTaggedPackagesHandler(request, context);
-});
+}
 
 // Exportar el POST sin wrapper de auth (manejo manual)
 // GET sí usa auth.internal para testing desde el proyecto
