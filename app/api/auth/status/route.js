@@ -4,7 +4,7 @@ import { auth, validateConfig } from "../../../lib/auth/index.js";
  * Authentication system status endpoint
  * Internal-only for monitoring the auth system
  */
-async function statusHandler(request, context) {
+export async function GET(request, context) {
   const configValidation = validateConfig();
   const stats = auth.keyManager.getStats();
 
@@ -25,6 +25,3 @@ async function statusHandler(request, context) {
     version: "1.0.0",
   });
 }
-
-// Export the internal-only status handler
-export const GET = auth.internal(statusHandler);
