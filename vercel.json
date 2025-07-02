@@ -22,7 +22,7 @@
       ]
     }
   ],
-  "cron": [
+  "crons": [
     {
       "path": "/api/cron/clean-old-tagged-packages",
       "schedule": "0 0 * * *"
