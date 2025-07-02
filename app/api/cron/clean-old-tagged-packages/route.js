@@ -125,6 +125,7 @@ async function cronHandler(request, context) {
 export async function POST(request, context) {
   return cronHandler(request, context);
 }
+console.log("das");
 
 // GET para testing manual con autenticación
 export async function GET(request, context) {
