@@ -1,4 +1,9 @@
-import { sanityCreate, sanityFetch } from "../../lib/sanityFetch";
+import {
+  sanityCreate,
+  sanityFetch,
+  sanityDelete,
+  sanityDeleteByQuery,
+} from "../../lib/sanityFetch";
 import { ApiUtils } from "./apiUtils.service";
 // Database service object containing various methods for database operations
 const SanityService = {
@@ -18,6 +23,20 @@ const SanityService = {
     );
     const response = await create;
     return response;
+  },
+  deleteByIds: async (documentIds) => {
+    const deleteResult = await ApiUtils.requestHandler(
+      sanityDelete(documentIds),
+      "Sanity delete by IDs"
+    );
+    return deleteResult;
+  },
+  deleteByQuery: async (query) => {
+    const deleteResult = await ApiUtils.requestHandler(
+      sanityDeleteByQuery(query),
+      "Sanity delete by query"
+    );
+    return deleteResult;
   },
 };
 
