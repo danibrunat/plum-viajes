@@ -81,7 +81,7 @@ const nextConfig = {
               "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'",
               "img-src 'self' data: https://cdn.sanity.io https://source.unsplash.com https://aws-qa1.ola.com.ar https://s3.amazonaws.com https://plumviajes.com.ar https://www.plumviajes.com.ar",
               "font-src 'self' https://fonts.gstatic.com",
-              "connect-src 'self' https://api.sanity.io",
+              "connect-src 'self' https://api.sanity.io https://aws-qa1.ola.com.ar",
               "frame-ancestors 'none'",
               "form-action 'self'",
               "base-uri 'self'",
