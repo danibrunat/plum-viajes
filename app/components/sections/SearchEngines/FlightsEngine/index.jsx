@@ -65,7 +65,7 @@ const FlightsEngine = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const passengersStr = `${passengers.adults}-${passengers.children}-${passengers.babies}`;
-    const baseURL = "https://carnival.aereos.app/aereos/plum-viajes";
+    const baseURL = "https://tucano.aereos.app/aereos/omg-travel";
     let finalURL = "";
 
     if (tripType === "multi") {

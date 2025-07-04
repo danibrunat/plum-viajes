@@ -1,9 +1,8 @@
-import dayjs from "dayjs";
-export const apiVersion = dayjs().format("YYYY-MM-DD");
+export const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION;
 
-export const dataset = "production";
+export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
 
-export const projectId = "q5tnasgw";
+export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 
 const token = `${process.env.SANITY_STUDIO_AUTH_TOKEN}`;
 export const previewToken = token;
