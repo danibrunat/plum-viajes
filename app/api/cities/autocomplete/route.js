@@ -22,7 +22,9 @@ export async function GET(req) {
   );
   const citiesResponse = await citiesSearch.json();
   if (!citiesResponse || citiesResponse.length === 0) {
-    throw new Error("No cities found");
+    return Response.json([
+      { label: "No se encontraron resultados", value: "" },
+    ]);
   }
   const autocompleteResponse = citiesResponse.map(
     ({ _id, name, country_name, region_name, iata_code }) => ({
