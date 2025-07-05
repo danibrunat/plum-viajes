@@ -1,5 +1,3 @@
-const { hostname } = require("os");
-
 const withPWA = require("@ducanh2912/next-pwa").default({
   dest: "public",
   disable: process.env.NODE_ENV === "development",
@@ -16,6 +14,9 @@ const withPWA = require("@ducanh2912/next-pwa").default({
 });
 
 const nextConfig = {
+  turbopack: {
+    resolveExtensions: [".mdx", ".tsx", ".ts", ".jsx", ".js", ".mjs", ".json"],
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "cdn.sanity.io" },
@@ -29,19 +30,6 @@ const nextConfig = {
       { protocol: "http", hostname: "localhost" },
       { protocol: "https", hostname: "guvpgxfgdpcfdtdvrpcd.supabase.co" },
     ],
-  },
-  experimental: {
-    turbo: {
-      resolveExtensions: [
-        ".mdx",
-        ".tsx",
-        ".ts",
-        ".jsx",
-        ".js",
-        ".mjs",
-        ".json",
-      ],
-    },
   },
   logging: {
     fetches: {
