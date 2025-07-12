@@ -21,7 +21,7 @@ const CitiesService = {
         {
           method: "GET",
           next: {
-            revalidate: CACHE.revalidation.cities,
+            revalidate: CACHE.REVALIDATION.cities,
           },
           headers: ApiUtils.getCommonHeaders(),
         }

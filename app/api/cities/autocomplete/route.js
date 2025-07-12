@@ -13,7 +13,7 @@ export async function GET(req) {
       {
         method: "GET",
         next: {
-          revalidate: CACHE.revalidation.cities,
+          revalidate: CACHE.REVALIDATION.cities,
         },
         headers: ApiUtils.getCommonHeaders(),
       }

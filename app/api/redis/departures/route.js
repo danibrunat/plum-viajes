@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import PackageApiService from "../../services/packages.service";
+import { getTTL } from "../../../constants/cachePolicies";
 
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { pkgDepartures, expireInSeconds } = body;
+    const { pkgDepartures, expireInSeconds, longTerm = false } = body;
 
     if (!Array.isArray(pkgDepartures)) {
       return NextResponse.json(
@@ -13,14 +14,18 @@ export async function POST(req) {
       );
     }
 
-    await PackageApiService.cache.setIfNotExists(
-      pkgDepartures,
-      expireInSeconds || 100000000 // 100000000 seconds = 1157 days
-    );
+    // Usar políticas centralizadas o valor personalizado
+    const ttl =
+      expireInSeconds ||
+      getTTL(longTerm ? "PACKAGES_DEPARTURES_LONG" : "PACKAGES_DEPARTURES");
+
+    await PackageApiService.cache.setIfNotExists(pkgDepartures, ttl);
 
     return NextResponse.json({
       success: true,
-      message: "Departures cacheados si no existían.",
+      message: `Departures cacheados si no existían (TTL: ${ttl}s).`,
+      ttl: ttl,
+      environment: process.env.NODE_ENV,
     });
   } catch (error) {
     console.error("Error en POST /api/cache/departures:", error);

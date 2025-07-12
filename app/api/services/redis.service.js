@@ -10,9 +10,28 @@ const RedisService = {
   set: async (key, value, expireInSeconds = 3600) => {
     try {
       const jsonValue = JSON.stringify(value);
-      await redis.set(key, jsonValue, { EX: expireInSeconds });
+      console.log("Setting key:", key, "with TTL:", expireInSeconds, "seconds");
+
+      // Opción 1: Usando setex (recomendado para Upstash)
+      await redis.setex(key, expireInSeconds, jsonValue);
+
+      // Opción 2: Si setex no funciona, usar expire después de set
+      // await redis.set(key, jsonValue);
+      // await redis.expire(key, expireInSeconds);
+
+      console.log("Successfully set key:", key);
     } catch (error) {
       console.error(`Error setting key "${key}":`, error);
+
+      // Fallback: intentar con set + expire
+      try {
+        console.log("Trying fallback method: set + expire");
+        await redis.set(key, JSON.stringify(value));
+        await redis.expire(key, expireInSeconds);
+        console.log("Fallback successful for key:", key);
+      } catch (fallbackError) {
+        console.error(`Fallback also failed for key "${key}":`, fallbackError);
+      }
     }
   },
 
@@ -43,6 +62,35 @@ const RedisService = {
   },
 
   /**
+   * Obtiene el TTL (tiempo de vida) de una clave en Redis.
+   * @param {string} key - La clave a consultar.
+   * @returns {Promise<number>} - TTL en segundos, -1 si no tiene TTL, -2 si no existe.
+   */
+  getTTL: async (key) => {
+    try {
+      return await redis.ttl(key);
+    } catch (error) {
+      console.error(`Error getting TTL for key "${key}":`, error);
+      return -2;
+    }
+  },
+
+  /**
+   * Verifica si una clave existe en Redis.
+   * @param {string} key - La clave a verificar.
+   * @returns {Promise<boolean>} - true si existe, false si no existe.
+   */
+  exists: async (key) => {
+    try {
+      const result = await redis.exists(key);
+      return result === 1;
+    } catch (error) {
+      console.error(`Error checking existence of key "${key}":`, error);
+      return false;
+    }
+  },
+
+  /**
    * Crea y retorna un pipeline para agrupar comandos.
    * @returns {Pipeline} Instancia del pipeline.
    */
@@ -56,10 +104,15 @@ const RedisService = {
     try {
       const pipeline = redis.pipeline();
       items.forEach((item) => {
-        const jsonValue = JSON.stringify(item.value); // Asegurar serialización
-        pipeline.set(item.key, jsonValue, { ex: item.expireInSeconds || 3600 });
+        const jsonValue = JSON.stringify(item.value);
+        const ttl = item.expireInSeconds || 3600;
+        console.log("Pipeline setting key:", item.key, "with TTL:", ttl);
+
+        // Para Upstash Redis en pipeline, usar setex
+        pipeline.setex(item.key, ttl, jsonValue);
       });
-      await pipeline.exec();
+      const results = await pipeline.exec();
+      console.log("Pipeline execution results:", results);
     } catch (error) {
       console.error("Error in pipelineSet:", error);
     }

@@ -2,6 +2,7 @@ import { Api } from "../../../services/api.service";
 import CitiesService from "../../../services/cities.service";
 import HotelsService from "../../../services/hotels.service";
 import AirlinesService from "../../../services/airlines.service";
+import { CacheService } from "../../services/cache";
 
 const mapFlightSegment = async (segment) => {
   const airlineData = await AirlinesService.getAirlineData(
@@ -19,7 +20,21 @@ export async function POST(req) {
     return Response.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  // Obtener los detalles del paquete
+  // Intentar obtener desde cache
+  const cachedResponse = await CacheService.packages.getDetailFromCache(
+    body.provider,
+    body.id,
+    body
+  );
+
+  if (cachedResponse) {
+    console.log("Cache HIT - Devolviendo detalles cacheados");
+    return Response.json(cachedResponse);
+  }
+
+  console.log("Cache MISS - Obteniendo detalles frescos");
+
+  // Obtener datos frescos
   const pBaseRequest = await fetch(
     Api.packages.detail.pbase.url(),
     Api.packages.detail.pbase.options(body)
@@ -29,6 +44,8 @@ export async function POST(req) {
   if (!pBaseDetailResponse || pBaseDetailResponse.length === 0) {
     return Response.json([]);
   }
+
+  // ...existing code...
 
   // Verificar que departures es un array
   const departures = pBaseDetailResponse.departures;
@@ -103,6 +120,15 @@ export async function POST(req) {
     hotelsData,
     citiesData,
   };
+
+  // Guardar en cache para futuras consultas (usando políticas centralizadas)
+  await CacheService.packages.setDetailCache(
+    body.provider,
+    body.id,
+    body,
+    response
+    // El TTL se obtiene automáticamente de las políticas
+  );
 
   return Response.json(response);
 }
