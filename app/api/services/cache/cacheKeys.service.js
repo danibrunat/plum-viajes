@@ -57,11 +57,29 @@ const CacheKeysService = {
         provider = "plum",
       } = packageData;
 
+      // Procesar origen: puede ser array de strings o un objeto con current
+      let originCodes = [];
+      if (Array.isArray(origin)) {
+        originCodes = origin;
+      } else if (origin?.current) {
+        originCodes = [origin.current];
+      }
+
+      // Procesar destino: puede ser array de references o un objeto con current
+      let destinationCodes = [];
+      if (Array.isArray(destination)) {
+        // Por ahora, si son references, invalidamos todo
+        // TODO: resolver references para obtener códigos específicos
+        destinationCodes = ["ANY_DESTINATION"]; // Marcador para invalidar todo
+      } else if (destination?.current) {
+        destinationCodes = [destination.current];
+      }
+
       console.log("📝 Generando patrones de invalidación para:", {
-        destination,
-        origin,
-        departuresCount: departures.length,
         packageId: _id,
+        originCodes,
+        destinationCodes,
+        departuresCount: departures.length,
       });
 
       // 1. Invalidar cache de departures específicas del paquete
@@ -71,7 +89,7 @@ const CacheKeysService = {
 
       // 2. INVALIDACIÓN PRINCIPAL: Todas las búsquedas de availability
       // que podrían incluir este paquete basado en destino/origen
-      if (destination?.current || origin?.current) {
+      if (originCodes.length > 0 || destinationCodes.length > 0) {
         console.log(
           "🎯 Invalidando búsquedas que incluyan destino/origen del paquete"
         );
@@ -81,15 +99,15 @@ const CacheKeysService = {
         // se regenere completamente con los datos actualizados
         patterns.push("pkg:avail:*");
 
-        // También invalidar búsquedas específicas por destino si tenemos la info
-        if (destination?.current) {
+        // Log de información específica
+        if (originCodes.length > 0) {
           console.log(
-            `📍 Invalidando búsquedas a destino: ${destination.current}`
+            `📍 Invalidando búsquedas desde orígenes: ${originCodes.join(", ")}`
           );
         }
-        if (origin?.current) {
+        if (destinationCodes.length > 0) {
           console.log(
-            `📍 Invalidando búsquedas desde origen: ${origin.current}`
+            `🎯 Invalidando búsquedas a destinos: ${destinationCodes.join(", ")}`
           );
         }
       }

@@ -128,13 +128,32 @@ const CacheService = {
     invalidateByPackageCriteria: async (packageData) => {
       try {
         console.log("🗑️ Invalidando cache por criterios de paquete...");
+
+        // Procesar orígenes (array de strings)
+        const origins = Array.isArray(packageData.origin)
+          ? packageData.origin
+          : packageData.origin?.current
+            ? [packageData.origin.current]
+            : [];
+
+        // Procesar destinos (array de referencias o strings)
+        let destinations = [];
+        if (Array.isArray(packageData.destination)) {
+          // Si son referencias, por ahora marcamos como "references"
+          destinations =
+            packageData.destination.length > 0 ? ["REFERENCES"] : [];
+        } else if (packageData.destination?.current) {
+          destinations = [packageData.destination.current];
+        }
+
         console.log(
           "📦 Datos del paquete:",
           JSON.stringify(
             {
               id: packageData._id,
-              destination: packageData.destination?.current,
-              origin: packageData.origin?.current,
+              title: packageData.title,
+              origins,
+              destinations,
               departuresCount: packageData.departures?.length || 0,
             },
             null,
@@ -193,19 +212,18 @@ const CacheService = {
           patterns: patterns,
           packageInfo: {
             id: packageData._id,
-            destination: packageData.destination?.current,
-            origin: packageData.origin?.current,
+            title: packageData.title,
+            origins,
+            destinations,
           },
         };
 
         console.log(`✅ RESUMEN DE INVALIDACIÓN:`);
         console.log(`   🗑️ Total claves eliminadas: ${deletedKeys.length}`);
         console.log(`   🔍 Búsquedas invalidadas: ${totalSearchesInvalidated}`);
-        console.log(`   📦 Paquete: ${packageData._id}`);
-        console.log(
-          `   🎯 Destino: ${packageData.destination?.current || "N/A"}`
-        );
-        console.log(`   📍 Origen: ${packageData.origin?.current || "N/A"}`);
+        console.log(`   📦 Paquete: ${packageData.title} (${packageData._id})`);
+        console.log(`   📍 Orígenes: ${origins.join(", ") || "N/A"}`);
+        console.log(`   🎯 Destinos: ${destinations.join(", ") || "N/A"}`);
 
         return summary;
       } catch (error) {
