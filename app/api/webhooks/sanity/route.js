@@ -27,11 +27,11 @@ export async function POST(req) {
       JSON.stringify(body, null, 2)
     );
 
-    // Extraer información del evento
-    const { _type: eventType, _id, transition, document } = body;
+    // El documento viene directamente en el body, no envuelto
+    const document = body;
 
     // Solo procesar eventos de paquetes
-    if (document?._type !== "packages") {
+    if (document._type !== "packages") {
       console.log("ℹ️ Evento ignorado: no es un paquete");
       return NextResponse.json({
         success: true,
@@ -39,25 +39,12 @@ export async function POST(req) {
       });
     }
 
-    // Solo procesar ciertos tipos de eventos
-    const relevantTransitions = ["update", "publish"];
-    if (!relevantTransitions.includes(transition)) {
-      console.log(
-        `ℹ️ Evento ignorado: transición '${transition}' no relevante`
-      );
-      return NextResponse.json({
-        success: true,
-        message: `Event ignored - transition '${transition}' not relevant`,
-      });
-    }
-
-    console.log(
-      `🔄 Procesando evento: ${transition} para paquete ${document._id}`
-    );
+    console.log(`🔄 Procesando webhook para paquete ${document._id}`);
     console.log(`📦 Información del paquete:`, {
       id: document._id,
-      destination: document.destination?.current,
-      origin: document.origin?.current,
+      title: document.title,
+      origins: document.origin,
+      destinationsCount: document.destination?.length || 0,
       departuresCount: document.departures?.length || 0,
     });
 
@@ -65,6 +52,7 @@ export async function POST(req) {
     const invalidationResult =
       await CacheService.packages.invalidateByPackageCriteria({
         _id: document._id,
+        title: document.title,
         destination: document.destination,
         origin: document.origin,
         departures: document.departures || [],
@@ -76,18 +64,19 @@ export async function POST(req) {
     console.log(
       `   🔍 Búsquedas invalidadas: ${invalidationResult.searchesInvalidated}`
     );
+    console.log(`   📍 Orígenes: ${(document.origin || []).join(", ")}`);
     console.log(
-      `   🎯 Destino afectado: ${document.destination?.current || "N/A"}`
+      `   🎯 Destinos: ${document.destination?.length || 0} referencias`
     );
-    console.log(`   📍 Origen afectado: ${document.origin?.current || "N/A"}`);
 
     return NextResponse.json({
       success: true,
       message: "Package cache invalidated successfully",
-      event: {
-        type: eventType,
-        transition,
-        packageId: document._id,
+      package: {
+        id: document._id,
+        title: document.title,
+        origins: document.origin,
+        destinationsCount: document.destination?.length || 0,
       },
       invalidation: {
         ...invalidationResult,
