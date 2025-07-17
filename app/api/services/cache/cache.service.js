@@ -119,6 +119,122 @@ const CacheService = {
       );
       await RedisService.delete(cacheKey);
     },
+
+    /**
+     * Invalida cache por criterios de paquete (origen, destino, fechas)
+     * Invalida TODAS las búsquedas que podrían contener este paquete
+     * @param {Object} packageData - Datos del paquete desde Sanity
+     */
+    invalidateByPackageCriteria: async (packageData) => {
+      try {
+        console.log("🗑️ Invalidando cache por criterios de paquete...");
+        console.log(
+          "📦 Datos del paquete:",
+          JSON.stringify(
+            {
+              id: packageData._id,
+              destination: packageData.destination?.current,
+              origin: packageData.origin?.current,
+              departuresCount: packageData.departures?.length || 0,
+            },
+            null,
+            2
+          )
+        );
+
+        const patterns =
+          CacheKeysService.packages.getInvalidationPatterns(packageData);
+        const deletedKeys = [];
+        let totalSearchesInvalidated = 0;
+
+        for (const pattern of patterns) {
+          console.log(`🔍 Buscando claves con patrón: ${pattern}`);
+
+          const keys = await RedisService.getKeysByPattern(pattern);
+
+          if (keys && keys.length > 0) {
+            console.log(`📋 Encontradas ${keys.length} claves para eliminar:`);
+
+            // Separar por tipo de cache para mejor logging
+            const availabilityKeys = keys.filter((key) =>
+              key.includes("pkg:avail:")
+            );
+            const detailKeys = keys.filter((key) =>
+              key.includes("pkg:detail:")
+            );
+            const departureKeys = keys.filter((key) => !key.includes(":"));
+
+            if (availabilityKeys.length > 0) {
+              console.log(
+                `   🔍 ${availabilityKeys.length} búsquedas de availability`
+              );
+              totalSearchesInvalidated += availabilityKeys.length;
+            }
+            if (detailKeys.length > 0) {
+              console.log(`   📄 ${detailKeys.length} detalles de paquetes`);
+            }
+            if (departureKeys.length > 0) {
+              console.log(`   📅 ${departureKeys.length} caches de departures`);
+            }
+
+            await RedisService.deleteMultiple(keys);
+            deletedKeys.push(...keys);
+          } else {
+            console.log(
+              `   ℹ️ No se encontraron claves para el patrón: ${pattern}`
+            );
+          }
+        }
+
+        const summary = {
+          success: true,
+          deletedKeys: deletedKeys.length,
+          searchesInvalidated: totalSearchesInvalidated,
+          patterns: patterns,
+          packageInfo: {
+            id: packageData._id,
+            destination: packageData.destination?.current,
+            origin: packageData.origin?.current,
+          },
+        };
+
+        console.log(`✅ RESUMEN DE INVALIDACIÓN:`);
+        console.log(`   🗑️ Total claves eliminadas: ${deletedKeys.length}`);
+        console.log(`   🔍 Búsquedas invalidadas: ${totalSearchesInvalidated}`);
+        console.log(`   📦 Paquete: ${packageData._id}`);
+        console.log(
+          `   🎯 Destino: ${packageData.destination?.current || "N/A"}`
+        );
+        console.log(`   📍 Origen: ${packageData.origin?.current || "N/A"}`);
+
+        return summary;
+      } catch (error) {
+        console.error("❌ Error invalidando cache:", error);
+        throw error;
+      }
+    },
+
+    /**
+     * Invalida cache de paquete específico
+     * @param {string} packageId - ID del paquete
+     */
+    invalidatePackageById: async (packageId) => {
+      try {
+        console.log(`🗑️ Invalidando cache para paquete: ${packageId}`);
+
+        // Invalidar departures específicas del paquete
+        await RedisService.delete(packageId);
+
+        // TODO: Invalidar availability y detail que contengan este paquete
+        // Esto requeriría un patrón más sofisticado de tracking
+
+        console.log(`✅ Cache de paquete ${packageId} invalidado`);
+        return { success: true, packageId };
+      } catch (error) {
+        console.error("❌ Error invalidando cache de paquete:", error);
+        throw error;
+      }
+    },
   },
   /**
    * Cache para ciudades

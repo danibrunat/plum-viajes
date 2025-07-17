@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import CACHE_POLICIES, { getTTL } from "../../../constants/cachePolicies";
+import CacheService from "../../services/cache/cache.service";
 
 /**
  * Endpoint para consultar y gestionar políticas de cache
@@ -46,16 +47,77 @@ export async function GET(req) {
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { action, pattern, type } = body;
+    const { action, pattern, type, packageData } = body;
 
     switch (action) {
       case "invalidate":
-        // Aquí implementarías la invalidación por patrón
+        // Invalidación por patrón general
         return NextResponse.json({
           success: true,
           message: `Cache invalidation queued for pattern: ${pattern}`,
           timestamp: new Date().toISOString(),
         });
+
+      case "invalidate-package":
+        // Invalidación específica para paquetes
+        if (!packageData) {
+          return NextResponse.json(
+            { error: "packageData is required for package invalidation" },
+            { status: 400 }
+          );
+        }
+
+        try {
+          const result =
+            await CacheService.packages.invalidateByPackageCriteria(
+              packageData
+            );
+          return NextResponse.json({
+            success: true,
+            message: "Package cache invalidated successfully",
+            result,
+            timestamp: new Date().toISOString(),
+          });
+        } catch (error) {
+          console.error("Error invalidating package cache:", error);
+          return NextResponse.json(
+            {
+              error: "Failed to invalidate package cache",
+              details: error.message,
+            },
+            { status: 500 }
+          );
+        }
+
+      case "invalidate-package-id":
+        // Invalidación por ID específico de paquete
+        const { packageId } = body;
+        if (!packageId) {
+          return NextResponse.json(
+            { error: "packageId is required" },
+            { status: 400 }
+          );
+        }
+
+        try {
+          const result =
+            await CacheService.packages.invalidatePackageById(packageId);
+          return NextResponse.json({
+            success: true,
+            message: `Package ${packageId} cache invalidated`,
+            result,
+            timestamp: new Date().toISOString(),
+          });
+        } catch (error) {
+          console.error("Error invalidating package by ID:", error);
+          return NextResponse.json(
+            {
+              error: "Failed to invalidate package cache",
+              details: error.message,
+            },
+            { status: 500 }
+          );
+        }
 
       case "stats":
         // Aquí implementarías estadísticas de cache

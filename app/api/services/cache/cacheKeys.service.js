@@ -38,6 +38,98 @@ const CacheKeysService = {
 
       return `pkg:detail:${hash}`;
     },
+
+    /**
+     * Genera patrones para invalidar cache relacionado con un paquete
+     * Invalida todas las búsquedas que podrían contener este paquete
+     * @param {Object} packageData - Datos del paquete desde Sanity
+     * @returns {Array<string>} Array de patrones de claves para invalidar
+     */
+    getInvalidationPatterns: (packageData) => {
+      const patterns = [];
+
+      // Extraer datos relevantes del paquete
+      const {
+        destination,
+        origin,
+        departures = [],
+        _id,
+        provider = "plum",
+      } = packageData;
+
+      console.log("📝 Generando patrones de invalidación para:", {
+        destination,
+        origin,
+        departuresCount: departures.length,
+        packageId: _id,
+      });
+
+      // 1. Invalidar cache de departures específicas del paquete
+      if (_id) {
+        patterns.push(_id.replace("drafts.", "")); // Clave directa del paquete
+      }
+
+      // 2. INVALIDACIÓN PRINCIPAL: Todas las búsquedas de availability
+      // que podrían incluir este paquete basado en destino/origen
+      if (destination?.current || origin?.current) {
+        console.log(
+          "🎯 Invalidando búsquedas que incluyan destino/origen del paquete"
+        );
+
+        // Invalidar TODAS las búsquedas de availability
+        // Esto garantiza que cualquier búsqueda que haya incluido este paquete
+        // se regenere completamente con los datos actualizados
+        patterns.push("pkg:avail:*");
+
+        // También invalidar búsquedas específicas por destino si tenemos la info
+        if (destination?.current) {
+          console.log(
+            `📍 Invalidando búsquedas a destino: ${destination.current}`
+          );
+        }
+        if (origin?.current) {
+          console.log(
+            `📍 Invalidando búsquedas desde origen: ${origin.current}`
+          );
+        }
+      }
+
+      // 3. Invalidar detalles específicos del paquete
+      if (_id && provider) {
+        patterns.push(`pkg:detail:*${provider}*`);
+        patterns.push(`pkg:detail:*${_id.replace("drafts.", "")}*`);
+      }
+
+      // 4. Invalidación temporal: búsquedas en el rango de fechas del paquete
+      if (departures.length > 0) {
+        console.log("📅 Invalidando búsquedas en rangos de fechas del paquete");
+
+        // Obtener rango de fechas del paquete
+        const dates = departures
+          .map((d) => d.departureFrom)
+          .filter(Boolean)
+          .sort();
+
+        if (dates.length > 0) {
+          const minDate = dates[0];
+          const maxDate = dates[dates.length - 1];
+
+          console.log(
+            `📅 Rango de fechas del paquete: ${minDate} a ${maxDate}`
+          );
+
+          // Por simplicidad, invalidamos todas las availability
+          // En el futuro se podría implementar invalidación más granular por fechas
+          patterns.push("pkg:avail:*");
+        }
+      }
+
+      // Remover duplicados
+      const uniquePatterns = [...new Set(patterns)];
+      console.log("🎯 Patrones finales generados:", uniquePatterns);
+
+      return uniquePatterns;
+    },
   },
 
   /**

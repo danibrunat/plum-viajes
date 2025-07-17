@@ -155,6 +155,44 @@ const RedisService = {
       return keys.map(() => null); // En caso de error, devolver un array de nulls
     }
   },
+
+  /**
+   * Obtiene claves que coincidan con un patrón.
+   * @param {string} pattern - Patrón de búsqueda (ej: "pkg:avail:*")
+   * @returns {Promise<Array<string>>} - Array de claves que coinciden
+   */
+  getKeysByPattern: async (pattern) => {
+    try {
+      console.log(`🔍 Buscando claves con patrón: ${pattern}`);
+      const keys = await redis.keys(pattern);
+      console.log(`📊 Encontradas ${keys.length} claves`);
+      return keys || [];
+    } catch (error) {
+      console.error(`Error buscando claves con patrón "${pattern}":`, error);
+      return [];
+    }
+  },
+
+  /**
+   * Elimina múltiples claves de Redis.
+   * @param {Array<string>} keys - Array de claves a eliminar
+   * @returns {Promise<number>} - Número de claves eliminadas
+   */
+  deleteMultiple: async (keys) => {
+    try {
+      if (!keys || !Array.isArray(keys) || keys.length === 0) {
+        return 0;
+      }
+
+      console.log(`🗑️ Eliminando ${keys.length} claves de Redis`);
+      const result = await redis.del(...keys);
+      console.log(`✅ Eliminadas ${result} claves`);
+      return result;
+    } catch (error) {
+      console.error("Error eliminando múltiples claves:", error);
+      return 0;
+    }
+  },
 };
 
 export default RedisService;
