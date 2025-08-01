@@ -29,6 +29,7 @@ const getRoomSummary = (rooms) => {
 };
 
 const convertSanityBlockToHtml = (description) => {
+  if (!description || !Array.isArray(description)) return "Sin descripción";
   return description
     .map((block) => {
       if (block._type === "block") {
@@ -116,6 +117,7 @@ const DepartureDetail = ({
       description && description.length > 0
         ? description[0].children
         : "Sin descripción";
+    console.log("packageDescription", packageDescription);
     const sanitizedDescription = packageDescription
       ? convertSanityBlockToHtml(description)
       : extractHtmlValuesToArray(description);
