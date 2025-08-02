@@ -20,7 +20,6 @@ export default function GoBackAndShare() {
           </span>
         </Link>
       </div>
-      <div className="flex text-blue-800">Compartir</div>
     </div>
   );
 }

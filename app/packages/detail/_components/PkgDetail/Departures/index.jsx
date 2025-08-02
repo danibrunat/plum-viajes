@@ -7,12 +7,9 @@ const Departures = async ({ searchParams }) => {
   const cacheDepartures = await PackageApiService.cache.get(searchParams.id);
 
   return (
-    <div>
-      <h1>Reservar Salida</h1>
-      <Suspense fallback={<Placeholder />}>
-        <DeparturesForm departures={cacheDepartures} />
-      </Suspense>
-    </div>
+    <Suspense fallback={<Placeholder />}>
+      <DeparturesForm departures={cacheDepartures} />
+    </Suspense>
   );
 };
 

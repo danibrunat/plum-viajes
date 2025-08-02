@@ -62,6 +62,10 @@ export default async function PackagesDetail(props) {
           detailResponse={pkgDetailResponse}
           searchParams={searchParams}
         />
+        <em className="text-xs text-gray-500 mt-4">
+          Las tarifas están sujetas a reconfirmación y disponibilidad al momento
+          de la reserva. Las mismas pueden variar sin previo aviso.
+        </em>
       </div>
     </>
   );

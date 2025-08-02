@@ -28,13 +28,13 @@ const ChildAgeSelect = React.memo(({ index, register, error }) => (
       validate: (value) => value !== "" || "Selecciona una edad",
     })}
     aria-label={`Edad del menor ${index + 1}`}
-    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:border-plumPrimaryOrange focus:bg-white focus:outline-none transition-all text-sm"
     aria-invalid={error ? "true" : "false"}
   >
-    <option value="">-</option>
+    <option value="">Edad</option>
     {Array.from({ length: 16 }, (_, age) => age + 2).map((age) => (
       <option key={age} value={age}>
-        {age}
+        {age} {age === 2 ? "año" : "años"}
       </option>
     ))}
   </select>
@@ -172,65 +172,119 @@ const DeparturesForm = ({ departures = [] }) => {
   const roomOptions = useMemo(() => [1, 2], []);
 
   return (
-    <div className="w-full px-4 md:max-w-6xl md:mx-auto">
-      <em className="block text-center text-base md:text-lg font-medium text-gray-700 mb-4">
-        Modifica la fecha de salida para ver otras tarifas disponibles:
-      </em>
+    <div className="w-full max-w-6xl mx-auto px-4">
+      <div className="text-center mb-3">
+        <div className="inline-flex items-center gap-2 bg-blue-50 px-3 py-1.5 rounded-full mb-2">
+          <svg
+            className="w-4 h-4 text-blue-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8 7V3a4 4 0 118 0v4c0 3-2 5-4 5s-4-2-4-5z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M3 21v-6a2 2 0 012-2h14a2 2 0 012 2v6"
+            />
+          </svg>
+          <span className="text-plumPrimaryPurple font-medium text-sm">
+            Personalizar búsqueda
+          </span>
+        </div>
+        <p className="text-gray-600 text-sm">
+          Modifica la fecha de salida para ver otras tarifas disponibles
+        </p>
+      </div>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white shadow rounded-lg p-4 flex flex-col md:flex-row md:items-end gap-4 md:space-x-4"
+        className="bg-white shadow-lg rounded-xl p-4 border border-gray-100"
       >
-        {/* Fecha de Salida */}
-        <div className="flex flex-col w-full md:w-auto">
-          <label
-            htmlFor="startDate"
-            className="text-sm font-medium text-gray-700 mb-1"
-          >
-            Fecha de Salida
-          </label>
-          <select
-            id="startDate"
-            {...register("startDate", {
-              required: "Este campo es obligatorio.",
-            })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-            aria-invalid={errors.startDate ? "true" : "false"}
-          >
-            {!departures || departures.length === 0 ? (
-              <option value="">No hay fechas disponibles</option>
-            ) : (
-              departures.map((departure) => (
-                <option key={departure.date} value={departure.date}>
-                  {departure.date}
-                </option>
-              ))
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 items-end">
+          {/* Fecha de Salida */}
+          <div className="col-span-2 md:col-span-1">
+            <label
+              htmlFor="startDate"
+              className="block text-xs font-semibold text-gray-700 mb-1"
+            >
+              <span className="flex items-center gap-1">
+                <svg
+                  className="w-3 h-3 text-orange-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 7V3a4 4 0 118 0v4c0 3-2 5-4 5s-4-2-4-5z"
+                  />
+                </svg>
+                Fecha de Salida
+              </span>
+            </label>
+            <select
+              id="startDate"
+              {...register("startDate", {
+                required: "Este campo es obligatorio.",
+              })}
+              className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:border-plumPrimaryOrange focus:bg-white focus:outline-none transition-all text-sm"
+              aria-invalid={errors.startDate ? "true" : "false"}
+            >
+              {!departures || departures.length === 0 ? (
+                <option value="">No hay fechas disponibles</option>
+              ) : (
+                departures.map((departure) => (
+                  <option key={departure.date} value={departure.date}>
+                    {departure.date}
+                  </option>
+                ))
+              )}
+            </select>
+            {errors.startDate && (
+              <span role="alert" className="mt-1 text-xs text-red-600">
+                {errors.startDate.message}
+              </span>
             )}
-            {/* Mapear las fechas de salida disponibles */}
-          </select>
-          {errors.startDate && (
-            <span role="alert" className="mt-1 text-xs text-red-600">
-              {errors.startDate.message}
-            </span>
-          )}
-        </div>
+          </div>
 
-        {/* Grid for Adultos, Menores, Habitación */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full md:w-auto">
           {/* Adultos */}
-          <div className="flex flex-col">
+          <div>
             <label
               htmlFor="adults"
-              className="text-sm font-medium text-gray-700 mb-1"
+              className="block text-xs font-semibold text-gray-700 mb-1"
             >
-              Adultos
+              <span className="flex items-center gap-1">
+                <svg
+                  className="w-3 h-3 text-orange-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+                Adultos
+              </span>
             </label>
             <select
               id="adults"
               {...register("adults", {
                 required: "Selecciona el número de adultos.",
               })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+              className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:border-plumPrimaryOrange focus:bg-white focus:outline-none transition-all text-sm"
               aria-invalid={errors.adults ? "true" : "false"}
             >
               {adultOptions.map((num) => (
@@ -247,12 +301,27 @@ const DeparturesForm = ({ departures = [] }) => {
           </div>
 
           {/* Menores */}
-          <div className="flex flex-col">
+          <div>
             <label
               htmlFor="children"
-              className="text-sm font-medium text-gray-700 mb-1"
+              className="block text-xs font-semibold text-gray-700 mb-1"
             >
-              Menores
+              <span className="flex items-center gap-1">
+                <svg
+                  className="w-3 h-3 text-orange-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.5a2.5 2.5 0 100-5H9v5z"
+                  />
+                </svg>
+                Menores
+              </span>
             </label>
             <select
               id="children"
@@ -260,7 +329,7 @@ const DeparturesForm = ({ departures = [] }) => {
                 required: "Selecciona el número de menores.",
                 onChange: handleChildrenCountChange,
               })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+              className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:border-plumPrimaryOrange focus:bg-white focus:outline-none transition-all text-sm"
               aria-invalid={errors.children ? "true" : "false"}
             >
               {childrenOptions.map((num) => (
@@ -277,19 +346,34 @@ const DeparturesForm = ({ departures = [] }) => {
           </div>
 
           {/* Habitaciones */}
-          <div className="flex flex-col col-span-2 md:col-span-1">
+          <div>
             <label
               htmlFor="occupancy"
-              className="text-sm font-medium text-gray-700 mb-1"
+              className="block text-xs font-semibold text-gray-700 mb-1"
             >
-              Habitación
+              <span className="flex items-center gap-1">
+                <svg
+                  className="w-3 h-3 text-orange-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
+                Habitación
+              </span>
             </label>
             <select
               id="occupancy"
               {...register("occupancy", {
                 required: "Selecciona la cantidad de habitaciones.",
               })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+              className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:border-plumPrimaryOrange focus:bg-white focus:outline-none transition-all text-sm"
               aria-invalid={errors.occupancy ? "true" : "false"}
             >
               {roomOptions.map((num) => (
@@ -304,28 +388,87 @@ const DeparturesForm = ({ departures = [] }) => {
               </span>
             )}
           </div>
+
+          {/* Botón de Envío */}
+          <div>
+            <button
+              type="submit"
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-md shadow-md hover:shadow-lg transition-all duration-200 text-sm"
+              aria-label="Buscar disponibilidad"
+            >
+              <span className="flex items-center justify-center gap-1">
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+                Buscar
+              </span>
+            </button>
+          </div>
         </div>
 
-        {/* Edades de los Menores */}
+        {/* Edades de los Menores - Aparece en nueva fila si hay menores */}
         {childrenCount > 0 && (
-          <div className="flex flex-col w-full md:w-auto">
+          <div className="mt-3 pt-3 border-t border-gray-100">
             <fieldset>
-              <legend className="text-sm font-medium text-gray-700 mb-1">
-                Edades de los menores
+              <legend className="block text-xs font-semibold text-gray-700 mb-2">
+                <span className="flex items-center gap-1">
+                  <svg
+                    className="w-3 h-3 text-orange-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  Edades de los menores
+                </span>
               </legend>
-              <div className="grid grid-cols-2 md:grid-cols-1 gap-2">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                 {Array.from({ length: childrenCount }, (_, index) => (
-                  <ChildAgeSelect
-                    key={index}
-                    index={index}
-                    register={register}
-                    error={errors.childrenAges?.[index]}
-                  />
+                  <div key={index}>
+                    <label className="text-xs text-gray-600 mb-1 block">
+                      Menor {index + 1}
+                    </label>
+                    <ChildAgeSelect
+                      index={index}
+                      register={register}
+                      error={errors.childrenAges?.[index]}
+                    />
+                  </div>
                 ))}
               </div>
             </fieldset>
             {errors.childrenAges && (
-              <span role="alert" className="mt-1 text-xs text-red-600">
+              <span
+                role="alert"
+                className="mt-2 text-xs text-red-600 flex items-center gap-1"
+              >
+                <svg
+                  className="w-3 h-3"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 002 0V6a1 1 0 00-1-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
                 {typeof errors.childrenAges.message === "string"
                   ? errors.childrenAges.message
                   : "Por favor selecciona una edad para cada menor"}
@@ -333,17 +476,6 @@ const DeparturesForm = ({ departures = [] }) => {
             )}
           </div>
         )}
-
-        {/* Botón de Envío */}
-        <div className="w-full md:w-auto">
-          <button
-            type="submit"
-            className="w-full md:w-auto bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-md shadow transition-colors"
-            aria-label="Buscar disponibilidad"
-          >
-            Buscar
-          </button>
-        </div>
       </form>
     </div>
   );

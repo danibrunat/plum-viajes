@@ -54,7 +54,7 @@ const Slider = ({ slides, deviceType = "desktop" }) => {
           sizes="100vw"
           style={{
             width: "100%",
-            height: deviceType === "desktop" ? "200px" : "auto",
+            height: deviceType === "desktop" ? "220px" : "auto",
             objectFit: "cover",
             borderRadius: "8px",
           }}

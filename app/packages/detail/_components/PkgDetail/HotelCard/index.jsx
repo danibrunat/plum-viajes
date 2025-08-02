@@ -19,9 +19,9 @@ const HotelCard = ({ hotelData }) => {
   };
 
   return (
-    <div className="w-full h-auto border rounded-lg overflow-hidden shadow-lg p-4">
+    <div className="w-full h-auto border rounded-lg overflow-hidden shadow-lg p-4 ">
       {/* Card title */}
-      <h2 className="flex flex-col md:flex-row text-md mb-2">
+      <h2 className="flex flex-col md:flex-row text-md mb-4">
         <p className="w-full md:w-auto font-bold">{name}</p>{" "}
         <div className="flex gap-3">
           <p className="flex text-md gap-1">
@@ -30,6 +30,16 @@ const HotelCard = ({ hotelData }) => {
             ))}
           </p>
           <p>{`${city.name} (${city.iata_code})`}</p>
+          {/* Map link with marker icon */}
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}&zoom=15`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700  rounded-lg transition-all duration-200 font-medium shadow-sm hover:shadow-md justify-center"
+          >
+            <FaMapMarkerAlt className="text-lg group-hover:scale-110 transition-transform duration-200" />
+            <span>Ver ubicación</span>
+          </a>
         </div>
       </h2>
 
@@ -38,18 +48,6 @@ const HotelCard = ({ hotelData }) => {
           <Slider slides={hotelImages} deviceType="desktop" />
         </div>
       )}
-
-      {/* Map link with marker icon */}
-      <a
-        href="https://www.google.com/maps"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-blue-500 flex items-center mb-4 justify-center"
-      >
-        <FaMapMarkerAlt className="mr-2" />
-        <span>Ver mapa</span>
-        {latitude} {longitude}
-      </a>
 
       {/* Large text (expandable) with ellipsis */}
       <div className={`transition-all ${expanded ? "" : "line-clamp-5"}`}>
