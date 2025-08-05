@@ -3,6 +3,7 @@ import {
   sanityFetch,
   sanityDelete,
   sanityDeleteByQuery,
+  sanityPatch,
 } from "../../lib/sanityFetch";
 import { ApiUtils } from "./apiUtils.service";
 // Database service object containing various methods for database operations
@@ -37,6 +38,13 @@ const SanityService = {
       "Sanity delete by query"
     );
     return deleteResult;
+  },
+  patchDocument: async (documentId, patchOperations) => {
+    const patchResult = await ApiUtils.requestHandler(
+      sanityPatch(documentId, patchOperations),
+      "Sanity patch document"
+    );
+    return patchResult;
   },
 };
 

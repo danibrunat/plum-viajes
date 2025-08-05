@@ -58,3 +58,31 @@ export async function sanityDeleteByQuery(query) {
     deletedIds: documentIds,
   };
 }
+
+// Función para hacer patch de un documento
+export async function sanityPatch(documentId, patchOperations) {
+  if (!documentId) {
+    throw new Error("documentId is required for patch operation");
+  }
+
+  let patch = client.patch(documentId);
+
+  // Aplicar las operaciones de patch
+  if (patchOperations.set) {
+    patch = patch.set(patchOperations.set);
+  }
+
+  if (patchOperations.unset) {
+    patch = patch.unset(patchOperations.unset);
+  }
+
+  if (patchOperations.inc) {
+    patch = patch.inc(patchOperations.inc);
+  }
+
+  if (patchOperations.dec) {
+    patch = patch.dec(patchOperations.dec);
+  }
+
+  return patch.commit();
+}

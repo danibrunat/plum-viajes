@@ -1,4 +1,3 @@
-import { client } from "../../../lib/client.js";
 import SanityService from "../../services/sanity.service.js";
 
 /**
@@ -83,8 +82,10 @@ async function cleanOldTaggedPackagesHandler(request, context) {
         console.log(`   - ID: ${pkg._id}, title: ${pkg.title || "Sin título"}`);
 
         try {
-          // Remover tags del package
-          await client.patch(pkg._id).unset(["tags"]).commit();
+          // Remover tags del package usando SanityService
+          await SanityService.patchDocument(pkg._id, {
+            unset: ["tags"],
+          });
 
           totalProcessed++;
 
