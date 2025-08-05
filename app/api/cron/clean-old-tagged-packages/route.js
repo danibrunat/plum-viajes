@@ -1,11 +1,11 @@
-import { auth } from "../../../lib/auth/index.js";
 import SanityService from "../../services/sanity.service.js";
 
 /**
  * Cron Job: Limpiar paquetes etiquetados antiguos
  *
- * Elimina todos los documentos del schema 'taggedPackages'
- * cuya fecha departureFrom sea anterior a hoy.
+ * Realiza dos operaciones de limpieza:
+ * 1. Elimina documentos 'taggedPackages' cuya departureFrom sea anterior a hoy
+ * 2. Remueve tags de documentos 'packages' que tengan departures antiguos
  *
  * Ejecuta diariamente a las 00:00 UTC via Vercel Cron
  */
@@ -20,50 +20,116 @@ async function cleanOldTaggedPackagesHandler(request, context) {
 
     console.log(`📅 Fecha de referencia: ${todayISO}`);
 
-    // Query para encontrar taggedPackages con departureFrom anterior a hoy
-    const queryOldPackages = `*[
+    // Query 1: taggedPackages con departureFrom anterior a hoy (lógica existente - eliminar documento)
+    const queryOldTaggedPackages = `*[
       _type == "taggedPackages" && 
       departureFrom < "${todayISO}"
     ]`;
 
-    // Obtener los documentos que se van a eliminar (para logging)
-    const oldPackages = await SanityService.getFromSanity(queryOldPackages);
+    // Query 2: packages con departureFrom anterior a hoy (nueva lógica - remover tags)
+    const queryOldPackages = `*[
+      _type == "packages" && 
+      defined(departures) &&
+      count(departures[departureFrom < "${todayISO}"]) > 0 &&
+      count(tags) > 0
+    ]`;
 
-    if (!oldPackages || oldPackages.length === 0) {
-      console.log("✅ No se encontraron taggedPackages antiguos para eliminar");
+    // Obtener los documentos que se van a procesar
+    const [oldTaggedPackages, oldPackages] = await Promise.all([
+      SanityService.getFromSanity(queryOldTaggedPackages),
+      SanityService.getFromSanity(queryOldPackages),
+    ]);
+
+    let totalProcessed = 0;
+    let processedDetails = [];
+
+    // 1. Eliminar taggedPackages con departures antiguos (lógica existente)
+    if (oldTaggedPackages && oldTaggedPackages.length > 0) {
+      console.log(
+        `🗑️ Encontrados ${oldTaggedPackages.length} taggedPackages para eliminar:`
+      );
+      oldTaggedPackages.forEach((pkg) => {
+        console.log(
+          `   - ID: ${pkg._id}, departureFrom: ${pkg.departureFrom}, title: ${pkg.title || "Sin título"}`
+        );
+      });
+
+      const deleteResult = await SanityService.deleteByQuery(
+        queryOldTaggedPackages
+      );
+      totalProcessed += deleteResult.deleted;
+
+      processedDetails.push(
+        ...oldTaggedPackages.map((pkg) => ({
+          id: pkg._id,
+          title: pkg.title || "Sin título",
+          departureFrom: pkg.departureFrom,
+          action: "Documento eliminado (taggedPackages)",
+          type: "taggedPackages",
+        }))
+      );
+
+      console.log(`✅ Eliminados ${deleteResult.deleted} taggedPackages`);
+    }
+
+    // 2. Remover tags de packages con departures antiguos (nueva lógica)
+    if (oldPackages && oldPackages.length > 0) {
+      console.log(
+        `🏷️ Encontrados ${oldPackages.length} packages con departures antiguos para remover tags:`
+      );
+
+      for (const pkg of oldPackages) {
+        console.log(`   - ID: ${pkg._id}, title: ${pkg.title || "Sin título"}`);
+
+        try {
+          // Remover tags del package
+          await SanityService.client.patch(pkg._id).unset(["tags"]).commit();
+
+          totalProcessed++;
+
+          processedDetails.push({
+            id: pkg._id,
+            title: pkg.title || "Sin título",
+            action: "Tags removidos (packages)",
+            type: "packages",
+            departuresAffected:
+              pkg.departures?.filter((d) => d.departureFrom < todayISO)
+                ?.length || 0,
+          });
+
+          console.log(`   ✅ Tags removidos de package ${pkg._id}`);
+        } catch (error) {
+          console.error(`   ❌ Error removiendo tags de ${pkg._id}:`, error);
+          processedDetails.push({
+            id: pkg._id,
+            title: pkg.title || "Sin título",
+            action: "Error al remover tags",
+            type: "packages",
+            error: error.message,
+          });
+        }
+      }
+    }
+
+    if (totalProcessed === 0) {
+      console.log("✅ No se encontraron elementos antiguos para procesar");
       return Response.json({
         success: true,
-        message: "No hay paquetes antiguos para eliminar",
-        deleted: 0,
+        message: "No hay elementos antiguos para procesar",
+        processed: 0,
         executedAt: new Date().toISOString(),
       });
     }
 
     console.log(
-      `🗑️ Encontrados ${oldPackages.length} taggedPackages para eliminar:`
-    );
-    oldPackages.forEach((pkg) => {
-      console.log(
-        `   - ID: ${pkg._id}, departureFrom: ${pkg.departureFrom}, title: ${pkg.title || "Sin título"}`
-      );
-    });
-
-    // Eliminar los documentos antiguos
-    const deleteResult = await SanityService.deleteByQuery(queryOldPackages);
-
-    console.log(
-      `✅ Limpieza completada: ${deleteResult.deleted} documentos eliminados`
+      `✅ Limpieza completada: ${totalProcessed} operaciones realizadas`
     );
 
     return Response.json({
       success: true,
       message: `Limpieza completada exitosamente`,
-      deleted: deleteResult.deleted,
-      deletedPackages: oldPackages.map((pkg) => ({
-        id: pkg._id,
-        title: pkg.title || "Sin título",
-        departureFrom: pkg.departureFrom,
-      })),
+      processed: totalProcessed,
+      processedItems: processedDetails,
       executedAt: new Date().toISOString(),
     });
   } catch (error) {
@@ -125,7 +191,6 @@ async function cronHandler(request, context) {
 export async function POST(request, context) {
   return cronHandler(request, context);
 }
-console.log("das");
 
 // GET para testing manual con autenticación
 export async function GET(request, context) {
@@ -158,6 +223,3 @@ export async function GET(request, context) {
 
   return cleanOldTaggedPackagesHandler(request, context);
 }
-
-// Exportar el POST sin wrapper de auth (manejo manual)
-// GET sí usa auth.internal para testing desde el proyecto

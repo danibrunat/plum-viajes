@@ -71,8 +71,8 @@ export default function PkgDetail({ detailResponse, searchParams }) {
 
           <div key={Math.random()} className="flex flex-col w-full rounded">
             <h2 className="text-xl">Alojamiento</h2>
-            {hotelsData?.map((hotel) => (
-              <HotelCard key={hotel?.id} hotelData={hotel} />
+            {hotelsData?.map((hotel, idx) => (
+              <HotelCard key={hotel?.id + idx} hotelData={hotel} />
             ))}
           </div>
 
