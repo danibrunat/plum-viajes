@@ -194,7 +194,7 @@ export async function POST(request, context) {
 
 // GET para testing manual con autenticación
 export async function GET(request, context) {
-  console.log("🧪 Ejecutando limpieza manual (modo testing)");
+  console.log("🧪 Ejecutando limpieza ");
 
   // Verificar autenticación interna para testing manual
   const authHeader = request.headers.get("authorization");
@@ -203,20 +203,20 @@ export async function GET(request, context) {
     return Response.json(
       {
         error: "No autorizado",
-        message: "Se requiere autenticación para acceso manual",
+        message: "Se requiere autenticación para acceso",
       },
       { status: 401 }
     );
   }
 
   const token = authHeader.split(" ")[1];
-  const { PLUM_INTERNAL_API_KEY } = process.env;
+  const { CRON_SECRET } = process.env;
 
-  if (!token || token !== PLUM_INTERNAL_API_KEY) {
+  if (!token || token !== CRON_SECRET) {
     return Response.json(
       {
         error: "Token inválido",
-        message: "API key interna requerida para testing manual",
+        message: "API key interna requerida para limpiar",
       },
       { status: 403 }
     );
