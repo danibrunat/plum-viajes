@@ -198,6 +198,7 @@ export async function GET(request, context) {
 
   // Verificar autenticación interna para testing manual
   const authHeader = request.headers.get("authorization");
+  console.log("authHeader", authHeader);
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return Response.json(
       {
