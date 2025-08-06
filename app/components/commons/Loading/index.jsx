@@ -9,7 +9,7 @@ export default function Loading({
         <Image
           width={250}
           height={250}
-          alt="loading..."
+          alt="Cargando..."
           className="align-middle self-center"
           src={`/images/avail-loader.gif`}
         />

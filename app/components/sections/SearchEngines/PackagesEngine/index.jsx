@@ -46,7 +46,10 @@ const getPackageEngineItems = () => {
           <AsyncSelect
             {...field}
             id="arrivalCity"
+            cacheOptions={true}
             instanceId="arrivalCity"
+            loadingMessage={() => "Buscando ciudades..."}
+            noOptionsMessage={() => "No se encontraron ciudades"}
             placeholder="Seleccione"
             loadOptions={(query, callback) =>
               loadOptions(query, callback, "arrivalCity")
@@ -81,6 +84,9 @@ const getPackageEngineItems = () => {
           {...field}
           id="departureCity"
           instanceId="departureCity"
+          cacheOptions={true}
+          loadingMessage={() => "Buscando ciudades..."}
+          noOptionsMessage={() => "No se encontraron ciudades"}
           className="w-full p-1"
           placeholder="Seleccione"
           loadOptions={(query, callback) =>
