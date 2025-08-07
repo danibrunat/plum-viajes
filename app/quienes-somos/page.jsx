@@ -31,7 +31,7 @@ const AboutUs = () => {
           </h1>
           <p>
             Esto no se termina cuando te vendimos el viaje, te acompañamos hasta
-            que estes de regreso
+            que estés de regreso.
           </p>
         </div>
         <div className="flex flex-col gap-3">
@@ -39,7 +39,7 @@ const AboutUs = () => {
             <strong>Queremos que vuelvas</strong>
           </h1>
           <p>
-            Nustra mayor satisfacción es encontrarte en un próximo viaje, por
+            Nuestra mayor satisfacción es encontrarte en un próximo viaje, por
             eso vamos a hacer nuestro mayor esfuerzo.
           </p>
         </div>
