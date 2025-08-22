@@ -65,7 +65,7 @@ const FlightsEngine = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const passengersStr = `${passengers.adults}-${passengers.children}-${passengers.babies}`;
-    const baseURL = "https://tucano.aereos.app/aereos/omg-travel";
+    const baseURL = "https://tucano.aereos.app/aereos/plum-viajes";
     let finalURL = "";
 
     if (tripType === "multi") {
