@@ -50,7 +50,7 @@ const HotelCard = ({ hotelData }) => {
       )}
 
       {/* Large text (expandable) with ellipsis */}
-      <div className={`transition-all ${expanded ? "" : "line-clamp-5"}`}>
+      <div className={`transition-all ${expanded ? "" : "line-clamp-5"} py-3`}>
         <p className="text-gray-700">{description}</p>
       </div>
 

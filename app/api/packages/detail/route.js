@@ -32,8 +32,6 @@ export async function POST(req) {
     return Response.json(cachedResponse);
   }
 
-  console.log("Cache MISS - Obteniendo detalles frescos");
-
   // Obtener datos frescos
   const pBaseRequest = await fetch(
     Api.packages.detail.pbase.url(),
@@ -45,8 +43,6 @@ export async function POST(req) {
     return Response.json([]);
   }
 
-  // ...existing code...
-
   // Verificar que departures es un array
   const departures = pBaseDetailResponse.departures;
   if (!Array.isArray(departures)) {
@@ -57,7 +53,6 @@ export async function POST(req) {
   }
 
   const provider = pBaseDetailResponse.provider;
-
   // Seleccionar la salida correspondiente a startDate
   const selectedDeparture = departures.find(
     (departure) => departure.date === body.startDate
@@ -80,8 +75,6 @@ export async function POST(req) {
       HotelsService.getHotelData(provider, hotel, body.arrivalCity)
     )
   );
-
-  console.log("hotelsData", hotelsData);
 
   // Procesar la data de ciudades según los hoteles
   const citiesData = await Promise.all(

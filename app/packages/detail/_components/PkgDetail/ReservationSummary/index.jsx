@@ -30,7 +30,7 @@ const getRoomSummaryText = (rooms, pricePerPerson, currency, roomType) => {
 
     // Construir texto por habitación
     return normalizeText(
-      `Total ${adultText}${childrenText} en Habitación ${roomType}`
+      `Total ${adultText}${childrenText} ${roomType ? `en Habitación ${roomType}` : ""}`
     );
   });
 
