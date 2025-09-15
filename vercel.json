@@ -20,6 +20,15 @@
           "value": "true"
         }
       ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "connect-src 'self' https://api.sanity.io https://cdn.sanity.io https://aws-qa1.ola.com.ar; img-src 'self' https://cdn.sanity.io data: blob:;"
+        }
+      ]
     }
   ],
   "crons": [
