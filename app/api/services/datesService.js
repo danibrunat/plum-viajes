@@ -1,4 +1,4 @@
-import { MONTHS } from "../utils/constants.js";
+import { MONTHS } from "./providers/utils/constants.js";
 
 /**
  * Generates departure date options for the current month and year

@@ -1,4 +1,4 @@
-import { ApiUtils } from "../../apiUtils.service";
+import { ApiUtils } from "./apiUtils.service";
 
 /**
  * Fetches package availability based on search parameters

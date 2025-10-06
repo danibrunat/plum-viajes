@@ -6,9 +6,9 @@ import { PlumProvider } from "./providers/plum.js";
 import {
   departureDateMonthYear,
   departureDateFromTo,
-} from "./services/datesService.js";
-import { getPkgAvailabilityAndFilters } from "./services/availabilityService.js";
-import { getPkgDetail } from "./services/detailService.js";
+} from "../datesService.js";
+import { getPkgAvailabilityAndFilters } from "../availabilityService.js";
+import { getPkgDetail } from "../detailService.js";
 import CitiesService from "../../../services/cities.service.js";
 import availResponseConfig from "./config/availConfig.js";
 import detailResponseConfig from "./config/detailConfig.js";

@@ -1,4 +1,4 @@
-import { ApiUtils } from "../../apiUtils.service.js";
+import { ApiUtils } from "./apiUtils.service.js";
 
 /**
  * Fetches package detail based on provider and id
