@@ -10,8 +10,8 @@ const getHeaderRequest = (token) => {
     DestinoIZPais: "MX", // Brasil
     DestinoIZCiudad: "CUN",
     Ocupacion: "2", // 2 adultos
-    VigenciaDesde: "2024-10-01",
-    VigenciaHasta: "2024-10-30",
+    VigenciaDesde: "2025-11-01",
+    VigenciaHasta: "2025-11-30",
     IDPaquete: 0, // Debemos poner 0 para que traiga todos. Sino va a traer un ID de paquete específico.
     Nombre: "",
     OrdenadoPor: "1",
@@ -43,7 +43,7 @@ export const Julia = {
       { method: "GET", headers: ApiUtils.getCommonHeaders() }
     );
     const juliaTokenResponse = await juliaLoginRequest.text();
-    const parsedToken = XmlService.parseXmlResults(juliaTokenResponse);
+    const parsedToken = await XmlService.parseXmlResults(juliaTokenResponse);
     const token = parsedToken[0]["IDTOKEN"];
     return token;
   },
@@ -65,10 +65,10 @@ export const Julia = {
       });
 
       const juliaPkgHeaderAvailXml = await juliaPkgHeaderAvail.text();
-      const juliaPkgAvailHeaderResponse = XmlService.parseXmlResults(
+      const juliaPkgAvailHeaderResponse = await XmlService.parseXmlResults(
         juliaPkgHeaderAvailXml
       );
-      // console.log("juliaPkgAvailHeaderResponse", juliaPkgAvailHeaderResponse);
+      console.log("juliaPkgAvailHeaderResponse", juliaPkgAvailHeaderResponse);
       return juliaPkgAvailHeaderResponse;
     } catch (error) {
       console.error("pkgHeader error -> ", error);
@@ -234,7 +234,8 @@ export const Julia = {
         body: new URLSearchParams({ ...requestData }),
       });
       const pkgDepartures = await pkgDeparturesRequest.text();
-      const pkgDeparturesHeader = XmlService.parseXmlResults(pkgDepartures);
+      const pkgDeparturesHeader =
+        await XmlService.parseXmlResults(pkgDepartures);
 
       if (pkgDeparturesHeader && pkgDeparturesHeader.length > 0) {
         // console.log("pkgDeparturesHeader", pkgDeparturesHeader);
@@ -260,11 +261,9 @@ export const Julia = {
       let pkgResponse = [];
       // Token
       const token = await Julia.getToken();
-      //console.log("token", token);
       // Header
       const headerRequest = getHeaderRequest(token);
       const headerResults = await Julia.pkgHeader(headerRequest);
-      //console.log("pkgAvail | headerResults", headerResults);
       if (headerResults && headerResults.length === 0) return { pkgResponse };
 
       // Departures + Flights / Hotels: Add departures, flights and hotels for each pkg.
@@ -294,7 +293,7 @@ export const Julia = {
       const pkgWithDepartures = departuresData.filter(
         (pkg) => pkg.departures.length > 0
       );
-      //console.log("pkgWithDepartures", JSON.stringify(pkgWithDepartures));
+      console.log("pkgWithDepartures", JSON.stringify(pkgWithDepartures));
 
       return pkgWithDepartures;
     } catch (error) {

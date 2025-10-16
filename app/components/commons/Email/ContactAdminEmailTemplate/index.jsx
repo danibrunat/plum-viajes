@@ -20,11 +20,23 @@ const formatYesNo = (value) => {
   const normalized = String(value ?? "")
     .trim()
     .toLowerCase();
-  const truthyValues = ["true", "1", "si", "sí", "yes", "y", "on"]; // Accept common truthy inputs
+  const truthyValues = ["true", "1", "si", "sí", "yes", "y", "on"];
   return truthyValues.includes(normalized) ? "Sí" : "No";
 };
 
-const ContactEmailTemplate = ({
+const formatPhone = (type, areaCode, number) => {
+  const pieces = [
+    formatValue(type, ""),
+    formatValue(areaCode, ""),
+    formatValue(number, ""),
+  ]
+    .map((piece) => piece.trim())
+    .filter(Boolean);
+
+  return pieces.length ? pieces.join(" ") : "No detalla";
+};
+
+const ContactAdminEmailTemplate = ({
   name,
   surname,
   phoneType,
@@ -50,27 +62,44 @@ const ContactEmailTemplate = ({
   return (
     <Html lang="es">
       <Head />
-      <Preview>Recibimos tu consulta en Plum Viajes</Preview>
+      <Preview>
+        Nueva consulta web - {fullName || "Pasajero sin nombre"}
+      </Preview>
       <Body style={styles.body}>
         <Container style={styles.container}>
           <Heading as="h1" style={styles.heading}>
-            ¡Gracias por contactarnos{fullName ? `, ${fullName}` : ""}!
+            Nueva consulta recibida desde la web
           </Heading>
           <Text style={styles.text}>
-            Recibimos tu consulta y uno de nuestros especialistas la estará
-            revisando a la brevedad. Nos pondremos en contacto por correo o
-            teléfono apenas tengamos una propuesta para vos.
+            Llegó una nueva solicitud mediante el formulario de contacto. Estos
+            son los datos proporcionados por la persona interesada:
           </Text>
-          <Text style={styles.text}>Este es el resumen de tu solicitud:</Text>
 
           <Section style={styles.section}>
             <Text style={styles.item}>
-              <strong>Destino buscado:</strong>{" "}
+              <strong>Nombre completo:</strong> {fullName || "No detalla"}
+            </Text>
+            <Text style={styles.item}>
+              <strong>Email:</strong> {formatValue(email, "No detalla")}
+            </Text>
+            <Text style={styles.item}>
+              <strong>Teléfono:</strong>{" "}
+              {formatPhone(phoneType, phoneAreaCode, phoneNumber)}
+            </Text>
+            <Text style={styles.item}>
+              <strong>Horario preferido:</strong>{" "}
+              {formatValue(contactTime, "Sin preferencia")}
+            </Text>
+          </Section>
+
+          <Section style={styles.section}>
+            <Text style={styles.item}>
+              <strong>Destino deseado:</strong>{" "}
               {formatValue(destination, "A definir")}
             </Text>
             <Text style={styles.item}>
-              <strong>Fecha de salida deseada:</strong>{" "}
-              {formatValue(departureDate)}
+              <strong>Fecha de salida estimada:</strong>{" "}
+              {formatValue(departureDate, "Sin fecha")}
             </Text>
             <Text style={styles.item}>
               <strong>Noches:</strong> {formatValue(nightsQty, "No detalla")}
@@ -85,40 +114,31 @@ const ContactEmailTemplate = ({
               <strong>Régimen de comidas:</strong>{" "}
               {formatValue(mealPlan, "A definir")}
             </Text>
+          </Section>
+
+          <Section style={styles.section}>
             <Text style={styles.item}>
-              <strong>Preferencia de contacto:</strong>{" "}
-              {formatValue(contactTime, "Cualquier horario")}
-            </Text>
-            <Text style={styles.item}>
-              <strong>Consulta:</strong>{" "}
+              <strong>Consulta / comentarios:</strong>{" "}
               {formatValue(inquiry, "Sin comentarios adicionales")}
             </Text>
             <Text style={styles.item}>
-              <strong>¿Querés que te llamemos?</strong> {formatYesNo(ringMe)}
+              <strong>Solicita llamado:</strong> {formatYesNo(ringMe)}
             </Text>
             <Text style={styles.item}>
-              <strong>¿Deseás recibir promociones?</strong>{" "}
+              <strong>Acepta promociones:</strong>{" "}
               {formatYesNo(notifyPromotions)}
             </Text>
           </Section>
 
           <Hr style={styles.hr} />
           <Text style={styles.text}>
-            Si necesitás modificar algún dato, simplemente respondé a este
-            correo o escribinos a{" "}
-            <a href="mailto:consultas@plumviajes.com.ar">
-              consultas@plumviajes.com.ar
-            </a>
-            .
+            Recordá responderle a la brevedad para mantener una buena
+            experiencia de cliente. Podés responder directamente a este correo
+            para iniciar la conversación.
           </Text>
-          <Text style={styles.text}>
-            ¡Gracias por elegir Plum Viajes!
-            <br />
-            Equipo Plum Viajes
-          </Text>
-          <Hr style={styles.hr} />
+
           <Text style={styles.footer}>
-            Plum Viajes · postventa@plumviajes.com.ar · +54 11 5263-2455
+            Sistema de notificaciones de Plum Viajes
           </Text>
         </Container>
       </Body>
@@ -142,7 +162,7 @@ const styles = {
     maxWidth: "640px",
   },
   heading: {
-    fontSize: "24px",
+    fontSize: "22px",
     marginBottom: "16px",
     color: "#0f172a",
   },
@@ -155,7 +175,7 @@ const styles = {
     backgroundColor: "#f9fafb",
     borderRadius: "10px",
     padding: "16px",
-    marginBottom: "24px",
+    marginBottom: "16px",
   },
   item: {
     fontSize: "14px",
@@ -174,4 +194,4 @@ const styles = {
   },
 };
 
-export default ContactEmailTemplate;
+export default ContactAdminEmailTemplate;

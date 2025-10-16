@@ -1,76 +1,77 @@
 import { parseStringPromise } from "xml2js"; // Para parsear el XML
 
-// Función general para simplificar arrays de un solo elemento, mapear "_" a "$value" y cambiar "$" a "attributes"
-const simplifyAndMapValues = (data) => {
-  if (Array.isArray(data)) {
-    // Si es un array, procesar cada elemento
-    return data.map((item) => simplifyAndMapValues(item));
-  } else if (typeof data === "object" && data !== null) {
-    Object.keys(data).forEach((key) => {
-      // Si existe la propiedad "_", mapearla a "$value"
-      if (data[key] && data[key]._ !== undefined) {
-        data[key].$value = data[key]._; // Asignar el valor de _ a $value
-        delete data[key]._; // Eliminar la propiedad "_"
-      }
-
-      // Si el valor es un array de un solo elemento, simplificarlo
-      if (Array.isArray(data[key]) && data[key].length === 1) {
-        data[key] = data[key][0];
-      }
-
-      // Renombrar "$" a "attributes"
-      if (key === "$") {
-        data.attributes = data[key];
-        delete data[key];
-      }
-
-      // Renombrar "$" a "attributes"
-      if (key === "_") {
-        data.$value = data[key];
-        delete data[key];
-      }
-
-      // Llamada recursiva para procesar las subpropiedades
-      data[key] = simplifyAndMapValues(data[key]);
-    });
+class XmlService {
+  constructor() {
+    this.soap = {
+      request: this.#soapRequest.bind(this),
+    };
   }
-  return data;
-};
 
-const XmlService = {
-  buildXmlSet: (object) => {
+  buildXmlSet(object) {
     const builder = require("xml2js").Builder();
-    const xmlSet = builder.buildObject(object);
-    return xmlSet;
-  },
-  /*  parseXmlResults: async (xml, rootElement = "DocumentElement") => {
-    try {
-      const result = await parseStringPromise(xml, { explicitArray: false }); // Ajuste para evitar arrays innecesarios
-      const emptyResponse = XmlService.isEmptyString(result[rootElement]);
-      if (emptyResponse) return [];
+    return builder.buildObject(object);
+  }
 
-      // Recorrer las propiedades del resultado
-      const rawResults = result.DocumentElement?.Row;
-      if (rawResults && Array.isArray(rawResults)) {
-        return rawResults.map((resultItem) => {
-          Object.keys(resultItem).forEach((resultProperty) => {
-            resultItem[resultProperty] = resultItem[resultProperty][0];
-          });
-          return resultItem;
-        });
+  async parseXmlResults(xml, rootElement = "DocumentElement") {
+    try {
+      const parsedXml = await parseStringPromise(xml, {
+        explicitArray: false,
+        trim: true,
+      });
+
+      const rootNode = rootElement ? parsedXml?.[rootElement] : parsedXml;
+      if (!rootNode || this.#isEmptyString(rootNode)) {
+        return [];
       }
-      return [];
+
+      let rowsSource = rootNode?.Row ?? rootNode?.row;
+      if (!rowsSource) {
+        if (Array.isArray(rootNode)) {
+          rowsSource = rootNode;
+        } else if (typeof rootNode === "object") {
+          rowsSource = rootNode;
+        }
+      }
+
+      if (!rowsSource) {
+        return [];
+      }
+
+      const rows = Array.isArray(rowsSource) ? rowsSource : [rowsSource];
+
+      return rows.reduce((acc, item) => {
+        if (!item || typeof item !== "object") {
+          return acc;
+        }
+
+        acc.push(this.#normalizeRowItem(item));
+        return acc;
+      }, []);
     } catch (error) {
       console.error("Error al parsear el XML:", error);
       return [];
     }
-  }, */
-  isEmptyString: (string) => {
-    return string === "" ? true : false;
-  },
-  soap: {
-    request: async (url, pBaseRequest, service) => {
-      const soapEnvelope = `<?xml version="1.0" encoding="ISO-8859-1"?>
+  }
+
+  #normalizeRowItem(item) {
+    return Object.entries(item).reduce((normalized, [key, value]) => {
+      if (Array.isArray(value)) {
+        normalized[key] = value.length === 1 ? value[0] : value;
+      } else if (value && typeof value === "object" && "$value" in value) {
+        normalized[key] = value.$value;
+      } else {
+        normalized[key] = value;
+      }
+      return normalized;
+    }, {});
+  }
+
+  #isEmptyString(value) {
+    return value === "";
+  }
+
+  async #soapRequest(url, pBaseRequest, service) {
+    const soapEnvelope = `<?xml version="1.0" encoding="ISO-8859-1"?>
       <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
                          xmlns:xsd="http://www.w3.org/2001/XMLSchema"
                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -86,55 +87,86 @@ const XmlService = {
         </SOAP-ENV:Body>
       </SOAP-ENV:Envelope>`;
 
-      try {
-        const response = await fetch(url, {
-          body: soapEnvelope,
-          method: "POST",
-          next: {
-            revalidate: 0,
-          },
-          headers: {
-            "Content-Type": "text/xml",
-            SOAPAction: `"${service}"`,
-          },
-        });
+    try {
+      const response = await fetch(url, {
+        body: soapEnvelope,
+        method: "POST",
+        next: {
+          revalidate: 0,
+        },
+        headers: {
+          "Content-Type": "text/xml",
+          SOAPAction: `"${service}"`,
+        },
+      });
 
-        const responseJson = await response.text();
+      const responseJson = await response.text();
 
-        // Parsear la respuesta XML
-        const soapResponse = await parseStringPromise(responseJson, {
-          explicitArray: false,
-        });
-        const envelope = soapResponse["SOAP-ENV:Envelope"];
-        const body = envelope["SOAP-ENV:Body"];
-        const serviceResponse = body[`ns1:${service}Response`];
+      const soapResponse = await parseStringPromise(responseJson, {
+        explicitArray: false,
+      });
+      const envelope = soapResponse["SOAP-ENV:Envelope"];
+      const body = envelope["SOAP-ENV:Body"];
+      const serviceResponse = body[`ns1:${service}Response`];
 
-        if (
-          !serviceResponse ||
-          !serviceResponse.Response ||
-          !serviceResponse.Response._
-        ) {
-          return [];
+      if (
+        !serviceResponse ||
+        !serviceResponse.Response ||
+        !serviceResponse.Response._
+      ) {
+        return [];
+      }
+
+      const nestedXml = serviceResponse.Response._;
+      const parsedNestedXml = await parseStringPromise(nestedXml, {
+        explicitArray: false,
+      });
+
+      const simplifiedData = this.#simplifyAndMapValues(
+        parsedNestedXml.GetPackagesFaresResponse?.PackageFare
+      );
+
+      return simplifiedData ? simplifiedData : [];
+    } catch (error) {
+      console.error("Error al llamar a OLA", error);
+      throw error;
+    }
+  }
+
+  #simplifyAndMapValues(data) {
+    if (Array.isArray(data)) {
+      return data.map((item) => this.#simplifyAndMapValues(item));
+    }
+
+    if (data && typeof data === "object") {
+      Object.keys(data).forEach((key) => {
+        if (data[key] && data[key]._ !== undefined) {
+          data[key].$value = data[key]._;
+          delete data[key]._;
         }
 
-        // Volver a parsear el contenido de Response._
-        const nestedXml = serviceResponse.Response._;
-        const parsedNestedXml = await parseStringPromise(nestedXml, {
-          explicitArray: false,
-        });
+        if (Array.isArray(data[key]) && data[key].length === 1) {
+          data[key] = data[key][0];
+        }
 
-        // Simplificar arrays de un solo elemento
-        const simplifiedData = simplifyAndMapValues(
-          parsedNestedXml.GetPackagesFaresResponse?.PackageFare
-        );
+        if (key === "$") {
+          data.attributes = data[key];
+          delete data[key];
+        }
 
-        return simplifiedData ? simplifiedData : [];
-      } catch (error) {
-        console.error("Error al llamar a OLA", error);
-        throw error;
-      }
-    },
-  },
-};
+        if (key === "_") {
+          data.$value = data[key];
+          delete data[key];
+        }
 
-export default XmlService;
+        data[key] = this.#simplifyAndMapValues(data[key]);
+      });
+    }
+
+    return data;
+  }
+}
+
+const xmlService = new XmlService();
+
+export default xmlService;

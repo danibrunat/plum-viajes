@@ -11,7 +11,7 @@ export default {
   },
   subtitle: {
     plum: "subtitle",
-    julia: "subtitle",
+    julia: "NOMBRE",
     ola: "Package.Description",
   },
   nights: {

@@ -168,18 +168,8 @@ async function fetchOlaPackages(searchParams) {
  * @returns {Promise<Response>} - Respuesta con los paquetes disponibles.
  */
 async function fetchJuliaPackages(searchParams) {
-  const arrivalCity = "ASU";
-  const departureCity = "BUE";
-  const departureFrom = "2024-10-01";
-  const departureTo = "2024-10-31";
-  const occupancy = "2";
-
   const juliaPkgResponse = await Julia.pkgAvail({
-    arrivalCity,
-    departureCity,
-    departureFrom,
-    departureTo,
-    occupancy,
+    searchParams,
   });
   const mapResponse = ProviderService.mapper(
     juliaPkgResponse,
@@ -203,9 +193,10 @@ export async function POST(req) {
   const { searchParams } = body;
 
   // Obtener los paquetes de los proveedores
-  const [plumPkg, olaPkg] = await Promise.all([
+  const [plumPkg, olaPkg, juliaPkg] = await Promise.all([
     fetchPlumPackages(searchParams),
     fetchOlaPackages(searchParams),
+    fetchJuliaPackages(searchParams),
   ]);
 
   const plumPkgResponse = await plumPkg.json();

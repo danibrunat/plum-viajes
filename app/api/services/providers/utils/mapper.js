@@ -1,4 +1,4 @@
-import { isObject, hasNestedProperty, getByDotOperator } from "./object.js";
+import { isObject, hasNestedProperty, getByDotOperator } from "./iterators.js";
 
 /**
  * Maps nested object structure according to configuration

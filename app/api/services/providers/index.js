@@ -1,4 +1,4 @@
-import { hasNestedProperty, getByDotOperator } from "./utils/object.js";
+import { hasNestedProperty, getByDotOperator } from "./utils/iterators.js";
 import { mapProviderResponse } from "./utils/mapper.js";
 import { OlaProvider } from "./providers/ola.js";
 import { JuliaProvider } from "./providers/julia.js";
