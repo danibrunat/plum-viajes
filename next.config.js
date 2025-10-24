@@ -1,3 +1,5 @@
+const path = require("path");
+
 const withPWA = require("@ducanh2912/next-pwa").default({
   dest: "public",
   disable: process.env.NODE_ENV === "development",
@@ -16,6 +18,7 @@ const withPWA = require("@ducanh2912/next-pwa").default({
 const nextConfig = {
   turbopack: {
     resolveExtensions: [".mdx", ".tsx", ".ts", ".jsx", ".js", ".mjs", ".json"],
+    root: path.join(__dirname, "."),
   },
   images: {
     remotePatterns: [

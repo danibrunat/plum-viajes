@@ -18,7 +18,7 @@ const allowedOrigins = [
 // Valor por defecto para llamadas internas sin header "origin"
 const defaultOrigin = "https://plum-viajes.vercel.app";
 
-export async function middleware(req) {
+export async function proxy(req) {
   const path = req.nextUrl.pathname;
 
   // Verificar si es una ruta de API que siempre debe procesarse

@@ -16,7 +16,6 @@ export const metadata = {
   title: "Plum Viajes",
   description: "Tu agencia de viajes online",
   manifest: "/manifest.json",
-  themeColor: "#2c388b",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -25,11 +24,12 @@ export const metadata = {
   formatDetection: {
     telephone: false,
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-  },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default async function Layout({ children }) {
