@@ -168,9 +168,7 @@ async function fetchOlaPackages(searchParams) {
  * @returns {Promise<Response>} - Respuesta con los paquetes disponibles.
  */
 async function fetchJuliaPackages(searchParams) {
-  const juliaPkgResponse = await Julia.pkgAvail({
-    searchParams,
-  });
+  const juliaPkgResponse = await Julia.pkgAvail(searchParams);
   const mapResponse = ProviderService.mapper(
     juliaPkgResponse,
     "julia",
@@ -190,9 +188,24 @@ async function fetchJuliaPackages(searchParams) {
  */
 export async function POST(req) {
   const body = await req.json();
-  const { searchParams } = body;
+  const { searchParams, provider } = body;
 
-  // Obtener los paquetes de los proveedores
+  if (provider) {
+    // Si se especifica un provider, devolver solo ese
+    switch (provider) {
+      case "plum":
+        return await fetchPlumPackages(searchParams);
+      case "ola":
+        const olaResponse = await fetchOlaPackages(searchParams);
+        return Response.json(olaResponse);
+      case "julia":
+        return await fetchJuliaPackages(searchParams);
+      default:
+        return Response.json({ error: "Provider not found" }, { status: 400 });
+    }
+  }
+
+  // Si no se especifica, devolver todos (comportamiento actual)
   const [plumPkg, olaPkg, juliaPkg] = await Promise.all([
     fetchPlumPackages(searchParams),
     fetchOlaPackages(searchParams),
@@ -200,8 +213,13 @@ export async function POST(req) {
   ]);
 
   const plumPkgResponse = await plumPkg.json();
-  const packagesResponse = plumPkgResponse.packages.concat(olaPkg.packages);
+  const juliaPkgResponse = await juliaPkg.json();
+  const packagesResponse = plumPkgResponse.packages.concat(
+    olaPkg.packages,
+    juliaPkgResponse
+  );
 
+  console.log("packagesResponse", packagesResponse);
   /**
    * Preparar los grupos de salidas para ser almacenados en la cache.
    */

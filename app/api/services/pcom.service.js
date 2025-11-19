@@ -7,7 +7,11 @@ const pcomService = {
      * @returns {number} El precio representativo (el mínimo basePrice).
      */
     getRepresentativePrice(pkg) {
-      if (Array.isArray(pkg.departures) && pkg.departures.length > 0) {
+      if (
+        pkg?.departures &&
+        Array.isArray(pkg.departures) &&
+        pkg.departures.length > 0
+      ) {
         const prices = pkg.departures.map((dep) => {
           const price = dep?.prices?.pricesDetail?.basePrice;
           return Number(price) || Infinity;

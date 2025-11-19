@@ -10,7 +10,7 @@ import ModalRoot from "./components/commons/Modal/ModalRoot";
 import SocialWidget from "./components/Widgets/SocialWidget"; // Importa el componente
 import { sanityFetch } from "./lib/sanityFetch";
 
-const GENERAL_MAINTENANCE_MODE = true;
+const GENERAL_MAINTENANCE_MODE = false;
 
 const inter = Inter({ subsets: ["latin"] });
 

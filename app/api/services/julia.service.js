@@ -24,8 +24,8 @@ const getDeparturesRequest = (token, { IDPAQUETE }, searchParams) => {
   return {
     Token: token,
     IDPaquete: IDPAQUETE,
-    FechaDesde: searchParams.departureFrom,
-    FechaHasta: searchParams.departureTo,
+    FechaDesde: searchParams.startDate,
+    FechaHasta: searchParams.endDate,
     Ocupacion: searchParams.occupancy,
   };
 };
@@ -225,6 +225,7 @@ export const Julia = {
       let pkgDeparturesResponse = [];
       // console.log("pkgDepartures | requestData", requestData);
       const departuresUrl = `http://ycixweb.juliatours.com.ar/WSJULIADEMO/WSJULIA.asmx/WS_jw_PAQUETES_SALIDAS`;
+
       const pkgDeparturesRequest = await fetch(departuresUrl, {
         method: "POST",
         headers: {
@@ -275,6 +276,7 @@ export const Julia = {
             pkg,
             searchParams
           );
+
           const departures = await Julia.pkgDepartures(
             departuresRequest,
             token,

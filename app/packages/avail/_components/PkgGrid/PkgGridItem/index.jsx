@@ -33,12 +33,10 @@ const getImgSource = (pkgItem, provider) => {
   return defaultImage;
 };
 
-// Main package grid item component (server component)
 const PkgGridItem = ({ pkgItem, searchParams }) => {
   const { departureCity, arrivalCity, startDate, endDate, occupancy } =
     searchParams;
 
-  // Direct calculations instead of using useMemo
   const hotels = pkgItem?.departures[0]?.hotels || [];
 
   const pkgPrice = PackageService.prices.getPkgPrice(
