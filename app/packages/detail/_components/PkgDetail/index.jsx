@@ -21,7 +21,7 @@ export default function PkgDetail({ detailResponse, searchParams }) {
   const hotelsData = detailResponse?.hotelsData;
   const citiesData = detailResponse?.citiesData;
   const flights = detailResponse?.departures[0].flights;
-  const isSoldOutDeparture = detailResponse?.departures[0]?.seats === 0;
+  //const isSoldOutDeparture = detailResponse?.departures[0]?.seats === 0;
   const prices = detailResponse?.departures[0]?.prices;
   const sliderImages = detailResponse?.images?.map(({ sourceUrl }) => {
     return {
@@ -42,11 +42,11 @@ export default function PkgDetail({ detailResponse, searchParams }) {
       <div className="flex flex-col md:flex-row md:gap-5">
         <div className="flex flex-col w-full md:w-3/4 p-3 md:p-0 my-3 gap-5">
           <h1 className="text-3xl font-bold">{name}</h1>
-          {isSoldOutDeparture && (
+          {/* {isSoldOutDeparture && (
             <span className="rounded-full bg-red-600 px-2 text-center text-sm font-medium text-white">
               Agotado
             </span>
-          )}
+          )} */}
           <span className=" text-sm uppercase">
             {nights} noches desde {departureCity}
           </span>
@@ -97,7 +97,7 @@ export default function PkgDetail({ detailResponse, searchParams }) {
             prices={prices}
             occupancy={occupancy}
             hotels={hotels}
-            isSoldOutDeparture={isSoldOutDeparture}
+            // isSoldOutDeparture={isSoldOutDeparture}
           />
         </aside>
       </div>

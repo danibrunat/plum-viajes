@@ -15,11 +15,11 @@ import CacheKeysService from "../../services/cache/cacheKeys.service";
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { 
-      patterns = [], 
-      keys = [], 
-      pkgId, 
-      invalidateAvailability = true 
+    const {
+      patterns = [],
+      keys = [],
+      pkgId,
+      invalidateAvailability = true,
     } = body;
 
     if (!Array.isArray(patterns) && !Array.isArray(keys) && !pkgId) {
@@ -34,10 +34,11 @@ export async function POST(req) {
 
     // Si se proporciona pkgId, agregar patrones de invalidación automáticamente
     if (pkgId) {
-      const detailPattern = CacheKeysService.packages.detailInvalidationPattern(pkgId);
+      const detailPattern =
+        CacheKeysService.packages.detailInvalidationPattern(pkgId);
       allPatterns.push(detailPattern);
       console.log(`📦 Invalidando cache de detail para paquete: ${pkgId}`);
-      
+
       if (invalidateAvailability) {
         allPatterns.push("pkg:avail:*");
         console.log(`🔍 Invalidando cache de availability`);
@@ -50,7 +51,9 @@ export async function POST(req) {
       const matchingKeys = await RedisService.getKeysByPattern(pattern);
 
       if (matchingKeys && matchingKeys.length > 0) {
-        console.log(`📋 Encontradas ${matchingKeys.length} claves para: ${pattern}`);
+        console.log(
+          `📋 Encontradas ${matchingKeys.length} claves para: ${pattern}`
+        );
         await RedisService.deleteMultiple(matchingKeys);
         deletedKeys.push(...matchingKeys);
       }

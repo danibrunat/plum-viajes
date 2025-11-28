@@ -8,7 +8,7 @@ const PricesAndAgentContact = ({
   prices,
   occupancy,
   hotels,
-  isSoldOutDeparture,
+  //  isSoldOutDeparture,
 }) => {
   const { currency = "", finalPrice } = PackageService.prices.getPkgPrice(
     prices,
@@ -21,7 +21,7 @@ const PricesAndAgentContact = ({
         finalPrice={finalPrice}
         occupancy={occupancy}
         hotels={hotels}
-        isSoldOutDeparture={isSoldOutDeparture}
+        //  isSoldOutDeparture={isSoldOutDeparture}
       />
       <AgentContact />
     </div>

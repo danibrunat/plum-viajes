@@ -46,7 +46,7 @@ const ReservationSummary = ({
   finalPrice,
   occupancy,
   hotels,
-  isSoldOutDeparture,
+  isSoldOutDeparture = false,
 }) => {
   const roomType = hotels?.[0]?.roomSize;
   const pricePerPerson = Formatters.price(finalPrice, currency);
