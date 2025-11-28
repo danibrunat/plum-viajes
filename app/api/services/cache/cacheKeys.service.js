@@ -32,11 +32,23 @@ const CacheKeysService = {
     },
 
     detail: (provider, id, searchParams) => {
-      const normalizedParams = { provider, id, ...searchParams };
+      // Incluimos el pkgId en la clave para poder invalidar por paquete específico
+      const normalizedParams = { provider, ...searchParams };
       const stringified = JSON.stringify(normalizedParams);
       const hash = crypto.createHash("md5").update(stringified).digest("hex");
 
-      return `pkg:detail:${hash}`;
+      // Formato: pkg:detail:{pkgId}:{hash} - permite invalidar con patrón pkg:detail:{pkgId}:*
+      return `pkg:detail:${id}:${hash}`;
+    },
+
+    /**
+     * Genera el patrón para invalidar cache de detail de un paquete específico
+     * @param {string} pkgId - ID del paquete (sin prefijo "drafts.")
+     * @returns {string} Patrón de clave para invalidar
+     */
+    detailInvalidationPattern: (pkgId) => {
+      const cleanId = pkgId.replace("drafts.", "");
+      return `pkg:detail:${cleanId}:*`;
     },
 
     /**
@@ -112,10 +124,9 @@ const CacheKeysService = {
         }
       }
 
-      // 3. Invalidar detalles específicos del paquete
-      if (_id && provider) {
-        patterns.push(`pkg:detail:*${provider}*`);
-        patterns.push(`pkg:detail:*${_id.replace("drafts.", "")}*`);
+      // 3. Invalidar detalles específicos del paquete usando el método helper
+      if (_id) {
+        patterns.push(CacheKeysService.packages.detailInvalidationPattern(_id));
       }
 
       // 4. Invalidación temporal: búsquedas en el rango de fechas del paquete

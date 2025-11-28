@@ -1,8 +1,8 @@
 "use client";
 
 import { useForm, Controller } from "react-hook-form";
+import { useEffect, useState } from "react";
 import AsyncSelect from "react-select/async";
-import { useEffect } from "react";
 import Select from "react-select";
 import {
   FaCalendar,
@@ -14,7 +14,16 @@ import PackageEngineItem from "./PackageEngineItem";
 import { ProviderService } from "../../../../api/services/providers";
 import CitiesService from "../../../../services/cities.service";
 
-const getPackageEngineItems = () => {
+// Placeholder que mantiene las mismas dimensiones que react-select
+const SelectPlaceholder = ({ className = "" }) => (
+  <div
+    className={`h-[38px] bg-white border border-gray-300 rounded flex items-center px-3 text-gray-400 ${className}`}
+  >
+    Seleccione
+  </div>
+);
+
+const getPackageEngineItems = (isMounted) => {
   function debounce(fn, delay) {
     let timeoutId;
     return (...args) => {
@@ -43,18 +52,22 @@ const getPackageEngineItems = () => {
       icon: <FaGlobeAmericas className="text-gray-200" />,
       children: (field) => (
         <div className="w-full md:w-72">
-          <AsyncSelect
-            {...field}
-            id="arrivalCity"
-            cacheOptions={true}
-            instanceId="arrivalCity"
-            loadingMessage={() => "Buscando ciudades..."}
-            noOptionsMessage={() => "No se encontraron ciudades"}
-            placeholder="Seleccione"
-            loadOptions={(query, callback) =>
-              loadOptions(query, callback, "arrivalCity")
-            }
-          />
+          {isMounted ? (
+            <AsyncSelect
+              {...field}
+              id="arrivalCity"
+              cacheOptions={true}
+              instanceId="arrivalCity"
+              loadingMessage={() => "Buscando ciudades..."}
+              noOptionsMessage={() => "No se encontraron ciudades"}
+              placeholder="Seleccione"
+              loadOptions={(query, callback) =>
+                loadOptions(query, callback, "arrivalCity")
+              }
+            />
+          ) : (
+            <SelectPlaceholder />
+          )}
         </div>
       ),
     },
@@ -64,14 +77,19 @@ const getPackageEngineItems = () => {
       title: "¿Cuándo pensás viajar?",
       icon: <FaCalendar className="text-gray-200" />,
       children: (field) => (
-        <Select
-          {...field}
-          id="departureDateMonthYear"
-          instanceId="departureDateMonthYear"
-          className="w-full p-1"
-          placeholder="Seleccione"
-          options={ProviderService.departureDateMonthYear()}
-        />
+        <div className="w-full p-1">
+          {isMounted ? (
+            <Select
+              {...field}
+              id="departureDateMonthYear"
+              instanceId="departureDateMonthYear"
+              placeholder="Seleccione"
+              options={ProviderService.departureDateMonthYear()}
+            />
+          ) : (
+            <SelectPlaceholder />
+          )}
+        </div>
       ),
     },
     {
@@ -80,19 +98,24 @@ const getPackageEngineItems = () => {
       title: "¿Desde qué ciudad partís?",
       icon: <FaMapMarked className="text-gray-200" />,
       children: (field) => (
-        <AsyncSelect
-          {...field}
-          id="departureCity"
-          instanceId="departureCity"
-          cacheOptions={true}
-          loadingMessage={() => "Buscando ciudades..."}
-          noOptionsMessage={() => "No se encontraron ciudades"}
-          className="w-full p-1"
-          placeholder="Seleccione"
-          loadOptions={(query, callback) =>
-            loadOptions(query, callback, "departureCity")
-          }
-        />
+        <div className="w-full p-1">
+          {isMounted ? (
+            <AsyncSelect
+              {...field}
+              id="departureCity"
+              instanceId="departureCity"
+              cacheOptions={true}
+              loadingMessage={() => "Buscando ciudades..."}
+              noOptionsMessage={() => "No se encontraron ciudades"}
+              placeholder="Seleccione"
+              loadOptions={(query, callback) =>
+                loadOptions(query, callback, "departureCity")
+              }
+            />
+          ) : (
+            <SelectPlaceholder />
+          )}
+        </div>
       ),
     },
   ];
@@ -130,6 +153,7 @@ const FormSubmitButton = () => {
 };
 
 export default function PackagesEngine({ defaultValues = {} }) {
+  const [isMounted, setIsMounted] = useState(false);
   const {
     control,
     reset,
@@ -138,6 +162,7 @@ export default function PackagesEngine({ defaultValues = {} }) {
   } = useForm(defaultValues);
 
   useEffect(() => {
+    setIsMounted(true);
     reset({
       arrivalCity: defaultValues.arrivalCity,
       departureCity: defaultValues.departureCity,
@@ -151,7 +176,7 @@ export default function PackagesEngine({ defaultValues = {} }) {
   }
 
   const renderFormItems = () => {
-    const packageEngineItems = getPackageEngineItems();
+    const packageEngineItems = getPackageEngineItems(isMounted);
     return packageEngineItems.map((item) => {
       return (
         <PackageEngineItem key={item.id} title={item.title} icon={item.icon}>
