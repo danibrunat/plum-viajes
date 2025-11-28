@@ -49,9 +49,9 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
   const provider = pkgItem?.provider;
   const imgSource = getImgSource(pkgItem, provider);
 
-  const isSoldOutDeparture =
+  /* const isSoldOutDeparture =
     (pkgItem?.departures.length === 1 && pkgItem?.departures[0].seats === 0) ||
-    pkgItem?.departures.every((departure) => departure.seats === 0);
+    pkgItem?.departures.every((departure) => departure.seats === 0); */
 
   const priceId = pkgItem?.departures[0]?.prices?.id;
   const firstDepartureDate = pkgItem?.departures[0]?.date;
@@ -83,11 +83,11 @@ const PkgGridItem = ({ pkgItem, searchParams }) => {
               {`${pkgItem?.specialOfferTags}`}
             </span>
           )}
-          {isSoldOutDeparture && (
+          {/* {isSoldOutDeparture && (
             <span className="rounded-full bg-red-600 px-2 text-center text-sm font-medium text-white">
               Agotado
             </span>
-          )}
+          )} */}
         </div>
       </div>
 
