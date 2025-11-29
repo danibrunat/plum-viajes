@@ -4,6 +4,13 @@ import HotelsService from "../../../services/hotels.service";
 import AirlinesService from "../../../services/airlines.service";
 import { CacheService } from "../../services/cache";
 
+/**
+ * Verifica si el producto es un circuito (no requiere procesamiento de vuelos)
+ * @param {string} product - Tipo de producto
+ * @returns {boolean}
+ */
+const isCircuitProduct = (product) => product === "circuitos";
+
 const mapFlightSegment = async (segment) => {
   const airlineData = await AirlinesService.getAirlineData(
     segment.airline.code
@@ -83,27 +90,32 @@ export async function POST(req) {
     )
   );
 
-  // Procesar segmentos de vuelo (si existen en la respuesta)
-  const flightSegments = Array.isArray(
-    pBaseDetailResponse.departures[0].flights
-  )
-    ? pBaseDetailResponse.departures[0].flights
-    : [];
+  // Procesar segmentos de vuelo solo si NO es un circuito
+  const productType = pBaseDetailResponse.product;
+  let updatedFlightSegments = [];
 
-  const updatedFlightSegments = await Promise.all(
-    flightSegments.map(async (flight) => {
-      if (!Array.isArray(flight.segments)) {
-        flight.segments = await mapFlightSegment(flight.segments);
-      } else {
-        flight.segments = await Promise.all(
-          flight.segments.map(
-            async (segment) => await mapFlightSegment(segment)
-          )
-        );
-      }
-      return flight;
-    })
-  );
+  if (!isCircuitProduct(productType)) {
+    const flightSegments = Array.isArray(
+      pBaseDetailResponse.departures[0].flights
+    )
+      ? pBaseDetailResponse.departures[0].flights
+      : [];
+
+    updatedFlightSegments = await Promise.all(
+      flightSegments.map(async (flight) => {
+        if (!Array.isArray(flight.segments)) {
+          flight.segments = await mapFlightSegment(flight.segments);
+        } else {
+          flight.segments = await Promise.all(
+            flight.segments.map(
+              async (segment) => await mapFlightSegment(segment)
+            )
+          );
+        }
+        return flight;
+      })
+    );
+  }
 
   pBaseDetailResponse.flights = updatedFlightSegments;
   // Devolver la respuesta manteniendo la estructura original

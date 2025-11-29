@@ -13,6 +13,7 @@ async function fetchPlumPackageDetail({ occupancy, id, startDate, endDate }) {
     now() < validDateTo]
     {
     ...,
+    product,
     "subtitle" : "Paquetes a " + origin[0] + " con aéreo " + departures[0].typeRt1 + " de " + departures[0].airlineRt1,
     "departures": departures[departureFrom >= "${startDate}" && departureFrom <= "${endDate}"] {
       ...,
@@ -41,7 +42,10 @@ async function fetchPlumPackageDetail({ occupancy, id, startDate, endDate }) {
         "roomSize": ^.roomSize,
       },
     
-      "flights": [
+      // Solo incluir flights si NO es un circuito
+      "flights": select(
+        ^.product == "circuitos" => [],
+        [
           {
             "segments": {
               "flightNumber": flightNumberRt1,
@@ -92,7 +96,8 @@ async function fetchPlumPackageDetail({ occupancy, id, startDate, endDate }) {
               }
             }
           }
-        ],
+        ]
+      ),
         "prices": prices[type == "${priceType}"] 
     }
    }`;

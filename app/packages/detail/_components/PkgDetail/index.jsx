@@ -64,10 +64,12 @@ export default function PkgDetail({ detailResponse, searchParams }) {
               roomConfig={occupancy}
             />
           </div>
-          <div className="flex flex-col w-full rounded">
-            <h1 className="text-xl">Itinerario de Vuelos</h1>
-            <Flights flights={flights} />
-          </div>
+          {flights && flights.length > 0 && (
+            <div className="flex flex-col w-full rounded">
+              <h1 className="text-xl">Itinerario de Vuelos</h1>
+              <Flights flights={flights} />
+            </div>
+          )}
 
           <div key={Math.random()} className="flex flex-col w-full rounded">
             <h2 className="text-xl">Alojamiento</h2>
