@@ -57,8 +57,14 @@ async function fetchPlumPackageDetail({ occupancy, id, startDate, endDate }) {
               "departureAirport": "Airport",
               "arrivalAirport": "Airport",
               "stopovers": stopoverRt1,
-              "departureCity": originDestinationRt1,
-              "arrivalCity": arrivalDestinationRt1
+              "departureCity": originDestinationRt1-> {
+                name,
+                "code": iata_code
+              },
+              "arrivalCity": arrivalDestinationRt1-> {
+                name,
+                "code": iata_code
+              }
             }
           },
           {
@@ -76,9 +82,14 @@ async function fetchPlumPackageDetail({ occupancy, id, startDate, endDate }) {
               "departureAirport": "Airport",
               "arrivalAirport": "Airport",
               "stopovers": stopoverRt2,
-              "departureCity": originDestinationRt2,
-              "arrivalCity": arrivalDestinationRt2
-
+              "departureCity": originDestinationRt2-> {
+                name,
+                "code": iata_code
+              },
+              "arrivalCity": arrivalDestinationRt2-> {
+                name,
+                "code": iata_code
+              }
             }
           }
         ],

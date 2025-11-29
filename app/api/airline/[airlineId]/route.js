@@ -10,5 +10,8 @@ export async function GET(req, props) {
   );
   const airlineResponse = airlineArrResponse[0];
 
+  if (!airlineArrResponse || airlineArrResponse.length === 0)
+    throw new Error(`No se encontró la aerolínea con ID: ${airlineId}`);
+
   return Response.json(airlineResponse);
 }

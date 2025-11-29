@@ -6,6 +6,31 @@ import { urlForImage } from "../../../../../lib/image";
 import { sanityFetch } from "../../../../../lib/sanityFetch";
 
 const Flights = ({ flights }) => {
+  /**
+   * Formatea el texto de escalas.
+   * - null, undefined, "", 0, "0" => "Directo"
+   * - >= 1 => "X Escala" o "X Escalas"
+   */
+  function formatStopovers(stopovers) {
+    // Si es null, undefined, string vacío, 0 o "0" => Directo
+    if (
+      stopovers === null ||
+      stopovers === undefined ||
+      stopovers === "" ||
+      stopovers === 0 ||
+      stopovers === "0"
+    ) {
+      return "Directo";
+    }
+
+    const numStopovers = Number(stopovers);
+    if (isNaN(numStopovers) || numStopovers < 1) {
+      return "Directo";
+    }
+
+    return numStopovers === 1 ? "1 Escala" : `${numStopovers} Escalas`;
+  }
+
   // Función para formatear la fecha
   function formatDateToString(dateString) {
     if (!dateString) return "Fecha inválida"; // Manejo de errores
@@ -107,9 +132,7 @@ const Flights = ({ flights }) => {
                   height={70}
                   alt={segment.airline.code}
                 />
-                {flight.stopovers == 0
-                  ? "Directo"
-                  : `${flight.stopovers} Escalas`}
+                {formatStopovers(flight.stopovers)}
               </div>
 
               <div className="w-1/3 p-3">
@@ -164,7 +187,7 @@ const Flights = ({ flights }) => {
               height={70}
               alt={flight.segments.airline.code}
             />
-            {flight.stopovers == 0 ? "Directo" : `${flight.stopovers} Escalas`}
+            {formatStopovers(flight.stopovers)}
           </div>
 
           <div className="w-1/3 p-3">

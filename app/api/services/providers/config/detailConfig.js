@@ -196,41 +196,41 @@ export default {
               departureAirport: {
                 code: {
                   ola: "DepartureAirport.attributes.Iata",
-                  plum: "departureCity",
+                  plum: "departureCity.code",
                 },
                 name: {
                   ola: "DepartureAirport.$value",
-                  plum: "departureCity",
+                  plum: "departureCity.name",
                 },
               },
               departureCity: {
                 code: {
                   ola: "DepartureCity.attributes.Iata",
-                  plum: "departureCity",
+                  plum: "departureCity.code",
                 },
                 name: {
                   ola: "DepartureCity.$value",
-                  plum: "departureCity",
+                  plum: "departureCity.name",
                 },
               },
               arrivalCity: {
                 code: {
                   ola: "ArrivalCity.attributes.Iata",
-                  plum: "arrivalCity",
+                  plum: "arrivalCity.code",
                 },
                 name: {
                   ola: "ArrivalCity.$value",
-                  plum: "arrivalCity",
+                  plum: "arrivalCity.name",
                 },
               },
               arrivalAirport: {
                 code: {
                   ola: "ArrivalAirport.attributes.Iata",
-                  plum: "arrivalCity",
+                  plum: "arrivalCity.code",
                 },
                 name: {
                   ola: "ArrivalAirport.$value",
-                  plum: "arrivalCity",
+                  plum: "arrivalCity.name",
                 },
               },
             },
