@@ -1,155 +1,135 @@
 "use client";
-import React, { useState } from "react";
+import React, { useReducer } from "react";
 import FormLayout from "./FormLayout";
 import InputGroup from "./InputGroup";
-import CheckboxGroup from "./CheckboxGroup";
-import RadioGroup from "./RadioGroup";
+import OptionsPanel from "./OptionsPanel";
 import SearchButton from "./SearchButton";
 import Passengers from "./Passengers";
-import LegInputGroup from "./LegInputGroup";
 import MultiTripLegContainer from "./MultitripLegContainer";
+import { formatDateToDDMMYYYY } from "../../../../helpers/dates";
+import { flightsReducer, initialFlightsState, FLIGHTS_ACTIONS } from "./flightsReducer";
+
+const FLIGHTS_BASE_URL = "https://tucano.aereos.app/aereos/plum-viajes";
 
 const FlightsEngine = () => {
-  // Estados para viajes no multi
-  const [origin, setOrigin] = useState("");
-  const [destination, setDestination] = useState("");
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [flexible, setFlexible] = useState(false);
-  const [business, setBusiness] = useState(false);
+  const [state, dispatch] = useReducer(flightsReducer, initialFlightsState);
+  
+  const {
+    origin,
+    destination,
+    dateRange,
+    tripType,
+    flexible,
+    business,
+    priceInUsd,
+    passengers,
+    showPassengersModal,
+    legs,
+  } = state;
+
   const [startDate, endDate] = dateRange;
-  const [priceInUsd, setPriceInUsd] = useState(false);
-  const [tripType, setTripType] = useState("roundTrip");
 
-  // Estado para pasajeros
-  const [passengers, setPassengers] = useState({
-    adults: 1,
-    children: 0,
-    babies: 0,
-  });
-  const [showPassengersModal, setShowPassengersModal] = useState(false);
-  const updatePassenger = (type, value) => {
-    setPassengers((prev) => ({
-      ...prev,
-      [type]: Math.max(0, prev[type] + value),
-    }));
-  };
-
-  // Estado para tramos en modo multi (inicia con un tramo por defecto)
-  const [legs, setLegs] = useState([{ origin: "", destination: "", date: "" }]);
-
-  const addLeg = () => {
-    setLegs([...legs, { origin: "", destination: "", date: "" }]);
-  };
-
-  // Función para actualizar un tramo en particular
-  const updateLeg = (index, field, value) => {
-    setLegs((prevLegs) =>
-      prevLegs.map((leg, i) => (i === index ? { ...leg, [field]: value } : leg))
-    );
-  };
-
-  // Función para eliminar un tramo
-  const removeLeg = (index) => {
-    setLegs((prevLegs) => prevLegs.filter((_, i) => i !== index));
-  };
-
-  // Función para formatear fechas
-  const formatDate = (date) => {
-    const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, "0");
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const year = d.getFullYear();
-    return `${day}-${month}-${year}`;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const buildFlightUrl = () => {
     const passengersStr = `${passengers.adults}-${passengers.children}-${passengers.babies}`;
-    const baseURL = "https://tucano.aereos.app/aereos/plum-viajes";
-    let finalURL = "";
+    const optionsStr = `${flexible}/${business}/${priceInUsd ? "USD" : "false"}`;
 
     if (tripType === "multi") {
-      // Validación: todos los tramos deben tener sus campos completos
+      const routePart = legs
+        .map((leg) => `${leg.origin},${leg.destination}`)
+        .join("-");
+      const datesPart = legs.map((leg) => formatDateToDDMMYYYY(leg.date)).join(",");
+      return `${FLIGHTS_BASE_URL}/multiples/${routePart}/${datesPart}/${passengersStr}/ALL/${optionsStr}/`;
+    }
+
+    const formattedStartDate = formatDateToDDMMYYYY(startDate);
+
+    if (tripType === "roundTrip") {
+      const formattedEndDate = formatDateToDDMMYYYY(endDate);
+      return `${FLIGHTS_BASE_URL}/roundTrip/${origin}-${destination}/${formattedStartDate}_${formattedEndDate}/${passengersStr}/ALL/${optionsStr}/`;
+    }
+
+    return `${FLIGHTS_BASE_URL}/oneWay/${origin}-${destination}/${formattedStartDate}/${passengersStr}/ALL/${optionsStr}/`;
+  };
+
+  const validateForm = () => {
+    if (tripType === "multi") {
       for (let i = 0; i < legs.length; i++) {
         const leg = legs[i];
         if (!leg.origin || !leg.destination || !leg.date) {
           alert("Complete todos los campos en cada tramo");
-          return;
+          return false;
         }
       }
-      // Armar la parte de rutas: concatenamos cada tramo con guión (-)
-      const routePart = legs
-        .map((leg) => `${leg.origin},${leg.destination}`)
-        .join("-");
-      // Armar la parte de fechas: cada fecha formateada y separada por coma
-      const datesPart = legs.map((leg) => formatDate(leg.date)).join(",");
-      finalURL = `${baseURL}/multiples/${routePart}/${datesPart}/${passengersStr}/ALL/${flexible}/${business}/${priceInUsd ? "USD" : "false"}/`;
-    } else {
-      // Validación para roundTrip y oneWay
-      if (!origin || !destination || !startDate) {
-        alert("Complete los campos obligatorios");
-        return;
-      }
-      if (tripType === "roundTrip" && !endDate) {
-        alert("Para viaje de ida y vuelta se requiere la fecha de regreso");
-        return;
-      }
-      const formattedStartDate = formatDate(startDate);
-      const formattedEndDate = endDate ? formatDate(endDate) : null;
-      if (tripType === "roundTrip") {
-        finalURL = `${baseURL}/roundTrip/${origin}-${destination}/${formattedStartDate}_${formattedEndDate}/${passengersStr}/ALL/${flexible}/${business}/${priceInUsd ? "USD" : "false"}/`;
-      } else if (tripType === "oneWay") {
-        finalURL = `${baseURL}/oneWay/${origin}-${destination}/${formattedStartDate}/${passengersStr}/ALL/${flexible}/${business}/${priceInUsd ? "USD" : "false"}/`;
-      }
+      return true;
     }
-    window.location.href = finalURL;
+
+    if (!origin || !destination || !startDate) {
+      alert("Complete los campos obligatorios");
+      return false;
+    }
+
+    if (tripType === "roundTrip" && !endDate) {
+      alert("Para viaje de ida y vuelta se requiere la fecha de regreso");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    window.location.href = buildFlightUrl();
   };
 
   return (
     <FormLayout onSubmit={handleSubmit}>
-      {tripType === "multi" ? (
-        <>
-          <MultiTripLegContainer
-            legs={legs}
-            updateLeg={updateLeg}
-            removeLeg={removeLeg}
-          />
-          <button
-            type="button"
-            onClick={addLeg}
-            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-          >
-            Agregar tramo
-          </button>
-        </>
-      ) : (
-        <InputGroup
-          origin={origin}
-          setOrigin={setOrigin}
-          destination={destination}
-          setDestination={setDestination}
-          dateRange={dateRange}
-          setDateRange={setDateRange}
-          startDate={startDate}
-          endDate={endDate}
+      <div className="w-full space-y-4">
+        <OptionsPanel
+          tripType={tripType}
+          flexible={flexible}
+          business={business}
+          priceInUsd={priceInUsd}
+          dispatch={dispatch}
         />
-      )}
-      <CheckboxGroup
-        flexibleDates={flexible}
-        setFlexibleDates={setFlexible}
-        business={business}
-        setBusiness={setBusiness}
-        priceInUsd={priceInUsd}
-        setPriceInUsd={setPriceInUsd}
-      />
-      <Passengers
-        setShowPassengersModal={setShowPassengersModal}
-        showPassengersModal={showPassengersModal}
-        passengers={passengers}
-        updatePassenger={updatePassenger}
-      />
-      <RadioGroup tripType={tripType} setTripType={setTripType} />
-      <SearchButton />
+
+        {tripType === "multi" ? (
+          <div className="space-y-3">
+            <MultiTripLegContainer
+              legs={legs}
+              dispatch={dispatch}
+            />
+            <button
+              type="button"
+              onClick={() => dispatch({ type: FLIGHTS_ACTIONS.ADD_LEG })}
+              className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Agregar tramo
+            </button>
+          </div>
+        ) : (
+          <InputGroup
+            origin={origin}
+            destination={destination}
+            startDate={startDate}
+            endDate={endDate}
+            tripType={tripType}
+            dispatch={dispatch}
+          />
+        )}
+
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          <Passengers
+            passengers={passengers}
+            showPassengersModal={showPassengersModal}
+            dispatch={dispatch}
+          />
+          <SearchButton />
+        </div>
+      </div>
     </FormLayout>
   );
 };

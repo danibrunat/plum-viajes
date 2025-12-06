@@ -3,19 +3,32 @@ import AsyncSelect from "react-select/async";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CitiesService from "../../../../../services/cities.service";
+import { FLIGHTS_ACTIONS } from "../flightsReducer";
 
 const getCitiesAutocompleteApi = async (query, inputName) =>
   await CitiesService.getCitiesAutocompleteApi(query, inputName);
 
+const selectStyles = {
+  control: (base) => ({
+    ...base,
+    minHeight: "44px",
+    borderRadius: "0.5rem",
+    borderColor: "#e5e7eb",
+    "&:hover": { borderColor: "#9333ea" },
+  }),
+  placeholder: (base) => ({
+    ...base,
+    color: "#9ca3af",
+  }),
+};
+
 const InputGroup = ({
   origin,
-  setOrigin,
   destination,
-  setDestination,
-  setDateRange,
-  dateRange,
   startDate,
   endDate,
+  tripType,
+  dispatch,
 }) => {
   const loadOptions = async (inputValue, _, inputName) => {
     if (inputValue.length < 4) {
@@ -23,7 +36,6 @@ const InputGroup = ({
     }
     try {
       const citiesFetch = await getCitiesAutocompleteApi(inputValue, inputName);
-
       const formattedOptions = citiesFetch.map((city) => ({
         label: `${city.label}`,
         value: city.value,
@@ -35,9 +47,18 @@ const InputGroup = ({
     }
   };
 
+  const handleDateChange = (update) => {
+    if (tripType === "oneWay") {
+      dispatch({ type: FLIGHTS_ACTIONS.SET_DATE_RANGE, payload: [update, null] });
+    } else {
+      dispatch({ type: FLIGHTS_ACTIONS.SET_DATE_RANGE, payload: update });
+    }
+  };
+
   return (
-    <>
-      <div className="flex-1">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      {/* Origen */}
+      <div className="space-y-1">
         <label
           htmlFor="origin"
           className="block text-sm font-medium text-white"
@@ -45,18 +66,22 @@ const InputGroup = ({
           Origen
         </label>
         <AsyncSelect
-          className="flex-1 mt-1"
           id="origin"
-          placeholder="Seleccione la ciudad de Origen"
+          instanceId="flights-origin-select"
+          placeholder="¿Desde dónde?"
           loadOptions={(inputValue, callback) =>
             loadOptions(inputValue, callback, "origin")
           }
-          onChange={(option) => setOrigin(option.value)}
+          onChange={(option) => dispatch({ type: FLIGHTS_ACTIONS.SET_ORIGIN, payload: option?.value || "" })}
           defaultOptions
           cacheOptions
+          isClearable
+          styles={selectStyles}
         />
       </div>
-      <div className="flex-1">
+
+      {/* Destino */}
+      <div className="space-y-1">
         <label
           htmlFor="destination"
           className="block text-sm font-medium text-white"
@@ -64,37 +89,42 @@ const InputGroup = ({
           Destino
         </label>
         <AsyncSelect
-          className="mt-1"
           id="destination"
-          placeholder="Seleccione la ciudad de llegada"
+          instanceId="flights-destination-select"
+          placeholder="¿Hacia dónde?"
           loadOptions={(inputValue, callback) =>
             loadOptions(inputValue, callback, "destination")
           }
-          onChange={(option) => setDestination(option.value)}
+          onChange={(option) => dispatch({ type: FLIGHTS_ACTIONS.SET_DESTINATION, payload: option?.value || "" })}
           defaultOptions
           cacheOptions
+          isClearable
+          styles={selectStyles}
         />
       </div>
-      <div className="flex-1">
+
+      {/* Fechas */}
+      <div className={`space-y-1 ${tripType === "oneWay" ? "lg:col-span-2" : "lg:col-span-2"}`}>
         <label
           htmlFor="dateRange"
           className="block text-sm font-medium text-white"
         >
-          Seleccione Fechas
+          {tripType === "oneWay" ? "Fecha de ida" : "Fechas"}
         </label>
         <DatePicker
-          selectsRange
-          id="dateRange" // Ensure ID matches label's for attribute
-          startDate={startDate}
-          endDate={endDate}
-          onChange={(update) => setDateRange(update)}
+          selectsRange={tripType !== "oneWay"}
+          selected={tripType === "oneWay" ? startDate : undefined}
+          startDate={tripType !== "oneWay" ? startDate : undefined}
+          endDate={tripType !== "oneWay" ? endDate : undefined}
+          onChange={handleDateChange}
           isClearable
-          placeholderText="Seleccione fechas"
-          className="col-span-3 p-3 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-          aria-labelledby="dateRange-label" // Add if needed for complex DatePickers
+          placeholderText={tripType === "oneWay" ? "Seleccione fecha" : "Ida - Vuelta"}
+          className="w-full p-3 rounded-lg border border-gray-200 shadow-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-gray-700"
+          dateFormat="dd/MM/yyyy"
+          minDate={new Date()}
         />
       </div>
-    </>
+    </div>
   );
 };
 

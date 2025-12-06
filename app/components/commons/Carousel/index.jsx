@@ -10,6 +10,7 @@ const CommonCarousel = ({
   children = [],
   itemClass = "p-1 md:p-2",
 }) => {
+  console.log('children:', children);
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -30,8 +31,8 @@ const CommonCarousel = ({
   return (
     <Carousel
       responsive={responsive}
-      autoPlay={true}
-      infinite={true}
+      //autoPlay={true}
+      //infinite={true}
       autoPlaySpeed={2500}
       partialVisible={false}
       itemClass={itemClass}

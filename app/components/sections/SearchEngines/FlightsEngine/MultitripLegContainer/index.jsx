@@ -1,18 +1,21 @@
 import React from "react";
 import LegInputGroup from "../LegInputGroup";
 
-const MultiTripLegContainer = ({ legs, updateLeg, removeLeg }) => {
+const MultiTripLegContainer = ({ legs, dispatch }) => {
   return (
-    <div className="flex-1 flex-col space-y-3">
-      {legs.map((leg, index) => (
-        <LegInputGroup
-          key={index}
-          index={index}
-          leg={leg}
-          updateLeg={updateLeg}
-          removeLeg={legs.length > 1 ? removeLeg : null}
-        />
-      ))}
+    <div className="space-y-4">
+      <h3 className="text-sm font-medium text-white/80">Tramos del viaje</h3>
+      <div className="space-y-3">
+        {legs.map((leg, index) => (
+          <LegInputGroup
+            key={index}
+            index={index}
+            leg={leg}
+            dispatch={dispatch}
+            canRemove={legs.length > 1}
+          />
+        ))}
+      </div>
     </div>
   );
 };

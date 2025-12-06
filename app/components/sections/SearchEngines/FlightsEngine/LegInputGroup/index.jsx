@@ -2,6 +2,7 @@ import React from "react";
 import AsyncSelect from "react-select/async";
 import CitiesService from "../../../../../services/cities.service";
 import { FiTrash2 } from "react-icons/fi";
+import { FLIGHTS_ACTIONS } from "../flightsReducer";
 
 const getCitiesAutocompleteApi = async (query, inputName) =>
   await CitiesService.getCitiesAutocompleteApi(query, inputName);
@@ -23,64 +24,103 @@ const loadOptions = async (inputValue, _, inputName) => {
   }
 };
 
-const LegInputGroup = ({ index, leg, updateLeg, removeLeg }) => {
+const selectStyles = {
+  control: (base) => ({
+    ...base,
+    minHeight: "40px",
+    borderRadius: "0.5rem",
+    borderColor: "#e5e7eb",
+    backgroundColor: "white",
+    "&:hover": { borderColor: "#9333ea" },
+  }),
+  placeholder: (base) => ({
+    ...base,
+    color: "#9ca3af",
+    fontSize: "0.875rem",
+  }),
+};
+
+const LegInputGroup = ({ index, leg, dispatch, canRemove }) => {
+  const handleUpdateLeg = (field, value) => {
+    dispatch({
+      type: FLIGHTS_ACTIONS.UPDATE_LEG,
+      payload: { index, field, value },
+    });
+  };
+
+  const handleRemoveLeg = () => {
+    dispatch({ type: FLIGHTS_ACTIONS.REMOVE_LEG, payload: index });
+  };
+
   return (
-    <div className="flex-1 w-full p-3 border rounded-md bg-gray-800 mb-3 relative items-center">
-      {/* Botón de eliminar tramo en la esquina superior derecha */}
-      {removeLeg && (
+    <div className="relative p-4 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
+      {/* Badge del número de tramo */}
+      <div className="absolute -top-2 -left-2 w-6 h-6 bg-plumPrimaryOrange text-white text-xs font-bold rounded-full flex items-center justify-center">
+        {index + 1}
+      </div>
+      
+      {/* Botón de eliminar */}
+      {canRemove && (
         <button
           type="button"
-          onClick={() => removeLeg(index)}
-          className="absolute top-2 right-2 text-red-500 hover:text-red-600"
+          onClick={handleRemoveLeg}
+          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
           title="Eliminar tramo"
         >
-          <FiTrash2 size={18} />
+          <FiTrash2 size={12} />
         </button>
       )}
-      {/* Contenedor responsivo: vertical en mobile, horizontal en md+ */}
-      <div className="flex flex-col md:flex-row md:space-x-4">
-        <div className="flex-1 mb-3 md:mb-0">
+      
+      {/* Grid de campos */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="space-y-1">
           <label
             htmlFor={`legOrigin-${index}`}
-            className="block text-xs font-medium text-white mb-1"
+            className="block text-xs font-medium text-white/80"
           >
             Origen
           </label>
           <AsyncSelect
             id={`legOrigin-${index}`}
-            placeholder="Origen"
+            instanceId={`leg-origin-${index}`}
+            placeholder="¿Desde dónde?"
             loadOptions={(inputValue, callback) =>
               loadOptions(inputValue, callback, "origin")
             }
-            onChange={(option) => updateLeg(index, "origin", option.value)}
+            onChange={(option) => handleUpdateLeg("origin", option?.value || "")}
             defaultOptions
             cacheOptions
-            className="mt-1"
+            isClearable
+            styles={selectStyles}
           />
         </div>
-        <div className="flex-1 mb-3 md:mb-0">
+        
+        <div className="space-y-1">
           <label
             htmlFor={`legDestination-${index}`}
-            className="block text-xs font-medium text-white mb-1"
+            className="block text-xs font-medium text-white/80"
           >
             Destino
           </label>
           <AsyncSelect
             id={`legDestination-${index}`}
-            placeholder="Destino"
+            instanceId={`leg-destination-${index}`}
+            placeholder="¿Hacia dónde?"
             loadOptions={(inputValue, callback) =>
               loadOptions(inputValue, callback, "destination")
             }
-            onChange={(option) => updateLeg(index, "destination", option.value)}
+            onChange={(option) => handleUpdateLeg("destination", option?.value || "")}
             defaultOptions
             cacheOptions
-            className="mt-1"
+            isClearable
+            styles={selectStyles}
           />
         </div>
-        <div className="flex-1">
+        
+        <div className="space-y-1">
           <label
             htmlFor={`legDate-${index}`}
-            className="block text-xs font-medium text-white mb-1"
+            className="block text-xs font-medium text-white/80"
           >
             Fecha
           </label>
@@ -88,8 +128,9 @@ const LegInputGroup = ({ index, leg, updateLeg, removeLeg }) => {
             type="date"
             id={`legDate-${index}`}
             value={leg.date}
-            onChange={(e) => updateLeg(index, "date", e.target.value)}
-            className="mt-1 p-2 w-full border border-gray-300 rounded-md text-sm"
+            onChange={(e) => handleUpdateLeg("date", e.target.value)}
+            min={new Date().toISOString().split("T")[0]}
+            className="w-full p-2.5 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
           />
         </div>
       </div>
