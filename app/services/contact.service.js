@@ -4,27 +4,85 @@ import AgentEmailTemplate from "../components/commons/Email/AgentEmailTemplate";
 import ContactAdminEmailTemplate from "../components/commons/Email/ContactAdminEmailTemplate";
 import ContactEmailTemplate from "../components/commons/Email/ContactEmailTemplate";
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT) || 587,
-  secure: `${process.env.SMTP_SECURE}`.toLowerCase() === "true",
-  auth: {
-    user: process.env.SMTP_USERNAME,
-    pass: process.env.SMTP_PASSWORD,
-  },
-});
+// ============================================
+// SMTP Configuration with caching (singleton pattern)
+// ============================================
+let cachedTransporter = null;
+let transporterConfigSignature = null;
 
+const getSmtpConfig = () => {
+  const host = process.env.SMTP_HOST?.trim();
+  const port = process.env.SMTP_PORT?.trim();
+  const username = process.env.SMTP_USERNAME?.trim();
+  const password = process.env.SMTP_PASSWORD?.trim();
+
+  if (!host || !port || !username || !password) {
+    return null;
+  }
+
+  const portNumber = Number(port);
+  if (!Number.isInteger(portNumber) || portNumber <= 0) {
+    console.warn(`[contact-service] SMTP_PORT inválido: ${port}`);
+    return null;
+  }
+
+  const secureEnv = process.env.SMTP_SECURE?.trim().toLowerCase();
+  const secure = secureEnv 
+    ? ["true", "1"].includes(secureEnv) 
+    : portNumber === 465;
+
+  return { host, port: portNumber, secure, username, password };
+};
+
+const getTransporter = () => {
+  const config = getSmtpConfig();
+  
+  if (!config) {
+    console.warn("[contact-service] Configuración SMTP incompleta. El envío de emails está deshabilitado.");
+    return null;
+  }
+
+  const signature = `${config.host}:${config.port}:${config.secure}:${config.username}`;
+
+  // Return cached transporter if config hasn't changed
+  if (cachedTransporter && transporterConfigSignature === signature) {
+    return cachedTransporter;
+  }
+
+  try {
+    cachedTransporter = nodemailer.createTransport({
+      host: config.host,
+      port: config.port,
+      secure: config.secure,
+      auth: {
+        user: config.username,
+        pass: config.password,
+      },
+    });
+    transporterConfigSignature = signature;
+    return cachedTransporter;
+  } catch (error) {
+    console.error("[contact-service] Error al crear transporter SMTP:", error);
+    cachedTransporter = null;
+    transporterConfigSignature = null;
+    return null;
+  }
+};
+
+// ============================================
+// Email address resolution
+// ============================================
 const ADMIN_CONTACT_EMAIL =
-  process.env.SMTP_ADMIN_EMAIL || "consultas@plumviajes.com.ar";
+  process.env.SMTP_ADMIN_EMAIL?.trim() || "consultas@plumviajes.com.ar";
 
 const resolveFromAddress = () => {
-  const fromEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USERNAME;
+  const fromEmail = process.env.SMTP_FROM_EMAIL?.trim() || process.env.SMTP_USERNAME?.trim();
 
   if (!fromEmail) {
     throw new Error("Falta configurar SMTP_FROM_EMAIL o SMTP_USERNAME");
   }
 
-  const fromName = process.env.SMTP_FROM_NAME;
+  const fromName = process.env.SMTP_FROM_NAME?.trim();
   return fromName ? `${fromName} <${fromEmail}>` : fromEmail;
 };
 
@@ -110,6 +168,16 @@ const ContactService = {
   },
 
   async sendMail(formData, formType = "contact") {
+    const transporter = getTransporter();
+    
+    if (!transporter) {
+      console.error("[contact-service] No hay transporter SMTP disponible. Email no enviado.");
+      return { 
+        success: false, 
+        error: "Configuración SMTP no disponible. Contacte al administrador." 
+      };
+    }
+
     const data =
       formData instanceof FormData
         ? Object.fromEntries(formData.entries())
@@ -119,6 +187,7 @@ const ContactService = {
       const emailHtml = await this.buildEmailContent(formType, data);
       const fromAddress = resolveFromAddress();
 
+      // Email al usuario que hizo la consulta
       const mailOptions = {
         from: fromAddress,
         to: [data.email],
@@ -140,6 +209,7 @@ const ContactService = {
 
       let adminResponse = null;
 
+      // Email al administrador (SMTP_ADMIN_EMAIL)
       if (ADMIN_CONTACT_EMAIL) {
         const adminHtml = await this.buildAdminEmailContent(formType, data);
         const adminSubject =
@@ -168,13 +238,13 @@ const ContactService = {
         };
       }
 
-      console.log("emailSendResult", {
+      console.log("[contact-service] Email enviado exitosamente", {
         user: normalizedResponse,
         admin: adminResponse,
       });
       return { success: true, response: normalizedResponse, adminResponse };
     } catch (error) {
-      console.log("Error al enviar mail:", error);
+      console.error("[contact-service] Error al enviar email:", error);
       return { success: false, error: error.message };
     }
   },

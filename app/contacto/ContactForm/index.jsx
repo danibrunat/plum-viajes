@@ -91,7 +91,7 @@ const ContactForm = () => {
               <label htmlFor="phone" className={labelStyles}>Teléfono</label>
               <div className="grid grid-cols-[80px_70px_1fr] gap-2">
                 <select className={selectStyles} name="phoneType" id="phoneType">
-                  <option value="cellphone">Cel</option>
+                  <option value="cellphone">Celular</option>
                   <option value="home">Fijo</option>
                 </select>
                 <input
