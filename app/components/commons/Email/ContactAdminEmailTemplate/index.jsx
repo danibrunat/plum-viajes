@@ -92,13 +92,6 @@ const ContactAdminEmailTemplate = ({
           {/* Header con gradiente */}
           <Section style={styles.header}>
             <Text style={styles.logoText}>PLUM VIAJES</Text>
-            <Text style={styles.headerSubtitle}>Panel de Consultas</Text>
-          </Section>
-
-          {/* Badge de nueva consulta */}
-          <Section style={styles.alertBadge}>
-            <Text style={styles.alertText}>📩 NUEVA CONSULTA RECIBIDA</Text>
-            <Text style={styles.alertDate}>{currentDate}</Text>
           </Section>
 
           {/* Información del cliente */}

@@ -153,7 +153,7 @@ const ContactForm = () => {
               >
                 <option value="">Seleccionar destino</option>
                 {CITIES.filter((city) => city.active).map((city) => (
-                  <option key={city.id} value={city.name}>
+                  <option key={city.id} value={`${city.name}, ${city.countryName}`}>
                     {city.name}, {city.countryName}
                   </option>
                 ))}
