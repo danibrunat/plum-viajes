@@ -1,13 +1,41 @@
 "use server";
 
 import ContactService from "../services/contact.service";
+import { verifyRecaptcha } from "../services/recaptcha.service";
 
 export async function submitContactForm(formData, consumer = "contact") {
   try {
-    const sendEmailResponse = await ContactService.sendMail(formData, consumer);
+    const data =
+      formData instanceof FormData
+        ? Object.fromEntries(formData.entries())
+        : formData;
+
+    // Verificar reCAPTCHA
+    const recaptchaToken = data.recaptchaToken;
+    const recaptchaResult = await verifyRecaptcha(recaptchaToken);
+    
+    if (!recaptchaResult.success) {
+      return { 
+        success: false, 
+        error: recaptchaResult.error || "Verificación de captcha fallida" 
+      };
+    }
+
+    // Eliminar el token del formData antes de enviarlo al servicio de email
+    if (formData instanceof FormData) {
+      formData.delete("recaptchaToken");
+    } else {
+      delete data.recaptchaToken;
+    }
+
+    const sendEmailResponse = await ContactService.sendMail(
+      formData instanceof FormData ? formData : data, 
+      consumer
+    );
     return sendEmailResponse;
   } catch (error) {
-    return { success: false, error };
+    console.error("[forms] Error en submitContactForm:", error);
+    return { success: false, error: error.message || "Error al enviar el formulario" };
   }
 }
 

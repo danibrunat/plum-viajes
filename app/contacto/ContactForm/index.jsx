@@ -1,6 +1,5 @@
 "use client";
 import React, { useRef, useState } from "react";
-import { useFormStatus } from "react-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import { submitContactForm } from "../../actions/forms";
 import DatePicker from "react-datepicker";
@@ -12,20 +11,18 @@ const inputBaseStyles = "w-full rounded-xl px-4 py-3 border border-gray-200 bg-g
 const labelStyles = "block text-sm font-medium text-gray-700 mb-1.5";
 const selectStyles = "w-full rounded-xl px-4 py-3 border border-gray-200 bg-gray-50 text-gray-700 focus:border-plumPrimaryPurple focus:ring-2 focus:ring-plumPrimaryPurple/20 focus:bg-white transition-all outline-none appearance-none cursor-pointer";
 
-// Componente separado para usar useFormStatus
-function SubmitButton() {
-  const { pending } = useFormStatus();
-
+// Componente del botón de submit
+function SubmitButton({ isSubmitting }) {
   return (
     <button
       type="submit"
-      disabled={pending}
+      disabled={isSubmitting}
       className="w-full py-4 bg-plumPrimaryOrange text-white font-semibold rounded-xl hover:bg-orange-600 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-plumPrimaryOrange"
       aria-label="Enviar"
       name="submit"
       id="submit"
     >
-      {pending ? (
+      {isSubmitting ? (
         <>
           <svg
             className="animate-spin h-5 w-5"
@@ -63,9 +60,36 @@ function SubmitButton() {
 
 const ContactForm = () => {
   const [startDate, setStartDate] = useState(new Date());
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
+  const [recaptchaError, setRecaptchaError] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const recaptchaRef = useRef(null);
+  const formRef = useRef(null);
 
-  async function handleFormAction(formData) {
+  const handleRecaptchaChange = (token) => {
+    setRecaptchaToken(token);
+    setRecaptchaError(false);
+  };
+
+  const handleRecaptchaExpired = () => {
+    setRecaptchaToken(null);
+  };
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    
+    // Validar que se completó el captcha - NO resetea el form
+    if (!recaptchaToken) {
+      setRecaptchaError(true);
+      // Scroll al captcha para que lo vea
+      recaptchaRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    setIsSubmitting(true);
+    const formData = new FormData(formRef.current);
+    formData.append("recaptchaToken", recaptchaToken);
+
     try {
       const sendContactFormMailResponse = await submitContactForm(formData);
       if (sendContactFormMailResponse.success) {
@@ -74,17 +98,29 @@ const ContactForm = () => {
           children:
             "Tu consulta fue enviada y será atendida por un representante.",
         });
+        // Solo resetear el form si fue exitoso
+        formRef.current?.reset();
+        setStartDate(new Date());
+        recaptchaRef.current?.reset();
+        setRecaptchaToken(null);
       } else {
         openModalBase({
           title: "Ocurrió un error",
           children: sendContactFormMailResponse.error || "Error al enviar el formulario",
         });
+        // Reset solo el captcha, mantener los datos del form
+        recaptchaRef.current?.reset();
+        setRecaptchaToken(null);
       }
     } catch (error) {
       openModalBase({
         title: "Ocurrió un error",
         children: error.message || "Error inesperado",
       });
+      recaptchaRef.current?.reset();
+      setRecaptchaToken(null);
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -99,8 +135,9 @@ const ContactForm = () => {
 
       <form
         id="contactForm"
+        ref={formRef}
         className="flex flex-col gap-6"
-        action={handleFormAction}
+        onSubmit={handleSubmit}
       >
         {/* Sección: Datos personales */}
         <div className="space-y-4">
@@ -326,14 +363,21 @@ const ContactForm = () => {
 
         {/* ReCAPTCHA y Botón */}
         <div className="space-y-4 pt-4 border-t border-gray-100">
-          <div className="flex justify-center">
+          <div className="flex flex-col items-center gap-2">
             <ReCAPTCHA
               ref={recaptchaRef}
               sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}
+              onChange={handleRecaptchaChange}
+              onExpired={handleRecaptchaExpired}
             />
+            {recaptchaError && (
+              <p className="text-red-500 text-sm animate-pulse">
+                ⚠️ Por favor, completá el captcha para continuar
+              </p>
+            )}
           </div>
 
-          <SubmitButton />
+          <SubmitButton isSubmitting={isSubmitting} />
         </div>
       </form>
     </div>

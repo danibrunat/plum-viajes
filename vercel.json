@@ -26,7 +26,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "connect-src 'self' https://api.sanity.io https://cdn.sanity.io https://aws-qa1.ola.com.ar; img-src 'self' https://cdn.sanity.io data: blob:;"
+          "value": "script-src 'self' https://cdn.sanity.io https://www.google.com https://www.gstatic.com 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://api.sanity.io https://cdn.sanity.io https://aws-qa1.ola.com.ar https://www.google.com; img-src 'self' https://cdn.sanity.io data: blob:; frame-src 'self' https://www.google.com;"
         }
       ]
     }
