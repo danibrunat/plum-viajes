@@ -121,7 +121,8 @@ const FlightsEngine = () => {
           />
         )}
 
-        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+        {/* Footer con Pasajeros y Botón de búsqueda */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 pt-2">
           <Passengers
             passengers={passengers}
             showPassengersModal={showPassengersModal}
