@@ -1,5 +1,3 @@
-"use client";
-
 import ContactForm from "../../../contacto/ContactForm";
 
 export default function ContactFormSection({ title, subtitle }) {
