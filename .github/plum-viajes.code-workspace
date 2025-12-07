@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../../plum-sanity"
+		},
+		{
+			"path": "../../plum-ticket"
 		}
 	],
 	"settings": {

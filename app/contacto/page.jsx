@@ -11,19 +11,36 @@ export const metadata = {
 
 const Contact = (props) => {
   return (
-    <div className="flex flex-col gap-3 ">
-      <h1 className="text-2xl p-4">Contáctenos</h1>
-      <div className="flex flex-col md:flex-row md:justify-center">
-        <div className="flex flex-col">
-          <div className="flex flex-col gap-2 m-3 p-3 border-2 rounded-xl">
-            <ContactInfo />
-          </div>
-          <div className="flex flex-col gap-2 m-3 p-3 border-2 rounded-xl">
-            <VisitUs />
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      {/* Header */}
+      <div className="bg-plumPrimaryPurple text-white py-12 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">Contáctenos</h1>
+          <p className="text-white/80 text-lg">
+            Estamos aquí para ayudarte a planificar tu próximo viaje
+          </p>
         </div>
-        <div className="flex flex-col gap-2 m-3 p-3 border-2 rounded-xl">
-          <ContactForm />
+      </div>
+
+      {/* Content */}
+      <div className="max-w-6xl mx-auto px-4 py-8 -mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Sidebar - Info Cards */}
+          <div className="lg:col-span-1 space-y-6">
+            <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow">
+              <ContactInfo />
+            </div>
+            <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow">
+              <VisitUs />
+            </div>
+          </div>
+
+          {/* Main - Contact Form */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 border border-gray-100">
+              <ContactForm />
+            </div>
+          </div>
         </div>
       </div>
     </div>
