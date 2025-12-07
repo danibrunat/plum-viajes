@@ -1,38 +1,90 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
+import { useFormStatus } from "react-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import { submitContactForm } from "../../actions/forms";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { CITIES } from "../../constants/destinations";
 import { openModalBase } from "../../helpers/modals";
-import { useFormState } from "react-dom";
 
 const inputBaseStyles = "w-full rounded-xl px-4 py-3 border border-gray-200 bg-gray-50 text-gray-700 placeholder-gray-400 focus:border-plumPrimaryPurple focus:ring-2 focus:ring-plumPrimaryPurple/20 focus:bg-white transition-all outline-none";
 const labelStyles = "block text-sm font-medium text-gray-700 mb-1.5";
 const selectStyles = "w-full rounded-xl px-4 py-3 border border-gray-200 bg-gray-50 text-gray-700 focus:border-plumPrimaryPurple focus:ring-2 focus:ring-plumPrimaryPurple/20 focus:bg-white transition-all outline-none appearance-none cursor-pointer";
 
+// Componente separado para usar useFormStatus
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="w-full py-4 bg-plumPrimaryOrange text-white font-semibold rounded-xl hover:bg-orange-600 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-plumPrimaryOrange"
+      aria-label="Enviar"
+      name="submit"
+      id="submit"
+    >
+      {pending ? (
+        <>
+          <svg
+            className="animate-spin h-5 w-5"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            />
+          </svg>
+          <span>Enviando...</span>
+        </>
+      ) : (
+        <>
+          <span>Enviar consulta</span>
+          <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </>
+      )}
+    </button>
+  );
+}
+
 const ContactForm = () => {
   const [startDate, setStartDate] = useState(new Date());
-
   const recaptchaRef = useRef(null);
 
-  async function submitForm(formData) {
-    if (formData) {
-      try {
-        const sendContactFormMailResponse = await submitContactForm(formData);
-        if (sendContactFormMailResponse.success)
-          openModalBase({
-            title: "Consulta Enviada",
-            children:
-              "Tu consulta fue enviada y será atendida por un representante.",
-          });
-      } catch (error) {
+  async function handleFormAction(formData) {
+    try {
+      const sendContactFormMailResponse = await submitContactForm(formData);
+      if (sendContactFormMailResponse.success) {
+        openModalBase({
+          title: "Consulta Enviada",
+          children:
+            "Tu consulta fue enviada y será atendida por un representante.",
+        });
+      } else {
         openModalBase({
           title: "Ocurrió un error",
-          children: JSON.stringify(error),
+          children: sendContactFormMailResponse.error || "Error al enviar el formulario",
         });
       }
+    } catch (error) {
+      openModalBase({
+        title: "Ocurrió un error",
+        children: error.message || "Error inesperado",
+      });
     }
   }
 
@@ -54,7 +106,7 @@ const ContactForm = () => {
       <form
         id="contactForm"
         className="flex flex-col gap-6"
-        action={submitForm}
+        action={handleFormAction}
       >
         {/* Sección: Datos personales */}
         <div className="space-y-4">
@@ -287,18 +339,7 @@ const ContactForm = () => {
             />
           </div>
 
-          <button
-            type="submit"
-            className="w-full py-4 bg-plumPrimaryOrange text-white font-semibold rounded-xl hover:bg-orange-600 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group"
-            aria-label="Enviar"
-            name="submit"
-            id="submit"
-          >
-            <span>Enviar consulta</span>
-            <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </button>
+          <SubmitButton />
         </div>
       </form>
     </div>

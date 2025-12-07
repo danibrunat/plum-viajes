@@ -3,6 +3,7 @@ import { render } from "@react-email/render";
 import AgentEmailTemplate from "../components/commons/Email/AgentEmailTemplate";
 import ContactAdminEmailTemplate from "../components/commons/Email/ContactAdminEmailTemplate";
 import ContactEmailTemplate from "../components/commons/Email/ContactEmailTemplate";
+import NewsletterAdminEmailTemplate from "../components/commons/Email/NewsletterAdminEmailTemplate";
 
 // ============================================
 // SMTP Configuration with caching (singleton pattern)
@@ -73,7 +74,7 @@ const getTransporter = () => {
 // Email address resolution
 // ============================================
 const ADMIN_CONTACT_EMAIL =
-  process.env.SMTP_ADMIN_EMAIL?.trim() || "consultas@plumviajes.com.ar";
+  process.env.SMTP_ADMIN_EMAIL?.trim() || "ventas@plumviajes.com.ar";
 
 const resolveFromAddress = () => {
   const fromEmail = process.env.SMTP_FROM_EMAIL?.trim() || process.env.SMTP_USERNAME?.trim();
@@ -194,7 +195,7 @@ const ContactService = {
         subject:
           formType === "agent"
             ? `Consulta de agente: ${data.name} ${data.surname}`
-            : `Contacto a través de la web: ${data.name} ${data.surname}`,
+            : `✈️ Recibimos tu consulta, ${data.name || "viajero"}!`,
         html: emailHtml,
       };
 
@@ -238,13 +239,69 @@ const ContactService = {
         };
       }
 
-      console.log("[contact-service] Email enviado exitosamente", {
-        user: normalizedResponse,
-        admin: adminResponse,
-      });
       return { success: true, response: normalizedResponse, adminResponse };
     } catch (error) {
       console.error("[contact-service] Error al enviar email:", error);
+      return { success: false, error: error.message };
+    }
+  },
+
+  /**
+   * Envía un email al administrador notificando una nueva suscripción al newsletter
+   * @param {Object} data - Datos del suscriptor
+   * @param {string} data.name - Nombre del suscriptor
+   * @param {string} data.email - Email del suscriptor
+   * @returns {Promise<{success: boolean, response?: Object, error?: string}>}
+   */
+  async sendNewsletterSubscription(data) {
+    const transporter = getTransporter();
+
+    if (!transporter) {
+      console.error("[contact-service] No hay transporter SMTP disponible. Email de newsletter no enviado.");
+      return {
+        success: false,
+        error: "Configuración SMTP no disponible. Contacte al administrador.",
+      };
+    }
+
+    if (!ADMIN_CONTACT_EMAIL) {
+      console.error("[contact-service] No hay SMTP_ADMIN_EMAIL configurado.");
+      return {
+        success: false,
+        error: "Email de administrador no configurado.",
+      };
+    }
+
+    try {
+      const emailHtml = await render(
+        NewsletterAdminEmailTemplate({
+          name: data.name,
+          email: data.email,
+        })
+      );
+
+      const fromAddress = resolveFromAddress();
+      const subscriberName = data.name?.trim() || "Sin nombre";
+
+      const mailOptions = {
+        from: fromAddress,
+        to: [ADMIN_CONTACT_EMAIL],
+        subject: `📬 Nuevo suscriptor al newsletter: ${subscriberName}`,
+        html: emailHtml,
+      };
+
+      const sendResult = await transporter.sendMail(mailOptions);
+      const normalizedResponse = {
+        messageId: sendResult.messageId,
+        response: sendResult.response,
+        accepted: sendResult.accepted,
+        rejected: sendResult.rejected,
+        envelope: sendResult.envelope,
+      };
+
+      return { success: true, response: normalizedResponse };
+    } catch (error) {
+      console.error("[contact-service] Error al enviar email de newsletter:", error);
       return { success: false, error: error.message };
     }
   },

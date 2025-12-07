@@ -187,13 +187,6 @@ const ContactAdminEmailTemplate = ({
 
           <Hr style={styles.hr} />
 
-          {/* Call to action */}
-          <Section style={styles.ctaSection}>
-            <Text style={styles.ctaText}>
-              ⚡ Respondé a este correo para contactar directamente al cliente
-            </Text>
-          </Section>
-
           {/* Footer */}
           <Section style={styles.footer}>
             <Text style={styles.footerText}>
