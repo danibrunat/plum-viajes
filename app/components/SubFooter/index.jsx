@@ -24,7 +24,7 @@ export default function SubFooter() {
         <p>
           Plum Viajes - Legajo 18.156 -&nbsp;
           <Link
-            href="#"
+            href="https://drive.google.com/file/d/1IBIthXk9ly7Y5G-1QuVPI-LeRE3hIsBF/view?pli=1"
             target="_blank"
             className="text-blue-300"
             aria-label="Ver licencia de Plum Viajes"
@@ -33,16 +33,17 @@ export default function SubFooter() {
           </Link>
         </p>
         <br />
-        {/* <span className="defensaConsumidor" id="btnPieArrepentimiento">
+        <span className="defensaConsumidor" id="btnPieArrepentimiento">
           Me arrepentí de mi compra. Para cancelarla{" "}
           <Link
-            href="/solicitar-cancelacion.php"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSc681BZJrJFI5YcFwrZ40f7x_CASmYwhIzye_Mt0qRXE7EyQA/viewform?usp=sharing&ouid=106700684850477811148"
             target="_blank"
             className="text-blue-300"
           >
             ingrese aquí
           </Link>
-        </span> */}
+        </span>
+        <br/>
         <span className="defensaConsumidor" id="btnPieConsumidor">
           Defensa del consumidor. Para reclamos{" "}
           <Link
@@ -55,17 +56,7 @@ export default function SubFooter() {
           </Link>
         </span>
         <br />
-        <span className="defensaConsumidor" id="btnPieDenuncia">
-          Denuncia contra una agencia. Para reclamos{" "}
-          <Link
-            href="https://www.argentina.gob.ar/servicio/presentar-una-denuncia-contra-una-agencia-de-viajes"
-            prefetch={false}
-            target="_blank"
-            className="text-blue-300"
-          >
-            ingrese aquí
-          </Link>
-        </span>
+       
       </div>
   );
 }
