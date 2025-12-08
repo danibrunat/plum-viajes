@@ -209,28 +209,39 @@ const ContactForm = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="phone" className={labelStyles}>Teléfono</label>
+              <label htmlFor="phoneNumber" className={labelStyles}>Teléfono</label>
               <div className="grid grid-cols-[80px_70px_1fr] gap-2">
-                <select className={selectStyles} name="phoneType" id="phoneType">
-                  <option value="cellphone">Celular</option>
-                  <option value="home">Fijo</option>
-                </select>
-                <input
-                  className={inputBaseStyles}
-                  type="text"
-                  maxLength={5}
-                  name="phoneAreaCode"
-                  id="phoneAreaCode"
-                  placeholder="Cód"
-                />
-                <input
-                  className={inputBaseStyles}
-                  type="text"
-                  maxLength={12}
-                  name="phoneNumber"
-                  id="phoneNumber"
-                  placeholder="Número"
-                />
+                <div>
+                  <label htmlFor="phoneType" className="sr-only">Tipo de teléfono</label>
+                  <select className={selectStyles} name="phoneType" id="phoneType" aria-label="Tipo de teléfono">
+                    <option value="cellphone">Celular</option>
+                    <option value="home">Fijo</option>
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="phoneAreaCode" className="sr-only">Código de área</label>
+                  <input
+                    className={inputBaseStyles}
+                    type="text"
+                    maxLength={5}
+                    name="phoneAreaCode"
+                    id="phoneAreaCode"
+                    placeholder="Cód"
+                    aria-label="Código de área"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="phoneNumber" className="sr-only">Número de teléfono</label>
+                  <input
+                    className={inputBaseStyles}
+                    type="text"
+                    maxLength={12}
+                    name="phoneNumber"
+                    id="phoneNumber"
+                    placeholder="Número"
+                    aria-label="Número de teléfono"
+                  />
+                </div>
               </div>
             </div>
             <div>

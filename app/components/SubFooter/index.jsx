@@ -39,8 +39,9 @@ export default function SubFooter() {
             href="https://docs.google.com/forms/d/e/1FAIpQLSc681BZJrJFI5YcFwrZ40f7x_CASmYwhIzye_Mt0qRXE7EyQA/viewform?usp=sharing&ouid=106700684850477811148"
             target="_blank"
             className="text-blue-300"
+            aria-label="Formulario de arrepentimiento de compra"
           >
-            ingrese aquí
+            completá el formulario
           </Link>
         </span>
         <br/>
@@ -51,8 +52,9 @@ export default function SubFooter() {
             target="_blank"
             prefetch={false}
             className="text-blue-300"
+            aria-label="Formulario de defensa del consumidor"
           >
-            ingrese aquí
+            ingresá aquí
           </Link>
         </span>
         <br />

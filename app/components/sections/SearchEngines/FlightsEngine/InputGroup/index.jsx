@@ -83,15 +83,17 @@ const InputGroup = ({
       {/* Origen - 4 columnas en desktop */}
       <div className="lg:col-span-4 space-y-1">
         <label
-          htmlFor="origin"
+          id="flights-origin-label"
+          htmlFor="flights-origin-select-input"
           className="block text-sm font-medium text-white"
         >
           Origen
         </label>
         <div className="h-12">
           <AsyncSelect
-            id="origin"
+            inputId="flights-origin-select-input"
             instanceId="flights-origin-select"
+            aria-labelledby="flights-origin-label"
             placeholder="¿Desde dónde?"
             loadOptions={(inputValue, callback) =>
               loadOptions(inputValue, callback, "origin")
@@ -115,15 +117,17 @@ const InputGroup = ({
       {/* Destino - 4 columnas en desktop */}
       <div className="lg:col-span-4 space-y-1">
         <label
-          htmlFor="destination"
+          id="flights-destination-label"
+          htmlFor="flights-destination-select-input"
           className="block text-sm font-medium text-white"
         >
           Destino
         </label>
         <div className="h-12">
           <AsyncSelect
-            id="destination"
+            inputId="flights-destination-select-input"
             instanceId="flights-destination-select"
+            aria-labelledby="flights-destination-label"
             placeholder="¿Hacia dónde?"
             loadOptions={(inputValue, callback) =>
               loadOptions(inputValue, callback, "destination")
