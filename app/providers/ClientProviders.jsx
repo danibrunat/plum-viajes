@@ -3,7 +3,6 @@
 import React from "react";
 import { CookieConsentProvider } from "../context/CookieConsentContext";
 import CookieConsent from "../components/CookieConsent";
-import CookieSettingsButton from "../components/CookieConsent/CookieSettingsButton";
 
 /**
  * Client-side providers wrapper
@@ -14,7 +13,6 @@ const ClientProviders = ({ children }) => {
     <CookieConsentProvider>
       {children}
       <CookieConsent />
-      <CookieSettingsButton />
     </CookieConsentProvider>
   );
 };
