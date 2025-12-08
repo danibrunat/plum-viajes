@@ -7,7 +7,8 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Whatsapp from "./components/Widgets/Whatsapp";
 import ModalRoot from "./components/commons/Modal/ModalRoot";
-import SocialWidget from "./components/Widgets/SocialWidget"; // Importa el componente
+import SocialWidget from "./components/Widgets/SocialWidget";
+import ClientProviders from "./providers/ClientProviders";
 import { sanityFetch } from "./lib/sanityFetch";
 
 const GENERAL_MAINTENANCE_MODE = false;
@@ -31,7 +32,7 @@ export const metadata = {
 export const viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
+  maximumScale: 5,
 };
 
 export default async function Layout({ children }) {
@@ -124,29 +125,30 @@ export default async function Layout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className} text-sm md:text-1xl`}>
-        <ModalRoot />
-        <Head>
-          <meta
-            name="viewport"
-            content="initial-scale=1.0, width=device-width, viewport-fit=cover"
+        <ClientProviders>
+          <ModalRoot />
+          <Head>
+            <meta
+              name="viewport"
+              content="initial-scale=1.0, width=device-width, viewport-fit=cover"
+            />
+          </Head>
+          <Header
+            title={title}
+            navItems={mainNavigation}
+            logo={logo}
+            contact={contact}
           />
-        </Head>
-        <Header
-          title={title}
-          navItems={mainNavigation}
-          logo={logo}
-          contact={contact}
-        />
-        <div className="content ">{children}</div>
-        <Footer navItems={footerNavigation} text={footerText} />
-        {logoUrl && url && <LogoJsonLd url={url} logo={logoUrl} />}
-        <Whatsapp />
-        <SocialWidget
-          whatsappLink={whatsappLink}
-          facebookLink={facebookLink}
-          instagramLink={instagramLink}
-        />{" "}
-        {/* Pasa los enlaces como props */}
+          <div className="content ">{children}</div>
+          <Footer navItems={footerNavigation} text={footerText} />
+          {logoUrl && url && <LogoJsonLd url={url} logo={logoUrl} />}
+          <Whatsapp />
+          <SocialWidget
+            whatsappLink={whatsappLink}
+            facebookLink={facebookLink}
+            instagramLink={instagramLink}
+          />
+        </ClientProviders>
       </body>
     </html>
   );

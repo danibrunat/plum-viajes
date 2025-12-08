@@ -1,11 +1,19 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { submitAgentContactForm } from "../../../../../actions/forms";
 import { openModalBase } from "../../../../../helpers/modals";
+import { useCookieConsentContext } from "../../../../../context/CookieConsentContext";
+import { COOKIE_CATEGORIES } from "../../../../../constants/cookieCategories";
 
 const AgentContact = () => {
   const recaptchaRef = useRef(null);
+  const { hasConsent, openSettings } = useCookieConsentContext();
+  const [canShowRecaptcha, setCanShowRecaptcha] = useState(false);
+
+  useEffect(() => {
+    setCanShowRecaptcha(hasConsent(COOKIE_CATEGORIES.FUNCTIONAL));
+  }, [hasConsent]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -90,11 +98,26 @@ const AgentContact = () => {
           </label>
         </div>
         <div className="flex justify-center min-h-24">
-          <ReCAPTCHA
-            size="compact"
-            ref={recaptchaRef}
-            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}
-          />
+          {canShowRecaptcha ? (
+            <ReCAPTCHA
+              size="compact"
+              ref={recaptchaRef}
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}
+            />
+          ) : (
+            <div className="bg-gray-100 border border-gray-300 rounded-md p-4 text-gray-700 text-sm text-center">
+              <p className="mb-2">
+                Para enviar el formulario, necesitamos verificar que no sos un robot.
+              </p>
+              <button
+                type="button"
+                onClick={openSettings}
+                className="text-plumPrimaryPurple underline hover:text-plumSecondaryPurple"
+              >
+                Aceptar cookies funcionales
+              </button>
+            </div>
+          )}
         </div>
         <button
           className="bg-plumPrimaryPurple hover:bg-plumPrimaryOrange text-white p-3 rounded transition duration-300"
