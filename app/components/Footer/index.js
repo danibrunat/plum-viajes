@@ -75,7 +75,8 @@ export default function Footer(props) {
         </ul>
       </div>
       <div className="flex flex-col md:flex-row md:justify-center p-0 md:p-10 text-md bg-plumPrimaryPurple">
-        <div className="flex-1 p-8 flex-col gap-4">
+        <section className="flex w-2/4">
+          <div className="flex-1 p-8 flex-col gap-4">
           <h1 className="text-xl">Dónde encontrarnos</h1>
           {contactInfo.map((ci) => (
             <ContactInfo
@@ -98,6 +99,7 @@ export default function Footer(props) {
           ></iframe>
         </div> */}
         <SubFooter />
+        </section>
       </div>
       
     </footer>
