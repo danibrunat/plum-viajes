@@ -4,8 +4,7 @@ import Image from "next/image";
 
 export default function SubFooter() {
   return (
-    <div className="flex-1 flex-col md:flex-row p-0 md:p-5 text-sm bg-plumPrimaryPurple">
-      <div className="flex p-2 flex-col">
+    <div className="flex-1 flex-col md:flex-row p-5 text-sm bg-plumPrimaryPurple">
         <p>
           <Link
             className="fiscal"
@@ -68,6 +67,5 @@ export default function SubFooter() {
           </Link>
         </span>
       </div>
-    </div>
   );
 }
