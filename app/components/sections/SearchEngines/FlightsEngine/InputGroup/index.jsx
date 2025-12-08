@@ -9,14 +9,15 @@ const getCitiesAutocompleteApi = async (query, inputName) =>
   await CitiesService.getCitiesAutocompleteApi(query, inputName);
 
 const selectStyles = {
-  control: (base) => ({
+  control: (base, state) => ({
     ...base,
     minHeight: "48px",
     height: "48px",
     borderRadius: "0.5rem",
-    borderColor: "#e5e7eb",
+    borderColor: state.selectProps.hasError ? "#ef4444" : "#e5e7eb",
     backgroundColor: "white",
-    "&:hover": { borderColor: "#9333ea" },
+    "&:hover": { borderColor: state.selectProps.hasError ? "#ef4444" : "#9333ea" },
+    boxShadow: state.selectProps.hasError ? "0 0 0 1px #ef4444" : base.boxShadow,
   }),
   valueContainer: (base) => ({
     ...base,
@@ -49,6 +50,8 @@ const InputGroup = ({
   endDate,
   tripType,
   dispatch,
+  errors = {},
+  clearFieldError = () => {},
 }) => {
   const loadOptions = async (inputValue, _, inputName) => {
     if (inputValue.length < 4) {
@@ -93,13 +96,20 @@ const InputGroup = ({
             loadOptions={(inputValue, callback) =>
               loadOptions(inputValue, callback, "origin")
             }
-            onChange={(option) => dispatch({ type: FLIGHTS_ACTIONS.SET_ORIGIN, payload: option?.value || "" })}
+            onChange={(option) => {
+              dispatch({ type: FLIGHTS_ACTIONS.SET_ORIGIN, payload: option?.value || "" });
+              clearFieldError("origin");
+            }}
             defaultOptions
             cacheOptions
             isClearable
             styles={selectStyles}
+            hasError={!!errors.origin}
           />
         </div>
+        {errors.origin && (
+          <p className="text-red-400 text-xs mt-1">{errors.origin}</p>
+        )}
       </div>
 
       {/* Destino - 4 columnas en desktop */}
@@ -118,13 +128,20 @@ const InputGroup = ({
             loadOptions={(inputValue, callback) =>
               loadOptions(inputValue, callback, "destination")
             }
-            onChange={(option) => dispatch({ type: FLIGHTS_ACTIONS.SET_DESTINATION, payload: option?.value || "" })}
+            onChange={(option) => {
+              dispatch({ type: FLIGHTS_ACTIONS.SET_DESTINATION, payload: option?.value || "" });
+              clearFieldError("destination");
+            }}
             defaultOptions
             cacheOptions
             isClearable
             styles={selectStyles}
+            hasError={!!errors.destination}
           />
         </div>
+        {errors.destination && (
+          <p className="text-red-400 text-xs mt-1">{errors.destination}</p>
+        )}
       </div>
 
       {/* Fechas - 3 columnas en desktop (más compacto) */}
@@ -141,15 +158,26 @@ const InputGroup = ({
             selected={tripType === "oneWay" ? startDate : undefined}
             startDate={tripType !== "oneWay" ? startDate : undefined}
             endDate={tripType !== "oneWay" ? endDate : undefined}
-            onChange={handleDateChange}
+            onChange={(update) => {
+              handleDateChange(update);
+              clearFieldError("startDate");
+              clearFieldError("endDate");
+            }}
             isClearable
             placeholderText={tripType === "oneWay" ? "Seleccione fecha" : "Ida - Vuelta"}
-            className="w-full h-12 px-4 rounded-lg border border-gray-200 shadow-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-gray-700 bg-white"
+            className={`w-full h-12 px-4 rounded-lg border shadow-sm focus:ring-1 text-gray-700 bg-white ${
+              errors.startDate || errors.endDate
+                ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                : "border-gray-200 focus:border-purple-500 focus:ring-purple-500"
+            }`}
             dateFormat="dd/MM/yyyy"
             minDate={new Date()}
             wrapperClassName="w-full"
           />
         </div>
+        {(errors.startDate || errors.endDate) && (
+          <p className="text-red-400 text-xs mt-1">{errors.startDate || errors.endDate}</p>
+        )}
       </div>
     </div>
   );

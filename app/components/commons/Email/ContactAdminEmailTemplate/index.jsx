@@ -49,6 +49,23 @@ const formatMealPlan = (plan) => {
   return plans[plan] || formatValue(plan, "A definir");
 };
 
+/**
+ * Formatea las edades de los menores para mostrar entre paréntesis
+ * @param {string[]} ages - Array de edades
+ * @returns {string} Texto formateado con las edades (ej: "(3, 5, 8 y 12 años)")
+ */
+const formatChildrenAges = (ages) => {
+  if (!ages || ages.length === 0) return "";
+  
+  if (ages.length === 1) {
+    return ` (${ages[0]} año${ages[0] === "1" ? "" : "s"})`;
+  }
+  
+  const allButLast = ages.slice(0, -1).join(", ");
+  const last = ages[ages.length - 1];
+  return ` (${allButLast} y ${last} años)`;
+};
+
 const ContactAdminEmailTemplate = ({
   name,
   surname,
@@ -62,6 +79,7 @@ const ContactAdminEmailTemplate = ({
   nightsQty,
   adultsQty,
   childQty,
+  childrenAges = [],
   mealPlan,
   inquiry,
   ringMe,
@@ -153,7 +171,12 @@ const ContactAdminEmailTemplate = ({
                 <Text style={styles.passengerLabel}>Adultos</Text>
               </Column>
               <Column style={styles.passengerBox}>
-                <Text style={styles.passengerNumber}>{formatValue(childQty, "0")}</Text>
+                <Text style={styles.passengerNumber}>
+                  {formatValue(childQty, "0")}
+                  {childrenAges.length > 0 && (
+                    <span style={styles.childrenAgesInline}>{formatChildrenAges(childrenAges)}</span>
+                  )}
+                </Text>
                 <Text style={styles.passengerLabel}>Menores</Text>
               </Column>
               <Column style={styles.passengerBox}>
@@ -319,6 +342,11 @@ const styles = {
     color: "#6b7280",
     margin: 0,
     textTransform: "uppercase",
+  },
+  childrenAgesInline: {
+    fontSize: "12px",
+    fontWeight: "400",
+    color: "#6b7280",
   },
   inquiryText: {
     fontSize: "14px",

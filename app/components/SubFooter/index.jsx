@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function SubFooter() {
   return (
-    <div className="flex flex-col md:flex-row w-full justify-normal p-0 md:p-5 text-sm bg-plumPrimaryPurple">
+    <div className="flex-1 flex-col md:flex-row p-0 md:p-5 text-sm bg-plumPrimaryPurple">
       <div className="flex p-2 flex-col">
         <p>
           <Link
@@ -34,7 +34,7 @@ export default function SubFooter() {
           </Link>
         </p>
         <br />
-        <span className="defensaConsumidor" id="btnPieArrepentimiento">
+        {/* <span className="defensaConsumidor" id="btnPieArrepentimiento">
           Me arrepentí de mi compra. Para cancelarla{" "}
           <Link
             href="/solicitar-cancelacion.php"
@@ -43,8 +43,7 @@ export default function SubFooter() {
           >
             ingrese aquí
           </Link>
-        </span>
-        <br />
+        </span> */}
         <span className="defensaConsumidor" id="btnPieConsumidor">
           Defensa del consumidor. Para reclamos{" "}
           <Link

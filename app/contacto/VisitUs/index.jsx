@@ -14,14 +14,14 @@ function VisitUs() {
 
       {/* Dirección */}
       <div className="p-4 bg-gray-50 rounded-xl">
-        <p className="font-medium text-gray-800">Sargento Cabral 2644</p>
-        <p className="text-gray-600">Local 05</p>
-        <p className="text-sm text-gray-500 mt-2">Caseros, Buenos Aires</p>
+        <p className="font-medium text-gray-800">Justo J Urquiza 4775</p>
+        <p className="text-gray-600"> Torres 2 - Piso 7. Caseros, Buenos Aires.</p>
+        <p className="text-sm text-gray-500 mt-2">Visitas CON CITA PREVIA</p>
       </div>
 
       {/* Link a mapa */}
       <a
-        href="https://maps.google.com/?q=Sargento+Cabral+2644+Caseros"
+        href="https://maps.app.goo.gl/jL6RimjbVEHNY23aA"
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center justify-center gap-2 w-full py-3 text-plumPrimaryPurple border border-plumPrimaryPurple/30 rounded-xl hover:bg-plumPrimaryPurple hover:text-white transition-all font-medium"

@@ -21,19 +21,19 @@ const contactInfo = [
     id: "address",
     icon: <FaMapMarked />,
     title: "Dirección",
-    detail: "Sargento Cabral 2644 Loc 05",
+    detail: "Justo J Urquiza 4775 - Torres 2 - Piso 7. Caseros, Buenos Aires. Visitas CON CITA PREVIA",
   },
   {
     id: "workingTime",
     icon: <FaClock />,
     title: "Horarios",
-    detail: "Lunes a viernes de: 09:00 a 18:00 hs Sábados de 10:00 a 13:00 hs",
+    detail: "Lunes a viernes de: 10 a 19 hs | Sábados de: 10 a 16 hs",
   },
   {
     id: "phone",
     icon: <FaPhone />,
     title: "Teléfono",
-    detail: "+54 9 11 7079 7586",
+    detail: "0810 220 7586",
   },
   {
     id: "whatsapp",
@@ -74,8 +74,8 @@ export default function Footer(props) {
             })}
         </ul>
       </div>
-      <div className="flex flex-col md:flex-row w-full justify-normal p-0 md:p-10 text-lg bg-plumPrimaryPurple">
-        <div className="flex p-8 flex-col gap-4">
+      <div className="flex flex-col md:flex-row md:justify-center p-0 md:p-10 text-md bg-plumPrimaryPurple">
+        <div className="flex-1 p-8 flex-col gap-4">
           <h1 className="text-xl">Dónde encontrarnos</h1>
           {contactInfo.map((ci) => (
             <ContactInfo
@@ -97,8 +97,9 @@ export default function Footer(props) {
             allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
           ></iframe>
         </div> */}
+        <SubFooter />
       </div>
-      <SubFooter />
+      
     </footer>
   );
 }

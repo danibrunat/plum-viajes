@@ -6,10 +6,13 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { CITIES } from "../../constants/destinations";
 import { openModalBase } from "../../helpers/modals";
+import ChildrenAgesFields from "./ChildrenAgesFields";
 
 const inputBaseStyles = "w-full rounded-xl px-4 py-3 border border-gray-200 bg-gray-50 text-gray-700 placeholder-gray-400 focus:border-plumPrimaryPurple focus:ring-2 focus:ring-plumPrimaryPurple/20 focus:bg-white transition-all outline-none";
 const labelStyles = "block text-sm font-medium text-gray-700 mb-1.5";
 const selectStyles = "w-full rounded-xl px-4 py-3 border border-gray-200 bg-gray-50 text-gray-700 focus:border-plumPrimaryPurple focus:ring-2 focus:ring-plumPrimaryPurple/20 focus:bg-white transition-all outline-none appearance-none cursor-pointer";
+
+const MAX_CHILDREN = 10;
 
 // Componente del botón de submit
 function SubmitButton({ isSubmitting }) {
@@ -63,6 +66,8 @@ const ContactForm = () => {
   const [recaptchaToken, setRecaptchaToken] = useState(null);
   const [recaptchaError, setRecaptchaError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [childrenCount, setChildrenCount] = useState(0);
+  const [childrenAges, setChildrenAges] = useState([]);
   const recaptchaRef = useRef(null);
   const formRef = useRef(null);
 
@@ -73,6 +78,26 @@ const ContactForm = () => {
 
   const handleRecaptchaExpired = () => {
     setRecaptchaToken(null);
+  };
+
+  const handleChildrenCountChange = (e) => {
+    const count = Math.min(Math.max(0, parseInt(e.target.value) || 0), MAX_CHILDREN);
+    setChildrenCount(count);
+    // Ajustar el array de edades al nuevo tamaño
+    setChildrenAges((prev) => {
+      if (count > prev.length) {
+        return [...prev, ...Array(count - prev.length).fill("")];
+      }
+      return prev.slice(0, count);
+    });
+  };
+
+  const handleChildAgeChange = (index, age) => {
+    setChildrenAges((prev) => {
+      const newAges = [...prev];
+      newAges[index] = age;
+      return newAges;
+    });
   };
 
   async function handleSubmit(e) {
@@ -101,6 +126,8 @@ const ContactForm = () => {
         // Solo resetear el form si fue exitoso
         formRef.current?.reset();
         setStartDate(new Date());
+        setChildrenCount(0);
+        setChildrenAges([]);
         recaptchaRef.current?.reset();
         setRecaptchaToken(null);
       } else {
@@ -129,7 +156,10 @@ const ContactForm = () => {
       {/* Header del formulario */}
       <div className="border-b border-gray-100 pb-4">
         <p className="text-gray-500 mt-2">
-          Puede comunicarse con nosotros completando el siguiente formulario. Uno de nuestros representantes se comunicará con usted para atender sus consultas.
+          Completá el formulario con tus datos y uno de nuestros Consultores de Viaje se pondrá en contacto con vos a la brevedad para asesorarte de forma personalizada.
+        </p>
+        <p className="text-gray-500">
+          En Plum Viajes te acompañamos en todo el proceso para que solo te ocupes de disfrutar tu próximo viaje.
         </p>
       </div>
 
@@ -258,6 +288,19 @@ const ContactForm = () => {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+             <div>
+              <label htmlFor="mealPlan" className={labelStyles}>Comidas</label>
+              <select
+                className={selectStyles}
+                name="mealPlan"
+                id="mealPlan"
+              >
+                <option value="breakfast">Desayuno</option>
+                <option value="halfPension">Media pensión</option>
+                <option value="fullPension">Pensión completa</option>
+                <option value="allInclusive">All inclusive</option>
+              </select>
+            </div>
             <div>
               <label htmlFor="nightsQty" className={labelStyles}>Noches</label>
               <input
@@ -290,26 +333,24 @@ const ContactForm = () => {
                 className={inputBaseStyles}
                 type="number"
                 min={0}
-                max={10}
+                max={MAX_CHILDREN}
                 name="childQty"
                 id="childQty"
                 placeholder="0"
+                value={childrenCount}
+                onChange={handleChildrenCountChange}
               />
             </div>
-            <div>
-              <label htmlFor="mealPlan" className={labelStyles}>Comidas</label>
-              <select
-                className={selectStyles}
-                name="mealPlan"
-                id="mealPlan"
-              >
-                <option value="breakfast">Desayuno</option>
-                <option value="halfPension">Media pensión</option>
-                <option value="fullPension">Pensión completa</option>
-                <option value="allInclusive">All inclusive</option>
-              </select>
-            </div>
+           
           </div>
+
+          {/* Campos de edad de menores - aparecen dinámicamente */}
+          <ChildrenAgesFields 
+            childrenCount={childrenCount} 
+            childrenAges={childrenAges}
+            onAgeChange={handleChildAgeChange}
+            labelStyles={labelStyles}
+          />
         </div>
 
         {/* Sección: Tu consulta */}

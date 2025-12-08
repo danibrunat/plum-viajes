@@ -16,6 +16,7 @@ const formatValue = (value, fallback = "Sin especificar") => {
   return trimmed.length ? trimmed : fallback;
 };
 
+
 const ContactEmailTemplate = ({
   name,
   surname,
@@ -223,6 +224,24 @@ const styles = {
   statLabel: {
     fontSize: "12px",
     color: "#92400e",
+    margin: 0,
+  },
+  childrenAgesRow: {
+    marginTop: "12px",
+    borderTop: "1px solid rgba(146, 64, 14, 0.2)",
+    paddingTop: "12px",
+  },
+  childrenAgesLabel: {
+    fontSize: "11px",
+    color: "#92400e",
+    margin: "0 0 4px 0",
+    textTransform: "uppercase",
+    letterSpacing: "0.5px",
+  },
+  childrenAgesValue: {
+    fontSize: "14px",
+    fontWeight: "500",
+    color: "#78350f",
     margin: 0,
   },
   nextStepsTitle: {

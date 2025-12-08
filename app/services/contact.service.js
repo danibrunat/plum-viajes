@@ -76,6 +76,22 @@ const getTransporter = () => {
 const ADMIN_CONTACT_EMAIL =
   process.env.SMTP_ADMIN_EMAIL?.trim() || "ventas@plumviajes.com.ar";
 
+/**
+ * Extrae las edades de los menores desde los datos del formulario
+ * @param {Object} data - Datos del formulario con childAge_0, childAge_1, etc.
+ * @returns {string[]} Array de edades como strings
+ */
+const extractChildrenAges = (data) => {
+  const ages = [];
+  let index = 0;
+  while (data[`childAge_${index}`] !== undefined) {
+    const age = data[`childAge_${index}`];
+    if (age) ages.push(age);
+    index++;
+  }
+  return ages;
+};
+
 const resolveFromAddress = () => {
   const fromEmail = process.env.SMTP_FROM_EMAIL?.trim() || process.env.SMTP_USERNAME?.trim();
 
@@ -105,6 +121,7 @@ const ContactService = {
             nightsQty: data.nightsQty,
             adultsQty: data.adultsQty,
             childQty: data.childQty,
+            childrenAges: extractChildrenAges(data),
             mealPlan: data.mealPlan,
             inquiry: data.inquiry,
             ringMe: data.ringMe,
@@ -145,6 +162,7 @@ const ContactService = {
             nightsQty: data.nightsQty,
             adultsQty: data.adultsQty,
             childQty: data.childQty,
+            childrenAges: extractChildrenAges(data),
             mealPlan: data.mealPlan,
             inquiry: data.inquiry,
             ringMe: data.ringMe,
