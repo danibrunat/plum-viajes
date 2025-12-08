@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { submitContactForm } from "../../actions/forms";
 import DatePicker from "react-datepicker";
@@ -7,6 +7,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { CITIES } from "../../constants/destinations";
 import { openModalBase } from "../../helpers/modals";
 import ChildrenAgesFields from "./ChildrenAgesFields";
+import { useCookieConsentContext } from "../../context/CookieConsentContext";
+import { COOKIE_CATEGORIES } from "../../constants/cookieCategories";
 
 const inputBaseStyles = "w-full rounded-xl px-4 py-3 border border-gray-200 bg-gray-50 text-gray-700 placeholder-gray-400 focus:border-plumPrimaryPurple focus:ring-2 focus:ring-plumPrimaryPurple/20 focus:bg-white transition-all outline-none";
 const labelStyles = "block text-sm font-medium text-gray-700 mb-1.5";
@@ -68,8 +70,14 @@ const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [childrenCount, setChildrenCount] = useState(0);
   const [childrenAges, setChildrenAges] = useState([]);
+  const [canShowRecaptcha, setCanShowRecaptcha] = useState(false);
   const recaptchaRef = useRef(null);
   const formRef = useRef(null);
+  const { hasConsent, openSettings } = useCookieConsentContext();
+
+  useEffect(() => {
+    setCanShowRecaptcha(hasConsent(COOKIE_CATEGORIES.FUNCTIONAL));
+  }, [hasConsent]);
 
   const handleRecaptchaChange = (token) => {
     setRecaptchaToken(token);
@@ -405,12 +413,27 @@ const ContactForm = () => {
         {/* ReCAPTCHA y Botón */}
         <div className="space-y-4 pt-4 border-t border-gray-100">
           <div className="flex flex-col items-center gap-2">
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}
-              onChange={handleRecaptchaChange}
-              onExpired={handleRecaptchaExpired}
-            />
+            {canShowRecaptcha ? (
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}
+                onChange={handleRecaptchaChange}
+                onExpired={handleRecaptchaExpired}
+              />
+            ) : (
+              <div className="bg-gray-100 border border-gray-300 rounded-md p-4 text-gray-700 text-sm text-center">
+                <p className="mb-2">
+                  Para enviar el formulario, necesitamos verificar que no sos un robot.
+                </p>
+                <button
+                  type="button"
+                  onClick={openSettings}
+                  className="text-plumPrimaryPurple underline hover:text-plumSecondaryPurple"
+                >
+                  Aceptar cookies funcionales
+                </button>
+              </div>
+            )}
             {recaptchaError && (
               <p className="text-red-500 text-sm animate-pulse">
                 ⚠️ Por favor, completá el captcha para continuar

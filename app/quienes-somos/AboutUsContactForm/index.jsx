@@ -1,13 +1,32 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { submitContactForm } from "../../actions/forms";
 import { openModalBase } from "../../helpers/modals";
+import { useCookieConsentContext } from "../../context/CookieConsentContext";
+import { COOKIE_CATEGORIES } from "../../constants/cookieCategories";
 
 const AboutUsContactForm = () => {
   const recaptchaRef = useRef(null);
+  const { hasConsent, openSettings } = useCookieConsentContext();
+  const [canShowRecaptcha, setCanShowRecaptcha] = useState(false);
+
+  // Check consent on mount and when it changes
+  useEffect(() => {
+    setCanShowRecaptcha(hasConsent(COOKIE_CATEGORIES.FUNCTIONAL));
+  }, [hasConsent]);
 
   const submitForm = async (formData) => {
+    // Check if reCAPTCHA consent is given
+    if (!canShowRecaptcha) {
+      openModalBase({
+        title: "Cookies requeridas",
+        children:
+          "Para enviar el formulario, necesitás aceptar las cookies funcionales que permiten la verificación de seguridad.",
+      });
+      return;
+    }
+
     if (formData) {
       try {
         const response = await submitContactForm(formData, "agent");
@@ -90,12 +109,28 @@ const AboutUsContactForm = () => {
             id="inquiry"
           />
         </div>
-        {/* Se establecen los min width para prevenir el layout shift */}
+        {/* reCAPTCHA section - only loads if consent is given */}
         <div className="min-w-auto min-h-24">
-          <ReCAPTCHA
-            ref={recaptchaRef}
-            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}
-          />
+          {canShowRecaptcha ? (
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}
+            />
+          ) : (
+            <div className="bg-gray-100 border border-gray-300 rounded-md p-4 text-gray-700 text-sm">
+              <p className="mb-2">
+                Para completar el formulario, necesitamos verificar que no sos
+                un robot.
+              </p>
+              <button
+                type="button"
+                onClick={openSettings}
+                className="text-plumPrimaryPurple underline hover:text-plumSecondaryPurple"
+              >
+                Aceptar cookies funcionales
+              </button>
+            </div>
+          )}
         </div>
 
         <button
