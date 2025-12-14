@@ -6,7 +6,7 @@ export async function GET(req) {
   const query = searchParams.get("query");
   //const input = searchParams.get("input");
   /* if (input === "arrivalCity") { */
-  const host = req.headers.get("host"); // Obtiene el host actual (ej. plum-viajes.vercel.app)
+  const host = req.headers.get("host"); // Obtiene el host actual (ej. plumviajes.com.ar)
   const citiesSearch = await ApiUtils.requestHandler(
     fetch(
       `${!host.includes("localhost") ? `https` : `http`}://${host}/api/cities/byName?name=${query}`,

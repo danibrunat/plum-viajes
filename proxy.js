@@ -11,12 +11,12 @@ const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3333",
   "http://localhost:3001",
-  "https://plum-viajes.vercel.app",
+  "https://plumviajes.com.ar",
   "https://plumviajes.sanity.studio",
 ];
 
 // Valor por defecto para llamadas internas sin header "origin"
-const defaultOrigin = "https://plum-viajes.vercel.app";
+const defaultOrigin = "https://plumviajes.com.ar";
 
 export async function proxy(req) {
   const path = req.nextUrl.pathname;

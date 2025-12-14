@@ -127,7 +127,7 @@ Los proveedores externos pueden usar cualquiera de estos formatos:
 **Opción 1: Authorization Bearer (Recomendado)**
 
 ```javascript
-fetch("https://plum-viajes.vercel.app/api/packages", {
+fetch("https://plumviajes.com.ar/api/packages", {
   headers: {
     Authorization:
       "Bearer sk_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5f6",
@@ -139,7 +139,7 @@ fetch("https://plum-viajes.vercel.app/api/packages", {
 **Opción 2: X-API-Key Header**
 
 ```javascript
-fetch("https://plum-viajes.vercel.app/api/packages", {
+fetch("https://plumviajes.com.ar/api/packages", {
   headers: {
     "X-API-Key":
       "sk_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5f6",
@@ -166,7 +166,7 @@ fetch("https://plum-viajes.vercel.app/api/packages", {
 ```javascript
 const PLUM_API_KEY =
   "sk_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5f6";
-const BASE_URL = "https://plum-viajes.vercel.app/api";
+const BASE_URL = "https://plumviajes.com.ar/api";
 
 async function getPackages() {
   try {
@@ -216,7 +216,7 @@ import requests
 import json
 
 PLUM_API_KEY = 'sk_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5f6'
-BASE_URL = 'https://plum-viajes.vercel.app/api'
+BASE_URL = 'https://plumviajes.com.ar/api'
 
 def get_packages():
     headers = {
@@ -247,12 +247,12 @@ def check_availability(search_params):
 
 ```bash
 # Obtener paquetes
-curl -X GET "https://plum-viajes.vercel.app/api/packages" \
+curl -X GET "https://plumviajes.com.ar/api/packages" \
   -H "Authorization: Bearer sk_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5f6" \
   -H "Content-Type: application/json"
 
 # Consultar disponibilidad
-curl -X POST "https://plum-viajes.vercel.app/api/packages/availability" \
+curl -X POST "https://plumviajes.com.ar/api/packages/availability" \
   -H "Authorization: Bearer sk_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5f6" \
   -H "Content-Type: application/json" \
   -d '{
