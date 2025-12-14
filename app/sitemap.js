@@ -12,8 +12,6 @@ const routesQuery = groq`*[
   "lastModified": coalesce(page->_updatedAt, page->_createdAt, _updatedAt, _createdAt)
 }`;
 
-export const revalidate = 60 * 60; // 1 hour
-
 export default async function sitemap() {
   const baseUrl = getSiteBaseUrl();
 
