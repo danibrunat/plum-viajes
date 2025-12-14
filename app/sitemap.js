@@ -1,5 +1,5 @@
 import { groq } from "next-sanity";
-import { getSiteBaseUrl, mapRoutesToSitemapEntries, buildFallbackSitemapEntry } from "./helpers/api/sitemap";
+import { getSiteBaseUrl, mapRoutesToSitemapEntries, buildFallbackSitemapEntry } from "./helpers/api/sitemapHelpers";
 import { client } from "./lib/client";
 
 const routesQuery = groq`*[
