@@ -203,8 +203,13 @@ const ContactService = {
         : formData;
 
     try {
-      const emailHtml = await this.buildEmailContent(formType, data);
       const fromAddress = resolveFromAddress();
+
+      // Preparar ambos emails en paralelo para evitar timeout en serverless
+      const [emailHtml, adminHtml] = await Promise.all([
+        this.buildEmailContent(formType, data),
+        ADMIN_CONTACT_EMAIL ? this.buildAdminEmailContent(formType, data) : Promise.resolve(null),
+      ]);
 
       // Email al usuario que hizo la consulta
       const mailOptions = {
@@ -217,45 +222,54 @@ const ContactService = {
         html: emailHtml,
       };
 
-      const sendResult = await transporter.sendMail(mailOptions);
-      const normalizedResponse = {
-        messageId: sendResult.messageId,
-        response: sendResult.response,
-        accepted: sendResult.accepted,
-        rejected: sendResult.rejected,
-        envelope: sendResult.envelope,
-      };
-
-      let adminResponse = null;
-
-      // Email al administrador (SMTP_ADMIN_EMAIL)
-      if (ADMIN_CONTACT_EMAIL) {
-        const adminHtml = await this.buildAdminEmailContent(formType, data);
+      // Preparar email al admin si está configurado
+      let adminMailOptions = null;
+      if (ADMIN_CONTACT_EMAIL && adminHtml) {
         const adminSubject =
           formType === "agent"
-            ? `Nueva consulta de agente: ${data.name || "Sin nombre"} ${
-                data.surname || ""
-              }`
-            : `Nueva consulta desde la web: ${data.name || "Sin nombre"} ${
-                data.surname || ""
-              }`;
+            ? `Nueva consulta de agente: ${data.name || "Sin nombre"} ${data.surname || ""}`
+            : `Nueva consulta desde la web: ${data.name || "Sin nombre"} ${data.surname || ""}`;
 
-        const adminMailOptions = {
+        adminMailOptions = {
           from: fromAddress,
           to: [ADMIN_CONTACT_EMAIL],
           subject: adminSubject.trim(),
           html: adminHtml,
         };
-
-        const adminSendResult = await transporter.sendMail(adminMailOptions);
-        adminResponse = {
-          messageId: adminSendResult.messageId,
-          response: adminSendResult.response,
-          accepted: adminSendResult.accepted,
-          rejected: adminSendResult.rejected,
-          envelope: adminSendResult.envelope,
-        };
       }
+
+      // Enviar ambos emails en paralelo con timeout de 8s (Vercel tiene límite de 10s)
+      const sendPromises = [transporter.sendMail(mailOptions)];
+      if (adminMailOptions) {
+        sendPromises.push(transporter.sendMail(adminMailOptions));
+      }
+
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("SMTP timeout: el servidor tardó más de 8 segundos")), 8000)
+      );
+
+      const results = await Promise.race([
+        Promise.all(sendPromises),
+        timeoutPromise,
+      ]);
+
+      const normalizedResponse = {
+        messageId: results[0].messageId,
+        response: results[0].response,
+        accepted: results[0].accepted,
+        rejected: results[0].rejected,
+        envelope: results[0].envelope,
+      };
+
+      const adminResponse = results[1]
+        ? {
+            messageId: results[1].messageId,
+            response: results[1].response,
+            accepted: results[1].accepted,
+            rejected: results[1].rejected,
+            envelope: results[1].envelope,
+          }
+        : null;
 
       return { success: true, response: normalizedResponse, adminResponse };
     } catch (error) {
