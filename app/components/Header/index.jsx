@@ -1,17 +1,19 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { urlForImage } from "../../lib/image";
 import Image from "next/image";
 import MenuItem from "./MenuItem";
 import { getIconByName } from "../../helpers/iconHelper";
+import MobileMenu from "./MobileMenu";
 
 export default function Header(props) {
   const { title = "Missing title", navItems, logo, contact } = props;
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <nav className="flex flex-col md:flex-row  md:items-center md:justify-between md:flex-wrap md:mx-12">
-      <div className="p-4 mr-0 flex self-center md:self-start text-white md:mr-2 md:p-1">
+      <div className="flex w-full items-center justify-between p-4 md:w-auto md:self-start md:mr-2 md:p-1">
         <Link href={"/"} aria-label="Ir a la página principal">
           <Image
             priority
@@ -21,6 +23,20 @@ export default function Header(props) {
             height={98}
           />
         </Link>
+
+        <button
+          type="button"
+          className="md:hidden rounded-lg p-3 text-plumPrimaryPurple"
+          aria-label="Abrir menú"
+          aria-expanded={isMobileMenuOpen}
+          onClick={() => setIsMobileMenuOpen(true)}
+        >
+          <span className="relative block h-5 w-7" aria-hidden="true">
+            <span className="absolute left-0 top-0 block h-[1px] w-full bg-plumPrimaryPurple" />
+            <span className="absolute left-0 top-1/2 block h-[1px] w-full -translate-y-1/2 bg-plumPrimaryPurple" />
+            <span className="absolute left-0 bottom-0 block h-[1px] w-5 bg-plumPrimaryPurple" />
+          </span>
+        </button>
       </div>
       <div className="hidden md:flex md:flex-grow md:justify-end md:self-center">
         <menu className="flex md:text-sm items-center">
@@ -45,29 +61,11 @@ export default function Header(props) {
           </Link>
         </div>
       )} */}
-      {/* Begin Mobile Menú */}
-      <label
-        className="z-40 cursor-pointer px-3 py-6 md:hidden"
-        htmlFor="mobile-menu"
-      >
-        <input className="peer hidden" type="checkbox" id="mobile-menu" />
-        <div className="relative z-50 block h-[1px] w-7 bg-black bg-transparent content-[''] before:absolute before:top-[-0.35rem] before:z-50 before:block before:h-full before:w-full before:bg-black before:transition-all before:duration-200 before:ease-out before:content-[''] after:absolute after:right-0 after:bottom-[-0.35rem] after:block after:h-full after:w-full after:bg-black after:transition-all after:duration-200 after:ease-out after:content-[''] peer-checked:bg-transparent before:peer-checked:top-0 before:peer-checked:w-full before:peer-checked:rotate-45 before:peer-checked:transform after:peer-checked:bottom-0 after:peer-checked:w-full after:peer-checked:-rotate-45 after:peer-checked:transform"></div>
-        <div className="fixed inset-0 z-40 hidden h-full w-full bg-black/50 backdrop-blur-sm peer-checked:block">
-          &nbsp;
-        </div>
-        <div className="fixed top-0 right-0 z-40 h-full w-full translate-x-full overflow-y-auto overscroll-y-none transition duration-500 peer-checked:translate-x-0">
-          <div className="float-right min-h-full w-[60%] bg-white px-6 pt-6 shadow-2xl">
-            <menu className="md:text-sm flex flex-col justify-center gap-3">
-              {navItems &&
-                navItems.map((item) => {
-                  const Icon = getIconByName(item?.icon?.name);
-                  return <MenuItem key={item._id} item={item} icon={Icon} />;
-                })}
-            </menu>
-          </div>
-        </div>
-      </label>
-      {/* End Mobile Menú */}
+      <MobileMenu
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+        navItems={navItems}
+      />
     </nav>
   );
 }
