@@ -322,7 +322,16 @@ const ContactService = {
         html: emailHtml,
       };
 
-      const sendResult = await transporter.sendMail(mailOptions);
+      // Timeout de 8s para evitar que Vercel corte la función
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("SMTP timeout: el servidor tardó más de 8 segundos")), 8000)
+      );
+
+      const sendResult = await Promise.race([
+        transporter.sendMail(mailOptions),
+        timeoutPromise,
+      ]);
+
       const normalizedResponse = {
         messageId: sendResult.messageId,
         response: sendResult.response,
