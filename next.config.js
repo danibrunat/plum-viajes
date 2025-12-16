@@ -81,6 +81,15 @@ const nextConfig = {
             ].join("; "),
           },
           {
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000; includeSubDomains; preload",
+          },
+          {
+            key: "Permissions-Policy",
+            value:
+              "accelerometer=(), autoplay=(), camera=(), clipboard-write=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()",
+          },
+          {
             key: "X-DNS-Prefetch-Control",
             value: "off",
           },
@@ -99,6 +108,10 @@ const nextConfig = {
           {
             key: "Referrer-Policy",
             value: "no-referrer",
+          },
+          {
+            key: "X-Permitted-Cross-Domain-Policies",
+            value: "none",
           },
         ],
       },
