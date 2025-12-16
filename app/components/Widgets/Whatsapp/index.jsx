@@ -12,10 +12,10 @@ const Whatsapp = () => {
 
     if (isAndroid) {
       // WhatsApp is installed
-      window.open(`whatsapp://send?phone=541161758142`);
+      window.open(`whatsapp://send?phone=541130875513`);
     } else {
       // WhatsApp is not installed, open WhatsApp Web
-      window.open("https://web.whatsapp.com/send?phone=541161758142", "_blank");
+      window.open("https://web.whatsapp.com/send?phone=541130875513", "_blank");
     }
   };
 
