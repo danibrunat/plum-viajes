@@ -10,6 +10,7 @@ import ModalRoot from "./components/commons/Modal/ModalRoot";
 import SocialWidget from "./components/Widgets/SocialWidget";
 import ClientProviders from "./providers/ClientProviders";
 import { sanityFetch } from "./lib/sanityFetch";
+import { Analytics } from "@vercel/analytics/next"
 
 const GENERAL_MAINTENANCE_MODE = false;
 
@@ -149,6 +150,7 @@ export default async function Layout({ children }) {
             instagramLink={instagramLink}
           />
         </ClientProviders>
+        <Analytics />
       </body>
     </html>
   );
