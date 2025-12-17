@@ -5,7 +5,7 @@
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://plumviajes.sanity.studio"
+          "value": "https://plumviajes.com.ar, https://www.plumviajes.com.ar"
         },
         {
           "key": "Access-Control-Allow-Methods",
