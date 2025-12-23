@@ -20,6 +20,15 @@ const defaultOrigin = "https://plumviajes.com.ar";
 
 export async function proxy(req) {
   const path = req.nextUrl.pathname;
+  const requestHeaders = new Headers(req.headers);
+
+  const continueResponse = () => {
+    const res = NextResponse.next({
+      request: { headers: requestHeaders },
+    });
+    res.headers.set("Referrer-Policy", "no-referrer-when-downgrade");
+    return res;
+  };
 
   // Verificar si es una ruta de API que siempre debe procesarse
   const isApiRoute = path.startsWith("/api/");
@@ -35,10 +44,10 @@ export async function proxy(req) {
     if (path === "/maintenance" || isExcluded) {
       // Continuar con el flujo normal para rutas de API
       if (isApiRoute) {
-        return await processApiRequest(req);
+        return await processApiRequest(req, requestHeaders);
       }
 
-      return NextResponse.next();
+      return continueResponse();
     }
 
     // Redirigir a la página de mantenimiento
@@ -47,14 +56,14 @@ export async function proxy(req) {
 
   // Modo normal - Procesar rutas de API siempre
   if (isApiRoute) {
-    return await processApiRequest(req);
+    return await processApiRequest(req, requestHeaders);
   }
 
-  // Para rutas no-API en modo normal, continuar sin procesamiento especial
-  return NextResponse.next();
+  // Para rutas no-API en modo normal, continuar con headers y CSP
+  return continueResponse();
 }
 
-async function processApiRequest(req) {
+async function processApiRequest(req, requestHeaders) {
   // Aplicar configuración CORS para APIs
   const origin = req.headers.get("origin");
   const method = req.method;
@@ -80,9 +89,10 @@ async function processApiRequest(req) {
     }
   }
 
-  const res = NextResponse.next();
+  const res = NextResponse.next({
+    request: { headers: requestHeaders },
+  });
 
-  // Agregar política de referer más permisiva
   res.headers.set("Referrer-Policy", "no-referrer-when-downgrade");
 
   // Si no hay origin (llamada interna) o si el origin está permitido
