@@ -54,7 +54,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' https://cdn.sanity.io https://www.google.com https://www.gstatic.com https://vercel.live 'unsafe-inline' 'unsafe-eval'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src 'self' data: https://cdn.sanity.io https://source.unsplash.com https://aws-qa1.ola.com.ar https://s3.amazonaws.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://plumviajes.com.ar https://api.sanity.io https://aws-qa1.ola.com.ar https://www.google.com https://vercel.live; frame-src 'self' https://www.google.com https://vercel.live; frame-ancestors 'none';"
+          "value": "default-src 'self'; script-src 'self' https://cdn.sanity.io https://www.google.com https://www.gstatic.com https://www.googletagmanager.com https://vercel.live 'unsafe-inline' 'unsafe-eval'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src 'self' data: https://cdn.sanity.io https://source.unsplash.com https://aws-qa1.ola.com.ar https://s3.amazonaws.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://plumviajes.com.ar https://api.sanity.io https://aws-qa1.ola.com.ar https://www.google.com https://www.googletagmanager.com https://vercel.live; frame-src 'self' https://www.google.com https://www.googletagmanager.com https://vercel.live; frame-ancestors 'none';"
         }
       ]
     }
