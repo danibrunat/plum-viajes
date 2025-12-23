@@ -1,6 +1,7 @@
 import { Tabs, Tab } from "../../commons/Tabs";
 import FlightsEngine from "./FlightsEngine";
 import PackagesEngine from "./PackagesEngine";
+import AssistanceEngine from "./AssistanceEngine";
 
 export default function SearchEngines({
   assurances,
@@ -32,16 +33,11 @@ export default function SearchEngines({
           <></>
         )}
 
-        {assurances ? (
           <Tab label="Asistencia al Viajero">
             <div className=" bg-plumPrimaryPurple py-4">
-              <h1>Assurances</h1>
+              <AssistanceEngine defaultValues={defaultValues?.assistance} />
             </div>
           </Tab>
-        ) : (
-          <></>
-        )}
-
         {hotels ? (
           <Tab label="Hoteles">
             <div className=" bg-plumPrimaryPurple py-4">
