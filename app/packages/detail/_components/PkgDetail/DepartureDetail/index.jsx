@@ -76,31 +76,25 @@ const convertSanityBlockToHtml = (description) => {
 const extractHtmlValuesToArray = (htmlString) => {
   if (!htmlString || typeof htmlString !== "string") return [];
 
-  // Verificar si el string contiene etiquetas HTML
   const hasHtmlTags = /<\/?[a-z][\s\S]*>/i.test(htmlString);
   if (!hasHtmlTags) return [htmlString];
 
-  let document;
-
-  if (typeof window !== "undefined" && window.DOMParser) {
-    // Estamos en el navegador
+  // En cliente usamos DOMParser; en servidor evitamos jsdom y hacemos stripping básico
+  if (typeof window !== "undefined" && typeof DOMParser !== "undefined") {
     const parser = new DOMParser();
-    document = parser.parseFromString(htmlString, "text/html");
-  } else {
-    // Estamos en Node.js (Servidor en Next.js)
-    const { JSDOM } = require("jsdom");
-    document = new JSDOM(htmlString).window.document;
+    const doc = parser.parseFromString(htmlString, "text/html");
+    const extractedTexts = [];
+
+    doc.querySelectorAll("p, div, span, strong, em, li").forEach((el) => {
+      const text = el.textContent.trim();
+      if (text) extractedTexts.push(text);
+    });
+
+    return extractedTexts;
   }
 
-  const extractedTexts = [];
-
-  // Extraer texto de etiquetas relevantes
-  document.querySelectorAll("p, div, span, strong, em").forEach((el) => {
-    const text = el.textContent.trim();
-    if (text) extractedTexts.push(text);
-  });
-
-  return extractedTexts;
+  const stripped = htmlString.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  return stripped ? [stripped] : [];
 };
 
 const DepartureDetail = ({
