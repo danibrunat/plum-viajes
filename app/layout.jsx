@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Head from "next/head";
+import Script from "next/script";
 import { LogoJsonLd } from "next-seo";
 
 import Header from "./components/Header";
@@ -15,6 +16,7 @@ import { Analytics } from "@vercel/analytics/next"
 const GENERAL_MAINTENANCE_MODE = false;
 
 const inter = Inter({ subsets: ["latin"] });
+const googleTagId = process.env.NEXT_PUBLIC_GOOGLE_TAG_ID;
 
 export const metadata = {
   title: "Plum Viajes",
@@ -126,6 +128,23 @@ export default async function Layout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className} text-sm md:text-1xl`}>
+        {googleTagId && (
+          <>
+            <Script
+              id="gtag-lib"
+              strategy="afterInteractive"
+              src={`https://www.googletagmanager.com/gtag/js?id=${googleTagId}`}
+            />
+            <Script id="gtag-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${googleTagId}');
+              `}
+            </Script>
+          </>
+        )}
         <ClientProviders>
           <ModalRoot />
           <Head>
