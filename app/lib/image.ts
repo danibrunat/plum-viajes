@@ -8,15 +8,25 @@ const imageBuilder = createImageUrlBuilder({
   dataset: dataset || "",
 });
 
-export const urlForImage = (source: SanityImageSource) => {
+type ImageOptions = {
+  width?: number;
+  height?: number;
+  quality?: number;
+};
+
+export const urlForImage = (
+  source: SanityImageSource,
+  options?: ImageOptions
+) => {
   try {
-    const imageUrl = imageBuilder
-      ?.image(source)
-      .auto("format")
-      .fit("max")
-      .url();
-    return imageUrl;
-  } catch (error) {
-    return source;
+    let builder = imageBuilder.image(source).auto("format");
+
+    if (options?.width) builder = builder.width(options.width);
+    if (options?.height) builder = builder.height(options.height);
+    if (options?.quality) builder = builder.quality(options.quality);
+
+    return builder.url();
+  } catch {
+    return "";
   }
 };
