@@ -30,39 +30,44 @@ export async function generateMetadata(props, parent) {
 
   const openGraphImages = openGraphImage
     ? [
-        {
-          url: builder.image(openGraphImage).width(800).height(600).url(),
-          width: 800,
-          height: 600,
-          alt: title,
-        },
-        {
-          // Tamaño recomendado para Facebook
-          url: builder.image(openGraphImage).width(1200).height(630).url(),
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-        {
-          // Cuadrado 1:1
-          url: builder.image(openGraphImage).width(600).height(600).url(),
-          width: 600,
-          height: 600,
-          alt: title,
-        },
-      ]
+      {
+        url: builder.image(openGraphImage).width(800).height(600).url(),
+        width: 800,
+        height: 600,
+        alt: title,
+      },
+      {
+        // Tamaño recomendado para Facebook
+        url: builder.image(openGraphImage).width(1200).height(630).url(),
+        width: 1200,
+        height: 630,
+        alt: title,
+      },
+      {
+        // Cuadrado 1:1
+        url: builder.image(openGraphImage).width(600).height(600).url(),
+        width: 600,
+        height: 600,
+        alt: title,
+      },
+    ]
     : [];
 
   return {
     title,
     titleTemplate: `%s | ${config.title}`,
     description,
-    canonical: config.url && `${config.url}/${slug}`,
+    alternates: {
+      canonical: config.url && `${config.url}/${slug}`,
+    },
     manifest: "/manifest.json",
     openGraph: {
       images: openGraphImages,
     },
-    noindex: { disallowRobots },
+    robots: {
+      index: !disallowRobots,
+      follow: !disallowRobots,
+    },
   };
 }
 

@@ -19,6 +19,7 @@ const inter = Inter({ subsets: ["latin"] });
 const googleTagId = process.env.NEXT_PUBLIC_GOOGLE_TAG_ID;
 
 export const metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_URL || 'https://plumviajes.com.ar'),
   title: "Plum Viajes",
   description: "Tu agencia de viajes online",
   manifest: "/manifest.json",
@@ -126,7 +127,7 @@ export default async function Layout({ children }) {
     );
   }
   return (
-    <html lang="en">
+    <html lang="es">
       <body className={`${inter.className} text-sm md:text-1xl`}>
         {googleTagId && (
           <>
