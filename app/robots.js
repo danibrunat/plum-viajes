@@ -13,12 +13,16 @@ export default async function robots() {
     }
   }`);
 
-  // Create disallow rules for routes that should be hidden from robots
-  const disallowRules =
-    disallowedRoutes?.map((route) => ({
-      userAgent: "*",
-      disallow: `/${route.slug === "/" ? "" : route.slug}`,
-    })) || [];
+  // Normalize and filter slugs to avoid accidental blocking of the root or empty paths
+  const normalizedDisallowed = (disallowedRoutes || [])
+    .map(({ slug }) => (typeof slug === "string" ? slug.trim() : ""))
+    .filter(Boolean)
+    .filter((slug) => slug !== "/");
+
+  const disallowRules = normalizedDisallowed.map((slug) => ({
+    userAgent: "*",
+    disallow: slug.startsWith("/") ? slug : `/${slug}`,
+  }));
 
   // Add default allow rule
   const rules = [

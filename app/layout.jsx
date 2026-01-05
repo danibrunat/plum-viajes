@@ -31,6 +31,9 @@ export const metadata = {
   formatDetection: {
     telephone: false,
   },
+  alternates: {
+    canonical: '/',
+  },
 };
 
 export const viewport = {
