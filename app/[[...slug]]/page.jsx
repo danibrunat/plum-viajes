@@ -3,17 +3,16 @@ import React from "react";
 import RenderSections from "../components/RenderSections";
 import { getData } from "../actions/sanity";
 import { client } from "../lib/client";
+import { notFound } from "next/navigation";
+import { slugToAbsUrl } from "../../utils/urls";
 
 export async function generateMetadata(props, parent) {
   const params = await props.params;
   const data = await getData(params);
 
   if (!data) {
-    return {
-      title: "Landing no encontrada",
-      description: "La página solicitada no se encontró.",
-      manifest: "/manifest.json",
-    };
+    // Return 404 metadata to avoid soft-404s without a real 404 status
+    notFound();
   }
 
   const {
@@ -58,7 +57,10 @@ export async function generateMetadata(props, parent) {
     titleTemplate: `%s | ${config.title}`,
     description,
     alternates: {
-      canonical: config.url && `${config.url}/${slug}`,
+      canonical:
+        config.url && slug
+          ? slugToAbsUrl(slug, config.url.replace(/\/$/, ""))
+          : undefined,
     },
     manifest: "/manifest.json",
     openGraph: {
@@ -75,14 +77,9 @@ export default async function LandingPage(props) {
   const params = await props.params;
   const data = await getData(params);
 
-  // Verifica si no se obtuvo data o no hay contenido
+  // If there is no data or content, return a real 404 to avoid soft-404s
   if (!data || !data.content || data.content.length === 0) {
-    return (
-      <div style={{ padding: "2rem", textAlign: "center" }}>
-        <h1>Landing no encontrada</h1>
-        <p>No se encontró contenido para la página solicitada.</p>
-      </div>
-    );
+    notFound();
   }
 
   return <RenderSections sections={data.content} />;
