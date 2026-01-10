@@ -6,6 +6,10 @@ export const metadata = {
   title: "Paquetes | Plum Viajes",
   keywords: "Paquetes Plum Viajes El mejor precio para tu viaje",
   description: "Paquetes a Buzios - Detalle de paquetes",
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 export default async function PackagesDetail(props) {

@@ -4,6 +4,10 @@ import { MAINTENANCE_CONFIG } from "../constants/maintenance";
 export const metadata = {
   title: "En Mantenimiento | Plum Viajes",
   description: "El sitio se encuentra en mantenimiento temporalmente",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function MaintenancePage() {

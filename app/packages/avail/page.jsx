@@ -8,6 +8,13 @@ import NoResults from "./_components/NoResults";
 export const metadata = {
   title: "Paquetes | Plum Viajes",
   keywords: "Paquetes Plum Viajes El mejor precio para tu viaje",
+  alternates: {
+    canonical: '/packages/avail',
+  },
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 // Convert to a Server Component

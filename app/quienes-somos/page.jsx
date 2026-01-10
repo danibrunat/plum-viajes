@@ -5,6 +5,9 @@ export const metadata = {
   title: "Quienes Somos",
   description: `Somos una agencia de turismo enfocada en la experiencia de cada uno de
         sus pasajeros. Buscamos hacer la diferencia...`,
+  alternates: {
+    canonical: '/quienes-somos',
+  },
 };
 
 const AboutUs = () => {

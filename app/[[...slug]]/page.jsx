@@ -5,6 +5,7 @@ import { getData } from "../actions/sanity";
 import { client } from "../lib/client";
 import { notFound } from "next/navigation";
 import { slugToAbsUrl } from "../../utils/urls";
+import { getSiteBaseUrl } from "../helpers/api/sitemapHelpers";
 
 export async function generateMetadata(props, parent) {
   const params = await props.params;
@@ -21,9 +22,10 @@ export async function generateMetadata(props, parent) {
     disallowRobots,
     openGraphImage,
     content = [],
-    config = {},
     slug,
   } = data;
+
+  const siteBaseUrl = getSiteBaseUrl();
 
   const builder = imageUrlBuilder(client);
 
@@ -54,13 +56,9 @@ export async function generateMetadata(props, parent) {
 
   return {
     title,
-    titleTemplate: `%s | ${config.title}`,
     description,
     alternates: {
-      canonical:
-        config.url && slug
-          ? slugToAbsUrl(slug, config.url.replace(/\/$/, ""))
-          : undefined,
+      canonical: slug ? slugToAbsUrl(slug, siteBaseUrl) : siteBaseUrl,
     },
     manifest: "/manifest.json",
     openGraph: {

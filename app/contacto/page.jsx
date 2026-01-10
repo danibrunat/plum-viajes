@@ -7,6 +7,9 @@ import ContactForm from "./ContactForm";
 export const metadata = {
   title: "Contáctenos",
   description: `Dejá tu consulta`,
+  alternates: {
+    canonical: '/contacto',
+  },
 };
 
 const Contact = (props) => {

@@ -6,6 +6,7 @@ import LandingGrid from "./LandingGrid";
 import { LandingService } from "../../../services/landing.service";
 import { sanityFetch } from "../../../lib/sanityFetch";
 import { client } from "../../../lib/client";
+import { getSiteBaseUrl } from "../../../helpers/api/sitemapHelpers";
 
 async function getLandingData(product, destination) {
   const body = { destination, product };
@@ -77,8 +78,14 @@ export async function generateMetadata(props, parent) {
     return {
       title,
       description,
+      alternates: {
+        canonical: `${getSiteBaseUrl()}/landing/by-destination/${params?.slug?.join('/') || ''}`,
+      },
       openGraph: { images: openGraphImages },
-      noindex: disallowRobots,
+      robots: {
+        index: !disallowRobots,
+        follow: !disallowRobots,
+      },
     };
   } catch (error) {
     console.error("Error generating metadata:", error);
